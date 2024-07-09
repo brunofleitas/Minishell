@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 16:52:49 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/06 12:20:58 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/07/09 17:30:17 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
       Counts the number of words in the string 's' delimited by
 	  the character 'c'.
 */
-static int	count_words(char const *s, char c)
+int	count_words(char const *s, char c)
 {
 	int	counter;
 	int	i;
@@ -90,7 +90,7 @@ char	**ft_split(char const *s, char c)
                 word_length = 0;
                 while (s[word_length] != '"' && s[word_length])
                     word_length++;
-                split[i++] = ft_substr(s - 1, 0, word_length + 2);
+                split[i++] = ft_substr(s , 0, word_length);
                 s += word_length + 1;
             }
             else if (*s == '\'')
@@ -99,7 +99,7 @@ char	**ft_split(char const *s, char c)
                 word_length = 0;
                 while (s[word_length] != '\'' && s[word_length])
                     word_length++;
-                split[i++] = ft_substr(s - 1, 0, word_length + 2);
+                split[i++] = ft_substr(s , 0, word_length);
                 s += word_length + 1;
             }
             else
