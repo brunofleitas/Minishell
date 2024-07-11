@@ -5,8 +5,8 @@ LIBRARIES = -L./libft -lft
 LIBRARIES_PATH = -I./libft/headers
 LDFLAGS = -lreadline
 
-SRCS 	= 1-main.c 2-lexer.c 3-count_words.c 4-split_generator.c
-SRCSB	= 1-main.c 2-lexer.c 3-count_words.c 4-split_generator.c
+SRCS 	= 1-main.c 2-lexer.c 3-count_words.c 4-split_generator.c 5-clasify_token.c
+SRCSB	= 1-main.c 2-lexer.c 3-count_words.c 4-split_generator.c 5-clasify_token.c
 
 OBJS	= $(SRCS:.c=.o)
 OBJSB	= $(SRCSB:.c=.o)
