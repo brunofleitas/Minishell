@@ -14,3 +14,5 @@ typedef struct s_word
 }	t_word;
 
 void    lexer(char *input);
+int     count_words_tokens(char const *s, char c);
+char    **ft_split_tokens(char const *s, char c);
