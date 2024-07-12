@@ -29,7 +29,9 @@
 int	main(void)
 {
 	char	*input;
+	t_ntc	*first_node;
 
+	first_node = NULL;
 	while (1)
 	{
 		input = readline(">>");

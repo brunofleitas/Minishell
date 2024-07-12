@@ -1,3 +1,8 @@
+
+
+#ifndef MINISHELL_H
+# define MINISHELL_H
+
 #include "ft_printf.h"
 #include "libft.h"
 #include <readline/history.h>
@@ -8,7 +13,7 @@
 #include <unistd.h>
 
 /*
-  TokenType: An enumeration representing different types of tokens encountered
+  t_token_type: An enumeration representing different types of tokens encountered
   in a minishell environment.
   Values:
 	TOKEN_COMMAND_ECHO: Represents an echo command token.
@@ -31,8 +36,9 @@
 	TOKEN_ARGUMENT: Represents a general argument token.
 	TOKEN_ERROR: Represents an error token.
 */
-typedef enum
+typedef enum e_token_type
 {
+	TOKEN_ERROR ,
 	TOKEN_COMMAND_ECHO,
 	TOKEN_COMMAND_CD,
 	TOKEN_COMMAND_PWD,
@@ -51,16 +57,35 @@ typedef enum
 	TOKEN_STRING_SINGLE,
 	TOKEN_STRING_DOUBLE,
 	TOKEN_ARGUMENT,
-	TOKEN_ERROR,
-}				TokenType;
+}				t_token_type;
 
+/* ************************************************************************** */
+/*                           STRUCTURE DEFINITIONS                            */                           
+/* ************************************************************************** */
 typedef struct s_word
 {
-	TokenType	key;
+	t_token_type	key;
 	char		*value;
 }				t_word;
 
-void			lexer(char *input);
-int				count_words_tokens(char const *s, char c);
-char			**ft_split_tokens(char const *s, char c);
-TokenType		clasify_token(char *value);
+/* ************************  GARBAGE COLLECTOR NODE  ************************ */
+typedef struct s_ntc
+{
+	void			*data;
+	struct s_ntc	*next;
+	struct s_ntc	*prev;
+
+}					t_ntc;
+// ntc = node to clean
+
+
+/* ************************************************************************** */
+/*                                   FUNCTIONS                                */
+/* ************************************************************************** */
+void				lexer(char *input);
+int					count_words_tokens(char const *s, char c);
+char				**ft_split_tokens(char const *s, char c);
+t_token_type		clasify_token(char *value);
+t_ntc				*garbage_collector(t_ntc **first_node, size_t size_of);
+
+#endif

@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static TokenType	classify_command(char *value)
+static t_token_type	classify_command(char *value)
 {
 	if (ft_strcmp(value, "echo") == 0)
 		return (TOKEN_COMMAND_ECHO);
@@ -29,7 +29,7 @@ static TokenType	classify_command(char *value)
 	return (TOKEN_ERROR);
 }
 
-static TokenType	classify_operator(char *value)
+static t_token_type	classify_operator(char *value)
 {
 	if (ft_strcmp(value, "<") == 0)
 		return (TOKEN_REDIRECT_IN);
@@ -48,7 +48,7 @@ static TokenType	classify_operator(char *value)
 	return (TOKEN_ERROR);
 }
 
-static TokenType	classify_variable(char *value)
+static t_token_type	classify_variable(char *value)
 {
 	if (value[0] == '$' && value[1] == '?')
 		return (TOKEN_VARIABLE_EXIT);
@@ -57,7 +57,7 @@ static TokenType	classify_variable(char *value)
 	return (TOKEN_ERROR);
 }
 
-static TokenType	classify_string(char *value)
+static t_token_type	classify_string(char *value)
 {
 	if (value[0] == '\'' && value[ft_strlen(value) - 1] == '\'')
 		return (TOKEN_STRING_SINGLE);
@@ -66,7 +66,7 @@ static TokenType	classify_string(char *value)
 	return (TOKEN_ERROR);
 }
 
-TokenType	clasify_token(char *value)
+t_token_type	clasify_token(char *value)
 {
 	int	token_type;
 
