@@ -17,24 +17,34 @@ The free_ntc_prior function is used to free a node in the garbage collector
 list at any time during the execution of the program. It is usefull when we need
 to free a node before the end of the program.
 */
-void	free_ntc_prior(t_ntc **first_node, void *data_ptr)
+void free_ntc_prior(t_ntc **first_node, void *data_ptr) 
 {
-	t_ntc	*temp;
+	t_ntc *temp;
 
 	temp = *first_node;
-	while (temp != NULL)
+	while (temp != NULL) 
 	{
 		if (temp->data != NULL && temp->data == data_ptr)
-			break ;
+			break;
 		temp = temp->next;
 	}
-	if(temp->prev)
-    	temp->prev->next = temp->next;
-	if(temp->next)
-    	temp->next->prev = temp->prev;
-	free(temp->data);
-    temp->data = NULL;
-    free(temp);
+	if (temp != NULL) 
+	{
+		if (temp == *first_node && temp->next != NULL)
+			*first_node = temp->next;
+		else if (temp == *first_node && temp->next == NULL)
+			*first_node = NULL;
+		if (temp->prev != NULL)
+			temp->prev->next = temp->next;
+		if (temp->next != NULL)
+			temp->next->prev = temp->prev;
+		if (temp->data != NULL) 
+		{
+			free(temp->data);
+			temp->data = NULL;
+		}
+		free(temp);
+	}
 }
 
 /*

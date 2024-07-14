@@ -50,5 +50,6 @@ int	main(void)
 			break ;
 	}
 	clear_history();
+	free_memory(&first_node);
 	return (0);
 }
