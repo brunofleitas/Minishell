@@ -33,7 +33,7 @@ static int	word_count(const char *s, char c)
 	return (count);
 }
 
-static char	*get_next_word(const char **s, char c)
+static char	*get_next_word(const char **s, char c, t_ntc **first_node)
 {
 	const char	*start;
 
@@ -42,10 +42,10 @@ static char	*get_next_word(const char **s, char c)
 	start = *s;
 	while (**s && **s != c)
 		(*s)++;
-	return (ft_substr(start, 0, *s - start));
+	return (ft_substr_g_c(start, 0, *s - start, first_node));
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c, t_ntc **first_node)
 {
 	int		i;
 	int		words;
@@ -53,11 +53,12 @@ char	**ft_split(char const *s, char c)
 
 	i = 0;
 	words = word_count(s, c);
-	split = (char **)malloc(sizeof(char *) * (words + 1));
+	split = (char **)(g_c(first_node, \
+								sizeof(char *) * (words + 1))->data);
 	if (!s || !split)
 		return (NULL);
 	while (i < words)
-		split[i++] = get_next_word(&s, c);
+		split[i++] = get_next_word(&s, c, first_node);
 	split[i] = NULL;
 	return (split);
 }

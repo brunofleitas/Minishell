@@ -12,7 +12,8 @@
 
 #include "libft.h"
 
-t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *), \
+															t_ntc **first_node)
 {
 	t_list	*mapped_l;
 	t_list	*mapped_n;
@@ -22,7 +23,7 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	last_mapped = NULL;
 	while (lst)
 	{
-		mapped_n = malloc(sizeof(t_list));
+		mapped_n = g_c(first_node, sizeof(t_list))->data;
 		if (!mapped_n)
 		{
 			ft_lstclear(&mapped_l, del);

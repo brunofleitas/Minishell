@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-char	*ft_strdup(const char *s)
+char	*ft_strdup(const char *s, t_ntc **first_node)
 {
 	int		i;
 	char	*newstr;
@@ -20,7 +20,7 @@ char	*ft_strdup(const char *s)
 
 	i = 0;
 	scop = (char *)s;
-	newstr = (char *)malloc(ft_strlen(s) + 1);
+	newstr = (char *)(g_c(first_node, ft_strlen(s) + 1)->data);
 	if (newstr == NULL)
 		return (NULL);
 	while (*scop)

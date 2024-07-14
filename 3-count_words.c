@@ -104,7 +104,7 @@ static int	handle_single_operators_and_specials(const char *s, int *i)
 	are surrounded by the separator character or are adjacent to it but 
 	not immediately preceded by it.
 */
-int	count_words_tokens(char const *s, char c)
+int	count_w_tks(char const *s, char c)
 {
 	int	counter;
 	int	i;

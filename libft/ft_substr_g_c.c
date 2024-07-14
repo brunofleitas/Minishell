@@ -12,7 +12,31 @@
 
 #include "libft.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr_g_c(char const *s, unsigned int start, size_t len, t_ntc **first_node)
+{
+	char	*substr;
+	size_t	dlen;
+
+	if (!s)
+		return (NULL);
+	if (start > ft_strlen(s))
+	{
+		substr = g_c(first_node, sizeof(char))->data;
+		if (substr == NULL)
+			return (NULL);
+		substr[0] = 0;
+		return (substr);
+	}
+	dlen = ft_strlen(s + start);
+	if (len > dlen)
+		len = dlen;
+	substr = g_c(first_node, (len + 1) * sizeof(char))->data;
+	if (!substr)
+		return (0);
+	ft_strlcpy(substr, s + start, len + 1);
+	return (substr);
+}
+/*
 {
 	char	*substr;
 	size_t	dlen;
@@ -34,6 +58,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	ft_strlcpy(substr, s + start, len + 1);
 	return (substr);
 }
+*/
 /* ************************************************************************** */
 /*                                    TEST                                    */
 /* ************************************************************************** */

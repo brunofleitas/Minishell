@@ -12,14 +12,16 @@
 
 #include "libft.h"
 
-char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char), \
+													t_ntc **first_node)
 {
 	unsigned int	i;
 	char			*result;
 
 	if (!s || !f)
 		return (NULL);
-	result = (char *)malloc((ft_strlen(s) + 1) * sizeof(char));
+	result = (char *)(g_c(first_node, \
+									(ft_strlen(s) + 1) * sizeof(char))->data);
 	if (!result)
 		return (NULL);
 	i = 0;

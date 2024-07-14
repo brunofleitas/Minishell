@@ -43,7 +43,7 @@ int	main(void)
 				break ;
 			}
 			add_history(input);
-			lexer(input);
+			lexer(input, &first_node);
 			free(input);
 		}
 		else

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Z_Garbage_Collector.c                              :+:      :+:    :+:   */
+/*   Z_g_c.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pcasagra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
 /*
 The free_ntc_prior function is used to free a node in the garbage collector
@@ -28,8 +28,10 @@ void	free_ntc_prior(t_ntc **first_node, void *data_ptr)
 			break ;
 		temp = temp->next;
 	}
-    temp->prev->next = temp->next;
-    temp->next->prev = temp->prev;
+	if(temp->prev)
+    	temp->prev->next = temp->next;
+	if(temp->next)
+    	temp->next->prev = temp->prev;
 	free(temp->data);
     temp->data = NULL;
     free(temp);
@@ -61,10 +63,10 @@ void	free_memory(t_ntc **first_node)
 }
 
 /*
-The function util_garbage_collector is used to create a new node in the garbage
+The function util_g_c is used to create a new node in the garbage
 collector list.
 */
-static t_ntc	**util_garbage_collector(t_ntc **new_node, size_t size_of)
+static t_ntc	**util_g_c(t_ntc **new_node, size_t size_of)
 {
 	*new_node = malloc(sizeof(t_ntc));
 	if (*new_node == NULL)
@@ -78,7 +80,7 @@ static t_ntc	**util_garbage_collector(t_ntc **new_node, size_t size_of)
 	return (new_node);
 }
 
-/* The garbage_collector function is used to create a list of all the adresses
+/* The g_c function is used to create a list of all the adresses
 where we allocated memory on the heap. Each time we need to allocate space on
 the heap for a new element regardless of its type we use this function. So each
 time this function is called the adress of the new memory allocation on the
@@ -93,19 +95,19 @@ function() {
 t_ntc	*first_node;
 
 first_node = NULL;
-garbage_collector(&first_node, sizeof(t_lst));
+g_c(&first_node, sizeof(t_lst));
 }
 
 t_lst is the type of the data we want to store in the garbage collector list.
 */
-t_ntc	*garbage_collector(t_ntc **first_node, size_t size_of)
+t_ntc	*g_c(t_ntc **first_node, size_t size_of)
 {
 	t_ntc	*temp;
 	t_ntc	*new_node;
 
 	if (!first_node)
 		return (NULL);
-	if (util_garbage_collector(&new_node, size_of) == NULL)
+	if (util_g_c(&new_node, size_of) == NULL)
 		return (NULL);
 	new_node->next = NULL;
 	new_node->prev = NULL;
@@ -124,6 +126,7 @@ t_ntc	*garbage_collector(t_ntc **first_node, size_t size_of)
 
 /*
 ntc = node to clean
+gc = garbage collector
 The first malloc allocates a new garbage collector node.
 The second malloc allocates memory for the actual data (t_lst nodes)
 */

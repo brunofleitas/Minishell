@@ -68,24 +68,13 @@ typedef struct s_word
 	char		*value;
 }				t_word;
 
-/* ************************  GARBAGE COLLECTOR NODE  ************************ */
-typedef struct s_ntc
-{
-	void			*data;
-	struct s_ntc	*next;
-	struct s_ntc	*prev;
-
-}					t_ntc;
-// ntc = node to clean
-
-
 /* ************************************************************************** */
 /*                                   FUNCTIONS                                */
 /* ************************************************************************** */
-void				lexer(char *input);
-int					count_words_tokens(char const *s, char c);
-char				**ft_split_tokens(char const *s, char c);
+void				lexer(char *input, t_ntc **first_node);
+int					count_w_tks(char const *s, char c);
+char				**ft_split_tokens(char const *s, char c, \
+															t_ntc **first_node);
 t_token_type		clasify_token(char *value);
-t_ntc				*garbage_collector(t_ntc **first_node, size_t size_of);
 
 #endif

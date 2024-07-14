@@ -46,7 +46,7 @@ static void	populate(char *newstr, long long newn, int sign, int size)
 	newstr[size] = '\0';
 }
 
-char	*ft_itoa(int n)
+char	*ft_itoa_gb(int n, t_ntc **first_node)
 {
 	int			sign;
 	int			size;
@@ -61,7 +61,7 @@ char	*ft_itoa(int n)
 		sign = -1;
 	}
 	size = ft_intsize(newn, sign);
-	newstr = malloc((size + 1) * sizeof(char));
+	newstr = g_c(first_node, (size + 1) * sizeof(char))->data;
 	if (!newstr)
 		return (NULL);
 	populate(newstr, newn, sign, size);

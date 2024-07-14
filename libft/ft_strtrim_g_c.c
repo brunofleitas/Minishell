@@ -64,13 +64,13 @@ static void	populate(char *newstr, char const *s1, char const *set, int lnewstr)
 	newstr[i] = '\0';
 }
 
-char	*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char const *s1, char const *set, t_ntc **first_node)
 {
 	int		lnewstr;
 	char	*newstr;
 
 	lnewstr = calclength(s1, set);
-	newstr = malloc((lnewstr + 1) * sizeof(char));
+	newstr = g_c(first_node, (lnewstr + 1) * sizeof(char))->data;
 	if (!newstr)
 		return (NULL);
 	populate(newstr, s1, set, lnewstr);

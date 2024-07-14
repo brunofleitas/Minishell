@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char const *s1, char const *s2, t_ntc **first_node)
 {
 	int		s1s2len;
 	char	*join;
@@ -20,7 +20,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (s1 && s2)
 	{
 		s1s2len = ft_strlen(s1) + ft_strlen(s2);
-		join = malloc((s1s2len + 1) * sizeof(char));
+		join = g_c(first_node, \
+									(s1s2len + 1) * sizeof(char))->data;
 		if (!join)
 			return (NULL);
 		ft_strlcpy(join, s1, ft_strlen(s1) + 1);

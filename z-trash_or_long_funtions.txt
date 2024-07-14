@@ -1,5 +1,5 @@
 /*
-static int	count_words_tokens(char const *s, char c)
+static int	count_w_tks(char const *s, char c)
 {
 	int		counter;
 	int		i;
@@ -43,7 +43,7 @@ static int	count_words_tokens(char const *s, char c)
 static char	**ft_split_tokens(char const *s, char c)
 {
 	i = 0;
-	split = (char **)malloc((count_words_tokens(s, c) + 1) * sizeof(char *));
+	split = (char **)malloc((count_w_tks(s, c) + 1) * sizeof(char *));
 	if (!s || !split)
 		return (0);
 	while (*s)
@@ -93,7 +93,7 @@ static char	**ft_split_tokens(char const *s, char c)
 	return (split);
 }*/
 
-/*static int	count_words_tokens(char const *s, char c)
+/*static int	count_w_tks(char const *s, char c)
 {
 	int		counter;
 	int		i;
@@ -145,7 +145,7 @@ static char	**ft_split_tokens(char const *s, char c)
 	int		len;
 
 	i = 0;
-	split = (char **)malloc((count_words_tokens(s, c) + 1) * sizeof(char *));
+	split = (char **)malloc((count_w_tks(s, c) + 1) * sizeof(char *));
 	if (!s || !split)
 		return (0);
 	while (*s)

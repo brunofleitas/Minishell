@@ -21,17 +21,17 @@
     Splits the input string into tokens. Stores each word in a new
     node of type t_word. Prints each word and frees split memory.
 */
-void	lexer(char *input, t_ntc *first_node)
+void	lexer(char *input, t_ntc **first_node)
 {
 	t_word	*tokens[1024];
 	char	**split;
 	int		i;
 
 	i = 0;
-	split = ft_split_tokens(input, ' ');
+	split = ft_split_tokens(input, ' ', first_node);
 	while (split[i])
 	{
-		tokens[i] = garbage_collector(first_node, sizeof(t_word));
+		tokens[i] = g_c(first_node, sizeof(t_word))->data;
 		tokens[i]->value = split[i];
 		tokens[i]->key = clasify_token(tokens[i]->value);
 		ft_printf("%s\nType : %i\n\n", tokens[i]->value, tokens[i]->key);

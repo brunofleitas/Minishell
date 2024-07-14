@@ -25,7 +25,7 @@
 	advancement of the input string based on whether the quote ends at the end 
 	of the line or not.
 */
-static void	generate_quotes(const char **s, char ***split, int *i)
+static void	generate_quotes(const char **s, char ***split, int *i, t_ntc **first_node)
 {
 	char	quote;
 	int		word_length;
@@ -34,7 +34,7 @@ static void	generate_quotes(const char **s, char ***split, int *i)
 	word_length = 0;
 	while ((*s)[word_length] != quote && (*s)[word_length])
 		word_length++;
-	(*split)[(*i)++] = ft_substr(*s, 0, word_length);
+	(*split)[(*i)++] = ft_substr_g_c(*s, 0, word_length, first_node);
 	if ((*s)[word_length] != '\0')
 		*s += word_length + 1;
 	else
@@ -51,9 +51,10 @@ static void	generate_quotes(const char **s, char ***split, int *i)
 	the input string into the tokens array. Advances the input string by 2 
 	positions to skip the operator.
 */
-static void	generate_double_operators(const char **s, char ***split, int *i)
+static void	generate_double_operators(const char **s, char ***split, int *i, \
+															t_ntc **first_node)
 {
-	(*split)[(*i)++] = ft_substr(*s, 0, 2);
+	(*split)[(*i)++] = ft_substr_g_c(*s, 0, 2, first_node);
 	*s += 2;
 }
 
@@ -69,14 +70,14 @@ static void	generate_double_operators(const char **s, char ***split, int *i)
     Advances the input string by the length of the extracted substring.
 */
 static void	generate_single_operators_and_specials(const char **s,
-		char ***split, int *i)
+		char ***split, int *i, t_ntc **first_node)
 {
 	int	len;
 
 	len = 1;
 	if (**s == '$' && *(*s + 1) == '?')
 		len = 2;
-	(*split)[(*i)++] = ft_substr(*s, 0, len);
+	(*split)[(*i)++] = ft_substr_g_c(*s, 0, len, first_node);
 	*s += len;
 }
 
@@ -92,14 +93,15 @@ static void	generate_single_operators_and_specials(const char **s,
 	the first occurrence of an operator or special character. Advances the 
 	input string by the length of the extracted token.
 */
-static void	generate_regular_tokens(const char **s, char ***split, int *i)
+static void	generate_regular_tokens(const char **s, char ***split, int *i, \
+																t_ntc **first_node)
 {
 	int	word_length;
 
 	word_length = 0;
 	while ((*s)[word_length] && !strchr(" ><&()|$", (*s)[word_length]))
 		word_length++;
-	(*split)[(*i)++] = ft_substr(*s, 0, word_length);
+	(*split)[(*i)++] = ft_substr_g_c(*s, 0, word_length, first_node);
 	*s += word_length;
 }
 
@@ -119,13 +121,13 @@ static void	generate_regular_tokens(const char **s, char ***split, int *i)
 	initializes it accordingly. The last element of the array is set to NULL
 	to indicate the end.
 */
-char	**ft_split_tokens(char const *s, char c)
+char	**ft_split_tokens(char const *s, char c, t_ntc **first_node)
 {
 	char	**split;
 	int		i;
 
 	i = 0;
-	split = malloc((count_words_tokens(s, c) + 1) * sizeof(char *));
+	split = g_c(first_node, (count_w_tks(s, c) + 1) * sizeof(char *))->data;
 	if (!s || !split)
 		return (NULL);
 	while (*s)
@@ -133,17 +135,18 @@ char	**ft_split_tokens(char const *s, char c)
 		if (*s == c)
 			s++;
 		else if (*s == '"' || *s == '\'')
-			generate_quotes(&s, &split, &i);
+			generate_quotes(&s, &split, &i, first_node);
 		else if ((*s == '>' && *(s + 1) == '>') || (*s == '<' && *(s
 					+ 1) == '<') || (*s == '&' && *(s + 1) == '&') || (*s == '|'
 				&& *(s + 1) == '|'))
-			generate_double_operators(&s, &split, &i);
+			generate_double_operators(&s, &split, &i, first_node);
 		else if (*s == '>' || *s == '<' || *s == '(' || *s == ')' || *s == '|'
 			|| (*s == '$' && *(s + 1) == '?') || *s == '$')
-			generate_single_operators_and_specials(&s, &split, &i);
+			generate_single_operators_and_specials(&s, &split, &i, first_node);
 		else
-			generate_regular_tokens(&s, &split, &i);
+			generate_regular_tokens(&s, &split, &i, first_node);
 	}
 	split[i] = NULL;
 	return (split);
 }
+// f_node is an alias for first_node but I had to shorten it otherwise the funtion would have been more than 25 lines long.
