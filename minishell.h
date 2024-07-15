@@ -83,6 +83,15 @@ int					count_w_tks(char const *s, char c);
 char				**ft_split_tokens(char const *s, char c,
 						t_ntc **first_node);
 t_token_type		clasify_token(char *value);
+int					is_command(t_word *token);
+int					is_operator(t_word *token);
+int					is_redirect(t_word *token);
+int					is_variable(t_word *token);
+int					is_string(t_word *token);
+int					is_argument(t_word *token);
+int					is_here_document(t_word *token);
+int					is_error(t_word *token);
 void				parser(t_word **tokens, t_ast **root, t_ntc **first_node);
+void 				free_ast(t_ast **root);
 
 #endif

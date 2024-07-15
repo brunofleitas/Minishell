@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:59:46 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/15 15:32:32 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/07/15 23:57:19 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ int	main(void)
 	t_ast	*root;
 
 	first_node = NULL;
-	root = NULL;
 	while (1)
 	{
+		root = NULL;
 		input = readline(">>");
 		if (input)
 		{
@@ -48,6 +48,7 @@ int	main(void)
 			add_history(input);
 			lexer(input, &first_node, tokens);
 			parser(tokens, &root, &first_node);
+			free_ast(&root);
 			free(input);
 		}
 		else
