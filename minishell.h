@@ -3,14 +3,14 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include "ft_printf.h"
-#include "libft.h"
-#include <readline/history.h>
-#include <readline/readline.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+# include "ft_printf.h"
+# include "libft.h"
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <unistd.h>
 
 /*
   t_token_type: An enumeration representing different types of tokens encountered
@@ -38,7 +38,7 @@
 */
 typedef enum e_token_type
 {
-	TOKEN_ERROR ,
+	TOKEN_ERROR,
 	TOKEN_COMMAND_ECHO,
 	TOKEN_COMMAND_CD,
 	TOKEN_COMMAND_PWD,
@@ -57,24 +57,32 @@ typedef enum e_token_type
 	TOKEN_STRING_SINGLE,
 	TOKEN_STRING_DOUBLE,
 	TOKEN_ARGUMENT,
-}				t_token_type;
+}					t_token_type;
 
 /* ************************************************************************** */
-/*                           STRUCTURE DEFINITIONS                            */                           
+/*                           STRUCTURE DEFINITIONS                            */
 /* ************************************************************************** */
 typedef struct s_word
 {
 	t_token_type	key;
-	char		*value;
-}				t_word;
+	char			*value;
+}					t_word;
+
+typedef struct s_ast
+{
+	t_word			*data;
+	struct s_ast	*left;
+	struct s_ast	*right;
+}					t_ast;
 
 /* ************************************************************************** */
 /*                                   FUNCTIONS                                */
 /* ************************************************************************** */
-void				lexer(char *input, t_ntc **first_node);
+void				lexer(char *input, t_ntc **first_node, t_word **tokens);
 int					count_w_tks(char const *s, char c);
-char				**ft_split_tokens(char const *s, char c, \
-															t_ntc **first_node);
+char				**ft_split_tokens(char const *s, char c,
+						t_ntc **first_node);
 t_token_type		clasify_token(char *value);
+void				parser(t_word **tokens, t_ast **root, t_ntc **first_node);
 
 #endif
