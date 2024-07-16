@@ -120,7 +120,7 @@ struct s_astnode
             t_astnode *commands;
             int command_count;
         } pipeline;
-
+		
         struct {
             t_astnode *words;
             t_astnode *redirections;
