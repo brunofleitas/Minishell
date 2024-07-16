@@ -35,7 +35,7 @@ void	lexer(char *input, t_ntc **first_node)
 		tokens[i]->value = split[i];
 		tokens[i]->key = clasify_token(tokens[i]->value);
 		ft_printf("%s\nType : %i\n\n", tokens[i]->value, tokens[i]->key);
-		free_ntc_prior(first_node, split[i]);
+		//free_ntc_prior(first_node, split[i]);
 		i++;
 	}
 	free_ntc_prior(first_node, split);
