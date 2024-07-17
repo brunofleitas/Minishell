@@ -33,7 +33,7 @@ static int	word_count(const char *s, char c)
 	return (count);
 }
 
-static char	*get_next_word(const char **s, char c, t_ntc **first_node)
+static char	*get_next_token(const char **s, char c, t_ntc **first_node)
 {
 	const char	*start;
 
@@ -58,7 +58,7 @@ char	**ft_split(char const *s, char c, t_ntc **first_node)
 	if (!s || !split)
 		return (NULL);
 	while (i < words)
-		split[i++] = get_next_word(&s, c, first_node);
+		split[i++] = get_next_token(&s, c, first_node);
 	split[i] = NULL;
 	return (split);
 }
@@ -125,7 +125,7 @@ Counts words in s separated by c. It iterates through s, using in_word
 flag to track when it enters or leaves a word. Increments count at each word
 start. Returns total word count.
 
-get_next_word:
+get_next_token:
 Finds and allocates memory for the next word in s separated by c. Skips
 leading delimiters, then marks the start of a word. Finds the word's end, and
 uses ft_substr to allocate and copy the word, returning its pointer.
@@ -133,7 +133,7 @@ uses ft_substr to allocate and copy the word, returning its pointer.
 ft_split:
 Splits s into an array of words using c as a delimiter. Uses word_count
 to allocate memory for an array of pointers for each word plus a NULL terminator.
-Iterates through s, using get_next_word to allocate and assign each word
+Iterates through s, using get_next_token to allocate and assign each word
 to the array. Returns the array of word pointers.
 */
 /* ************************************************************************** */

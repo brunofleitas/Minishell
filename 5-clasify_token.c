@@ -15,30 +15,30 @@
 static t_token_type	classify_command(char *value)
 {
 	if (ft_strcmp(value, "echo") == 0)
-		return (TOKEN_COMMAND_ECHO);
+		return (ECHO);
 	if (ft_strcmp(value, "cd") == 0)
-		return (TOKEN_COMMAND_CD);
+		return (CD);
 	if (ft_strcmp(value, "pwd") == 0)
-		return (TOKEN_COMMAND_PWD);
+		return (PWD);
 	if (ft_strcmp(value, "export") == 0)
-		return (TOKEN_COMMAND_EXPORT);
+		return (EXPORT);
 	if (ft_strcmp(value, "unset") == 0)
-		return (TOKEN_COMMAND_UNSET);
+		return (UNSET);
 	if (ft_strcmp(value, "env") == 0)
-		return (TOKEN_COMMAND_ENV);
+		return (ENV);
 	return (TOKEN_ERROR);
 }
 
 static t_token_type	classify_operator(char *value)
 {
 	if (ft_strcmp(value, "<") == 0)
-		return (TOKEN_REDIRECT_IN);
+		return (TOKEN_REDIR_IN);
 	if (ft_strcmp(value, ">") == 0)
-		return (TOKEN_REDIRECT_OUT);
+		return (TOKEN_REDIR_OUT);
 	if (ft_strcmp(value, ">>") == 0)
-		return (TOKEN_REDIRECT_APPEND);
+		return (TOKEN_REDIR_APPEND);
 	if (ft_strcmp(value, "<<") == 0)
-		return (TOKEN_HERE_DOCUMENT);
+		return (TOKEN_HEREDOC);
 	if (ft_strcmp(value, "|") == 0)
 		return (TOKEN_PIPE);
 	if (ft_strcmp(value, "&&") == 0)
@@ -51,18 +51,18 @@ static t_token_type	classify_operator(char *value)
 static t_token_type	classify_variable(char *value)
 {
 	if (value[0] == '$' && value[1] == '?')
-		return (TOKEN_VARIABLE_EXIT);
+		return (TOKEN_EXIT_STATUS);
 	if (value[0] == '$')
-		return (TOKEN_VARIABLE);
+		return (TOKEN_ENV_VAR);
 	return (TOKEN_ERROR);
 }
 
 static t_token_type	classify_string(char *value)
 {
 	if (value[0] == '\'' && value[ft_strlen(value) - 1] == '\'')
-		return (TOKEN_STRING_SINGLE);
+		return (TOKEN_SINGLE_QUOTE);
 	if (value[0] == '"' && value[ft_strlen(value) - 1] == '"')
-		return (TOKEN_STRING_DOUBLE);
+		return (TOKEN_DOUBLE_QUOTE);
 	return (TOKEN_ERROR);
 }
 

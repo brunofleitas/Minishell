@@ -22,17 +22,17 @@
 	TOKEN_COMMAND_EXPORT: Represents an export command token.
 	TOKEN_COMMAND_UNSET: Represents an unset command token.
 	TOKEN_COMMAND_ENV: Represents an environment variable command token.
-	TOKEN_REDIRECT_IN: Represents an input redirection token.
-	TOKEN_REDIRECT_OUT: Represents an output redirection token.
-	TOKEN_REDIRECT_APPEND: Represents an append redirection token.
-	TOKEN_HERE_DOCUMENT: Represents a here document token.
+	TOKEN_REDIR_IN: Represents an input redirection token.
+	TOKEN_REDIR_OUT: Represents an output redirection token.
+	TOKEN_REDIR_APPEND: Represents an append redirection token.
+	TOKEN_HEREDOC: Represents a here document token.
 	TOKEN_PIPE: Represents a pipe token.
 	TOKEN_AND: Represents an AND logical operator token.
 	TOKEN_OR: Represents an OR logical operator token.
-	TOKEN_VARIABLE: Represents a variable token.
-	TOKEN_VARIABLE_EXIT: Represents a variable exit status token.
-	TOKEN_STRING_SINGLE: Represents a single-quoted string token.
-	TOKEN_STRING_DOUBLE: Represents a double-quoted string token.
+	TOKEN_ENV_VAR: Represents a variable token.
+	TOKEN_EXIT_STATUS: Represents a variable exit status token.
+	TOKEN_SINGLE_QUOTE: Represents a single-quoted string token.
+	TOKEN_DOUBLE_QUOTE: Represents a double-quoted string token.
 	TOKEN_ARGUMENT: Represents a general argument token.
 	TOKEN_ERROR: Represents an error token.
 */
@@ -46,22 +46,33 @@ typedef enum e_token_type
 	TOKEN_COMMAND_EXPORT,
 	TOKEN_COMMAND_UNSET,
 	TOKEN_COMMAND_ENV,
-	TOKEN_REDIRECT_IN,
-	TOKEN_REDIRECT_OUT,
-	TOKEN_REDIRECT_APPEND,
-	TOKEN_HERE_DOCUMENT,
+	TOKEN_REDIR_IN,
+	TOKEN_REDIR_OUT,
+	TOKEN_REDIR_APPEND,
+	TOKEN_HEREDOC,
 	TOKEN_PIPE,
 	TOKEN_AND,
 	TOKEN_OR,
-	TOKEN_VARIABLE,
-	TOKEN_VARIABLE_EXIT,
-	TOKEN_STRING_SINGLE,
-	TOKEN_STRING_DOUBLE,
+	TOKEN_ENV_VAR,
+	TOKEN_EXIT_STATUS,
+	TOKEN_SINGLE_QUOTE,
+	TOKEN_DOUBLE_QUOTE,
 	TOKEN_ARGUMENT,
 }				t_token_type;
 */
 
-typedef enum e_token_type{
+typedef enum e_builtins
+{
+    ECHO,
+    CD,
+    PWD,
+    EXPORT,
+    UNSET,
+    ENV,
+}				t_builtins;
+
+typedef enum e_token_type
+{
     TOKEN_WORD,           // Regular words/commands
     TOKEN_SINGLE_QUOTE,   // '
     TOKEN_DOUBLE_QUOTE,   // "
@@ -77,17 +88,19 @@ typedef enum e_token_type{
     TOKEN_LPAREN,         // (
     TOKEN_RPAREN,         // )
     TOKEN_WILDCARD,       // *
-    TOKEN_EOF             // End of input
+    TOKEN_EOF,            // End of input
+    TOKEN_ARGUMENT,       // Is there an input? maybe this one we delete at some point let's see
+    TOKEN_ERROR           // Error
 } 			t_token_type;
 
 /* ************************************************************************** */
 /*                           STRUCTURE DEFINITIONS                            */                           
 /* ************************************************************************** */
-typedef struct s_word
+typedef struct  s_token
 {
-	t_token_type	key;
-	char		*value;
-}				t_word;
+	t_token_type	type;
+	char		    *value;
+}				t_token;
 
 
 /* ************************************************************************** */
@@ -108,7 +121,7 @@ typedef struct s_astnode t_astnode;
 struct s_astnode 
 {
     t_nodetype type;
-
+    t_nodetype *next;
     union {
         struct {
             t_astnode *left;
@@ -117,7 +130,7 @@ struct s_astnode
         } command_line;
 
         struct {
-            t_astnode *commands;
+            t_astnode **commands;
             int command_count;
         } pipeline;
 		
@@ -163,5 +176,14 @@ int					count_w_tks(char const *s, char c);
 char				**ft_split_tokens(char const *s, char c, \
 															t_ntc **first_node);
 t_token_type		clasify_token(char *value);
+
+t_astnode           *parse_command_line(t_ntc **first_node);
+t_astnode           *parse_pipeline(t_ntc **first_node);
+t_astnode           *parse_command(t_ntc **first_node);
+t_astnode           *parse_simple_command(t_ntc **first_node);
+t_astnode           *parse_word_list(t_ntc **first_node);
+t_astnode           *parse_word(t_ntc **first_node);
+t_astnode           *parse_redirection_list(t_ntc **first_node);
+t_astnode           *parse_redirection(t_ntc **first_node);
 
 #endif
