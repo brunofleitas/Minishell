@@ -143,12 +143,13 @@ int							is_word_token(t_token_type type);
 int							is_redirection_token(t_token_type type);
 t_astnode                    *create_ast_node(t_ntc **first_node,
                                 t_nodetype type);
+t_token						*get_next_token(t_token **tokens);
 
-t_astnode					*parse_command_line(t_ntc **first_node);
-t_astnode					*parse_pipeline(t_ntc **first_node);
-t_astnode					*parse_command(t_ntc **first_node);
-t_astnode					*parse_simple_command(t_ntc **first_node);
-t_astnode					*parse_word_list(t_ntc **first_node);
-t_astnode					*parse_redirection_list(t_ntc **first_node);
+t_astnode					*parse_command_line(t_ntc **first_node, t_token **tokens);
+t_astnode					*parse_pipeline(t_ntc **first_node, t_token **tokens, t_token *current_token);
+t_astnode					*parse_command(t_ntc **first_node, t_token **tokens, t_token *current_token);
+t_astnode					*parse_simple_command(t_ntc **first_node, t_token **tokens, t_token *current_token);
+t_astnode					*parse_word_list(t_ntc **first_node, t_token **tokens, t_token *current_token);
+t_astnode					*parse_redirection_list(t_ntc **first_node, t_token **tokens, t_token *current_token);
 
 #endif

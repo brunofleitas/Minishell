@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 12:24:43 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/18 12:25:54 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/07/18 12:36:47 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,12 @@
  */
 int is_word_token(t_token_type type) 
 {
-    return (type == TOKEN_WORD || type == TOKEN_SINGLE_QUOTE || type == TOKEN_DOUBLE_QUOTE ||
-           type == TOKEN_ENV_VAR || type == TOKEN_EXIT_STATUS || type == TOKEN_WILDCARD);
+    return (type == TOKEN_WORD 
+        || type == TOKEN_SINGLE_QUOTE
+        || type == TOKEN_DOUBLE_QUOTE
+        || type == TOKEN_ENV_VAR
+        || type == TOKEN_EXIT_STATUS
+        || type == TOKEN_WILDCARD);
 }
 
 /* 
@@ -28,6 +32,8 @@ int is_word_token(t_token_type type)
  */
 int is_redirection_token(t_token_type type) 
 {
-    return (type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT || 
-           type == TOKEN_REDIR_APPEND || type == TOKEN_HEREDOC);
+    return (type == TOKEN_REDIR_IN
+        || type == TOKEN_REDIR_OUT
+        || type == TOKEN_REDIR_APPEND
+        || type == TOKEN_HEREDOC);
 }

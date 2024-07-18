@@ -6,18 +6,28 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 12:26:51 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/18 12:27:10 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/07/18 12:38:59 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+t_token *get_next_token(t_token **tokens) 
+{
+    static int i;
+
+    if (!tokens[i])
+        return (NULL);
+    return (tokens[i++]);
+}
+
 t_astnode *create_ast_node(t_ntc **first_node, t_nodetype type) 
 {
     t_astnode *node;
     
-    node = gc(first_node, sizeof(t_astnode));
-    if (!node) {
+    node = g_c(first_node, sizeof(t_astnode))->data;
+    if (!node)
+    {
         fprintf(stderr, "Error: Memory allocation failed\n");
         exit(1);
     }
