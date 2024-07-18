@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 15:03:22 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/15 22:55:52 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/07/18 12:14:35 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
     Splits the input string into tokens. Stores each word in a new
     node of type t_word. Prints each word and frees split memory.
 */
-void	lexer(char *input, t_ntc **first_node, t_word **tokens)
+void	lexer(char *input, t_ntc **first_node, t_token **tokens)
 {
 	char	**split;
 	int		i;
@@ -30,13 +30,13 @@ void	lexer(char *input, t_ntc **first_node, t_word **tokens)
 	split = ft_split_tokens(input, ' ', first_node);
 	while (split[i])
 	{
-		tokens[i] = g_c(first_node, sizeof(t_word))->data;
+		tokens[i] = g_c(first_node, sizeof(t_token))->data;
 		tokens[i]->value = split[i];
-		tokens[i]->key = clasify_token(tokens[i]->value);
+		tokens[i]->type = clasify_token(tokens[i]->value);
 		//ft_printf("%s\nType : %i\n\n", tokens[i]->value, tokens[i]->key);
 		//free_ntc_prior(first_node, split[i]);
 		i++;
 	}
 	tokens[i] = NULL;
-	free_ntc_prior(first_node, split);
+	//free_ntc_prior(first_node, split);
 }
