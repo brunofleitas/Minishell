@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 14:26:55 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/18 12:56:25 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/07/18 21:06:56 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ t_astnode *parse_word_list(t_ntc **first_node, t_token **tokens, t_token *curren
         }
 		else
 		{
-            current->next = word_node;
+            current->next  = word_node;
             current = word_node;
         }
         current_token = get_next_token(tokens);
