@@ -1,7 +1,5 @@
 #include "minishell.h"
 
-
-
 t_token current_token;
 t_token get_next_token();
 
@@ -10,7 +8,8 @@ t_astnode *create_ast_node(t_ntc **first_node, t_nodetype type)
     t_astnode *node;
     
     node = gc(first_node, sizeof(t_astnode));
-    if (!node) {
+    if (!node) 
+    {
         fprintf(stderr, "Error: Memory allocation failed\n");
         exit(1);
     }
@@ -39,7 +38,6 @@ t_astnode *parse_command_line(t_ntc **first_node)
         new_node->data.command_line.right = parse_pipeline(first_node);
         node = new_node;
     }
-    
     return (node);
 }
 
@@ -64,7 +62,6 @@ t_astnode *parse_pipeline(t_ntc **first_node)
                                                node->data.pipeline.command_count * sizeof(t_astnode*));
         node->data.pipeline.commands[node->data.pipeline.command_count - 1] = parse_command(first_node);
     }
-    
     return (node);
 }
 
@@ -81,13 +78,15 @@ t_astnode *parse_command(t_ntc **first_node)
     {
         get_next_token();
         node = parse_command_line(first_node);
-        if (current_token.type != TOKEN_RPAREN) {
+        if (current_token.type != TOKEN_RPAREN) 
+        {
             fprintf(stderr, "Error: Expected closing parenthesis\n");
             exit(1);
         }
         get_next_token();
         return (node);
-    } else 
+    } 
+    else 
     {
         return parse_simple_command(first_node);
     }
@@ -126,17 +125,19 @@ t_astnode *parse_word_list(t_ntc **first_node)
         word_node->data.word.value = strdup(current_token.value);
         word_node->data.word.type = current_token.type;
 
-        if (!head) {
+        if (!head) 
+        {
             head = word_node;
             current = head;
-        } else {
+        }
+        else
+        {
             current->next = word_node;
             current = word_node;
         }
 
         get_next_token();
     }
-
     return (head);
 }
 
@@ -157,17 +158,20 @@ t_astnode *parse_redirection_list(t_ntc **first_node)
         redir_node = create_ast_node(first_node, NODE_REDIRECTION);
         redir_node->data.redirection.type = current_token.type;
         get_next_token();
-        if (!is_word_token(current_token.type)) {
+        if (!is_word_token(current_token.type))
+        {
             fprintf(stderr, "Error: Expected filename after redirection\n");
             exit(1);
         }
         redir_node->data.redirection.file = strdup(current_token.value);
         get_next_token();
-        
-        if (!head) {
+        if (!head) 
+        {
             head = redir_node;
             current = head;
-        } else {
+        }
+        else
+        {
             current->next = redir_node;
             current = redir_node;
         }
@@ -175,14 +179,15 @@ t_astnode *parse_redirection_list(t_ntc **first_node)
     return (head);
 }
 
-/* 
+/*
  * Checks if the given token type is a word token.
  * Returns 1 if it is, 0 otherwise.
  */
 int is_word_token(t_token_type type) 
 {
-    return (type == TOKEN_WORD || type == TOKEN_SINGLE_QUOTE || type == TOKEN_DOUBLE_QUOTE ||
-           type == TOKEN_ENV_VAR || type == TOKEN_EXIT_STATUS || type == TOKEN_WILDCARD);
+    return (type == TOKEN_WORD || type == TOKEN_SINGLE_QUOTE || 
+            type == TOKEN_DOUBLE_QUOTE || type == TOKEN_ENV_VAR ||
+            type == TOKEN_EXIT_STATUS || type == TOKEN_WILDCARD);
 }
 
 /* 
@@ -191,6 +196,6 @@ int is_word_token(t_token_type type)
  */
 int is_redirection_token(t_token_type type) 
 {
-    return (type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT || 
-           type == TOKEN_REDIR_APPEND || type == TOKEN_HEREDOC);
+    return (type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT ||
+            type == TOKEN_REDIR_APPEND || type == TOKEN_HEREDOC);
 }

@@ -61,7 +61,7 @@ typedef enum e_token_type
 }				t_token_type;
 */
 
-typedef enum e_builtins
+typedef enum    e_builtins
 {
     ECHO,
     CD,
@@ -177,6 +177,7 @@ char				**ft_split_tokens(char const *s, char c, \
 															t_ntc **first_node);
 t_token_type		clasify_token(char *value);
 
+t_astnode           *create_ast_node(t_ntc **first_node, t_nodetype type);
 t_astnode           *parse_command_line(t_ntc **first_node);
 t_astnode           *parse_pipeline(t_ntc **first_node);
 t_astnode           *parse_command(t_ntc **first_node);
