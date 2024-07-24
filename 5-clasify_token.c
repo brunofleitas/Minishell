@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 21:49:28 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/18 12:19:56 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/07/21 17:25:11 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 static t_token_type	classify_command(char *value)
 {
 	if (ft_strcmp(value, "echo") == 0)
-		return (ECHO);
+		return (TOKEN_WORD);
 	if (ft_strcmp(value, "cd") == 0)
-		return (CD);
+		return (TOKEN_WORD);
 	if (ft_strcmp(value, "pwd") == 0)
-		return (PWD);
+		return (TOKEN_WORD);
 	if (ft_strcmp(value, "export") == 0)
-		return (EXPORT);
+		return (TOKEN_WORD);
 	if (ft_strcmp(value, "unset") == 0)
-		return (UNSET);
+		return (TOKEN_WORD);
 	if (ft_strcmp(value, "env") == 0)
-		return (ENV);
+		return (TOKEN_WORD);
 	return (TOKEN_ERROR);
 }
 

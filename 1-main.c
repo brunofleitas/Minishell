@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:59:46 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/18 12:15:06 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/07/24 12:39:17 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,19 @@
 	finally frees the memory allocated for the input string after processing. 
 	The function also ensures to clear the history at the end of execution.
 */
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
+	(void)argc;
+	(void)argv;
 	char		*input;
 	t_ntc		*first_node;
 	t_token		*tokens[1024];
-	t_astnode	*root;
+	//t_astnode	*root;
 
 	first_node = NULL;
 	while (1)
 	{
-		root = NULL;
+		//root = NULL;
 		input = readline(">>");
 		if (input)
 		{
@@ -47,7 +49,7 @@ int	main(void)
 			}
 			add_history(input);
 			lexer(input, &first_node, tokens);
-			//parser(tokens, &root, &first_node);
+			//root = parse_command_line(&first_node, tokens);
 			//free_ast(&root);
 			free(input);
 		}
