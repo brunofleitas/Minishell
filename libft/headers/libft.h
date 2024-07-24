@@ -30,6 +30,7 @@ typedef struct s_list
 typedef struct s_ntc
 {
 	void			*data;
+	size_t			size;
 	struct s_ntc	*next;
 	struct s_ntc	*prev;
 
@@ -61,6 +62,8 @@ void		*ft_memset(void *s, int c, size_t n);
 t_ntc		*g_c(t_ntc **first_node, size_t size_of);
 void		free_ntc_prior(t_ntc **first_node, void *data_ptr);
 void		free_memory(t_ntc **first_node);
+void    	*ft_realloc_g_c(t_ntc **first_node, void *existing_data,\
+			size_t new_size);
 /* ************************************************************************** */
 /*                                 STRING                                     */
 /* ************************************************************************** */
