@@ -121,34 +121,41 @@ typedef struct s_astnode t_astnode;
 struct s_astnode 
 {
     t_nodetype type;
-    t_nodetype *next;
-    union {
-        struct {
+    union 
+	{
+        struct 
+		{
             t_astnode *left;
             t_astnode *right;
             int operator;
         } command_line;
 
-        struct {
+        struct 
+		{
             t_astnode **commands;
             int command_count;
         } pipeline;
-		
-        struct {
+
+        struct
+		{
             t_astnode *words;
             t_astnode *redirections;
-			int word_count;
+            int word_count;
             int redirection_count;
         } simple_command;
 
-        struct {
+        struct
+		{
             char *value;
             int type;
+            t_astnode *next; // Linked list for words
         } word;
 
-        struct {
+        struct
+		{
             int type;
             char *file;
+            t_astnode *next; // Linked list for redirections
         } redirection;
     } data;
 };
@@ -176,9 +183,9 @@ int					count_w_tks(char const *s, char c);
 char				**ft_split_tokens(char const *s, char c, \
 															t_ntc **first_node);
 t_token_type		clasify_token(char *value);
-
+t_token 		    get_next_token();
 t_astnode           *create_ast_node(t_ntc **first_node, t_nodetype type);
-t_astnode           *parse_command_line(t_ntc **first_node);
+t_astnode           *parse_command_line(t_ntc **first_node, t_token *current_token);
 t_astnode           *parse_pipeline(t_ntc **first_node);
 t_astnode           *parse_command(t_ntc **first_node);
 t_astnode           *parse_simple_command(t_ntc **first_node);
