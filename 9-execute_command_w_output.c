@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   9-execute_simple_commands.c                        :+:      :+:    :+:   */
+/*   9-execute_command_w_output.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 23:30:21 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/24 20:01:33 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/07/25 01:26:59 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 
-static char	*builtin_echo(t_astnode *node, t_ntc **first_node,
+static char	*handle_builtin_echo(t_astnode *node, t_ntc **first_node,
 		int is_pipe, int is_redirect, char *output_file)
 {
 	char	*output;
@@ -61,7 +60,7 @@ static char	*handle_builtin_env(char **env, t_ntc **first_node, int is_pipe,
 	return (NULL);
 }
 
-char	*execute_command(t_astnode *node, int is_pipe, int is_redirect,
+char	*execute_command_w_output(t_astnode *node, int is_pipe, int is_redirect,
 		char *output_file, t_ntc **first_node, char **env)
 {
 	if (!node)

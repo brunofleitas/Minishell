@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   10-builtins.c                                      :+:      :+:    :+:   */
+/*   11-builtins_with_output.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 23:20:11 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/24 19:55:26 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/07/25 01:31:01 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	should_add_newline(t_astnode *node)
 {
 	if (node->data.simple_command.word_count > 1
-		&& !strcmp(node->data.simple_command.words.value[1], "-n"))
+		&& !strcmp(node->data.simple_command.words->data.word.value[1], "-n"))
 		return (0);
 	return (1);
 }

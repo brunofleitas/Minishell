@@ -5,14 +5,13 @@
 
 # include "ft_printf.h"
 # include "libft.h"
+# include <fcntl.h>
+# include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-# include <limits.h>
-# include <fcntl.h>
-
 
 typedef enum e_builtins
 {
@@ -42,9 +41,9 @@ typedef enum e_token_type
 	TOKEN_RPAREN,       // )
 	TOKEN_WILDCARD,     // *
 	TOKEN_EOF,          // End of input
-	TOKEN_ARGUMENT,    
-		// Is there an input? maybe this one we delete at some point let's see
-	TOKEN_ERROR         // Error
+	TOKEN_ARGUMENT,
+	// Is there an input? maybe this one we delete at some point let's see
+	TOKEN_ERROR // Error
 }							t_token_type;
 
 /* ************************************************************************** */
@@ -55,6 +54,12 @@ typedef struct s_token
 	t_token_type			type;
 	char					*value;
 }							t_token;
+
+typedef struct s_env
+{
+	char					**var;
+	int						count;
+}							t_env;
 
 /* ************************************************************************** */
 /*                                  AST NODE                                  */
@@ -144,15 +149,21 @@ t_token_type				clasify_token(char *value);
 
 int							is_word_token(t_token_type type);
 int							is_redirection_token(t_token_type type);
-t_astnode                    *create_ast_node(t_ntc **first_node,
-                                t_nodetype type);
+t_astnode					*create_ast_node(t_ntc **first_node,
+								t_nodetype type);
 t_token						*get_next_token(t_token **tokens);
 
-t_astnode					*parse_command_line(t_ntc **first_node, t_token **tokens);
-t_astnode					*parse_pipeline(t_ntc **first_node, t_token **tokens, t_token *current_token);
-t_astnode					*parse_command(t_ntc **first_node, t_token **tokens, t_token *current_token);
-t_astnode					*parse_simple_command(t_ntc **first_node, t_token **tokens, t_token *current_token);
-t_astnode					*parse_word_list(t_ntc **first_node, t_token **tokens, t_token *current_token);
-t_astnode					*parse_redirection_list(t_ntc **first_node, t_token **tokens, t_token *current_token);
+t_astnode					*parse_command_line(t_ntc **first_node,
+								t_token **tokens);
+t_astnode					*parse_pipeline(t_ntc **first_node,
+								t_token **tokens, t_token *current_token);
+t_astnode					*parse_command(t_ntc **first_node, t_token **tokens,
+								t_token *current_token);
+t_astnode					*parse_simple_command(t_ntc **first_node,
+								t_token **tokens, t_token *current_token);
+t_astnode					*parse_word_list(t_ntc **first_node,
+								t_token **tokens, t_token *current_token);
+t_astnode					*parse_redirection_list(t_ntc **first_node,
+								t_token **tokens, t_token *current_token);
 
 #endif
