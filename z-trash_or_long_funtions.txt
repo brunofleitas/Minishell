@@ -40,7 +40,7 @@ static int	count_w_tks(char const *s, char c)
 }*/
 
 /*
-static char	**ft_split_tokens(char const *s, char c)
+static char	**ft_split_tkns(char const *s, char c)
 {
 	i = 0;
 	split = (char **)malloc((count_w_tks(s, c) + 1) * sizeof(char *));
@@ -136,7 +136,7 @@ static char	**ft_split_tokens(char const *s, char c)
 	return (counter);
 }*/
 
-/*static char	**ft_split_tokens(char const *s, char c)
+/*static char	**ft_split_tkns(char const *s, char c)
 {
 	int		i;
 	int		word_length;

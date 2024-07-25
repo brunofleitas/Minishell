@@ -13,15 +13,15 @@
 #include <unistd.h>
 
 /*
-  t_token_type: An enumeration representing different types of tokens encountered
+  t_token_type: An enumeration representing different types of tkns encountered
   in a minishell environment.
   Values:
-	TOKEN_COMMAND_ECHO: Represents an echo command token.
-	TOKEN_COMMAND_CD: Represents a change directory command token.
-	TOKEN_COMMAND_PWD: Represents a print working directory command token.
-	TOKEN_COMMAND_EXPORT: Represents an export command token.
-	TOKEN_COMMAND_UNSET: Represents an unset command token.
-	TOKEN_COMMAND_ENV: Represents an environment variable command token.
+	TOKEN_cmd_ECHO: Represents an echo cmd token.
+	TOKEN_cmd_CD: Represents a change directory cmd token.
+	TOKEN_cmd_PWD: Represents a print working directory cmd token.
+	TOKEN_cmd_EXPORT: Represents an export cmd token.
+	TOKEN_cmd_UNSET: Represents an unset cmd token.
+	TOKEN_cmd_ENV: Represents an environment variable cmd token.
 	TOKEN_REDIR_IN: Represents an input redirection token.
 	TOKEN_REDIR_OUT: Represents an output redirection token.
 	TOKEN_REDIR_APPEND: Represents an append redirection token.
@@ -40,12 +40,12 @@
 typedef enum e_token_type
 {
 	TOKEN_ERROR ,
-	TOKEN_COMMAND_ECHO,
-	TOKEN_COMMAND_CD,
-	TOKEN_COMMAND_PWD,
-	TOKEN_COMMAND_EXPORT,
-	TOKEN_COMMAND_UNSET,
-	TOKEN_COMMAND_ENV,
+	TOKEN_cmd_ECHO,
+	TOKEN_cmd_CD,
+	TOKEN_cmd_PWD,
+	TOKEN_cmd_EXPORT,
+	TOKEN_cmd_UNSET,
+	TOKEN_cmd_ENV,
 	TOKEN_REDIR_IN,
 	TOKEN_REDIR_OUT,
 	TOKEN_REDIR_APPEND,
@@ -73,7 +73,7 @@ typedef enum    e_builtins
 
 typedef enum e_token_type
 {
-    TOKEN_BUILTIN,           // Regular words/commands
+    TOKEN_BUILTIN,           // Regular words/cmds
     TOKEN_SINGLE_QUOTE,   // '
     TOKEN_DOUBLE_QUOTE,   // "
     TOKEN_REDIR_IN,       // <
@@ -109,10 +109,10 @@ typedef struct  s_token
 
 typedef enum e_nodetype 
 {
-    NODE_COMMAND_LINE,
+    NODE_cmd_LINE,
     NODE_PIPELINE,
-    NODE_COMMAND,
-    NODE_SIMPLE_COMMAND,
+    NODE_cmd,
+    NODE_SIMPLE_cmd,
     NODE_WORD,
     NODE_REDIRECTION
 }			t_nodetype;
@@ -128,12 +128,12 @@ struct s_astnode
             t_astnode *left;
             t_astnode *right;
             int operator;
-        } command_line;
+        } cmd_line;
 
         struct 
 		{
-            t_astnode **commands;
-            int command_count;
+            t_astnode **cmds;
+            int cmd_count;
         } pipeline;
 
         struct
@@ -142,7 +142,7 @@ struct s_astnode
             t_astnode *redirections;
             int word_count;
             int redirection_count;
-        } simple_command;
+        } simple_cmd;
 
         struct
 		{
@@ -163,11 +163,11 @@ struct s_astnode
 /*
 Structs in the Union: Each struct within the union represents different types of node-specific data:
 
-- command_line: For command line nodes, it contains pointers to left and right nodes and an operator (AND/OR).
+- cmd_line: For cmd line nodes, it contains pointers to left and right nodes and an operator (AND/OR).
 
-- pipeline: For pipeline nodes, it contains an array of commands and the count of these commands.
+- pipeline: For pipeline nodes, it contains an array of cmds and the count of these cmds.
 
-- simple_command: For simple command nodes, it contains arrays of words and redirections, and their respective counts.
+- simple_cmd: For simple cmd nodes, it contains arrays of words and redirections, and their respective counts.
 
 - word: For word nodes, it contains a string value and a type indicating what kind of word it is.
 
@@ -178,20 +178,20 @@ Structs in the Union: Each struct within the union represents different types of
 /* ************************************************************************** */
 /*                                   FUNCTIONS                                */
 /* ************************************************************************** */
-void				lexer(char *input, t_ntc **first_node);
+void	            lexer(char *input,t_token **tkns, t_ntc **first_node);
 int					count_w_tks(char const *s, char c);
-char				**ft_split_tokens(char const *s, char c, \
+char				**ft_split_tkns(char const *s, char c, \
 															t_ntc **first_node);
 t_token_type		clasify_token(char *value);
-t_token 		    get_next_token();
+t_token             *get_next_token(t_token **tkns);
+t_astnode           *parser(t_ntc **first_node, t_token **tkns); 
 t_astnode           *create_ast_node(t_ntc **first_node, t_nodetype type);
-t_astnode           *parse_command_line(t_ntc **first_node, t_token *current_token);
-t_astnode           *parse_pipeline(t_ntc **first_node);
-t_astnode           *parse_command(t_ntc **first_node);
-t_astnode           *parse_simple_command(t_ntc **first_node);
-t_astnode           *parse_word_list(t_ntc **first_node);
-t_astnode           *parse_word(t_ntc **first_node);
-t_astnode           *parse_redirection_list(t_ntc **first_node);
-t_astnode           *parse_redirection(t_ntc **first_node);
-
+t_astnode           *parse_cmd_line(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
+t_astnode           *parse_pipeline(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
+t_astnode           *parse_cmd(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
+t_astnode           *parse_simple_cmd(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
+t_astnode           *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
+t_astnode           *parse_redirection_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
+int                 is_word_token(t_token_type type);
+int                 is_redirection_token(t_token_type type);  
 #endif

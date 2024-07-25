@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-char	*ft_strdup(const char *s, t_ntc **first_node)
+char	*ft_strdup_g_c(const char *s, t_ntc **first_node)
 {
 	int		i;
 	char	*newstr;

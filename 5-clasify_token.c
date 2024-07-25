@@ -27,7 +27,7 @@ if (ft_strcmp(value, "echo") == 0)
 	return (TOKEN_ERROR);
 */
 
-static t_token_type	classify_command(char *value)
+static t_token_type	classify_cmd(char *value)
 {
 	if (ft_strcmp(value, "echo") == 0 
 	|| ft_strcmp(value, "cd") == 0 || ft_strcmp(value, "pwd") == 0\
@@ -78,7 +78,7 @@ t_token_type	clasify_token(char *value)
 {
 	int	token_type;
 
-	token_type = classify_command(value);
+	token_type = classify_cmd(value);
 	if (token_type != TOKEN_ERROR)
 		return (TOKEN_BUILTIN);
 	token_type = classify_operator(value);

@@ -60,6 +60,7 @@ void		*ft_memset(void *s, int c, size_t n);
 /*                             GARBAGE COLLEECTOR                             */
 /* ************************************************************************** */
 t_ntc		*g_c(t_ntc **first_node, size_t size_of);
+t_ntc   	*find_ntc(t_ntc **first_node, void *data_ptr);
 void		free_ntc_prior(t_ntc **first_node, void *data_ptr);
 void		free_memory(t_ntc **first_node);
 void    	*ft_realloc_g_c(t_ntc **first_node, void *existing_data,\

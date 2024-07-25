@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-t_token *get_next_token(t_token **tokens) 
+t_token *get_next_token(t_token **tkns) 
 {
     static int i;
 
-    if (!tokens[i])
+    if (!tkns[i])
         return (NULL);
-    return (tokens[i++]);
+    return (tkns[i++]);
 }

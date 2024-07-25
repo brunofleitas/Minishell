@@ -1,23 +1,23 @@
 #include "minishell.h"
 
-t_astnode *parser(t_ntc **first_node) 
+t_astnode *parser(t_ntc **first_node, t_token **tkns) 
 {
-    t_token     current_token; // Static variable to maintain token state
-    t_astnode   *command_line;
+    t_token     *c_tkn;
+    t_astnode   *cmd_line;
     /*t_astnode   *pipeline;
-    t_astnode   *simple_command;
+    t_astnode   *simple_cmd;
     t_astnode   *current;*/
 
-    current_token = get_next_token(); // Initialize current_token
-    command_line = parse_command_line(first_node, &current_token);
-    // Print the parsed words in the first simple command
-    /*if (command_line->type == NODE_COMMAND_LINE) 
+    c_tkn = get_next_token(tkns); // Initialize c_tkn
+    cmd_line = parse_cmd_line(first_node, c_tkn, tkns);
+    // Print the parsed words in the first simple cmd
+    /*if (cmd_line->type == NODE_cmd_LINE) 
     {
-        pipeline = command_line->data.command_line.left;
+        pipeline = cmd_line->data.cmd_line.left;
         if (pipeline->type == NODE_PIPELINE) 
         {
-            simple_command = pipeline->data.pipeline.commands[0];
-            current = simple_command->data.simple_command.words;
+            simple_cmd = pipeline->data.pipeline.cmds[0];
+            current = simple_cmd->data.simple_cmd.words;
             while (current) 
             {
                 printf("Word: %s\n", current->data.word.value);
@@ -25,10 +25,10 @@ t_astnode *parser(t_ntc **first_node)
             }*
         }
     } 
-    else if (command_line->type == NODE_PIPELINE) 
+    else if (cmd_line->type == NODE_PIPELINE) 
     {
-        simple_command = command_line->data.pipeline.commands[0];
-        current = simple_command->data.simple_command.words;
+        simple_cmd = cmd_line->data.pipeline.cmds[0];
+        current = simple_cmd->data.simple_cmd.words;
         while (current) 
         {
             printf("Word: %s\n", current->data.word.value);
@@ -41,5 +41,5 @@ t_astnode *parser(t_ntc **first_node)
         fprintf(stderr, "Error: Unexpected node type\n");
     }
     */
-    return command_line;
+    return cmd_line;
 }
