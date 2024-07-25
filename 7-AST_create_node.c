@@ -23,6 +23,5 @@ t_astnode *create_ast_node(t_ntc **first_node, t_nodetype type)
         exit(1);
     }
     node->type = type;
-    node->next = NULL;
     return (node);
 }

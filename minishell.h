@@ -109,7 +109,7 @@ typedef struct  s_token
 
 typedef enum e_nodetype 
 {
-    NODE_cmd_LINE,
+    NODE_CMD_LINE,
     NODE_PIPELINE,
     NODE_cmd,
     NODE_SIMPLE_cmd,

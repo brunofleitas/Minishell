@@ -11,7 +11,7 @@ t_astnode *parser(t_ntc **first_node, t_token **tkns)
     c_tkn = get_next_token(tkns); // Initialize c_tkn
     cmd_line = parse_cmd_line(first_node, c_tkn, tkns);
     // Print the parsed words in the first simple cmd
-    /*if (cmd_line->type == NODE_cmd_LINE) 
+    /*if (cmd_line->type == NODE_CMD_LINE) 
     {
         pipeline = cmd_line->data.cmd_line.left;
         if (pipeline->type == NODE_PIPELINE) 

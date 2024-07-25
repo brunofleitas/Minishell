@@ -27,7 +27,7 @@ t_astnode *parse_cmd_line(t_ntc **first_node, t_token *c_tkn, t_token **tkns)
     node = parse_pipeline(first_node, c_tkn, tkns);
     while (c_tkn->type == TOKEN_AND || c_tkn->type == TOKEN_OR) 
     {
-        new_node = create_ast_node(first_node, NODE_cmd_LINE);
+        new_node = create_ast_node(first_node, NODE_CMD_LINE);
         new_node->data.cmd_line.left = node;
         new_node->data.cmd_line.operator = c_tkn->type;
         c_tkn = get_next_token(tkns);
