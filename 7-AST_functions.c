@@ -4,7 +4,7 @@ t_astnode *create_ast_node(t_ntc **first_node, t_nodetype type)
 {
     t_astnode *node;
     
-    node = gc(first_node, sizeof(t_astnode));
+    node = g_c(first_node, sizeof(t_astnode))->data;
     if (!node) 
     {
         fprintf(stderr, "Error: Memory allocation failed\n");
@@ -46,7 +46,7 @@ t_astnode *parse_pipeline(t_ntc **first_node, t_token *current_token)
     t_astnode *node;
     
     node = create_ast_node(first_node, NODE_PIPELINE);
-    node->data.pipeline.commands = gc(first_node, sizeof(t_astnode*));
+    node->data.pipeline.commands = g_c(first_node, sizeof(t_astnode*));
     node->data.pipeline.commands[0] = parse_command(first_node, current_token);
     node->data.pipeline.command_count = 1;
     
@@ -54,9 +54,12 @@ t_astnode *parse_pipeline(t_ntc **first_node, t_token *current_token)
     {
         get_next_token();
         node->data.pipeline.command_count++;
-        node->data.pipeline.commands = realloc(node->data.pipeline.commands, 
-                                               node->data.pipeline.command_count * sizeof(t_astnode*));
-        node->data.pipeline.commands[node->data.pipeline.command_count - 1] = parse_command(first_node, current_token);
+        node->data.pipeline.commands = ft_realloc_g_c(first_node,\
+                                        node->data.pipeline.commands,\
+                                        node->data.pipeline.command_count\
+                                        * sizeof(t_astnode*));
+        node->data.pipeline.commands[node->data.pipeline.command_count - 1]\
+                                = parse_command(first_node, current_token);
     }
     return (node);
 }

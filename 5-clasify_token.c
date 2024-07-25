@@ -11,10 +11,8 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static t_token_type	classify_command(char *value)
-{
-	if (ft_strcmp(value, "echo") == 0)
+/*
+if (ft_strcmp(value, "echo") == 0)
 		return (ECHO);
 	if (ft_strcmp(value, "cd") == 0)
 		return (CD);
@@ -26,6 +24,16 @@ static t_token_type	classify_command(char *value)
 		return (UNSET);
 	if (ft_strcmp(value, "env") == 0)
 		return (ENV);
+	return (TOKEN_ERROR);
+*/
+
+static t_token_type	classify_command(char *value)
+{
+	if (ft_strcmp(value, "echo") == 0 
+	|| ft_strcmp(value, "cd") == 0 || ft_strcmp(value, "pwd") == 0\
+	|| ft_strcmp(value, "export") == 0 || ft_strcmp(value, "unset") == 0\
+	|| ft_strcmp(value, "env") == 0)
+		return (TOKEN_BUILTIN);
 	return (TOKEN_ERROR);
 }
 
@@ -72,7 +80,7 @@ t_token_type	clasify_token(char *value)
 
 	token_type = classify_command(value);
 	if (token_type != TOKEN_ERROR)
-		return (token_type);
+		return (TOKEN_BUILTIN);
 	token_type = classify_operator(value);
 	if (token_type != TOKEN_ERROR)
 		return (token_type);

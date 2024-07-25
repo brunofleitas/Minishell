@@ -73,7 +73,7 @@ typedef enum    e_builtins
 
 typedef enum e_token_type
 {
-    TOKEN_WORD,           // Regular words/commands
+    TOKEN_BUILTIN,           // Regular words/commands
     TOKEN_SINGLE_QUOTE,   // '
     TOKEN_DOUBLE_QUOTE,   // "
     TOKEN_REDIR_IN,       // <
