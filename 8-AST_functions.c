@@ -1,19 +1,5 @@
 #include "minishell.h"
 
-t_astnode *create_ast_node(t_ntc **first_node, t_nodetype type) 
-{
-    t_astnode *node;
-    
-    node = g_c(first_node, sizeof(t_astnode))->data;
-    if (!node) 
-    {
-        fprintf(stderr, "Error: Memory allocation failed\n");
-        exit(1);
-    }
-    node->type = type;
-    return (node);
-}
-
 /* 
  * Parses a cmd line, which can be a single pipeline or multiple pipelines
  * connected by AND (&&) or OR (||) operators.
@@ -100,7 +86,7 @@ t_astnode *parse_simple_cmd(t_ntc **first_node, t_token *c_tkn, t_token **tkns)
 {
     t_astnode *node;
     
-    node = create_ast_node(first_node, NODE_SIMPLE_cmd);
+    node = create_ast_node(first_node, NODE_SIMPLE_CMD);
     node->data.simple_cmd.words = parse_word_list(first_node, c_tkn, tkns);
     node->data.simple_cmd.redirections = parse_redirection_list(first_node, c_tkn, tkns);
     return (node);

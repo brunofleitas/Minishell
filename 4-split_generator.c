@@ -30,7 +30,8 @@ static void	generate_quotes(const char **s, char ***split, int *i, t_ntc **first
 	char	quote;
 	int		word_length;
 
-	quote = *(*s)++;
+	quote = **s;
+	(*s)++;
 	word_length = 0;
 	while ((*s)[word_length] != quote && (*s)[word_length])
 		word_length++;

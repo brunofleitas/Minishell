@@ -112,7 +112,7 @@ typedef enum e_nodetype
     NODE_CMD_LINE,
     NODE_PIPELINE,
     NODE_cmd,
-    NODE_SIMPLE_cmd,
+    NODE_SIMPLE_CMD,
     NODE_WORD,
     NODE_REDIRECTION
 }			t_nodetype;
