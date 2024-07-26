@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   3-count_words.c                                    :+:      :+:    :+:   */
+/*   3-count_tkns.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -94,13 +94,13 @@ static int	handle_single_operators_and_specials(const char *s, int *i)
 /*
   Parameters:
     s: Input string.
-    c: Character used to separate tokens.
+    c: Character used to separate tkns.
   Return value:
-    Number of tokens found in the input string.
+    Number of tkns found in the input string.
   Description:
-    Counts the number of tokens in the input string, considering various
+    Counts the number of tkns in the input string, considering various
 	conditions such as quotes, double operators, single operators, and
-	special characters. Tokens are incremented based on whether they 
+	special characters. tkns are incremented based on whether they 
 	are surrounded by the separator character or are adjacent to it but 
 	not immediately preceded by it.
 */

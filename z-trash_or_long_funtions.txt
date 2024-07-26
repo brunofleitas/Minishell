@@ -40,7 +40,7 @@ static int	count_w_tks(char const *s, char c)
 }*/
 
 /*
-static char	**ft_split_tokens(char const *s, char c)
+static char	**ft_split_tkns(char const *s, char c)
 {
 	i = 0;
 	split = (char **)malloc((count_w_tks(s, c) + 1) * sizeof(char *));
@@ -136,7 +136,7 @@ static char	**ft_split_tokens(char const *s, char c)
 	return (counter);
 }*/
 
-/*static char	**ft_split_tokens(char const *s, char c)
+/*static char	**ft_split_tkns(char const *s, char c)
 {
 	int		i;
 	int		word_length;
@@ -190,116 +190,3 @@ static char	**ft_split_tokens(char const *s, char c)
 	split[i] = NULL;
 	return (split);
 }*/
-
-char	*builtin_echo(t_astnode *node, t_ntc **first_node)
-{
-	int		i;
-	int		newline;
-	char	*result;
-	char	*temp;
-
-	i = 1;
-	newline = 1;
-	result = ft_strdup("", first_node);
-	if (node->data.simple_command.word_count > 1
-		&& !strcmp(node->data.simple_command.words.value[1], "-n"))
-	{
-		newline = 0;
-		i++;
-	}
-	while (i < node->data.simple_command.word_count)
-	{
-		temp = ft_strjoin(result, node->data.simple_command.words[i],
-				first_node);
-		free(result);
-		result = temp;
-		if (i < node->data.simple_command.word_count - 1)
-		{
-			temp = ft_strjoin(result, " ", first_node);
-			free(result);
-			result = temp;
-		}
-		i++;
-	}
-	if (newline)
-	{
-		temp = ft_strjoin(result, "\n", first_node);
-		free(result);
-		result = temp;
-	}
-	return (result);
-}
-
-
-char	*execute_command(t_astnode *node, int is_pipe, int is_redirect,
-		char *output_file, t_ntc **first_node, char **env)
-{
-	char	*output;
-
-	output = NULL;
-	if (!node)
-		return ;
-	if (node->data.simple_command.words
-		&& ft_strcmp(node->data.simple_command.words->data.word.value,
-			"echo") == 0)
-	{
-		output = builtin_echo(node, first_node);
-		if (is_pipe)
-			return (output);
-		else if (is_redirect)
-			redirect_output(output, output_file);
-		//|| redirect_output_append(output, output_file);
-		else
-			ft_printf("%s\n", output);
-		free(output);
-	}
-	else if (node->data.simple_command.words
-		&& ft_strcmp(node->data.simple_command.words->data.word.value,
-			"pwd") == 0)
-	{
-		output = builtin_pwd(first_node);
-		if (is_pipe)
-			return (output);
-		else if (is_redirect)
-			redirect_output(output, output_file);
-		//|| redirect_output_append(output, output_file);
-		else
-			ft_printf("%s\n", output);
-		free(output);
-	}
-	else if (node->data.simple_command.words
-		&& ft_strcmp(node->data.simple_command.words->data.word.value,
-			"export") == 0)
-	{
-		if (node->data.simple_command.words[1] != NULL)
-			builtin_export(node->data.simple_command.words[1]);
-		else
-			ft_printf("export: not enough arguments\n");
-		// what should be returned here?
-	}
-	else if (node->data.simple_command.words
-		&& ft_strcmp(node->data.simple_command.words->data.word.value,
-			"unset") == 0)
-	{
-		if (node->data.simple_command.words[1] != NULL)
-			builtin_unset(node->data.simple_command.words[1]);
-		else
-			ft_printf("unset: not enough arguments\n");
-		// what should be returned here?
-	}
-	else if (node->data.simple_command.words
-		&& ft_strcmp(node->data.simple_command.words->data.word.value,
-			"env") == 0)
-	{
-		output = builtin_env(env, first_node);
-		if (is_pipe)
-			return (output);
-		else if (is_redirect)
-			redirect_output(output, output_file);
-		//|| redirect_output_append(output, output_file);
-		else
-			ft_printf("%s\n", output);
-		free(output);
-	}
-	return (NULL);
-}

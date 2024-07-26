@@ -12,6 +12,21 @@
 
 #include "libft.h"
 
+
+t_ntc   *find_ntc(t_ntc **first_node, void *data_ptr) 
+{
+    t_ntc	*temp;
+    
+    temp = *first_node;
+    while (temp != NULL) 
+    {
+        if (temp->data != NULL && temp->data == data_ptr) 
+            return temp;
+        temp = temp->next;
+    }
+    return (NULL);
+}
+
 /*
 The free_ntc_prior function is used to free a node in the garbage collector
 list at any time during the execution of the program. It is usefull when we need
@@ -19,15 +34,16 @@ to free a node before the end of the program.
 */
 void free_ntc_prior(t_ntc **first_node, void *data_ptr) 
 {
-	t_ntc *temp;
+	t_ntc	*temp;
 
-	temp = *first_node;
+	/*temp = *first_node;
 	while (temp != NULL) 
 	{
 		if (temp->data != NULL && temp->data == data_ptr)
 			break;
 		temp = temp->next;
-	}
+	}*/
+	temp = find_ntc(first_node, data_ptr);
 	if (temp != NULL) 
 	{
 		if (temp == *first_node && temp->next != NULL)
@@ -119,6 +135,7 @@ t_ntc	*g_c(t_ntc **first_node, size_t size_of)
 		return (NULL);
 	if (util_g_c(&new_node, size_of) == NULL)
 		return (NULL);
+	new_node->size = size_of;
 	new_node->next = NULL;
 	new_node->prev = NULL;
 	if (*first_node == NULL)

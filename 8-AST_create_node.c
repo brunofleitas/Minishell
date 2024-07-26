@@ -12,15 +12,6 @@
 
 #include "minishell.h"
 
-t_token *get_next_token(t_token **tokens) 
-{
-    static int i;
-
-    if (!tokens[i])
-        return (NULL);
-    return (tokens[i++]);
-}
-
 t_astnode *create_ast_node(t_ntc **first_node, t_nodetype type) 
 {
     t_astnode *node;
@@ -32,6 +23,5 @@ t_astnode *create_ast_node(t_ntc **first_node, t_nodetype type)
         exit(1);
     }
     node->type = type;
-    node->next = NULL;
     return (node);
 }

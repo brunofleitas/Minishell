@@ -1,31 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   5-clasify_token.c                                  :+:      :+:    :+:   */
+/*   6-clasify_token.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 21:49:28 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/21 17:25:11 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/07/26 12:47:02 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static t_token_type	classify_command(char *value)
-{
-	if (ft_strcmp(value, "echo") == 0)
-		return (TOKEN_WORD);
+/*
+if (ft_strcmp(value, "echo") == 0)
+		return (ECHO);
 	if (ft_strcmp(value, "cd") == 0)
-		return (TOKEN_WORD);
+		return (CD);
 	if (ft_strcmp(value, "pwd") == 0)
-		return (TOKEN_WORD);
+		return (PWD);
 	if (ft_strcmp(value, "export") == 0)
-		return (TOKEN_WORD);
+		return (EXPORT);
 	if (ft_strcmp(value, "unset") == 0)
-		return (TOKEN_WORD);
+		return (UNSET);
 	if (ft_strcmp(value, "env") == 0)
-		return (TOKEN_WORD);
+		return (ENV);
+	return (TOKEN_ERROR);
+*/
+
+static t_token_type	classify_cmd(char *value)
+{
+	if (ft_strcmp(value, "echo") == 0 
+	|| ft_strcmp(value, "cd") == 0 || ft_strcmp(value, "pwd") == 0\
+	|| ft_strcmp(value, "export") == 0 || ft_strcmp(value, "unset") == 0\
+	|| ft_strcmp(value, "env") == 0)
+		return (TOKEN_BUILTIN);
 	return (TOKEN_ERROR);
 }
 
@@ -70,9 +78,9 @@ t_token_type	clasify_token(char *value)
 {
 	int	token_type;
 
-	token_type = classify_command(value);
+	token_type = classify_cmd(value);
 	if (token_type != TOKEN_ERROR)
-		return (token_type);
+		return (TOKEN_BUILTIN);
 	token_type = classify_operator(value);
 	if (token_type != TOKEN_ERROR)
 		return (token_type);
@@ -83,6 +91,6 @@ t_token_type	clasify_token(char *value)
 	if (token_type != TOKEN_ERROR)
 		return (token_type);
 	if (ft_strlen(value) > 0)
-		return (TOKEN_ARGUMENT);
+		return (TOKEN_WORD);
 	return (TOKEN_ERROR);
 }
