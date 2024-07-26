@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:59:46 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/11 19:34:54 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/07/24 12:39:17 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,14 @@ int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	(void)envp;
 	char		*input;
 	t_ntc		*first_node;
-	t_token		*tkns[1024];
+	t_token		*tokens[1024];
 	//t_astnode	*root;
 
 	first_node = NULL;
 	while (1)
 	{
-		//root = NULL;
 		input = readline(">>");
 		if (input)
 		{

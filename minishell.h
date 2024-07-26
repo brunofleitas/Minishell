@@ -94,7 +94,7 @@ typedef enum e_token_type
 } 			t_token_type;
 
 /* ************************************************************************** */
-/*                           STRUCTURE DEFINITIONS                            */                           
+/*                           STRUCTURE DEFINITIONS                            */
 /* ************************************************************************** */
 typedef struct  s_token
 {
