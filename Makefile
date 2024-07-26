@@ -5,9 +5,19 @@ LIBRARIES = -L./libft -lft
 LIBRARIES_PATH = -I./libft/headers
 LDFLAGS = -lreadline
 
-SRCS 	= 1-main.c 2-lexer.c 3-count_words.c 4-split_generator.c 5-clasify_token.c 6-AST_parser.c 7-AST_create_node.c 8-AST_functions.c 9-get_next_token.c 10-check_tokens.c 11-execute_simple_commands.c 12-execute_echo_pwd.c 13-redirections.c
-SRCSB	= 1-main.c 2-lexer.c 3-count_words.c 4-split_generator.c 5-clasify_token.c 6-AST_parser.c 7-AST_create_node.c 8-AST_functions.c 9-get_next_token.c 10-check_tokens.c 11-execute_simple_commands.c 12-execute_echo_pwd.c 13-redirections.c
-
+SRCS 	= 1-main.c 2-build_env_structure.c 3-lexer.c 4-count_words.c\
+		5-split_generator.c 6-clasify_token.c 7-AST_parser.c\
+		8-AST_create_node.c 9-AST_functions.c 10-get_next_token.c\
+		11-execute_command.c 12-builtin_cd.c 13-builtin_export.c\
+		14-builtin_unset.c 15-builtin_echo.c 16-builtin_pwd.c\
+		17-builtin_env.c 18-redirections.c
+SRCSB 	= 1-main.c 2-build_env_structure.c 3-lexer.c 4-count_words.c\
+		5-split_generator.c 6-clasify_token.c 7-AST_parser.c\
+		8-AST_create_node.c 9-AST_functions.c 10-get_next_token.c\
+		11-execute_command.c 12-builtin_cd.c 13-builtin_export.c\
+		14-builtin_unset.c 15-builtin_echo.c 16-builtin_pwd.c\
+		17-builtin_env.c 18-redirections.c
+		
 OBJS	= $(SRCS:.c=.o)
 OBJSB	= $(SRCSB:.c=.o)
 

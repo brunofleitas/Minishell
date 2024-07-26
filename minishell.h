@@ -11,6 +11,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <limits.h>
+
 
 /*
   t_token_type: An enumeration representing different types of tkns encountered
@@ -89,12 +92,12 @@ typedef enum e_token_type
     TOKEN_RPAREN,         // )
     TOKEN_WILDCARD,       // *
     TOKEN_EOF,            // End of input
-    TOKEN_ARGUMENT,       // Is there an input? maybe this one we delete at some point let's see
+    TOKEN_WORD,       // Is there an input? maybe this one we delete at some point let's see
     TOKEN_ERROR           // Error
 } 			t_token_type;
 
 /* ************************************************************************** */
-/*                           STRUCTURE DEFINITIONS                            */
+/*                           STRUCTURE DEFINITIONS                            */                           
 /* ************************************************************************** */
 typedef struct  s_token
 {
@@ -102,6 +105,11 @@ typedef struct  s_token
 	char		    *value;
 }				t_token;
 
+typedef struct s_env
+{
+	char					**var;
+	int						count;
+}							t_env;
 
 /* ************************************************************************** */
 /*                                  AST NODE                                  */                           
@@ -178,6 +186,9 @@ Structs in the Union: Each struct within the union represents different types of
 /* ************************************************************************** */
 /*                                   FUNCTIONS                                */
 /* ************************************************************************** */
+t_env               duplicate_vars(t_ntc **first_node, char **envp);
+void                print_env(t_env env);
+
 void	            lexer(char *input,t_token **tkns, t_ntc **first_node);
 int					count_w_tks(char const *s, char c);
 char				**ft_split_tkns(char const *s, char c, \
@@ -193,5 +204,9 @@ t_astnode           *parse_simple_cmd(t_ntc **first_node, t_token *c_tkn, t_toke
 t_astnode           *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
 t_astnode           *parse_redirection_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
 int                 is_word_token(t_token_type type);
-int                 is_redirection_token(t_token_type type);  
+int                 is_redirection_token(t_token_type type);
+char                *execute_command(t_astnode *node, t_ntc **first_node, char **env);
+char                *builtin_export(t_astnode *node, t_ntc **first_node, t_env *env);
+
+
 #endif

@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 15:03:22 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/18 12:14:35 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/07/11 23:37:17 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,6 @@ void	lexer(char *input,t_token **tkns, t_ntc **first_node)
 		//free_ntc_prior(first_node, split[i]);
 		i++;
 	}
-	tokens[i] = NULL;
-	//free_ntc_prior(first_node, split);
+	free_ntc_prior(first_node, split);
+	//free(split);
 }
