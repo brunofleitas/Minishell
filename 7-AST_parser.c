@@ -12,13 +12,13 @@ static void print_ast(t_astnode *node, int indent) {
             print_ast(node->data.cmd_line.left, indent + 1);
             break;
         case NODE_PIPELINE:
-            ft_printf("Pipeline:\n");
+            ft_printf("Pipeline\n");
             for (int i = 0; node->data.pipeline.cmds[i]; ++i) {
                 print_ast(node->data.pipeline.cmds[i], indent + 1);
             }
             break;
         case NODE_SIMPLE_CMD:
-            ft_printf("Simple Command:\n");
+            ft_printf("Simple Command\n");
             t_astnode *current = node->data.simple_cmd.words;
             while (current) {
                 print_ast(current, indent + 1);
