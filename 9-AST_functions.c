@@ -88,10 +88,11 @@ t_astnode *parse_cmd(t_ntc **first_node, t_token *c_tkn, t_token **tkns)
 t_astnode *parse_simple_cmd(t_ntc **first_node, t_token *c_tkn, t_token **tkns) 
 {
     t_astnode *node;
+    t_astnode *last_word;
     
     node = create_ast_node(first_node, NODE_SIMPLE_CMD);
-    node->data.simple_cmd.words = parse_word_list(first_node, c_tkn, tkns);
-    node->data.simple_cmd.redirections = parse_redirection_list(first_node, c_tkn, tkns);
+    node->data.simple_cmd.words = parse_word_list(first_node, c_tkn, tkns, &last_word);
+    node->data.simple_cmd.redirections = parse_redirection_list(first_node, c_tkn, tkns, &last_word);
     return (node);
 }
 
@@ -99,7 +100,7 @@ t_astnode *parse_simple_cmd(t_ntc **first_node, t_token *c_tkn, t_token **tkns)
  * Parses a list of words (cmd and its arguments).
  * Returns the head of a linked list of word nodes.
  */
-t_astnode *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns) 
+t_astnode *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns, t_astnode **last_word) 
 {
     t_astnode *head;
     t_astnode *current;
@@ -110,7 +111,7 @@ t_astnode *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns)
     while (is_word_token(c_tkn->type)) 
     {
         word_node = create_ast_node(first_node, NODE_WORD);
-        word_node->data.word.value = ft_strdup_g_c(c_tkn->value, first_node);
+        word_node->data.word.value = c_tkn->value; //ft_strdup_g_c(c_tkn->value, first_node);//this might be unnecessary as I don't think we need to recreate a malloc for this token as it is already stored int the tkns** array.
         word_node->data.word.type = c_tkn->type;
 
         if (!head) 
@@ -123,9 +124,9 @@ t_astnode *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns)
             current->data.word.next = word_node;
             current = word_node;
         }
-
         c_tkn = get_next_token(tkns);
     }
+    *last_word = current;
     return (head);
 }
 
@@ -133,7 +134,7 @@ t_astnode *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns)
  * Parses a list of redirections.
  * Returns the head of a linked list of redirection nodes.
  */
-t_astnode *parse_redirection_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns) 
+t_astnode *parse_redirection_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns, t_astnode **last_word) 
 {
     t_astnode *head;
     t_astnode *current;
@@ -151,7 +152,7 @@ t_astnode *parse_redirection_list(t_ntc **first_node, t_token *c_tkn, t_token **
             fprintf(stderr, "Error: Expected filename after redirection\n");
             exit(1);
         }
-        redir_node->data.redirection.file = ft_strdup_g_c(c_tkn->value, first_node);
+        redir_node->data.redirection.file = c_tkn->value; //ft_strdup_g_c(c_tkn->value, first_node);
         c_tkn = get_next_token(tkns);
         if (!head) 
         {
@@ -163,6 +164,8 @@ t_astnode *parse_redirection_list(t_ntc **first_node, t_token *c_tkn, t_token **
             current->data.redirection.next = redir_node;
             current = redir_node;
         }
+        if (is_word_token(c_tkn->type))
+            (*last_word)->data.word.next = parse_word_list(first_node, c_tkn, tkns);
     }
     return (head);
 }
