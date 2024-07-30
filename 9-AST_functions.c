@@ -127,6 +127,7 @@ t_astnode *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns, t
         c_tkn = get_next_token(tkns);
     }
     *last_word = current;
+    current->data.word.next = NULL;
     return (head);
 }
 
@@ -167,6 +168,7 @@ t_astnode *parse_redirection_list(t_ntc **first_node, t_token *c_tkn, t_token **
         if (is_word_token(c_tkn->type))
             (*last_word)->data.word.next = parse_word_list(first_node, c_tkn, tkns);
     }
+    current->data.redirection.next = NULL;
     return (head);
 }
 
