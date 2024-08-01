@@ -6,13 +6,13 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:50:08 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/26 02:56:39 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/01 18:18:10 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
+/* 
   Parameters:
     node: Pointer to the AST node.
   Return value:

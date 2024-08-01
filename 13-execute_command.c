@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   11-execute_command.c                               :+:      :+:    :+:   */
+/*   13-execute_command.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:12:28 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/26 12:35:43 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/01 18:25:31 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,22 @@
     value. For "echo", "pwd", and "env", the function calls their 
     respective handlers and returns the resulting string.
 */
-char	*execute_command(t_astnode *node, t_ntc **first_node, char **env)
+char	*execute_builtin(t_astnode *node, t_ntc **first_node, char **env)
 {
 	if (!node)
 		return (NULL);
 	if (node->data.simple_cmd.words && \
 		ft_strcmp(node->data.simple_cmd.words->data.word.value, "cd") == 0)
-		builtin_cd(node, first_node, env);
+		return(builtin_cd(node, first_node, env));
 	if (node->data.simple_cmd.words && \
 		ft_strcmp(node->data.simple_cmd.words->data.word.value, "export") == 0)
-		builtin_export(node, first_node, env);
+		return(builtin_export(node, first_node, env));
 	if (node->data.simple_cmd.words && \
 		ft_strcmp(node->data.simple_cmd.words->data.word.value, "unset") == 0)
-		builtin_unset(node, first_node);
+		return(builtin_unset(node, first_node));
 	if (node->data.simple_cmd.words && \
 		ft_strcmp(node->data.simple_cmd.words->data.word.value, "echo") == 0)
-		return (builtin_echo(node, first_node));
+		return(builtin_echo(node, first_node));
 	if (node->data.simple_cmd.words && \
 		ft_strcmp(node->data.simple_cmd.words->data.word.value, "pwd") == 0)
 		return (builtin_pwd(first_node));
