@@ -34,7 +34,7 @@ void	empty_format_substr(t_c_data *data)
 {
 	int	i;
 
-	i = 0;
+	i = 0;,
 	while (data->format_substr[i] != '\0')
 	{
 		data->format_substr[i] = 0;

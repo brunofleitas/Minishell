@@ -109,6 +109,7 @@ typedef struct s_env
 {
 	char					**var;
 	int						count;
+    //int                     capacity;  // Current capacity of the var array. I propose to add this to the struct in order to keep track of the current capacity of the var array. Here what I call capacity is the number of elements that the var array can hold at the moment. This is useful when we want to add a new element to the array. If the array is full, we can reallocate memory to increase the capacity of the array. This avoid calling ft_realloc_g_c for each new variable. We call it only when count == capacity.
 }							t_env;
 
 /* ************************************************************************** */
