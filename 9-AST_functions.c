@@ -166,7 +166,7 @@ t_astnode *parse_redirection_list(t_ntc **first_node, t_token *c_tkn, t_token **
             current = redir_node;
         }
         if (is_word_token(c_tkn->type))
-            (*last_word)->data.word.next = parse_word_list(first_node, c_tkn, tkns);
+            (*last_word)->data.word.next = parse_word_list(first_node, c_tkn, tkns, last_word);
     }
     current->data.redirection.next = NULL;
     return (head);

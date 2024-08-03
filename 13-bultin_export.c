@@ -104,11 +104,11 @@ static void	add_env_var(t_env *env, char *var, t_ntc **first_node)
     If the variable does not exist, it adds the variable to 
     the environment.
 */
-void	builtin_export(t_astnode *node, t_ntc **first_node, t_env *env)
+void	builtin_export(t_astnode *node, t_env *env, t_ntc **first_node)
 {
-	int			i;
 	t_astnode	*tmp;
-	char		*var;
+  int       i;
+	char      *var;
 
 	tmp = node->data.simple_cmd.words;
 	var = tmp->data.word.next->data.word.value;

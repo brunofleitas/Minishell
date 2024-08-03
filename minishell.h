@@ -109,7 +109,7 @@ typedef struct s_env
 {
 	char					**var;
 	int						count;
-    //int                     capacity;  // Current capacity of the var array. I propose to add this to the struct in order to keep track of the current capacity of the var array. Here what I call capacity is the number of elements that the var array can hold at the moment. This is useful when we want to add a new element to the array. If the array is full, we can reallocate memory to increase the capacity of the array. This avoid calling ft_realloc_g_c for each new variable. We call it only when count == capacity.
+    int                     capacity;  // Current capacity of the var array. I propose to add this to the struct in order to keep track of the current capacity of the var array. Here what I call capacity is the number of elements that the var array can hold at the moment. This is useful when we want to add a new element to the array. If the array is full, we can reallocate memory to increase the capacity of the array. This avoid calling ft_realloc_g_c for each new variable. We call it only when count == capacity.
 }							t_env;
 
 /* ************************************************************************** */
@@ -183,6 +183,32 @@ Structs in the Union: Each struct within the union represents different types of
 - redirection: For redirection nodes, it contains a type of redirection and a file name.
 
 */
+/* ************************************************************************** */
+/*                                   AST EXECUTION                            */
+/* ************************************************************************** */
+
+/* ***************************  EXECUTE_PIPELINE_ARGS  ********************** */
+
+typedef struct  s_pipeline_args
+{
+    int     pipe_fds[2];
+    int     input_fd;
+    pid_t   pid;
+    pid_t   last_pid;
+    int     status;
+    int     last_cmd;
+}               t_pip_args;
+
+/* *************************  EXECUTE_SIMPLE_CMD_ARGS  ********************* */
+
+typedef struct  s_simple_cmd_args
+{
+    int     word_count;
+    int     status;
+    char    **words_arr;
+    int     saved_stdin;
+    int     saved_stdout;
+}               t_s_cmd_args;
 
 /* ************************************************************************** */
 /*                                   FUNCTIONS                                */
@@ -207,7 +233,8 @@ t_astnode           *parse_redirection_list(t_ntc **first_node, t_token *c_tkn, 
 int                 is_word_token(t_token_type type);
 int                 is_redirection_token(t_token_type type);
 char                *execute_command(t_astnode *node, t_ntc **first_node, char **env);
-char                *builtin_export(t_astnode *node, t_ntc **first_node, t_env *env);
+int                builtin_export(t_astnode *node, t_env *env, t_ntc **first_node);
+int                 execute_pipeline(t_ntc **first_node, t_astnode *node, t_env *env);
 
 
 #endif
