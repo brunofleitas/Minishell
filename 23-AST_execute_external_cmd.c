@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static int execute_external_cmd(char **words_arr, t_env *env)
+int execute_external_cmd(char **words_arr, t_env *env)
 {
     pid_t pid;
     

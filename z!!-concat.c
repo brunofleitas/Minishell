@@ -205,7 +205,7 @@ int					count_w_tks(char const *s, char c);
 char				**ft_split_tkns(char const *s, char c, \
 															t_ntc **first_node);
 t_token_type		clasify_token(char *value);
-t_token             *get_next_token(t_token **tkns);
+t_token             *get_next_token(t_token **tkns, int t);
 t_astnode           *parser(t_ntc **first_node, t_token **tkns); 
 t_astnode           *create_ast_node(t_ntc **first_node, t_nodetype type);
 t_astnode           *parse_cmd_line(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
@@ -580,7 +580,7 @@ t_astnode *parser(t_ntc **first_node, t_token **tkns)
     t_astnode   *simple_cmd;
     t_astnode   *current;*/
 
-    c_tkn = get_next_token(tkns); // Initialize c_tkn
+    c_tkn = get_next_token(tkns, 1); // Initialize c_tkn
     cmd_line = parse_cmd_line(first_node, c_tkn, tkns);
     print_ast(cmd_line, 0);
     // Print the parsed words in the first simple cmd
@@ -642,7 +642,7 @@ t_astnode *parse_cmd_line(t_ntc **first_node, t_token *c_tkn, t_token **tkns)
         new_node = create_ast_node(first_node, NODE_CMD_LINE);
         new_node->data.cmd_line.left = node;
         new_node->data.cmd_line.operator = c_tkn->type;
-        c_tkn = get_next_token(tkns);
+        c_tkn = get_next_token(tkns, 1);
         new_node->data.cmd_line.right = parse_pipeline(first_node, c_tkn, tkns);
         node = new_node;
     }
@@ -664,7 +664,7 @@ t_astnode *parse_pipeline(t_ntc **first_node, t_token *c_tkn, t_token **tkns)
     
     while (c_tkn->type == TOKEN_PIPE) 
     {
-        c_tkn = get_next_token(tkns);
+        c_tkn = get_next_token(tkns, 1);
         node->data.pipeline.cmd_count++;
         /*node->data.pipeline.cmds = ft_realloc_g_c(first_node,\
                                         node->data.pipeline.cmds,\
@@ -690,14 +690,14 @@ t_astnode *parse_cmd(t_ntc **first_node, t_token *c_tkn, t_token **tkns)
 
     if (c_tkn->type == TOKEN_LPAREN) 
     {
-        c_tkn = get_next_token(tkns);
+        c_tkn = get_next_token(tkns, 1);
         node = parse_cmd_line(first_node, c_tkn, tkns);
         if (c_tkn->type != TOKEN_RPAREN) 
         {
             fprintf(stderr, "Error: Expected closing parenthesis\n");
             exit(1);
         }
-        c_tkn = get_next_token(tkns);
+        c_tkn = get_next_token(tkns, 1);
         return (node);
     } 
     else 
@@ -750,7 +750,7 @@ t_astnode *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns, t
             current->data.word.next = word_node;
             current = word_node;
         }
-        c_tkn = get_next_token(tkns);
+        c_tkn = get_next_token(tkns, 1);
     }
     *last_word = current;
     current->data.word.next = NULL;
@@ -773,14 +773,14 @@ t_astnode *parse_redirection_list(t_ntc **first_node, t_token *c_tkn, t_token **
     {
         redir_node = create_ast_node(first_node, NODE_REDIRECTION);
         redir_node->data.redirection.type = c_tkn->type;
-        c_tkn = get_next_token(tkns);
+        c_tkn = get_next_token(tkns, 1);
         if (!is_word_token(c_tkn->type))
         {
             fprintf(stderr, "Error: Expected filename after redirection\n");
             exit(1);
         }
         redir_node->data.redirection.file = c_tkn->value; //ft_strdup_g_c(c_tkn->value, first_node);
-        c_tkn = get_next_token(tkns);
+        c_tkn = get_next_token(tkns, 1);
         if (!head) 
         {
             head = redir_node;
@@ -820,7 +820,7 @@ int is_redirection_token(t_token_type type)
 }
 
 
-t_token *get_next_token(t_token **tkns) 
+t_token *get_next_token(t_token **tkns, int t) 
 {
     static int i;
 

@@ -8,7 +8,6 @@ static void setup_pipe(int pipe_fds[2])
         exit(1);
     }
 }
-
 pid_t    fork_process()
 {
     pid_t pid;
@@ -35,7 +34,7 @@ static void child_process(t_ntc **first_node, t_pip_args *a, t_astnode *simple_c
         close(a->pipe_fds[0]);
         close(a->pipe_fds[1]);
     }
-    exit(execute_ast(simple_cmd, env, first_node));
+    exit(execute_ast(simple_cmd, env, first_node)); //what is this function?
 }
 
 static void parent_process(t_pip_args *a)
@@ -74,7 +73,7 @@ int execute_pipeline(t_astnode *node, t_env *env, t_ntc **first_node)
             setup_pipe(a.pipe_fds);
         a.pid = fork_process();
         if (a.pid == 0)
-            child_process(&a, node->data.pipeline.cmds[i], env, first_node);
+            child_process(first_node, &a, node->data.pipeline.cmds[i], env);
         else
             parent_process(&a);
         i++;

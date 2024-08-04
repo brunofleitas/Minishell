@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   flush_buffers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcasagra <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 19:06:54 by pcasagra          #+#    #+#             */
-/*   Updated: 2024/03/22 10:57:56 by pcasagra         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:43:59 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	empty_format_substr(t_c_data *data)
 {
 	int	i;
 
-	i = 0;,
+	i = 0;
 	while (data->format_substr[i] != '\0')
 	{
 		data->format_substr[i] = 0;

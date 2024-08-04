@@ -13,6 +13,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <limits.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 
 /*
@@ -213,28 +215,30 @@ typedef struct  s_simple_cmd_args
 /* ************************************************************************** */
 /*                                   FUNCTIONS                                */
 /* ************************************************************************** */
-t_env               duplicate_vars(t_ntc **first_node, char **envp);
-void                print_env(t_env env);
-
-void	            lexer(char *input,t_token **tkns, t_ntc **first_node);
-int					count_w_tks(char const *s, char c);
-char				**ft_split_tkns(char const *s, char c, \
-															t_ntc **first_node);
-t_token_type		clasify_token(char *value);
-t_token             *get_next_token(t_token **tkns);
-t_astnode           *parser(t_ntc **first_node, t_token **tkns); 
-t_astnode           *create_ast_node(t_ntc **first_node, t_nodetype type);
-t_astnode           *parse_cmd_line(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
-t_astnode           *parse_pipeline(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
-t_astnode           *parse_cmd(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
-t_astnode           *parse_simple_cmd(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
-t_astnode           *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
-t_astnode           *parse_redirection_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
-int                 is_word_token(t_token_type type);
-int                 is_redirection_token(t_token_type type);
-char                *execute_command(t_astnode *node, t_ntc **first_node, char **env);
-int                builtin_export(t_astnode *node, t_env *env, t_ntc **first_node);
-int                 execute_pipeline(t_ntc **first_node, t_astnode *node, t_env *env);
-
+t_env           duplicate_vars(t_ntc **first_node, char **envp);
+void            lexer(char *input,t_token **tkns, t_ntc **first_node);
+int             count_w_tks(char const *s, char c);
+char            **ft_split_tkns(char const *s, char c, t_ntc **first_node);
+t_token_type    clasify_token(char *value);
+t_astnode       *parser(t_ntc **first_node, t_token **tkns);
+t_astnode       *create_ast_node(t_ntc **first_node, t_nodetype type);
+t_astnode       *parse_cmd_line(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
+t_token         *get_next_token(t_token **tkns, int t);
+int             execute_builtin(char **args, t_env *env, t_ntc **first_node);
+int             is_builtin(const char *word);
+int             execute_cmd_line(t_astnode *node, t_env *env, t_ntc **first_node);
+int             execute_pipeline(t_astnode *node, t_env *env, t_ntc **first_node);
+int             execute_simple_cmd(t_astnode *node, t_env *env, t_ntc **first_node);
+int             execute_external_cmd(char **words_arr, t_env *env);
+t_astnode       *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns, t_astnode **last_word);
+int             builtin_pwd(char **args, t_ntc **first_node);
+int             builtin_echo(char **args, int count_words, t_ntc **first_node);
+int             builtin_env(char **args, char **env, t_ntc **first_node);
+int             builtin_export(char **args, t_env *env, t_ntc **first_node);
+int             builtin_unset(char **args, t_env *env);
+int             builtin_cd(char **args, t_env *env, t_ntc **first_node);
+int             find_env_var(t_env *env, char *var);
+int             execute_ast(t_astnode *node, t_env *env, t_ntc **first_node);
+pid_t           fork_process();
 
 #endif

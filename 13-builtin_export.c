@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   13-bultin_export.c                                 :+:      :+:    :+:   */
+/*   13-builtin_export.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:56:05 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/26 02:56:42 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/04 14:11:11 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,17 @@ int	find_env_var(t_env *env, char *var)
     Frees the old value and duplicates the new value. Handles 
     errors if memory duplication fails.
 */
-static void	update_env_var(t_env *env, int i, const char *var,
+static int	update_env_var(t_env *env, int i, const char *var,
 		t_ntc **first_node)
 {
 	free(env->var[i]);
 	env->var[i] = ft_strdup_g_c(var, first_node);
 	if (!env->var[i])
+  {
 		perror("ft_strdup_g_c");
+    return (1);
+  }
+  return (0);
 }
 
 /*
@@ -74,19 +78,23 @@ static void	update_env_var(t_env *env, int i, const char *var,
     and updates the environment variable count. Handles errors 
     if memory allocation fails.
 */
-static void	add_env_var(t_env *env, char *var, t_ntc **first_node)
+static int	add_env_var(t_env *env, char *var, t_ntc **first_node)
 {
 	char	**new_var;
 
 	new_var = realloc(env->var, (env->count + 2) * sizeof(char *));
 	if (!new_var)
+  {
 		perror("realloc");
+    return (1);
+  }
 	env->var = new_var;
 	env->var[env->count] = ft_strdup_g_c(var, first_node);
 	if (!env->var[env->count])
 		perror("ft_strdup_g_c");
 	env->count++;
 	env->var[env->count] = NULL;
+  return (0);
 }
 
 /*
@@ -104,17 +112,32 @@ static void	add_env_var(t_env *env, char *var, t_ntc **first_node)
     If the variable does not exist, it adds the variable to 
     the environment.
 */
-void	builtin_export(t_astnode *node, t_env *env, t_ntc **first_node)
+int	builtin_export(char **args, t_env *env, t_ntc **first_node)
 {
-	t_astnode	*tmp;
-  int       i;
-	char      *var;
+	char    **tmp;
+  int     i;
+	char    *var;
 
-	tmp = node->data.simple_cmd.words;
-	var = tmp->data.word.next->data.word.value;
-	i = find_env_var(env, var);
-	if (i)
-		update_env_var(env, i, var, first_node);
-	else
-		add_env_var(env, var, first_node);
+	tmp = args;
+  while (*tmp)
+  {
+    var = *tmp;
+	  i = find_env_var(env, var);
+	  if (i)
+	  {
+    	if (!update_env_var(env, i, var, first_node))
+        return(1);
+      else 
+        return(0);
+    }
+	  else
+    {
+	    if (!add_env_var(env, var, first_node))
+        return(1);
+      else 
+        return(0);
+    }
+    tmp++;
+  }
+  return (0);
 }

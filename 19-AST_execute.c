@@ -22,6 +22,7 @@ int execute_ast(t_astnode *node, t_env *env, t_ntc **first_node)
         return (execute_simple_cmd(node, env, first_node));
     else
     {
+        printf("%i\n", node->type);
         ft_putstr_fd("Error: Unknown node type\n", STDERR_FILENO);// just an Idea I got if we want a file where we store all the errors
         return (1);
     }
@@ -53,6 +54,5 @@ int execute_cmd_line(t_astnode *node, t_env *env, t_ntc **first_node)
             return (execute_ast(node->data.cmd_line.right, env, first_node));
         return left_result;
     }
-    
     return (left_result);
 }

@@ -1,5 +1,17 @@
 #include "minishell.h"
 
+static int	count_words(char **args)
+{
+	char	**temp;
+	int		i;
+
+	i = 0;
+    temp = args;
+	while (temp[i])
+		i++;
+	return (i);
+}
+
 /**
  * @brief Check if a command is a builtin
  *
@@ -43,18 +55,21 @@ int is_builtin(const char *word)
  */
 int execute_builtin(char **args, t_env *env, t_ntc **first_node)
 {
+    int word_count;
+
+    word_count = count_words(args);
     if (ft_strcmp(args[0], "echo") == 0)
-        return (builtin_echo(args));
+        return (builtin_echo(args, word_count, first_node));
     else if (ft_strcmp(args[0], "cd") == 0)
-        return (builtin_cd(args, env));
+        return (builtin_cd(args, env, first_node));
     else if (ft_strcmp(args[0], "pwd") == 0)
-        return (builtin_pwd());
+        return (builtin_pwd(args, first_node));
     else if (ft_strcmp(args[0], "export") == 0)
         return (builtin_export(args, env, first_node));
     else if (ft_strcmp(args[0], "unset") == 0)
         return (builtin_unset(args, env));
     else if (ft_strcmp(args[0], "env") == 0)
-        return (builtin_env(env));
+        return (builtin_env(args, env->var, first_node));
     return 1;
 }
 

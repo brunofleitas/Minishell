@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:59:46 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/26 12:15:50 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/04 18:51:15 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	main(int argc, char **argv, char **envp)
 	t_ntc		*first_node;
 	t_token		*tkns[1024];
 	t_env		env;
-	//t_astnode	*root;
+	t_astnode	*root;
 
 	first_node = NULL;
 	while (1)
@@ -48,19 +48,17 @@ int	main(int argc, char **argv, char **envp)
 				break ;
 			}
 			env = duplicate_vars(&first_node, envp);
-			print_env(env);
 			add_history(input);
 			lexer(input, tkns, &first_node);
-			parser(&first_node, tkns);
-			//root = parse_cmd_line(&first_node, tkns);
-			//free_ast(&root);
-			free(input);
+			root = parser(&first_node, tkns);
+			execute_ast(root, &env, &first_node);
+			free_memory(&first_node);
+			get_next_token(tkns, 0);
 		}
 		else
 			break ;
 	}
 	clear_history();
-	free_memory(&first_node);
 	return (0);
 }
 /*

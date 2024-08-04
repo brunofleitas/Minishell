@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:51:32 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/26 02:57:41 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:28:44 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,19 @@
     the resulting string and handles errors if memory allocation 
     fails.
 */
-char	*builtin_env(char **env, t_ntc **first_node)
+int	builtin_env(char **args, char **env, t_ntc **first_node)
 {
 	int		i;
 	size_t	total_length;
 	char	*result;
-	char	*temp;
 
 	i = 0;
 	total_length = 0;
+	if (args[1] != NULL)
+	{
+		printf("env: too many arguments\n");
+		return (1);
+	}
 	while (env[i] != NULL)
 	{
 		total_length += ft_strlen(env[i]) + 1;
@@ -41,7 +45,7 @@ char	*builtin_env(char **env, t_ntc **first_node)
 	}
 	result = g_c(first_node, (total_length + 1) * sizeof(char *))->data;
 	if (!result)
-		return (NULL);
+		return (1);
 	i = 0;
 	while (env[i] != NULL)
 	{
@@ -49,5 +53,10 @@ char	*builtin_env(char **env, t_ntc **first_node)
 		ft_strlcat(result, "\n", total_length + 1);
 		i++;
 	}
-	return (result);
+	if (result)
+	{
+		printf("%s\n", result);
+		return (0);
+	}
+	return (1);
 }

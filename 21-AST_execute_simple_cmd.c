@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-int node_word_count(t_astnode *node)
+static int node_word_count(t_astnode *node)
 {
     int         count;
     t_astnode   *node_word;
@@ -38,6 +38,7 @@ static char **create_words_arr(t_ntc **first_node, t_astnode *node, t_env *env, 
     char        **words_arr;
     int         i;
 
+    (void)env; //Can we delete env parameter?
     i= 0;
     node_word = node->data.simple_cmd.words;
     *word_count = node_word_count(node);
@@ -50,7 +51,7 @@ static char **create_words_arr(t_ntc **first_node, t_astnode *node, t_env *env, 
     node_word = node->data.simple_cmd.words;
     while(i < *word_count)
     {
-        words_arr[i++] = expand_env_vars(node_word->data.word.value, env);
+        words_arr[i++] = ft_substr_g_c(node_word->data.word.value, 0, ft_strlen(node_word->data.word.value), first_node);
         node_word = node_word->data.word.next;
     }
     words_arr[*word_count] = NULL;
@@ -76,18 +77,18 @@ int execute_simple_cmd(t_astnode *node, t_env *env, t_ntc **first_node)
 
     a.saved_stdin = dup(STDIN_FILENO);
     a.saved_stdout = dup(STDOUT_FILENO);
-    if (handle_redirections(node->data.simple_cmd.redirections) != 0)
+    /*if (handle_redirections(node->data.simple_cmd.redirections) != 0)
     {
         restore_io(a.saved_stdin, a.saved_stdout);
         return(1);
-    } 
+    }*/
     a.words_arr = create_words_arr(first_node, node, env, &(a.word_count));
     if (!a.words_arr)
     {
         restore_io(a.saved_stdin, a.saved_stdout);
         return(1);
     }
-    expand_wildcards(a.words_arr);
+    //expand_wildcards(a.words_arr);
     if (is_builtin(a.words_arr[0]))
         a.status = execute_builtin(a.words_arr, env, first_node);
     else
