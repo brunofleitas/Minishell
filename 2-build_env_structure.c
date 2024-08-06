@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 23:53:32 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/06 11:55:37 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:03:22 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,20 @@ static char	**allocate_env(t_ntc **first_node, int count)
 	}
 	return (new_envp);
 }
-
-static void	free_env_vars(t_env *env)
+/*
+static void	free_env_vars(t_ntc **first_node, t_env *env)
 {
 	int	i;
 
 	i = 0;
 	while (i < env->count)
 	{
-		free(env->var[i]);
+		free_ntc_prior(first_node, env->var[i]);
 		i++;
 	}
-	free(env->var);
+	//free_ntc_prior(first_node, env);
 }
-
+*/
 t_env	*duplicate_vars(t_ntc **first_node, char **envp)
 {
 	t_env	*env;
@@ -65,7 +65,9 @@ t_env	*duplicate_vars(t_ntc **first_node, char **envp)
 		if (!env->var[i])
 		{
 			perror("ft_strdup_g_c");
-			free_env_vars(env);
+			free_memory(first_node);
+			exit(1);
+			//free_env_vars(first_node, env);
 		}
 		i++;
 	}

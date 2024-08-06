@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:56:05 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/06 14:21:33 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:27:05 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	find_env_var(t_env **env, char *var)
 static int	update_env_var(t_env **env, int i, const char *var,
 		t_ntc **first_node)
 {
-	//free((*env)->var[i]);
+	//free_ntc_prior(first_node, (*env)->var[i]);
 	(*env)->var[i] = ft_strdup_g_c(var, first_node);
 	if (!(*env)->var[i])
   {

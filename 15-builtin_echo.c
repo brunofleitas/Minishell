@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:50:08 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/05 17:07:31 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:23:56 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,12 @@ static char	*join_words(char **args, t_ntc **first_node, int i, int word_count)
 	while (i < word_count)
 	{
 		temp = ft_strjoin_g_c(result, args[i], first_node);
-		free(result);
+		//free_ntc_prior(first_node, result);
 		result = temp;
 		if (i < word_count - 1)
 		{
 			temp = ft_strjoin_g_c(result, " ", first_node);
-			free(result);
+			//free_ntc_prior(first_node, result);
 			result = temp;
 		}
 		i++;
@@ -90,13 +90,13 @@ int	builtin_echo(char **args, int word_count, t_ntc **first_node)
 	if (newline)
 	{
 		temp = ft_strjoin_g_c(result, "\n", first_node);
-		free(result);
+		//free_ntc_prior(first_node, result);
 		result = temp;
 	}
 	if (result)
 	{
 		printf("%s", result);
-		free(result);
+		//free_ntc_prior(first_node, result);
 		return (0);
 	}
 	return (1);

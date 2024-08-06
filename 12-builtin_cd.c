@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:45:41 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/06 11:06:33 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:06:26 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static int change_directory(char **args, t_env **env, char *path, t_ntc **first_
 	ft_strlcpy(new_pwd, "PWD=", len);
 	ft_strlcat(new_pwd, cwd, len);
 	builtin_export(args, env, first_node);
-	free(new_pwd);
+	free_ntc_prior(first_node, new_pwd);
   return (0);
 }
 

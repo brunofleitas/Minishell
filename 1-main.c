@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:59:46 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/06 12:34:50 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:29:57 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,14 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	char		*input;
 	t_ntc		*first_node;
+	t_ntc		*first_env;
 	t_token		*tkns[1024];
 	t_env		*env;
 	t_astnode	*root;
 
 	first_node = NULL;
+	first_env = NULL;
+	env = duplicate_vars(&first_env, envp);
 	while (1)
 	{
 		input = readline(">>");
@@ -47,7 +50,6 @@ int	main(int argc, char **argv, char **envp)
 				free(input);
 				break ;
 			}
-			env = duplicate_vars(&first_node, envp);
 			add_history(input);
 			lexer(input, tkns, &first_node);
 			get_next_token(tkns, 0);
@@ -58,7 +60,7 @@ int	main(int argc, char **argv, char **envp)
 			free_memory(&first_node);
 		}
 	}
-	//free_memory(&first_node);
+	//free_memory(&first_env);
 	clear_history();
 	return (0);
 }
