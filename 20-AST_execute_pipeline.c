@@ -96,3 +96,4 @@ int execute_pipeline(t_astnode *node, t_env **env, t_ntc **first_node)
     //printf("execute_pipeline end\n");
     return (WEXITSTATUS(a.status));
 }
+// This implementation of simple command execution is incomplete. It does not handle the case where for exemple we have export PATH=new/path/added | env and then execute env again as it will only have been updated in the child process.
