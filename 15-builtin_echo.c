@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:50:08 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/04 15:27:35 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/05 17:07:31 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	builtin_echo(char **args, int word_count, t_ntc **first_node)
 	}
 	if (result)
 	{
-		printf("%s\n", result);
+		printf("%s", result);
 		free(result);
 		return (0);
 	}

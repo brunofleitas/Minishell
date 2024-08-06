@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:59:46 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/04 18:51:15 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/06 12:34:50 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,14 @@ int	main(int argc, char **argv, char **envp)
 	char		*input;
 	t_ntc		*first_node;
 	t_token		*tkns[1024];
-	t_env		env;
+	t_env		*env;
 	t_astnode	*root;
 
 	first_node = NULL;
 	while (1)
 	{
 		input = readline(">>");
-		if (input)
+		if (ft_strcmp(input, "") != 0)
 		{
 			if (ft_strcmp(input, "exit") == 0)
 			{
@@ -50,14 +50,15 @@ int	main(int argc, char **argv, char **envp)
 			env = duplicate_vars(&first_node, envp);
 			add_history(input);
 			lexer(input, tkns, &first_node);
+			get_next_token(tkns, 0);
 			root = parser(&first_node, tkns);
 			execute_ast(root, &env, &first_node);
+			//printf("main\n");
+			//print_env(env);
 			free_memory(&first_node);
-			get_next_token(tkns, 0);
 		}
-		else
-			break ;
 	}
+	//free_memory(&first_node);
 	clear_history();
 	return (0);
 }
@@ -76,6 +77,8 @@ Here's a high-level overview of steps you might take to construct the AST:
 3. **Building the Tree**: As the parser recognizes the grammar patterns in the token sequence, it should create the appropriate AST nodes and link them together to build the tree. This involves determining the parent-child relationships between nodes based on the syntactic structure of the input.
 
 4. **Error Handling**: Implement error handling in the parser to deal with syntax errors, providing meaningful error messages to the user.
+
+Get_next_token function is used to initialize the i = 0;
 
 After constructing the AST, the next steps in the shell's execution process would involve traversing the AST to interpret or execute the cmds represented by the tree.
 

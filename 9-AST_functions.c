@@ -7,10 +7,12 @@
  */
 static int is_word_token(t_token_type type) 
 {
-    printf("is_word_token\n");
+    //printf("is_word_token start\n");
+    //printf("is_word_token end\n");
     return (type == TOKEN_BUILTIN || type == TOKEN_SINGLE_QUOTE || 
             type == TOKEN_DOUBLE_QUOTE || type == TOKEN_ENV_VAR ||
-            type == TOKEN_EXIT_STATUS || type == TOKEN_WILDCARD);
+            type == TOKEN_EXIT_STATUS || type == TOKEN_WILDCARD ||
+            type == TOKEN_WORD);
 }
 
 /* 
@@ -19,7 +21,8 @@ static int is_word_token(t_token_type type)
  */
 static int is_redirection_token(t_token_type type) 
 {
-    printf("is_redirection_token\n");
+    //printf("is_redirection_token start\n");
+    //printf("is_redirection_token end\n");
     return (type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT ||
             type == TOKEN_REDIR_APPEND || type == TOKEN_HEREDOC);
 }
@@ -34,14 +37,13 @@ static t_astnode *parse_redirection_list(t_ntc **first_node, t_token *c_tkn, t_t
     t_astnode *current;
     t_astnode *redir_node;
     
+    //printf("parse_redirection_list start\n");
     head = NULL;
     current = NULL;
-    printf("parse_redirection_list\n");
     while (is_redirection_token(c_tkn->type)) 
     {
         redir_node = create_ast_node(first_node, NODE_REDIRECTION);
         redir_node->data.redirection.type = c_tkn->type;
-        printf("tesT\n");
         c_tkn = get_next_token(tkns, 1);
         if (!is_word_token(c_tkn->type))
         {
@@ -65,7 +67,7 @@ static t_astnode *parse_redirection_list(t_ntc **first_node, t_token *c_tkn, t_t
     }
     if (current)
         current->data.redirection.next = NULL;
-    printf("parse_redirection_list end\n");
+    //printf("parse_redirection_list end\n");
     return (head);
 }
 
@@ -81,13 +83,11 @@ t_astnode *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns, t
 
     head = NULL;
     current = NULL;
-    printf("parse_word_list\n");
-    while (is_word_token(c_tkn->type)) 
+    while (c_tkn && is_word_token(c_tkn->type)) 
     {
         word_node = create_ast_node(first_node, NODE_WORD);
         word_node->data.word.value = c_tkn->value; //ft_strdup_g_c(c_tkn->value, first_node);//this might be unnecessary as I don't think we need to recreate a malloc for this token as it is already stored int the tkns** array.
         word_node->data.word.type = c_tkn->type;
-
         if (!head) 
         {
             head = word_node;
@@ -102,8 +102,13 @@ t_astnode *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns, t
     }
     if (current)
     {
-    *last_word = current;
-    current->data.word.next = NULL;
+        *last_word = current;
+        current->data.word.next = NULL;
+    }
+    t_astnode *temp = head;
+    while (temp)
+    {
+        temp = temp->data.word.next;
     }
     return (head);
 }
@@ -118,10 +123,15 @@ static t_astnode *parse_simple_cmd(t_ntc **first_node, t_token *c_tkn, t_token *
     t_astnode *node;
     t_astnode *last_word;
     
-    printf("parse_simple_cmd\n");
+    //printf("parse_simple_cmd start\n");
     node = create_ast_node(first_node, NODE_SIMPLE_CMD);
+    //if (c_tkn)
+    //{
+     //   printf("c_tkn->type: %s\n", c_tkn->value);
+    //}
     node->data.simple_cmd.words = parse_word_list(first_node, c_tkn, tkns, &last_word);
     node->data.simple_cmd.redirections = parse_redirection_list(first_node, c_tkn, tkns, &last_word);
+    //printf("parse_simple_cmd end\n");
     return (node);
 }
 
@@ -134,7 +144,7 @@ static t_astnode *parse_cmd(t_ntc **first_node, t_token *c_tkn, t_token **tkns)
 {
     t_astnode *node;
 
-    printf("parse_cmd\n");
+    //printf("parse_cmd start\n");
     if (c_tkn->type == TOKEN_LPAREN) 
     {
         c_tkn = get_next_token(tkns, 1);
@@ -145,11 +155,12 @@ static t_astnode *parse_cmd(t_ntc **first_node, t_token *c_tkn, t_token **tkns)
             exit(1);
         }
         c_tkn = get_next_token(tkns, 1);
+        //printf("parse_cmd end\n");
         return (node);
     } 
     else 
     {
-        //printf("parse_cmd else\n");
+        //printf("parse_cmd end\n");
         return parse_simple_cmd(first_node, c_tkn, tkns);
     }
 }
@@ -162,7 +173,7 @@ static t_astnode *parse_pipeline(t_ntc **first_node, t_token *c_tkn, t_token **t
 {
     t_astnode *node;
     
-    printf("parse_pipeline\n");
+    //printf("parse_pipeline start\n");
     node = create_ast_node(first_node, NODE_PIPELINE);
     node->data.pipeline.cmds = g_c(first_node, sizeof(t_astnode*))->data;
     node->data.pipeline.cmds[0] = parse_cmd(first_node, c_tkn, tkns);
@@ -182,6 +193,7 @@ static t_astnode *parse_pipeline(t_ntc **first_node, t_token *c_tkn, t_token **t
         node->data.pipeline.cmds[node->data.pipeline.cmd_count - 1]\
                                 = parse_cmd(first_node, c_tkn, tkns);
     }
+    //printf("parse_pipeline end\n");
     return (node);
 }
 
@@ -195,7 +207,7 @@ t_astnode *parse_cmd_line(t_ntc **first_node, t_token *c_tkn, t_token **tkns)
     t_astnode *node;
     t_astnode *new_node;
     
-    printf("parse_cmd_line\n");
+    //printf("parse_cmd_line start\n");
     node = parse_pipeline(first_node, c_tkn, tkns);
     while (c_tkn->type == TOKEN_AND || c_tkn->type == TOKEN_OR) 
     {
@@ -206,5 +218,6 @@ t_astnode *parse_cmd_line(t_ntc **first_node, t_token *c_tkn, t_token **tkns)
         new_node->data.cmd_line.right = parse_pipeline(first_node, c_tkn, tkns);
         node = new_node;
     }
+    //printf("parse_cmd_line end\n");
     return (node);
 }

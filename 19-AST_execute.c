@@ -10,16 +10,28 @@
  @param env Pointer to the environment structure
  @return int Returns the exit status of the executed command
 */
-int execute_ast(t_astnode *node, t_env *env, t_ntc **first_node)
+int execute_ast(t_astnode *node, t_env **env, t_ntc **first_node)
 {
+    int i;
+
     if (!node)
         return (0);
     if (node->type == NODE_CMD_LINE)
         return (execute_cmd_line(node, env, first_node));
     else if (node->type == NODE_PIPELINE)
-        return (execute_pipeline(node, env, first_node));
+    {
+        i = execute_pipeline(node, env, first_node);
+        //printf("pipeline\n");
+        //print_env(*env);
+        return (i);
+    }
     else if (node->type == NODE_SIMPLE_CMD)
-        return (execute_simple_cmd(node, env, first_node));
+    {
+        i=execute_simple_cmd(node, env, first_node);
+        //printf("simple_cmd\n");
+        //print_env(*env);
+        return (i);
+    }
     else
     {
         printf("%i\n", node->type);
@@ -37,10 +49,11 @@ int execute_ast(t_astnode *node, t_env *env, t_ntc **first_node)
  @param env Pointer to the environment structure
  @return int Returns the exit status of the last executed command
  */
-int execute_cmd_line(t_astnode *node, t_env *env, t_ntc **first_node)
+int execute_cmd_line(t_astnode *node, t_env **env, t_ntc **first_node)
 {
     int left_result;
     
+    //printf("execute_cmd_line start\n");
     left_result = execute_ast(node->data.cmd_line.left, env, first_node);
     if (node->data.cmd_line.operator == TOKEN_AND)
     {
@@ -54,5 +67,6 @@ int execute_cmd_line(t_astnode *node, t_env *env, t_ntc **first_node)
             return (execute_ast(node->data.cmd_line.right, env, first_node));
         return left_result;
     }
+    //printf("execute_cmd_line end\n");
     return (left_result);
 }

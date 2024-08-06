@@ -6,6 +6,7 @@ static int node_word_count(t_astnode *node)
     int         count;
     t_astnode   *node_word;
     
+    //printf("node_word_count start\n");
     count = 0;
     node_word = node->data.simple_cmd.words;
     while (node_word)
@@ -13,6 +14,7 @@ static int node_word_count(t_astnode *node)
         count++;
         node_word = node_word->data.word.next;
     }
+    //printf("node_word_count end\n");
     return (count);
 }
 /**
@@ -31,7 +33,7 @@ static void restore_io(int saved_stdin, int saved_stdout)
     close(saved_stdout);
 }
 
-static char **create_words_arr(t_ntc **first_node, t_astnode *node, t_env *env, \
+static char **create_words_arr(t_ntc **first_node, t_astnode *node, t_env **env, \
                                                                 int *word_count)
 {
     t_astnode   *node_word;
@@ -39,6 +41,7 @@ static char **create_words_arr(t_ntc **first_node, t_astnode *node, t_env *env, 
     int         i;
 
     (void)env; //Can we delete env parameter?
+    //printf("create_words_arr start\n");
     i= 0;
     node_word = node->data.simple_cmd.words;
     *word_count = node_word_count(node);
@@ -55,6 +58,7 @@ static char **create_words_arr(t_ntc **first_node, t_astnode *node, t_env *env, 
         node_word = node_word->data.word.next;
     }
     words_arr[*word_count] = NULL;
+    //printf("create_words_arr end\n");
     return (words_arr);
 }
 
@@ -71,9 +75,18 @@ static char **create_words_arr(t_ntc **first_node, t_astnode *node, t_env *env, 
  * @param first_node Double pointer to the first node in my garbage collector
  * @return int Returns the exit status of the executed command
  */
-int execute_simple_cmd(t_astnode *node, t_env *env, t_ntc **first_node)
+int execute_simple_cmd(t_astnode *node, t_env **env, t_ntc **first_node)
 {
     t_s_cmd_args   a;
+
+    //printf("execute_simple_cmd start\n");
+/*
+    t_astnode *tmp = node;
+    while (tmp->data.simple_cmd.words)
+    {
+        printf("node->data.simple_cmd.words->data.word.value = %s\n", tmp->data.simple_cmd.words->data.word.value);
+        tmp->data.simple_cmd.words = tmp->data.simple_cmd.words->data.word.next;
+    }*/
 
     a.saved_stdin = dup(STDIN_FILENO);
     a.saved_stdout = dup(STDOUT_FILENO);
@@ -95,6 +108,7 @@ int execute_simple_cmd(t_astnode *node, t_env *env, t_ntc **first_node)
         a.status = execute_external_cmd(a.words_arr, env);
     free_ntc_prior(first_node, a.words_arr);
     restore_io(a.saved_stdin, a.saved_stdout);
+    //printf("execute_simple_cmd end\n");
     return (a.status);
 }
 

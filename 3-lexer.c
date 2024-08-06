@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 15:03:22 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/04 12:22:48 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/05 17:35:15 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@ void	lexer(char *input,t_token **tkns, t_ntc **first_node)
 		tkns[i] = g_c(first_node, sizeof(t_token))->data;
 		tkns[i]->value = split[i];
 		tkns[i]->type = clasify_token(tkns[i]->value);
-		ft_printf("%s\nType : %i\n\n", tkns[i]->value, tkns[i]->type);
+		//ft_printf("%s\nType : %i\n\n", tkns[i]->value, tkns[i]->type);
 		i++;
 	}
+	tkns[i] = NULL;
 	free_ntc_prior(first_node, split);
 }
