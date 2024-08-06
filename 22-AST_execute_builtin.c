@@ -53,26 +53,26 @@ int is_builtin(const char *word)
  * @param env Pointer to the environment structure
  * @return int Returns the exit status of the builtin command
  */
-int execute_builtin(char **args, t_env **env, t_ntc **first_node)
+int execute_builtin(char **args, t_ma *ma)
 {
     int word_count;
 
     word_count = count_words(args);
     if (ft_strcmp(args[0], "echo") == 0)
-        return (builtin_echo(args, word_count, first_node));
+        return (builtin_echo(args, word_count, ma));
     else if (ft_strcmp(args[0], "cd") == 0)
-        return (builtin_cd(args, env, first_node));
+        return (builtin_cd(args, ma));
     else if (ft_strcmp(args[0], "pwd") == 0)
-        return (builtin_pwd(args, first_node));
+        return (builtin_pwd(args, ma));
     else if (ft_strcmp(args[0], "export") == 0)
     {
-        builtin_export(args, env, first_node);
+        builtin_export(args, ma);
         //print_env(*env);
     }
     else if (ft_strcmp(args[0], "unset") == 0)
-        return (builtin_unset(args, env));
+        return (builtin_unset(args, ma));
     else if (ft_strcmp(args[0], "env") == 0)
-        return (builtin_env(args, env, first_node));
+        return (builtin_env(args, ma));
     return 1;
 }
 

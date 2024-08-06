@@ -28,18 +28,15 @@
 */
 int	main(int argc, char **argv, char **envp)
 {
+	t_ma 		ma;
+	t_astnode 	*root;
+	char		*input;
+
 	(void)argc;
 	(void)argv;
-	char		*input;
-	t_ntc		*first_node;
-	t_ntc		*first_env;
-	t_token		*tkns[1024];
-	t_env		*env;
-	t_astnode	*root;
-
-	first_node = NULL;
-	first_env = NULL;
-	env = duplicate_vars(&first_env, envp);
+	ma.first_node = NULL;
+	ma.first_env = NULL;
+	ma.env = duplicate_vars(&(ma.first_env), envp);
 	while (1)
 	{
 		input = readline(">>");
@@ -51,16 +48,16 @@ int	main(int argc, char **argv, char **envp)
 				break ;
 			}
 			add_history(input);
-			lexer(input, tkns, &first_node);
-			get_next_token(tkns, 0);
-			root = parser(&first_node, tkns);
-			execute_ast(root, &env, &first_node);
+			lexer(input, ma.tkns, &(ma.first_node));
+			get_next_token(ma.tkns, 0);
+			root = parser(&(ma.first_node), ma.tkns);
+			execute_ast(root, &ma);
 			//printf("main\n");
 			//print_env(env);
 			//free_memory(&first_node);
 		}
 	}
-	free_memory(&first_env);
+	free_memory(&(ma.first_env));
 	clear_history();
 	return (0);
 }

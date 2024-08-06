@@ -25,7 +25,7 @@
     the resulting string and handles errors if memory allocation 
     fails.
 */
-int	builtin_env(char **args, t_env **env, t_ntc **first_node)
+int	builtin_env(char **args, t_ma *ma)
 {
 	int		i;
 	size_t	total_length;
@@ -41,18 +41,18 @@ int	builtin_env(char **args, t_env **env, t_ntc **first_node)
 	//print the environment variables
 	
 
-	while ((*env)->var[i] != NULL)
+	while (ma->env->var[i] != NULL)
 	{
-		total_length += ft_strlen((*env)->var[i]) + 1;
+		total_length += ft_strlen(ma->env->var[i]) + 1;
 		i++;
 	}
-	result = g_c(first_node, (total_length + 1) * sizeof(char *))->data;
+	result = g_c(ma->first_node, (total_length + 1) * sizeof(char *))->data;
 	if (!result)
 		return (1);
 	i = 0;
-	while ((*env)->var[i] != NULL)
+	while (ma->env->var[i] != NULL)
 	{
-		ft_strlcat(result, (*env)->var[i], total_length + 1);
+		ft_strlcat(result, ma->env->var[i], total_length + 1);
 		ft_strlcat(result, "\n", total_length + 1);
 		i++;
 	}

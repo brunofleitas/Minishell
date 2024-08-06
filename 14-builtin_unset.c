@@ -40,15 +40,15 @@ int remove_env_var(t_env **env, char *name)
     by name, frees its memory, shifts the subsequent variables in 
     the array, and decreases the environment variable count.
 */
-int	builtin_unset(char **args, t_env **env)
+int	builtin_unset(char **args, t_ma *ma)
 {
 	int	i;
 
 	i = 1;
 	while (args[i])
 	{
-		if (find_env_var(env, args[i]) != 0)
-			remove_env_var(env, args[i]);
+		if (find_env_var(ma->env, args[i]) != 0)
+			remove_env_var(ma->env, args[i]);
 		i++;
 	}
 	return (0);

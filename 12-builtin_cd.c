@@ -63,7 +63,7 @@ static char  *get_env_var(char *name, t_env **env)
     directory. Allocates memory for the new PWD value and exports it 
     to the environment variables.
 */
-static int change_directory(char **args, t_env **env, char *path, t_ntc **first_node)
+static int change_directory(char **args, char *path, t_ma *ma)
 {
 	char    cwd[PATH_MAX];
 	char    *new_pwd;
@@ -80,7 +80,7 @@ static int change_directory(char **args, t_env **env, char *path, t_ntc **first_
     return (1);
   }
   len = 4 + ft_strlen(cwd) + 1;
-	new_pwd = g_c(first_node, (4 + ft_strlen(cwd) + 1))->data;
+	new_pwd = g_c(ma->first_node, (4 + ft_strlen(cwd) + 1))->data;
 	if (!new_pwd)
   {
 		perror("malloc");
@@ -88,8 +88,8 @@ static int change_directory(char **args, t_env **env, char *path, t_ntc **first_
   }
 	ft_strlcpy(new_pwd, "PWD=", len);
 	ft_strlcat(new_pwd, cwd, len);
-	builtin_export(args, env, first_node);
-	free_ntc_prior(first_node, new_pwd);
+	builtin_export(args, ma);
+	free_ntc_prior(ma->first_node, new_pwd);
   return (0);
 }
 
@@ -105,15 +105,15 @@ static int change_directory(char **args, t_env **env, char *path, t_ntc **first_
     specified path. If no path is provided, changes to the home directory. 
     Handles errors for too many arguments and invalid paths.
 */
-int	builtin_cd(char **args, t_env **env, t_ntc **first_node)
+int	builtin_cd(char **args, t_ma *ma)
 {
   char    *path;
 
   path = args[1];
   if (!args[1])
   {
-      path = get_env_var("HOME", env);
-      return (change_directory(args, env, path, first_node));
+      path = get_env_var("HOME", ma->env);
+      return (change_directory(args, path, ma));
   }
   else if(args[2])
   {
@@ -123,7 +123,7 @@ int	builtin_cd(char **args, t_env **env, t_ntc **first_node)
   else if(check_valid_path(path))
   {
       path = args[1];
-      return (change_directory(args, env, path, first_node));
+      return (change_directory(args, path, ma));
   }
   else 
     return (1);

@@ -25,7 +25,7 @@ pid_t    fork_process()
     return (pid);
 }
 
-static void child_process(t_ntc **first_node, t_pip_args *a, t_astnode *simple_cmd, t_env **env)
+static void child_process(t_pip_args *a, t_astnode *simple_cmd, t_ma *ma)
 {
     //printf("child_process start\n");
     if (a->input_fd != STDIN_FILENO)
@@ -40,7 +40,7 @@ static void child_process(t_ntc **first_node, t_pip_args *a, t_astnode *simple_c
         close(a->pipe_fds[1]);
     }
     //printf("child_process end\n");
-    exit(execute_ast(simple_cmd, env, first_node)); //what is this function?
+    exit(execute_ast(simple_cmd, ma)); //what is this function?
 }
 
 static void parent_process(t_pip_args *a)
@@ -67,7 +67,7 @@ static void parent_process(t_pip_args *a)
  @param env Pointer to the environment structure
  @return int Returns the exit status of the last command in the pipeline
  */
-int execute_pipeline(t_astnode *node, t_env **env, t_ntc **first_node)
+int execute_pipeline(t_astnode *node, t_ma *ma)
 {
     t_pip_args  a;
     int         i;
@@ -76,7 +76,7 @@ int execute_pipeline(t_astnode *node, t_env **env, t_ntc **first_node)
     i = 1;
     a.input_fd = STDIN_FILENO;
     if (node->data.pipeline.cmd_count == 1)
-        return (execute_ast(node->data.pipeline.cmds[0], env, first_node));
+        return (execute_ast(node->data.pipeline.cmds[0], ma));
     else
     {
         while (i < node->data.pipeline.cmd_count)
@@ -86,7 +86,7 @@ int execute_pipeline(t_astnode *node, t_env **env, t_ntc **first_node)
                 setup_pipe(a.pipe_fds);
             a.pid = fork_process();
             if (a.pid == 0)
-                child_process(first_node, &a, node->data.pipeline.cmds[i], env);
+                child_process(&a, node->data.pipeline.cmds[i], ma);
             else
                 parent_process(&a);
             i++;
