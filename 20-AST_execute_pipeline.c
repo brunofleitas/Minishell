@@ -73,21 +73,26 @@ int execute_pipeline(t_astnode *node, t_env **env, t_ntc **first_node)
     int         i;
     
     //printf("execute_pipeline start\n");
-    i = 0;
+    i = 1;
     a.input_fd = STDIN_FILENO;
-    while (i < node->data.pipeline.cmd_count)
+    if (node->data.pipeline.cmd_count == 1)
+        return (execute_ast(node->data.pipeline.cmds[0], env, first_node));
+    else
     {
-        a.last_cmd = (i == node->data.pipeline.cmd_count - 1);
-        if (!node->data.pipeline.cmd_count - 1)
-            setup_pipe(a.pipe_fds);
-        a.pid = fork_process();
-        if (a.pid == 0)
-            child_process(first_node, &a, node->data.pipeline.cmds[i], env);
-        else
-            parent_process(&a);
-        i++;
+        while (i < node->data.pipeline.cmd_count)
+        {
+            a.last_cmd = (i == node->data.pipeline.cmd_count - 1);
+            if (!node->data.pipeline.cmd_count - 1)
+                setup_pipe(a.pipe_fds);
+            a.pid = fork_process();
+            if (a.pid == 0)
+                child_process(first_node, &a, node->data.pipeline.cmds[i], env);
+            else
+                parent_process(&a);
+            i++;
+        }
+        waitpid(a.last_pid, &(a.status), 0);
     }
-    waitpid(a.last_pid, &(a.status), 0);
     //printf("execute_pipeline end\n");
     return (WEXITSTATUS(a.status));
 }
