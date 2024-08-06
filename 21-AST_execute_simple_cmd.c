@@ -42,7 +42,7 @@ static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
     i= 0;
     node_word = node->data.simple_cmd.words;
     *word_count = node_word_count(node);
-    words_arr = g_c(ma->first_node, (*word_count + 1) * sizeof(char *))->data;
+    words_arr = g_c(&(ma->first_node), (*word_count + 1) * sizeof(char *))->data;
     if (!words_arr)
     {
         perror("malloc");
@@ -51,7 +51,7 @@ static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
     node_word = node->data.simple_cmd.words;
     while(i < *word_count)
     {
-        words_arr[i++] = ft_substr_g_c(node_word->data.word.value, 0, ft_strlen(node_word->data.word.value), ma->first_node);
+        words_arr[i++] = ft_substr_g_c(node_word->data.word.value, 0, ft_strlen(node_word->data.word.value), &(ma->first_node));
         node_word = node_word->data.word.next;
     }
     words_arr[*word_count] = NULL;
@@ -103,7 +103,7 @@ int execute_simple_cmd(t_astnode *node, t_ma *ma)
         a.status = execute_builtin(a.words_arr, ma);
     else
         a.status = execute_external_cmd(a.words_arr, ma);
-    free_ntc_prior(ma->first_node, a.words_arr);
+    free_ntc_prior(&(ma->first_node), a.words_arr);
     restore_io(a.saved_stdin, a.saved_stdout);
     //printf("execute_simple_cmd end\n");
     return (a.status);

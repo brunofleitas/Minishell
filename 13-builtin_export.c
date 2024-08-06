@@ -57,7 +57,7 @@ int	find_env_var(t_env **env, char *var)
 static int	update_env_var(int i, const char *var, t_ma *ma)
 {
 	//free_ntc_prior(first_node, (*env)->var[i]);
-	ma->env->var[i] = ft_strdup_g_c(var, ma->first_env);
+	ma->env->var[i] = ft_strdup_g_c(var, &(ma->first_env));
 	if (!(ma->env->var[i]))
   {
 		perror("ft_strdup_g_c");
@@ -85,14 +85,14 @@ static int	add_env_var(char *var, t_ma *ma)
   printf("add_env_var-----------------------------START\n");
   //print_env(*env);
   //printf("\n\n\n\n");
-	new_var = ft_realloc_g_c(ma->first_env, ma->env->var, (ma->env->count + 2) * sizeof(char *));
+	new_var = ft_realloc_g_c(&(ma->first_env), ma->env->var, (ma->env->count + 2) * sizeof(char *));
 	if (!new_var)
   {
 		//perror("realloc");
     return (1);
   }
 	ma->env->var = new_var;
-	ma->env->var[ma->env->count] = ft_strdup_g_c(var, ma->first_env);
+	ma->env->var[ma->env->count] = ft_strdup_g_c(var, &(ma->first_env));
 	if (!(*ma->env->var[ma->env->count]))
   {
 		perror("ft_strdup_g_c");
@@ -131,7 +131,7 @@ int	builtin_export(char **args, t_ma *ma)
   while (*tmp)
   {
     var = *tmp;
-	  i = find_env_var(ma->env, var);
+	  i = find_env_var(&(ma->env), var);
 	  if (i >= 0)
 	  {
     	if (!update_env_var(i, var,  ma))

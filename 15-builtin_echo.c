@@ -86,10 +86,10 @@ int	builtin_echo(char **args, int word_count, t_ma *ma)
 		i = 1;
 	else
 		i = 2;
-	result = join_words(args, ma->first_node, i, word_count);
+	result = join_words(args, &(ma->first_node), i, word_count);
 	if (newline)
 	{
-		temp = ft_strjoin_g_c(result, "\n", ma->first_node);
+		temp = ft_strjoin_g_c(result, "\n", &(ma->first_node));
 		//free_ntc_prior(first_node, result);
 		result = temp;
 	}

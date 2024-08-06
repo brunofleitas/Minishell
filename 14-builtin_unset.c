@@ -47,8 +47,8 @@ int	builtin_unset(char **args, t_ma *ma)
 	i = 1;
 	while (args[i])
 	{
-		if (find_env_var(ma->env, args[i]) != 0)
-			remove_env_var(ma->env, args[i]);
+		if (find_env_var(&(ma->env), args[i]) != 0)
+			remove_env_var(&(ma->env), args[i]);
 		i++;
 	}
 	return (0);

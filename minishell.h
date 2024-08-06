@@ -103,14 +103,6 @@ typedef enum e_token_type
 /*                           STRUCTURE DEFINITIONS                            */                           
 /* ************************************************************************** */
 
-typedef struct  s_main_args
-{
-    
-	t_ntc		*first_node;
-    t_ntc		*first_env;
-	t_token		*tkns[1024];
-	t_env		*env;
-}               t_ma;
 
 typedef struct  s_token
 {
@@ -206,6 +198,16 @@ Structs in the Union: Each struct within the union represents different types of
 - redirection: For redirection nodes, it contains a type of redirection and a file name.
 
 */
+
+typedef struct  s_main_args
+{
+    
+	t_ntc		*first_node;
+    t_ntc		*first_env;
+	t_token		*tkns[1024];
+	t_env		*env;
+}               t_ma;
+
 /* ************************************************************************** */
 /*                                   AST EXECUTION                            */
 /* ************************************************************************** */
@@ -247,10 +249,10 @@ t_astnode       *parse_cmd_line(t_ntc **first_node, t_token *c_tkn, t_token **tk
 t_token         *get_next_token(t_token **tkns, int t);
 int             execute_builtin(char **args, t_ma *ma);
 int             is_builtin(const char *word);
-int             execute_cmd_line(t_astnode *node, t_env **env, t_ntc **first_node);
+int             execute_cmd_line(t_astnode *node, t_ma *ma);
 int             execute_pipeline(t_astnode *node, t_ma *ma);
 int             execute_simple_cmd(t_astnode *node, t_ma *ma);
-int             execute_external_cmd(char **words_arr, t_env **env);
+int             execute_external_cmd(char **words_arr, t_ma *ma);
 t_astnode       *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns, t_astnode **last_word);
 int             builtin_pwd(char **args, t_ma *ma);
 int             builtin_echo(char **args, int count_words, t_ma *ma);

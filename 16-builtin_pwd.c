@@ -34,7 +34,7 @@ int	builtin_pwd(char **args, t_ma *ma)
   }
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
   {
-		printf("%s\n", ft_strdup_g_c(cwd, ma->first_node));
+		printf("%s\n", ft_strdup_g_c(cwd, &(ma->first_node)));
     return (0);
   }
   else

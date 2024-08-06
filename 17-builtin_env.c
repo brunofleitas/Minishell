@@ -46,7 +46,7 @@ int	builtin_env(char **args, t_ma *ma)
 		total_length += ft_strlen(ma->env->var[i]) + 1;
 		i++;
 	}
-	result = g_c(ma->first_node, (total_length + 1) * sizeof(char *))->data;
+	result = g_c(&(ma->first_node), (total_length + 1) * sizeof(char *))->data;
 	if (!result)
 		return (1);
 	i = 0;

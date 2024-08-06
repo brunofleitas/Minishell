@@ -80,7 +80,7 @@ static int change_directory(char **args, char *path, t_ma *ma)
     return (1);
   }
   len = 4 + ft_strlen(cwd) + 1;
-	new_pwd = g_c(ma->first_node, (4 + ft_strlen(cwd) + 1))->data;
+	new_pwd = g_c(&(ma->first_node), (4 + ft_strlen(cwd) + 1))->data;
 	if (!new_pwd)
   {
 		perror("malloc");
@@ -89,7 +89,7 @@ static int change_directory(char **args, char *path, t_ma *ma)
 	ft_strlcpy(new_pwd, "PWD=", len);
 	ft_strlcat(new_pwd, cwd, len);
 	builtin_export(args, ma);
-	free_ntc_prior(ma->first_node, new_pwd);
+	free_ntc_prior(&(ma->first_node), new_pwd);
   return (0);
 }
 
@@ -112,7 +112,7 @@ int	builtin_cd(char **args, t_ma *ma)
   path = args[1];
   if (!args[1])
   {
-      path = get_env_var("HOME", ma->env);
+      path = get_env_var("HOME", &(ma->env));
       return (change_directory(args, path, ma));
   }
   else if(args[2])
