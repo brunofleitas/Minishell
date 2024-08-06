@@ -107,7 +107,17 @@ typedef struct  s_token
 	t_token_type	type;
 	char		    *value;
 }				t_token;
-
+/*
+typedef struct s_main_args
+{
+    char    *input;
+    t_ntc   *first_node;
+    t_ntc   *first_env;
+    t_token *tkns[1024];
+    t_env   *env;
+    t_astnode *node;
+}               t_ma;
+*/
 typedef struct s_env
 {
 	char					**var;

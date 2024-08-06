@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:56:05 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/06 15:27:05 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/06 17:00:05 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ int	find_env_var(t_env **env, char *var)
 static int	update_env_var(t_env **env, int i, const char *var,
 		t_ntc **first_node)
 {
-	//free_ntc_prior(first_node, (*env)->var[i]);
 	(*env)->var[i] = ft_strdup_g_c(var, first_node);
 	if (!(*env)->var[i])
   {
@@ -86,10 +85,10 @@ static int	add_env_var(t_env **env, char *var, t_ntc **first_node)
 
   //print_env(*env);
   //printf("\n\n\n\n");
-	new_var = realloc((*env)->var, ((*env)->count + 2) * sizeof(char *));
+	new_var = ft_realloc_g_c(first_node, (*env)->var, ((*env)->count + 2) * sizeof(char *));
 	if (!new_var)
   {
-		perror("realloc");
+		//perror("realloc");
     return (1);
   }
 	(*env)->var = new_var;

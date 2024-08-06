@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:59:46 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/06 15:29:57 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:44:21 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,10 @@ int	main(int argc, char **argv, char **envp)
 			execute_ast(root, &env, &first_node);
 			//printf("main\n");
 			//print_env(env);
-			free_memory(&first_node);
+			//free_memory(&first_node);
 		}
 	}
-	//free_memory(&first_env);
+	free_memory(&first_env);
 	clear_history();
 	return (0);
 }
