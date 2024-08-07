@@ -45,7 +45,8 @@ int	builtin_env(char **args, t_ma *ma)
 		total_length += ft_strlen(ma->env->var[i]) + 1;
 		i++;
 	}
-	result = g_c(&(ma->first_node), (total_length + 1) * sizeof(char *))->data;
+	result = (char *)ft_calloc_g_c((total_length + 1), sizeof(char), &(ma->first_node));
+	//ft_memset(result, 0, (total_length + 1)*sizeof(char));
 	if (!result)
 		return (1);
 	i = 0;

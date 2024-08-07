@@ -45,6 +45,8 @@ int	main(int argc, char **argv, char **envp)
 			if (ft_strcmp(input, "exit") == 0)
 			{
 				free(input);
+				free_memory(&(ma.first_node));
+				free_memory(&(ma.first_env));
 				break ;
 			}
 			add_history(input);
