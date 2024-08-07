@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   ft_strjoin_g_c.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcasagra <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 16:39:20 by pcasagra          #+#    #+#             */
-/*   Updated: 2024/02/28 16:39:22 by pcasagra         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:49:12 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2, t_ntc **first_node)
+char	*ft_strjoin_g_c(char const *s1, char const *s2, t_ntc **first_node)
 {
 	int		s1s2len;
 	char	*join;

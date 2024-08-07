@@ -3,8 +3,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include "ft_printf.h"
-#include "libft.h"
+#include "./libft/headers/libft.h"
+#include "./libft/headers/ft_printf.h"
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <stdio.h>
@@ -13,6 +13,9 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <limits.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
 
 
 /*
@@ -104,13 +107,24 @@ typedef struct  s_token
 	t_token_type	type;
 	char		    *value;
 }				t_token;
-
+/*
+typedef struct s_main_args
+{
+    char    *input;
+    t_ntc   *first_node;
+    t_ntc   *first_env;
+    t_token *tkns[1024];
+    t_env   *env;
+    t_astnode *node;
+}               t_ma;
+*/
 typedef struct s_env
 {
 	char					**var;
 	int						count;
+    int                     capacity;  
 }							t_env;
-
+// Current capacity of the var array. I propose to add this to the struct in order to keep track of the current capacity of the var array. Here what I call capacity is the number of elements that the var array can hold at the moment. This is useful when we want to add a new element to the array. If the array is full, we can reallocate memory to increase the capacity of the array. This avoid calling ft_realloc_g_c for each new variable. We call it only when count == capacity.
 /* ************************************************************************** */
 /*                                  AST NODE                                  */                           
 /* ************************************************************************** */
@@ -119,7 +133,7 @@ typedef enum e_nodetype
 {
     NODE_CMD_LINE,
     NODE_PIPELINE,
-    NODE_cmd, //what type of node is this?
+    NODE_cmd,
     NODE_SIMPLE_CMD,
     NODE_WORD,
     NODE_REDIRECTION
@@ -182,31 +196,65 @@ Structs in the Union: Each struct within the union represents different types of
 - redirection: For redirection nodes, it contains a type of redirection and a file name.
 
 */
+/* ************************************************************************** */
+/*                                   AST EXECUTION                            */
+/* ************************************************************************** */
+
+/* ***************************  EXECUTE_PIPELINE_ARGS  ********************** */
+
+typedef struct  s_pipeline_args
+{
+    int     pipe_fds[2];
+    int     input_fd;
+    pid_t   pid;
+    pid_t   last_pid;
+    int     status;
+    int     last_cmd;
+}               t_pip_args;
+
+/* *************************  EXECUTE_SIMPLE_CMD_ARGS  ********************* */
+
+typedef struct  s_simple_cmd_args
+{
+    int     word_count;
+    int     status;
+    char    **words_arr;
+    int     saved_stdin;
+    int     saved_stdout;
+}               t_s_cmd_args;
 
 /* ************************************************************************** */
 /*                                   FUNCTIONS                                */
 /* ************************************************************************** */
-t_env               duplicate_vars(t_ntc **first_node, char **envp);
-void                print_env(t_env env);
+t_env           *duplicate_vars(t_ntc **first_node, char **envp);
+void            lexer(char *input,t_token **tkns, t_ntc **first_node);
+int             count_w_tks(char const *s, char c);
+char            **ft_split_tkns(char const *s, char c, t_ntc **first_node);
+t_token_type    clasify_token(char *value);
+t_astnode       *parser(t_ntc **first_node, t_token **tkns);
+t_astnode       *create_ast_node(t_ntc **first_node, t_nodetype type);
+t_astnode       *parse_cmd_line(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
+t_token         *get_next_token(t_token **tkns, int t);
+int             execute_builtin(char **args, t_env **env, t_ntc **first_node);
+int             is_builtin(const char *word);
+int             execute_cmd_line(t_astnode *node, t_env **env, t_ntc **first_node);
+int             execute_pipeline(t_astnode *node, t_env **env, t_ntc **first_node);
+int             execute_simple_cmd(t_astnode *node, t_env **env, t_ntc **first_node);
+int             execute_external_cmd(char **words_arr, t_env **env);
+t_astnode       *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns, t_astnode **last_word);
+int             builtin_pwd(char **args, t_ntc **first_node);
+int             builtin_echo(char **args, int count_words, t_ntc **first_node);
+int             builtin_env(char **args, t_env **env, t_ntc **first_node);
+int             builtin_export(char **args, t_env **env, t_ntc **first_node);
+int             builtin_unset(char **args, t_env **env);
+int             builtin_cd(char **args, t_env **env, t_ntc **first_node);
+int             find_env_var(t_env **env, char *var);
+int             execute_ast(t_astnode *node, t_env **env, t_ntc **first_node);
+pid_t           fork_process();
+int             update_env_var(t_env **env, int i, const char *var, t_ntc **first_node);
 
-void	            lexer(char *input,t_token **tkns, t_ntc **first_node);
-int					count_w_tks(char const *s, char c);
-char				**ft_split_tkns(char const *s, char c, \
-															t_ntc **first_node);
-t_token_type		clasify_token(char *value);
-t_token             *get_next_token(t_token **tkns);
-t_astnode           *parser(t_ntc **first_node, t_token **tkns); 
-t_astnode           *create_ast_node(t_ntc **first_node, t_nodetype type);
-t_astnode           *parse_cmd_line(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
-t_astnode           *parse_pipeline(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
-t_astnode           *parse_cmd(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
-t_astnode           *parse_simple_cmd(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
-t_astnode           *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
-t_astnode           *parse_redirection_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
-int                 is_word_token(t_token_type type);
-int                 is_redirection_token(t_token_type type);
-char                *execute_command(t_astnode *node, t_ntc **first_node, char **env);
-char                *builtin_export(t_astnode *node, t_ntc **first_node, t_env *env);
+void	print_env(t_env *env);
+
 
 
 #endif

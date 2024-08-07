@@ -1,0 +1,288 @@
+bruno@Brunos-Air Minishell % ./minishell
+>>pwd
+/Users/bruno/Minishell
+>>pwd kdld
+pwd: too many arguments
+>>echo -n hello world i'm bruno!
+hello world i'm bruno!>>
+>>echo hello world i'm bruno!
+hello world i'm bruno!
+>>env
+MallocNanoZone=0
+USER=bruno
+COMMAND_MODE=unix2003
+__CFBundleIdentifier=com.microsoft.VSCode
+PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin
+LOGNAME=bruno
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.ST7wZJSMPe/Listeners
+HOME=/Users/bruno
+SHELL=/bin/zsh
+TMPDIR=/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/
+__CF_USER_TEXT_ENCODING=0x1F5:0x0:0x8
+XPC_SERVICE_NAME=0
+XPC_FLAGS=0x0
+ORIGINAL_XDG_CURRENT_DESKTOP=undefined
+SHLVL=1
+PWD=/Users/bruno/Minishell
+OLDPWD=/Users/bruno/Minishell
+HOMEBREW_PREFIX=/opt/homebrew
+HOMEBREW_CELLAR=/opt/homebrew/Cellar
+HOMEBREW_REPOSITORY=/opt/homebrew
+INFOPATH=/opt/homebrew/share/info:/opt/homebrew/share/info:
+TERM_PROGRAM=vscode
+TERM_PROGRAM_VERSION=1.92.0
+LANG=es_ES.UTF-8
+COLORTERM=truecolor
+GIT_ASKPASS=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass.sh
+VSCODE_GIT_ASKPASS_NODE=/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin).app/Contents/MacOS/Code Helper (Plugin)
+VSCODE_GIT_ASKPASS_EXTRA_ARGS=
+VSCODE_GIT_ASKPASS_MAIN=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass-main.js
+VSCODE_GIT_IPC_HANDLE=/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/vscode-git-4b42b306d7.sock
+VSCODE_INJECTION=1
+ZDOTDIR=/Users/bruno
+USER_ZDOTDIR=/Users/bruno
+TERM=xterm-256color
+_=/Users/bruno/Minishell/./minishell
+>>export TEST=123
+>>env
+MallocNanoZone=0
+USER=bruno
+COMMAND_MODE=unix2003
+__CFBundleIdentifier=com.microsoft.VSCode
+PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin
+LOGNAME=bruno
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.ST7wZJSMPe/Listeners
+HOME=/Users/bruno
+SHELL=/bin/zsh
+TMPDIR=/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/
+__CF_USER_TEXT_ENCODING=0x1F5:0x0:0x8
+XPC_SERVICE_NAME=0
+XPC_FLAGS=0x0
+ORIGINAL_XDG_CURRENT_DESKTOP=undefined
+SHLVL=1
+PWD=/Users/bruno/Minishell
+OLDPWD=/Users/bruno/Minishell
+HOMEBREW_PREFIX=/opt/homebrew
+HOMEBREW_CELLAR=/opt/homebrew/Cellar
+HOMEBREW_REPOSITORY=/opt/homebrew
+INFOPATH=/opt/homebrew/share/info:/opt/homebrew/share/info:
+TERM_PROGRAM=vscode
+TERM_PROGRAM_VERSION=1.92.0
+LANG=es_ES.UTF-8
+COLORTERM=truecolor
+GIT_ASKPASS=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass.sh
+VSCODE_GIT_ASKPASS_NODE=/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin).app/Contents/MacOS/Code Helper (Plugin)
+VSCODE_GIT_ASKPASS_EXTRA_ARGS=
+VSCODE_GIT_ASKPASS_MAIN=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass-main.js
+VSCODE_GIT_IPC_HANDLE=/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/vscode-git-4b42b306d7.sock
+VSCODE_INJECTION=1
+ZDOTDIR=/Users/bruno
+USER_ZDOTDIR=/Users/bruno
+TERM=xterm-256color
+_=/Users/bruno/Minishell/./minishell
+TEST=123
+>>export TEST=124
+>>env
+MallocNanoZone=0
+USER=bruno
+COMMAND_MODE=unix2003
+__CFBundleIdentifier=com.microsoft.VSCode
+PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin
+LOGNAME=bruno
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.ST7wZJSMPe/Listeners
+HOME=/Users/bruno
+SHELL=/bin/zsh
+TMPDIR=/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/
+__CF_USER_TEXT_ENCODING=0x1F5:0x0:0x8
+XPC_SERVICE_NAME=0
+XPC_FLAGS=0x0
+ORIGINAL_XDG_CURRENT_DESKTOP=undefined
+SHLVL=1
+PWD=/Users/bruno/Minishell
+OLDPWD=/Users/bruno/Minishell
+HOMEBREW_PREFIX=/opt/homebrew
+HOMEBREW_CELLAR=/opt/homebrew/Cellar
+HOMEBREW_REPOSITORY=/opt/homebrew
+INFOPATH=/opt/homebrew/share/info:/opt/homebrew/share/info:
+TERM_PROGRAM=vscode
+TERM_PROGRAM_VERSION=1.92.0
+LANG=es_ES.UTF-8
+COLORTERM=truecolor
+GIT_ASKPASS=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass.sh
+VSCODE_GIT_ASKPASS_NODE=/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin).app/Contents/MacOS/Code Helper (Plugin)
+VSCODE_GIT_ASKPASS_EXTRA_ARGS=
+VSCODE_GIT_ASKPASS_MAIN=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass-main.js
+VSCODE_GIT_IPC_HANDLE=/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/vscode-git-4b42b306d7.sock
+VSCODE_INJECTION=1
+ZDOTDIR=/Users/bruno
+USER_ZDOTDIR=/Users/bruno
+TERM=xterm-256color
+_=/Users/bruno/Minishell/./minishell
+TEST=124
+>>export TEST=124 dgfgd
+>>env
+MallocNanoZone=0
+USER=bruno
+COMMAND_MODE=unix2003
+__CFBundleIdentifier=com.microsoft.VSCode
+PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin
+LOGNAME=bruno
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.ST7wZJSMPe/Listeners
+HOME=/Users/bruno
+SHELL=/bin/zsh
+TMPDIR=/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/
+__CF_USER_TEXT_ENCODING=0x1F5:0x0:0x8
+XPC_SERVICE_NAME=0
+XPC_FLAGS=0x0
+ORIGINAL_XDG_CURRENT_DESKTOP=undefined
+SHLVL=1
+PWD=/Users/bruno/Minishell
+OLDPWD=/Users/bruno/Minishell
+HOMEBREW_PREFIX=/opt/homebrew
+HOMEBREW_CELLAR=/opt/homebrew/Cellar
+HOMEBREW_REPOSITORY=/opt/homebrew
+INFOPATH=/opt/homebrew/share/info:/opt/homebrew/share/info:
+TERM_PROGRAM=vscode
+TERM_PROGRAM_VERSION=1.92.0
+LANG=es_ES.UTF-8
+COLORTERM=truecolor
+GIT_ASKPASS=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass.sh
+VSCODE_GIT_ASKPASS_NODE=/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin).app/Contents/MacOS/Code Helper (Plugin)
+VSCODE_GIT_ASKPASS_EXTRA_ARGS=
+VSCODE_GIT_ASKPASS_MAIN=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass-main.js
+VSCODE_GIT_IPC_HANDLE=/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/vscode-git-4b42b306d7.sock
+VSCODE_INJECTION=1
+ZDOTDIR=/Users/bruno
+USER_ZDOTDIR=/Users/bruno
+TERM=xterm-256color
+_=/Users/bruno/Minishell/./minishell
+TEST=124
+>>unset 
+unset: not enough arguments
+>>unset TEST=124 
+unset: TEST=124: invalid parameter name
+>>env
+MallocNanoZone=0
+COMMAND_MODE=unix2003
+__CFBundleIdentifier=com.microsoft.VSCode
+PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin
+LOGNAME=bruno
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.ST7wZJSMPe/Listeners
+HOME=/Users/bruno
+SHELL=/bin/zsh
+TMPDIR=/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/
+__CF_USER_TEXT_ENCODING=0x1F5:0x0:0x8
+XPC_SERVICE_NAME=0
+XPC_FLAGS=0x0
+ORIGINAL_XDG_CURRENT_DESKTOP=undefined
+SHLVL=1
+PWD=/Users/bruno/Minishell
+OLDPWD=/Users/bruno/Minishell
+HOMEBREW_PREFIX=/opt/homebrew
+HOMEBREW_CELLAR=/opt/homebrew/Cellar
+HOMEBREW_REPOSITORY=/opt/homebrew
+INFOPATH=/opt/homebrew/share/info:/opt/homebrew/share/info:
+TERM_PROGRAM=vscode
+TERM_PROGRAM_VERSION=1.92.0
+LANG=es_ES.UTF-8
+COLORTERM=truecolor
+GIT_ASKPASS=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass.sh
+VSCODE_GIT_ASKPASS_NODE=/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin).app/Contents/MacOS/Code Helper (Plugin)
+VSCODE_GIT_ASKPASS_EXTRA_ARGS=
+VSCODE_GIT_ASKPASS_MAIN=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass-main.js
+VSCODE_GIT_IPC_HANDLE=/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/vscode-git-4b42b306d7.sock
+VSCODE_INJECTION=1
+ZDOTDIR=/Users/bruno
+USER_ZDOTDIR=/Users/bruno
+TERM=xterm-256color
+_=/Users/bruno/Minishell/./minishell
+TEST=124
+>>unset TEST
+>>env
+MallocNanoZone=0
+COMMAND_MODE=unix2003
+__CFBundleIdentifier=com.microsoft.VSCode
+PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin
+LOGNAME=bruno
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.ST7wZJSMPe/Listeners
+HOME=/Users/bruno
+SHELL=/bin/zsh
+TMPDIR=/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/
+__CF_USER_TEXT_ENCODING=0x1F5:0x0:0x8
+XPC_SERVICE_NAME=0
+XPC_FLAGS=0x0
+ORIGINAL_XDG_CURRENT_DESKTOP=undefined
+SHLVL=1
+PWD=/Users/bruno/Minishell
+OLDPWD=/Users/bruno/Minishell
+HOMEBREW_PREFIX=/opt/homebrew
+HOMEBREW_CELLAR=/opt/homebrew/Cellar
+HOMEBREW_REPOSITORY=/opt/homebrew
+INFOPATH=/opt/homebrew/share/info:/opt/homebrew/share/info:
+TERM_PROGRAM=vscode
+TERM_PROGRAM_VERSION=1.92.0
+LANG=es_ES.UTF-8
+COLORTERM=truecolor
+GIT_ASKPASS=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass.sh
+VSCODE_GIT_ASKPASS_NODE=/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin).app/Contents/MacOS/Code Helper (Plugin)
+VSCODE_GIT_ASKPASS_EXTRA_ARGS=
+VSCODE_GIT_ASKPASS_MAIN=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass-main.js
+VSCODE_GIT_IPC_HANDLE=/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/vscode-git-4b42b306d7.sock
+VSCODE_INJECTION=1
+ZDOTDIR=/Users/bruno
+USER_ZDOTDIR=/Users/bruno
+TERM=xterm-256color
+_=/Users/bruno/Minishell/./minishell
+>>pwd
+/Users/bruno/Minishell
+>>cd 
+>>pwd
+/Users/bruno
+>>cd Github_42 
+>>pwd
+/Users/bruno/Github_42
+>>cd Minishell 
+>>pwd
+/Users/bruno/Github_42/Minishell
+>>env
+MallocNanoZone=0
+COMMAND_MODE=unix2003
+__CFBundleIdentifier=com.microsoft.VSCode
+PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin
+LOGNAME=bruno
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.ST7wZJSMPe/Listeners
+HOME=/Users/bruno
+SHELL=/bin/zsh
+TMPDIR=/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/
+__CF_USER_TEXT_ENCODING=0x1F5:0x0:0x8
+XPC_SERVICE_NAME=0
+XPC_FLAGS=0x0
+ORIGINAL_XDG_CURRENT_DESKTOP=undefined
+SHLVL=1
+PWD=/Users/bruno/Github_42/Minishell
+OLDPWD=/Users/bruno/Github_42
+HOMEBREW_PREFIX=/opt/homebrew
+HOMEBREW_CELLAR=/opt/homebrew/Cellar
+HOMEBREW_REPOSITORY=/opt/homebrew
+INFOPATH=/opt/homebrew/share/info:/opt/homebrew/share/info:
+TERM_PROGRAM=vscode
+TERM_PROGRAM_VERSION=1.92.0
+LANG=es_ES.UTF-8
+COLORTERM=truecolor
+GIT_ASKPASS=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass.sh
+VSCODE_GIT_ASKPASS_NODE=/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin).app/Contents/MacOS/Code Helper (Plugin)
+VSCODE_GIT_ASKPASS_EXTRA_ARGS=
+VSCODE_GIT_ASKPASS_MAIN=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass-main.js
+VSCODE_GIT_IPC_HANDLE=/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/vscode-git-4b42b306d7.sock
+VSCODE_INJECTION=1
+ZDOTDIR=/Users/bruno
+USER_ZDOTDIR=/Users/bruno
+TERM=xterm-256color
+_=/Users/bruno/Minishell/./minishell
+>>cd ..
+>>pwd
+/Users/bruno/Github_42
+>>cd .. sdffds
+cd: string not in pwd: ..
+>>cd 
+>>exit

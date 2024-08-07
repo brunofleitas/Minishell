@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:59:46 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/26 12:15:50 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/06 17:27:53 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,36 +32,37 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	char		*input;
 	t_ntc		*first_node;
+	t_ntc		*first_env;
 	t_token		*tkns[1024];
-	t_env		env;
-	//t_astnode	*root;
+	t_env		*env;
+	t_astnode	*root;
 
 	first_node = NULL;
+	first_env = NULL;
+	env = duplicate_vars(&first_env, envp);
 	while (1)
 	{
-		//root = NULL;
 		input = readline(">>");
-		if (input)
+		if (ft_strcmp(input, "") != 0)
 		{
 			if (ft_strcmp(input, "exit") == 0)
 			{
 				free(input);
 				break ;
 			}
-			env = duplicate_vars(&first_node, envp);
-			print_env(env);
 			add_history(input);
 			lexer(input, tkns, &first_node);
-			parser(&first_node, tkns);
-			//root = parse_cmd_line(&first_node, tkns);
-			//free_ast(&root);
-			free(input);
+			get_next_token(tkns, 0);
+			root = parser(&first_node, tkns);
+			execute_ast(root, &env, &first_node);
+			//printf("main\n");
+			//print_env(env);
+			//free_memory(&first_node);
 		}
-		else
-			break ;
 	}
+	//free_memory(&first_env);
+	//free_memory(&first_node);
 	clear_history();
-	free_memory(&first_node);
 	return (0);
 }
 /*
@@ -79,6 +80,8 @@ Here's a high-level overview of steps you might take to construct the AST:
 3. **Building the Tree**: As the parser recognizes the grammar patterns in the token sequence, it should create the appropriate AST nodes and link them together to build the tree. This involves determining the parent-child relationships between nodes based on the syntactic structure of the input.
 
 4. **Error Handling**: Implement error handling in the parser to deal with syntax errors, providing meaningful error messages to the user.
+
+Get_next_token function is used to initialize the i = 0;
 
 After constructing the AST, the next steps in the shell's execution process would involve traversing the AST to interpret or execute the cmds represented by the tree.
 

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   7-node_creation.c                                  :+:      :+:    :+:   */
+/*   8-AST_create_node.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 12:26:51 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/18 12:38:59 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/05 16:25:56 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,6 @@ t_astnode *create_ast_node(t_ntc **first_node, t_nodetype type)
         exit(1);
     }
     node->type = type;
+    //printf("Node created: %i\n", node->type);
     return (node);
 }

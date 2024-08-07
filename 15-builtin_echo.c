@@ -6,13 +6,13 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:50:08 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/01 18:18:10 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:23:56 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/* 
+/*
   Parameters:
     node: Pointer to the AST node.
   Return value:
@@ -22,10 +22,9 @@
     simple command. If the flag is present, indicates that a newline 
     should not be added after the command output.
 */
-static int	should_add_newline(t_astnode *node)
+static int	should_add_newline(char **args, int word_count)
 {
-	if (node->data.simple_cmd.word_count > 1
-		&& !strcmp(node->data.simple_cmd.words->data.word.value[1], "-n"))
+	if (word_count > 1 && !(ft_strncmp(args[1], "-n", 2)))
 		return (0);
 	return (1);
 }
@@ -42,22 +41,21 @@ static int	should_add_newline(t_astnode *node)
     a single string, starting from the given index. Adds a space 
     between each word. Handles memory allocation and errors.
 */
-static char	*join_words(t_astnode *node, t_ntc **first_node, int i)
+static char	*join_words(char **args, t_ntc **first_node, int i, int word_count)
 {
 	char	*result;
 	char	*temp;
 
-	result = ft_strdup("", first_node);
-	while (i < node->data.simple_cmd.word_count)
+	result = ft_strdup_g_c("", first_node);
+	while (i < word_count)
 	{
-		temp = ft_strjoin(result, node->data.simple_cmd.words[i],
-				first_node);
-		free(result);
+		temp = ft_strjoin_g_c(result, args[i], first_node);
+		//free_ntc_prior(first_node, result);
 		result = temp;
-		if (i < node->data.simple_cmd.word_count - 1)
+		if (i < word_count - 1)
 		{
-			temp = ft_strjoin(result, " ", first_node);
-			free(result);
+			temp = ft_strjoin_g_c(result, " ", first_node);
+			//free_ntc_prior(first_node, result);
 			result = temp;
 		}
 		i++;
@@ -76,24 +74,30 @@ static char	*join_words(t_astnode *node, t_ntc **first_node, int i)
     by name, frees its memory, shifts the subsequent variables in 
     the array, and decreases the environment variable count.
 */
-char	*builtin_echo(t_astnode *node, t_ntc **first_node)
+int	builtin_echo(char **args, int word_count, t_ntc **first_node)
 {
 	int		newline;
 	int		i;
 	char	*result;
 	char	*temp;
 
-	newline = should_add_newline(node);
+	newline = should_add_newline(args, word_count);
 	if (newline)
 		i = 1;
 	else
 		i = 2;
-	result = join_words(node, first_node, i);
+	result = join_words(args, first_node, i, word_count);
 	if (newline)
 	{
-		temp = ft_strjoin(result, "\n", first_node);
-		free(result);
+		temp = ft_strjoin_g_c(result, "\n", first_node);
+		//free_ntc_prior(first_node, result);
 		result = temp;
 	}
-	return (result);
+	if (result)
+	{
+		printf("%s", result);
+		//free_ntc_prior(first_node, result);
+		return (0);
+	}
+	return (1);
 }

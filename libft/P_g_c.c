@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-
+#include <stdio.h>
 
 t_ntc   *find_ntc(t_ntc **first_node, void *data_ptr) 
 {
@@ -20,7 +20,9 @@ t_ntc   *find_ntc(t_ntc **first_node, void *data_ptr)
     temp = *first_node;
     while (temp != NULL) 
     {
-        if (temp->data != NULL && temp->data == data_ptr) 
+		//printf("temp->data: %p\n", temp->data);
+		//printf("data_ptr: %p\n", data_ptr);
+        if (temp->data != NULL && (ft_memcmp(temp->data, data_ptr, temp->size) == 0)) 
             return temp;
         temp = temp->next;
     }
