@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:45:41 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/07 02:23:56 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/07 12:56:56 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	check_valid_path(char *path)
 		perror("cd");
 		return (0);
 	}
-	if (!S_ISDIR(sb.st_mode))
+	if (!S_ISDIR(sb.st_mode)) //CHECK IF IT IS ALLOWED
 	{
 		fprintf(stderr, "cd: not a directory: %s\n", path);
 		return (0);
