@@ -183,13 +183,13 @@ static t_astnode *parse_pipeline(t_ntc **first_node, t_token *c_tkn, t_token **t
     {
         c_tkn = get_next_token(tkns, 1);
         node->data.pipeline.cmd_count++;
-        /*node->data.pipeline.cmds = ft_realloc_g_c(first_node,\
+        node->data.pipeline.cmds = ft_realloc_g_c(first_node,\
                                         node->data.pipeline.cmds,\
                                         node->data.pipeline.cmd_count\
-                                        * sizeof(t_astnode*));*/
-        node->data.pipeline.cmds = realloc(node->data.pipeline.cmds,\
-                                        node->data.pipeline.cmd_count\
                                         * sizeof(t_astnode*));
+        /* node->data.pipeline.cmds = realloc(node->data.pipeline.cmds,\
+                                        node->data.pipeline.cmd_count\
+                                        * sizeof(t_astnode*)); */
         node->data.pipeline.cmds[node->data.pipeline.cmd_count - 1]\
                                 = parse_cmd(first_node, c_tkn, tkns);
     }

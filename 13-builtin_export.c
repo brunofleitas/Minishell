@@ -82,7 +82,7 @@ static int	update_env_var(int i, const char *var, t_ma *ma)
 static int	add_env_var(char *var, t_ma *ma)
 {
 	char	**new_var;
-  printf("add_env_var-----------------------------START\n");
+  //printf("add_env_var-----------------------------START\n");
   //print_env(*env);
   //printf("\n\n\n\n");
 	new_var = ft_realloc_g_c(&(ma->first_env), ma->env->var, (ma->env->count + 2) * sizeof(char *));
@@ -101,7 +101,7 @@ static int	add_env_var(char *var, t_ma *ma)
   ma->env->count++;
 	ma->env->var[ma->env->count] = NULL;
   //print_env(*env);
-  printf("add_env_var-----------------------------END\n");
+  //printf("add_env_var-----------------------------END\n");
   return (0);
 }
 

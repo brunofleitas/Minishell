@@ -33,14 +33,13 @@ int	builtin_env(char **args, t_ma *ma)
 
 	i = 0;
 	total_length = 0;
+	result = NULL;// added for test
 	if (args[1] != NULL)
 	{
 		printf("env: too many arguments\n");
 		return (1);
 	}
 	//print the environment variables
-	
-
 	while (ma->env->var[i] != NULL)
 	{
 		total_length += ft_strlen(ma->env->var[i]) + 1;
@@ -53,7 +52,7 @@ int	builtin_env(char **args, t_ma *ma)
 	while (ma->env->var[i] != NULL)
 	{
 		ft_strlcat(result, ma->env->var[i], total_length + 1);
-		ft_strlcat(result, "\n", total_length + 1);
+		ft_strlcat(result, "\n", total_length + 2);
 		i++;
 	}
 	if (result)

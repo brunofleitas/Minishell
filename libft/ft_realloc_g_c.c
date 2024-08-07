@@ -22,7 +22,7 @@ void *ft_realloc_g_c(t_ntc **first_node, void *existing_data, size_t new_size)
     }
     else
     {
-        printf("ft_realloc exiting_data : %p\n", existing_data);
+        //printf("ft_realloc exiting_data : %p\n", existing_data);
         existing_node = find_ntc(first_node, existing_data);
         if (!existing_node)
         {

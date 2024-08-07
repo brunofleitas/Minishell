@@ -54,7 +54,7 @@ int	main(int argc, char **argv, char **envp)
 			execute_ast(root, &ma);
 			//printf("main\n");
 			//print_env(env);
-			//free_memory(&first_node);
+			free_memory(&(ma.first_node));
 		}
 	}
 	free_memory(&(ma.first_env));
