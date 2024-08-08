@@ -4,7 +4,8 @@
         "stdio.h": "c",
         "libft.h": "c",
         "stdlib.h": "c",
-        "history.h": "c"
+        "history.h": "c",
+        "unistd.h": "c"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

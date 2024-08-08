@@ -46,7 +46,6 @@ int	main(int argc, char **argv, char **envp)
 			{
 				free(input);
 				free_memory(&(ma.first_node));
-				free_memory(&(ma.first_env));
 				break ;
 			}
 			add_history(input);
@@ -61,6 +60,7 @@ int	main(int argc, char **argv, char **envp)
 	}
 	free_memory(&(ma.first_env));
 	clear_history();
+	ft_printf("clear_history was executed\n");
 	return (0);
 }
 /*
