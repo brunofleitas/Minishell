@@ -74,7 +74,7 @@ static char	*join_words(char **args, t_ntc **first_node, int i, int word_count)
     by name, frees its memory, shifts the subsequent variables in 
     the array, and decreases the environment variable count.
 */
-int	builtin_echo(char **args, int word_count, t_ntc **first_node)
+int	builtin_echo(char **args, int word_count, t_ma *ma)
 {
 	int		newline;
 	int		i;
@@ -86,10 +86,10 @@ int	builtin_echo(char **args, int word_count, t_ntc **first_node)
 		i = 1;
 	else
 		i = 2;
-	result = join_words(args, first_node, i, word_count);
+	result = join_words(args, &(ma->first_node), i, word_count);
 	if (newline)
 	{
-		temp = ft_strjoin_g_c(result, "\n", first_node);
+		temp = ft_strjoin_g_c(result, "\n", &(ma->first_node));
 		//free_ntc_prior(first_node, result);
 		result = temp;
 	}

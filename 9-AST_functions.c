@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   9-AST_functions.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/11 13:08:01 by bfleitas          #+#    #+#             */
+/*   Updated: 2024/08/11 13:08:03 by bfleitas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 
@@ -183,13 +195,13 @@ static t_astnode *parse_pipeline(t_ntc **first_node, t_token *c_tkn, t_token **t
     {
         c_tkn = get_next_token(tkns, 1);
         node->data.pipeline.cmd_count++;
-        /*node->data.pipeline.cmds = ft_realloc_g_c(first_node,\
+        node->data.pipeline.cmds = ft_realloc_g_c(first_node,\
                                         node->data.pipeline.cmds,\
                                         node->data.pipeline.cmd_count\
-                                        * sizeof(t_astnode*));*/
-        node->data.pipeline.cmds = realloc(node->data.pipeline.cmds,\
-                                        node->data.pipeline.cmd_count\
                                         * sizeof(t_astnode*));
+        /* node->data.pipeline.cmds = realloc(node->data.pipeline.cmds,\
+                                        node->data.pipeline.cmd_count\
+                                        * sizeof(t_astnode*)); */
         node->data.pipeline.cmds[node->data.pipeline.cmd_count - 1]\
                                 = parse_cmd(first_node, c_tkn, tkns);
     }

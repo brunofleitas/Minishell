@@ -18,12 +18,12 @@ t_ntc   *find_ntc(t_ntc **first_node, void *data_ptr)
     t_ntc	*temp;
     
     temp = *first_node;
+	//printf("find_ntc data_ptr: %p\n", data_ptr);
     while (temp != NULL) 
     {
 		//printf("temp->data: %p\n", temp->data);
-		//printf("data_ptr: %p\n", data_ptr);
         if (temp->data != NULL && (ft_memcmp(temp->data, data_ptr, temp->size) == 0)) 
-            return temp;
+            return (temp);
         temp = temp->next;
     }
     return (NULL);
@@ -133,6 +133,7 @@ t_ntc	*g_c(t_ntc **first_node, size_t size_of)
 	t_ntc	*temp;
 	t_ntc	*new_node;
 
+	new_node = NULL;
 	if (!first_node)
 		return (NULL);
 	if (util_g_c(&new_node, size_of) == NULL)

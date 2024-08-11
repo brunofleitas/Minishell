@@ -1,5 +1,3 @@
-
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -102,6 +100,8 @@ typedef enum e_token_type
 /* ************************************************************************** */
 /*                           STRUCTURE DEFINITIONS                            */                           
 /* ************************************************************************** */
+
+
 typedef struct  s_token
 {
 	t_token_type	type;
@@ -196,6 +196,16 @@ Structs in the Union: Each struct within the union represents different types of
 - redirection: For redirection nodes, it contains a type of redirection and a file name.
 
 */
+
+typedef struct  s_main_args
+{
+    
+	t_ntc		*first_node;
+    t_ntc		*first_env;
+	t_token		*tkns[1024];
+	t_env		*env;
+}               t_ma;
+
 /* ************************************************************************** */
 /*                                   AST EXECUTION                            */
 /* ************************************************************************** */
@@ -235,23 +245,23 @@ t_astnode       *parser(t_ntc **first_node, t_token **tkns);
 t_astnode       *create_ast_node(t_ntc **first_node, t_nodetype type);
 t_astnode       *parse_cmd_line(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
 t_token         *get_next_token(t_token **tkns, int t);
-int             execute_builtin(char **args, t_env **env, t_ntc **first_node);
+int             execute_builtin(char **args, t_ma *ma);
 int             is_builtin(const char *word);
-int             execute_cmd_line(t_astnode *node, t_env **env, t_ntc **first_node);
-int             execute_pipeline(t_astnode *node, t_env **env, t_ntc **first_node);
-int             execute_simple_cmd(t_astnode *node, t_env **env, t_ntc **first_node);
-int             execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node);
+int             execute_cmd_line(t_astnode *node, t_ma *ma);
+int             execute_pipeline(t_astnode *node, t_ma *ma);
+int             execute_simple_cmd(t_astnode *node, t_ma *ma);
+int             execute_external_cmd(char **words_arr, t_ma *ma);
 t_astnode       *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns, t_astnode **last_word);
-int             builtin_pwd(char **args, t_ntc **first_node);
-int             builtin_echo(char **args, int count_words, t_ntc **first_node);
-int             builtin_env(char **args, t_env **env, t_ntc **first_node);
-int             builtin_export(char **args, t_env **env, t_ntc **first_node);
-int             builtin_unset(char **args, t_env **env);
-int             builtin_cd(char **args, t_env **env, t_ntc **first_node);
+int             builtin_pwd(char **args, t_ma *ma);
+int             builtin_echo(char **args, int count_words, t_ma *ma);
+int             builtin_env(char **args, t_ma *ma);
+int             builtin_export(char **args, t_ma *ma);
+int             builtin_unset(char **args, t_ma *ma);
+int             builtin_cd(char **args, t_ma *ma);
 int             find_env_var(t_env **env, char *var);
-int             execute_ast(t_astnode *node, t_env **env, t_ntc **first_node);
+int             execute_ast(t_astnode *node, t_ma *ma);
 pid_t           fork_process();
-int             update_env_var(t_env **env, int i, const char *var, t_ntc **first_node);
+int	update_env_var(int i, const char *var, t_ma *ma);
 
 void	print_env(t_env *env);
 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   19-AST_execute.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/11 13:07:32 by bfleitas          #+#    #+#             */
+/*   Updated: 2024/08/11 13:07:35 by bfleitas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /**
@@ -10,28 +22,16 @@
  @param env Pointer to the environment structure
  @return int Returns the exit status of the executed command
 */
-int execute_ast(t_astnode *node, t_env **env, t_ntc **first_node)
+int execute_ast(t_astnode *node, t_ma *ma)
 {
-    int i;
-
     if (!node)
         return (0);
     if (node->type == NODE_CMD_LINE)
-        return (execute_cmd_line(node, env, first_node));
+        return (execute_cmd_line(node, ma));
     else if (node->type == NODE_PIPELINE)
-    {
-        i = execute_pipeline(node, env, first_node);
-        //printf("pipeline\n");
-        //print_env(*env);
-        return (i);
-    }
+        return(execute_pipeline(node, ma));
     else if (node->type == NODE_SIMPLE_CMD)
-    {
-        i=execute_simple_cmd(node, env, first_node);
-        //printf("simple_cmd\n");
-        //print_env(*env);
-        return (i);
-    }
+        return(execute_simple_cmd(node, ma));
     else
     {
         printf("%i\n", node->type);
@@ -49,22 +49,22 @@ int execute_ast(t_astnode *node, t_env **env, t_ntc **first_node)
  @param env Pointer to the environment structure
  @return int Returns the exit status of the last executed command
  */
-int execute_cmd_line(t_astnode *node, t_env **env, t_ntc **first_node)
+int execute_cmd_line(t_astnode *node, t_ma *ma)
 {
     int left_result;
     
     //printf("execute_cmd_line start\n");
-    left_result = execute_ast(node->data.cmd_line.left, env, first_node);
+    left_result = execute_ast(node->data.cmd_line.left, ma);
     if (node->data.cmd_line.operator == TOKEN_AND)
     {
         if (left_result == 0)
-            return (execute_ast(node->data.cmd_line.right, env, first_node));
+            return (execute_ast(node->data.cmd_line.right, ma));
         return left_result;
     }
     else if (node->data.cmd_line.operator == TOKEN_OR)
     {
         if (left_result != 0)
-            return (execute_ast(node->data.cmd_line.right, env, first_node));
+            return (execute_ast(node->data.cmd_line.right, ma));
         return left_result;
     }
     //printf("execute_cmd_line end\n");

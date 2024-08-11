@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:45:41 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/07 12:56:56 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/11 15:51:35 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,6 @@ static char	*get_home_directory(t_env **env)
 	return (home);
 }
 
-
-
-
-
 char *get_cd_path(char **args, t_env **env)
 {
     char *path;
@@ -104,21 +100,21 @@ int change_directory(char *path)
 }
 
 
-int update_oldpwd(t_env **env, char *current_dir, t_ntc **first_node)
+int update_oldpwd(char *current_dir, t_ma *ma)
 {
     char *oldpwd_str;
 	char *temp;
     int i;
 
-    i = get_env_var(env, "OLDPWD", &temp);
+    i = get_env_var(&ma->env, "OLDPWD", &temp);
     if (i != -1)
 	{
-        oldpwd_str = ft_strdup_g_c("", first_node);
-        temp = ft_strjoin_g_c(oldpwd_str, "OLDPWD=", first_node);
+        oldpwd_str = ft_strdup_g_c("", &ma->first_env);
+        temp = ft_strjoin_g_c(oldpwd_str, "OLDPWD=", &ma->first_env);
         oldpwd_str = temp;
-        temp = ft_strjoin_g_c(oldpwd_str, current_dir, first_node);
+        temp = ft_strjoin_g_c(oldpwd_str, current_dir, &ma->first_env);
         oldpwd_str = temp;
-        if (update_env_var(env, i, oldpwd_str, first_node))
+        if (update_env_var(i, oldpwd_str, ma))
 		{
             fprintf(stderr, "cd: failed to update OLDPWD environment variable\n");
             return (1);
@@ -127,7 +123,7 @@ int update_oldpwd(t_env **env, char *current_dir, t_ntc **first_node)
     return (0);
 }
 
-int update_pwd(t_env **env, t_ntc **first_node)
+int update_pwd(t_ma *ma)
 {
     char *pwd_str;
 	char *temp;
@@ -139,15 +135,15 @@ int update_pwd(t_env **env, t_ntc **first_node)
         perror("getcwd");
         return (1);
     }
-    i = get_env_var(env, "PWD", &temp);
+    i = get_env_var(&ma->env, "PWD", &temp);
     if (i != -1)
     {
-        pwd_str = ft_strdup_g_c("", first_node);
-        temp = ft_strjoin_g_c(pwd_str, "PWD=", first_node);
+        pwd_str = ft_strdup_g_c("", &ma->first_env);
+        temp = ft_strjoin_g_c(pwd_str, "PWD=",  &ma->first_env);
         pwd_str = temp;
-        temp = ft_strjoin_g_c(pwd_str, new_current_dir, first_node);
+        temp = ft_strjoin_g_c(pwd_str, new_current_dir, &ma->first_env);
         pwd_str = temp;
-        if (update_env_var(env, i, pwd_str, first_node))
+        if (update_env_var(i, pwd_str, ma))
         {
             fprintf(stderr, "cd: failed to update PWD environment variable\n");
             return (1);
@@ -156,21 +152,21 @@ int update_pwd(t_env **env, t_ntc **first_node)
     return (0);
 }
 
-int update_env_variables(t_env **env, char *current_dir, t_ntc **first_node)
+int update_env_variables(char *current_dir, t_ma *ma)
 {
-    if (update_oldpwd(env, current_dir, first_node))
+    if (update_oldpwd(current_dir, ma))
         return 1;
-    if (update_pwd(env, first_node))
+    if (update_pwd(ma))
         return 1;
     return 0;
 }
 
-int builtin_cd(char **args, t_env **env, t_ntc **first_node)
+int builtin_cd(char **args, t_ma *ma)
 {
     char current_dir[PATH_MAX];
     char *path;
 
-    path = get_cd_path(args, env);
+    path = get_cd_path(args, &ma->env);
     if (!path)
         return (1);
 	if (!validate_cd_path(path))
@@ -182,7 +178,7 @@ int builtin_cd(char **args, t_env **env, t_ntc **first_node)
     }
     if (change_directory(path))
         return (1);
-    if (update_env_variables(env, current_dir, first_node))
+    if (update_env_variables(current_dir, ma))
         return (1);
     return (0);
 }

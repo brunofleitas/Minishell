@@ -26,7 +26,7 @@ static char	**allocate_env(t_ntc **first_node, int count)
 {
 	char	**new_envp;
 
-	new_envp = g_c(first_node, (count + 1) * sizeof(char *))->data;
+	new_envp = (char**)g_c(first_node, (count + 1) * sizeof(char *))->data;
 	if (!new_envp)
 	{
 		perror("malloc");

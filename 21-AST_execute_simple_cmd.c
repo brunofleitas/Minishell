@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   21-AST_execute_simple_cmd.c                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/11 13:07:15 by bfleitas          #+#    #+#             */
+/*   Updated: 2024/08/11 13:07:17 by bfleitas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -33,19 +44,16 @@ static void restore_io(int saved_stdin, int saved_stdout)
     close(saved_stdout);
 }
 
-static char **create_words_arr(t_ntc **first_node, t_astnode *node, t_env **env, \
-                                                                int *word_count)
+static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
 {
     t_astnode   *node_word;
     char        **words_arr;
     int         i;
 
-    (void)env; //Can we delete env parameter?
-    //printf("create_words_arr start\n");
     i= 0;
     node_word = node->data.simple_cmd.words;
     *word_count = node_word_count(node);
-    words_arr = g_c(first_node, (*word_count + 1) * sizeof(char *))->data;
+    words_arr = g_c(&(ma->first_node), (*word_count + 1) * sizeof(char *))->data;
     if (!words_arr)
     {
         perror("malloc");
@@ -54,7 +62,7 @@ static char **create_words_arr(t_ntc **first_node, t_astnode *node, t_env **env,
     node_word = node->data.simple_cmd.words;
     while(i < *word_count)
     {
-        words_arr[i++] = ft_substr_g_c(node_word->data.word.value, 0, ft_strlen(node_word->data.word.value), first_node);
+        words_arr[i++] = ft_substr_g_c(node_word->data.word.value, 0, ft_strlen(node_word->data.word.value), &(ma->first_node));
         node_word = node_word->data.word.next;
     }
     words_arr[*word_count] = NULL;
@@ -75,7 +83,7 @@ static char **create_words_arr(t_ntc **first_node, t_astnode *node, t_env **env,
  * @param first_node Double pointer to the first node in my garbage collector
  * @return int Returns the exit status of the executed command
  */
-int execute_simple_cmd(t_astnode *node, t_env **env, t_ntc **first_node)
+int execute_simple_cmd(t_astnode *node, t_ma *ma)
 {
     t_s_cmd_args   a;
 
@@ -95,7 +103,7 @@ int execute_simple_cmd(t_astnode *node, t_env **env, t_ntc **first_node)
         restore_io(a.saved_stdin, a.saved_stdout);
         return(1);
     }*/
-    a.words_arr = create_words_arr(first_node, node, env, &(a.word_count));
+    a.words_arr = create_words_arr(node, &(a.word_count), ma);
     if (!a.words_arr)
     {
         restore_io(a.saved_stdin, a.saved_stdout);
@@ -103,10 +111,10 @@ int execute_simple_cmd(t_astnode *node, t_env **env, t_ntc **first_node)
     }
     //expand_wildcards(a.words_arr);
     if (is_builtin(a.words_arr[0]))
-        a.status = execute_builtin(a.words_arr, env, first_node);
+        a.status = execute_builtin(a.words_arr, ma);
     else
-        a.status = execute_external_cmd(a.words_arr, env, first_node);
-    free_ntc_prior(first_node, a.words_arr);
+        a.status = execute_external_cmd(a.words_arr, ma);
+    free_ntc_prior(&(ma->first_node), a.words_arr);
     restore_io(a.saved_stdin, a.saved_stdout);
     //printf("execute_simple_cmd end\n");
     return (a.status);

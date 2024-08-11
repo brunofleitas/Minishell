@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:49:35 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/06 18:05:11 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/11 15:55:36 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static int check_for_equal(char *str)
     by name, frees its memory, shifts the subsequent variables in 
     the array, and decreases the environment variable count.
 */
-int	builtin_unset(char **args, t_env **env)
+int	builtin_unset(char **args, t_ma *ma)
 {
 	int	i;
 
@@ -93,14 +93,14 @@ int	builtin_unset(char **args, t_env **env)
 		{
 			while (args[i])
 			{
-				if (find_env_var_unset(env, args[i]) != 0)
-					remove_env_var(env, args[i]);
+				if (find_env_var_unset(&ma->env, args[i]) != 0)
+					remove_env_var(&ma->env, args[i]);
 				i++;
 			}
 			break;
 		}
-		if (find_env_var_unset(env, args[i]) != 0)
-			remove_env_var(env, args[i]);
+		if (find_env_var_unset(&ma->env, args[i]) != 0)
+			remove_env_var(&ma->env, args[i]);
 		i++;
 	}
 	return (0);

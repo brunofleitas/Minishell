@@ -23,7 +23,7 @@
     successful, duplicates the directory string and returns it. 
     Prints an error message if getcwd fails.
 */
-int	builtin_pwd(char **args, t_ntc **first_node)
+int	builtin_pwd(char **args, t_ma *ma)
 {
 	char	cwd[PATH_MAX];
 
@@ -34,7 +34,7 @@ int	builtin_pwd(char **args, t_ntc **first_node)
   }
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
   {
-		printf("%s\n", ft_strdup_g_c(cwd, first_node));
+		printf("%s\n", ft_strdup_g_c(cwd, &(ma->first_node)));
     return (0);
   }
   else

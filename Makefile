@@ -55,5 +55,7 @@ fclean: clean
 	$(RM) $(NAME) $(BONUS)
 
 re: fclean all
+	$(MAKE) -C libft clean
+	$(RM) $(OBJS) $(OBJSB)
 
 .PHONY: all bonus clean fclean re
