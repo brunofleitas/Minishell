@@ -204,6 +204,7 @@ typedef struct  s_main_args
     t_ntc		*first_env;
 	t_token		*tkns[1024];
 	t_env		*env;
+    char        *input;
 }               t_ma;
 
 /* ************************************************************************** */
@@ -250,8 +251,8 @@ int             is_builtin(const char *word);
 int             execute_cmd_line(t_astnode *node, t_ma *ma);
 int             execute_pipeline(t_astnode *node, t_ma *ma);
 int             execute_simple_cmd(t_astnode *node, t_ma *ma);
-int             execute_external_cmd(char **words_arr, t_ma *ma);
-t_astnode       *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns, t_astnode **last_word);
+int execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node);
+t_astnode       *parse_word_list(t_ntc **first_node, t_token **c_tkn, t_token **tkns, t_astnode **last_word);
 int             builtin_pwd(char **args, t_ma *ma);
 int             builtin_echo(char **args, int count_words, t_ma *ma);
 int             builtin_env(char **args, t_ma *ma);

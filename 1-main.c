@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:59:46 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/11 16:03:08 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/12 00:30:24 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_ma 		ma;
 	t_astnode 	*root;
-	char		*input;
 
 	(void)argc;
 	(void)argv;
@@ -39,17 +38,17 @@ int	main(int argc, char **argv, char **envp)
 	ma.env = duplicate_vars(&(ma.first_env), envp);
 	while (1)
 	{
-		input = readline(">>");
-		if (ft_strcmp(input, "") != 0)
+		ma.input = readline(">>");
+		if (ft_strcmp(ma.input, "") != 0)
 		{
-			if (ft_strcmp(input, "exit") == 0)
-			{
-				free(input);
-				free_memory(&(ma.first_node));
-				break ;
-			}
-			add_history(input);
-			lexer(input, ma.tkns, &(ma.first_node));
+			// if (ft_strcmp(input, "exit") == 0)
+			// {
+			// 	free(input);
+			// 	free_memory(&(ma.first_node));
+			// 	break ;
+			// }
+			add_history(ma.input);
+			lexer(ma.input, ma.tkns, &(ma.first_node));
 			get_next_token(ma.tkns, 0);
 			root = parser(&(ma.first_node), ma.tkns);
 			execute_ast(root, &ma);
@@ -58,8 +57,8 @@ int	main(int argc, char **argv, char **envp)
 			free_memory(&(ma.first_node));
 		}
 	}
-	free_memory(&(ma.first_env));
-	clear_history();
+	// free_memory(&(ma.first_env));
+	// clear_history();
 	//ft_printf("clear_history was executed\n");
 	return (0);
 }

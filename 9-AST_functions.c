@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:08:01 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/11 13:08:03 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/11 23:21:10 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
  * Checks if the given token type is a word token.
  * Returns 1 if it is, 0 otherwise.
  */
+/*
 static int is_word_token(t_token_type type) 
 {
     //printf("is_word_token start\n");
@@ -25,25 +26,49 @@ static int is_word_token(t_token_type type)
             type == TOKEN_DOUBLE_QUOTE || type == TOKEN_ENV_VAR ||
             type == TOKEN_EXIT_STATUS || type == TOKEN_WILDCARD ||
             type == TOKEN_WORD);
+}*/
+
+static int is_word_token(t_token_type type) 
+{
+    //printf("is_word_token start: type = %d\n", type);
+
+    int result = (type == TOKEN_BUILTIN || type == TOKEN_SINGLE_QUOTE || 
+                 type == TOKEN_DOUBLE_QUOTE || type == TOKEN_ENV_VAR ||
+                 type == TOKEN_EXIT_STATUS || type == TOKEN_WILDCARD ||
+                 type == TOKEN_WORD);
+
+    //printf("is_word_token end: result = %d\n", result);
+    return result;
 }
 
 /* 
  * Checks if the given token type is a redirection token.
  * Returns 1 if it is, 0 otherwise.
  */
+/*
 static int is_redirection_token(t_token_type type) 
 {
     //printf("is_redirection_token start\n");
     //printf("is_redirection_token end\n");
     return (type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT ||
             type == TOKEN_REDIR_APPEND || type == TOKEN_HEREDOC);
+}*/
+static int is_redirection_token(t_token_type type) 
+{
+    //printf("is_redirection_token start: type = %d\n", type);
+
+    int result = (type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT ||
+                 type == TOKEN_REDIR_APPEND || type == TOKEN_HEREDOC);
+
+    //printf("is_redirection_token end: result = %d\n", result);
+    return result;
 }
 
 /* 
  * Parses a list of redirections.
  * Returns the head of a linked list of redirection nodes.
  */
-static t_astnode *parse_redirection_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns, t_astnode **last_word) 
+static t_astnode *parse_redirection_list(t_ntc **first_node, t_token **c_tkn, t_token **tkns, t_astnode **last_word) 
 {
     t_astnode *head;
     t_astnode *current;
@@ -52,18 +77,18 @@ static t_astnode *parse_redirection_list(t_ntc **first_node, t_token *c_tkn, t_t
     //printf("parse_redirection_list start\n");
     head = NULL;
     current = NULL;
-    while (is_redirection_token(c_tkn->type)) 
+    while ((*c_tkn) && is_redirection_token((*c_tkn)->type)) 
     {
         redir_node = create_ast_node(first_node, NODE_REDIRECTION);
-        redir_node->data.redirection.type = c_tkn->type;
-        c_tkn = get_next_token(tkns, 1);
-        if (!is_word_token(c_tkn->type))
+        redir_node->data.redirection.type = (*c_tkn)->type;
+        (*c_tkn) = get_next_token(tkns, 1);
+        if (!is_word_token((*c_tkn)->type))
         {
             fprintf(stderr, "Error: Expected filename after redirection\n");
             exit(1);
         }
-        redir_node->data.redirection.file = c_tkn->value; //ft_strdup_g_c(c_tkn->value, first_node);
-        c_tkn = get_next_token(tkns, 1);
+        redir_node->data.redirection.file = (*c_tkn)->value; //ft_strdup_g_c(c_tkn->value, first_node);
+        (*c_tkn) = get_next_token(tkns, 1);
         if (!head) 
         {
             head = redir_node;
@@ -74,7 +99,7 @@ static t_astnode *parse_redirection_list(t_ntc **first_node, t_token *c_tkn, t_t
             current->data.redirection.next = redir_node;
             current = redir_node;
         }
-        if (is_word_token(c_tkn->type))
+        if (is_word_token((*c_tkn)->type))
             (*last_word)->data.word.next = parse_word_list(first_node, c_tkn, tkns, last_word);
     }
     if (current)
@@ -87,19 +112,21 @@ static t_astnode *parse_redirection_list(t_ntc **first_node, t_token *c_tkn, t_t
  * Parses a list of words (cmd and its arguments).
  * Returns the head of a linked list of word nodes.
  */
-t_astnode *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns, t_astnode **last_word) 
+t_astnode *parse_word_list(t_ntc **first_node, t_token **c_tkn, t_token **tkns, t_astnode **last_word) 
 {
     t_astnode *head;
     t_astnode *current;
     t_astnode *word_node;
+    t_astnode *temp;
 
+    //printf("parse_word_list start\n");
     head = NULL;
     current = NULL;
-    while (c_tkn && is_word_token(c_tkn->type)) 
+    while ((*c_tkn) && is_word_token((*c_tkn)->type)) 
     {
         word_node = create_ast_node(first_node, NODE_WORD);
-        word_node->data.word.value = c_tkn->value; //ft_strdup_g_c(c_tkn->value, first_node);//this might be unnecessary as I don't think we need to recreate a malloc for this token as it is already stored int the tkns** array.
-        word_node->data.word.type = c_tkn->type;
+        word_node->data.word.value = (*c_tkn)->value; //ft_strdup_g_c(c_tkn->value, first_node);//this might be unnecessary as I don't think we need to recreate a malloc for this token as it is already stored int the tkns** array.
+        word_node->data.word.type = (*c_tkn)->type;
         if (!head) 
         {
             head = word_node;
@@ -110,18 +137,19 @@ t_astnode *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns, t
             current->data.word.next = word_node;
             current = word_node;
         }
-        c_tkn = get_next_token(tkns, 1);
+        (*c_tkn) = get_next_token(tkns, 1);
     }
     if (current)
     {
         *last_word = current;
         current->data.word.next = NULL;
     }
-    t_astnode *temp = head;
+    temp = head;
     while (temp)
     {
         temp = temp->data.word.next;
     }
+    //printf("parse_word_list end\n");
     return (head);
 }
 
@@ -130,17 +158,13 @@ t_astnode *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns, t
  * and an optional list of redirections.
  * Returns a node representing the simple cmd.
  */
-static t_astnode *parse_simple_cmd(t_ntc **first_node, t_token *c_tkn, t_token **tkns) 
+static t_astnode *parse_simple_cmd(t_ntc **first_node, t_token **c_tkn, t_token **tkns) 
 {
     t_astnode *node;
     t_astnode *last_word;
     
     //printf("parse_simple_cmd start\n");
     node = create_ast_node(first_node, NODE_SIMPLE_CMD);
-    //if (c_tkn)
-    //{
-     //   printf("c_tkn->type: %s\n", c_tkn->value);
-    //}
     node->data.simple_cmd.words = parse_word_list(first_node, c_tkn, tkns, &last_word);
     node->data.simple_cmd.redirections = parse_redirection_list(first_node, c_tkn, tkns, &last_word);
     //printf("parse_simple_cmd end\n");
@@ -152,21 +176,21 @@ static t_astnode *parse_simple_cmd(t_ntc **first_node, t_token *c_tkn, t_token *
  * enclosed in parentheses.
  * Returns a node representing the cmd.
  */
-static t_astnode *parse_cmd(t_ntc **first_node, t_token *c_tkn, t_token **tkns) 
+static t_astnode *parse_cmd(t_ntc **first_node, t_token **c_tkn, t_token **tkns) 
 {
     t_astnode *node;
 
     //printf("parse_cmd start\n");
-    if (c_tkn->type == TOKEN_LPAREN) 
+    if ((*c_tkn)->type == TOKEN_LPAREN) 
     {
-        c_tkn = get_next_token(tkns, 1);
-        node = parse_cmd_line(first_node, c_tkn, tkns);
-        if (c_tkn->type != TOKEN_RPAREN) 
+        (*c_tkn) = get_next_token(tkns, 1);
+        node = parse_cmd_line(first_node, (*c_tkn), tkns);
+        if ((*c_tkn) && (*c_tkn)->type != TOKEN_RPAREN) 
         {
             fprintf(stderr, "Error: Expected closing parenthesis\n");
             exit(1);
         }
-        c_tkn = get_next_token(tkns, 1);
+        (*c_tkn) = get_next_token(tkns, 1);
         //printf("parse_cmd end\n");
         return (node);
     } 
@@ -181,7 +205,7 @@ static t_astnode *parse_cmd(t_ntc **first_node, t_token *c_tkn, t_token **tkns)
  * Parses a pipeline, which is a sequence of cmds connected by pipes (|).
  * Returns a node representing the pipeline.
  */
-static t_astnode *parse_pipeline(t_ntc **first_node, t_token *c_tkn, t_token **tkns) 
+static t_astnode *parse_pipeline(t_ntc **first_node, t_token **c_tkn, t_token **tkns) 
 {
     t_astnode *node;
     
@@ -191,9 +215,9 @@ static t_astnode *parse_pipeline(t_ntc **first_node, t_token *c_tkn, t_token **t
     node->data.pipeline.cmds[0] = parse_cmd(first_node, c_tkn, tkns);
     node->data.pipeline.cmd_count = 1;
     
-    while (c_tkn->type == TOKEN_PIPE) 
+    while ((*c_tkn) && (*c_tkn)->type == TOKEN_PIPE) 
     {
-        c_tkn = get_next_token(tkns, 1);
+        (*c_tkn) = get_next_token(tkns, 1);
         node->data.pipeline.cmd_count++;
         node->data.pipeline.cmds = ft_realloc_g_c(first_node,\
                                         node->data.pipeline.cmds,\
@@ -220,14 +244,14 @@ t_astnode *parse_cmd_line(t_ntc **first_node, t_token *c_tkn, t_token **tkns)
     t_astnode *new_node;
     
     //printf("parse_cmd_line start\n");
-    node = parse_pipeline(first_node, c_tkn, tkns);
-    while (c_tkn->type == TOKEN_AND || c_tkn->type == TOKEN_OR) 
+    node = parse_pipeline(first_node, &c_tkn, tkns);
+    while (c_tkn &&(c_tkn->type == TOKEN_AND || c_tkn->type == TOKEN_OR))
     {
         new_node = create_ast_node(first_node, NODE_CMD_LINE);
         new_node->data.cmd_line.left = node;
         new_node->data.cmd_line.operator = c_tkn->type;
         c_tkn = get_next_token(tkns, 1);
-        new_node->data.cmd_line.right = parse_pipeline(first_node, c_tkn, tkns);
+        new_node->data.cmd_line.right = parse_pipeline(first_node, &c_tkn, tkns);
         node = new_node;
     }
     //printf("parse_cmd_line end\n");

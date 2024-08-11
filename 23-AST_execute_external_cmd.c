@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   23-AST_execute_external_cmd.c                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/11 13:06:53 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/11 16:01:37 by bfleitas         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 static int	word_count(const char *s, char c)
@@ -74,7 +62,7 @@ static int	get_env_var(t_env **env, const char *name, char **value)
 	name_len = strlen(name);
 	while ((*env)->var[i])
 	{
-		if (ft_strncmp((*env)->var[i], name, name_len) == 0
+		if (strncmp((*env)->var[i], name, name_len) == 0
 			&& (*env)->var[i][name_len] == '=')
 		{
 			*value = (*env)->var[i] + name_len + 1;
@@ -91,13 +79,13 @@ char *join_path(const char *path, const char *cmd)
     char *full_path;
     int len;
 
-    len = ft_strlen(path) + ft_strlen(cmd) + 2;
+    len = strlen(path) + strlen(cmd) + 2;
     full_path = (char *)malloc(len);
     if (!full_path)
         return (NULL);
-    ft_strlcpy(full_path, path, len);
-    ft_strlcat(full_path, "/", len);
-    ft_strlcat(full_path, cmd, len);
+    strcpy(full_path, path);
+    strcat(full_path, "/");
+    strcat(full_path, cmd);
     return (full_path);
 }
 
@@ -110,21 +98,24 @@ char *find_command_path(char *cmd, t_env **env, t_ntc **first_node)
 
     if (get_env_var(env, "PATH", &path_env) == -1 || !path_env)
         return (NULL);
-    paths = ft_split(path_env, ':', first_node);
+    paths = ft_split(path_env, ':', first_node);  // Assuming ft_split exists
     i = 0;
     while (paths[i])
     {
         cmd_path = join_path(paths[i], cmd);
         if (access(cmd_path, X_OK) == 0)
         {
-            return (cmd_path);
+            //free(paths);  // Free the paths array
+            return (cmd_path); // Found the command
         }
+        //free(cmd_path);
         i++;
-    }  
-    return (NULL); 
+    }
+    //free(paths);  // Free the paths array
+    return (NULL); // Command not found
 }
 
-int execute_external_cmd(char **words_arr, t_ma *ma)
+int execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
 {
     pid_t pid;
     char *command_path;
@@ -133,7 +124,7 @@ int execute_external_cmd(char **words_arr, t_ma *ma)
     if (words_arr[0][0] == '/' || words_arr[0][0] == '.' || words_arr[0][0] == '~')
         command_path = strdup(words_arr[0]);
     else
-        command_path = find_command_path(words_arr[0], &(ma->env), &(ma->first_env));
+        command_path = find_command_path(words_arr[0], env, first_node);
     if (!command_path)
     {
         printf("command not found: %s\n", words_arr[0]);
@@ -142,7 +133,7 @@ int execute_external_cmd(char **words_arr, t_ma *ma)
     pid = fork_process();
     if (pid == 0)
     {
-        execve(command_path, words_arr, ma->env->var);
+        execve(command_path, words_arr, (*env)->var);
         perror("execve");
         exit(1);
     }
