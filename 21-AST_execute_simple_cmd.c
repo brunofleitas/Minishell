@@ -105,7 +105,7 @@ int execute_simple_cmd(t_astnode *node, t_env **env, t_ntc **first_node)
     if (is_builtin(a.words_arr[0]))
         a.status = execute_builtin(a.words_arr, env, first_node);
     else
-        a.status = execute_external_cmd(a.words_arr, env);
+        a.status = execute_external_cmd(a.words_arr, env, first_node);
     free_ntc_prior(first_node, a.words_arr);
     restore_io(a.saved_stdin, a.saved_stdout);
     //printf("execute_simple_cmd end\n");

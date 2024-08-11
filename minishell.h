@@ -240,7 +240,7 @@ int             is_builtin(const char *word);
 int             execute_cmd_line(t_astnode *node, t_env **env, t_ntc **first_node);
 int             execute_pipeline(t_astnode *node, t_env **env, t_ntc **first_node);
 int             execute_simple_cmd(t_astnode *node, t_env **env, t_ntc **first_node);
-int             execute_external_cmd(char **words_arr, t_env **env);
+int             execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node);
 t_astnode       *parse_word_list(t_ntc **first_node, t_token *c_tkn, t_token **tkns, t_astnode **last_word);
 int             builtin_pwd(char **args, t_ntc **first_node);
 int             builtin_echo(char **args, int count_words, t_ntc **first_node);
