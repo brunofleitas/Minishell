@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   4-split_generator.c                                :+:      :+:    :+:   */
+/*   5-split_generator.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 19:14:08 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/11 20:02:25 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/12 01:31:06 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static void	generate_quotes(const char **s, char ***split, int *i, t_ntc **first
 	word_length = 0;
 	while ((*s)[word_length] != quote && (*s)[word_length])
 		word_length++;
+	//word_length++;
 	(*split)[(*i)++] = ft_substr_g_c(*s, 0, word_length, first_node);
 	if ((*s)[word_length] != '\0')
 		*s += word_length + 1;
@@ -71,14 +72,14 @@ static void	generate_double_operators(const char **s, char ***split, int *i, \
     Advances the input string by the length of the extracted substring.
 */
 static void	generate_single_operators_and_specials(const char **s,
-		char ***split, int *i, t_ntc **first_node)
+		char ***split, int *i, t_ntc **first_node, t_ma *ma)
 {
 	int	len;
 
 	len = 1;
 	if (**s == '$' && *(*s + 1) == '?')
 		len = 2;
-	(*split)[(*i)++] = ft_substr_g_c(*s, 0, len, first_node);
+	(*split)[(*i)++] = ft_substr_g_c(ft_itoa_gb(ma->last_exit_status, first_node), 0, ft_strlen(ft_itoa_gb(ma->last_exit_status, first_node)), first_node);
 	*s += len;
 }
 
@@ -122,7 +123,7 @@ static void	generate_regular_tkns(const char **s, char ***split, int *i, \
 	initializes it accordingly. The last element of the array is set to NULL
 	to indicate the end.
 */
-char	**ft_split_tkns(char const *s, char c, t_ntc **first_node)
+char	**ft_split_tkns(char const *s, char c, t_ntc **first_node, t_ma *ma)
 {
 	char	**split;
 	int		i;
@@ -143,7 +144,7 @@ char	**ft_split_tkns(char const *s, char c, t_ntc **first_node)
 			generate_double_operators(&s, &split, &i, first_node);
 		else if (*s == '>' || *s == '<' || *s == '(' || *s == ')' || *s == '|'
 			|| (*s == '$' && *(s + 1) == '?') || *s == '$')
-			generate_single_operators_and_specials(&s, &split, &i, first_node);
+			generate_single_operators_and_specials(&s, &split, &i, first_node, ma);
 		else
 			generate_regular_tkns(&s, &split, &i, first_node);
 	}

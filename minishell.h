@@ -3,8 +3,8 @@
 
 #include "./libft/headers/libft.h"
 #include "./libft/headers/ft_printf.h"
-#include <readline/history.h>
 #include <readline/readline.h>
+#include <readline/history.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,6 +14,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
+#include <signal.h>
 
 
 /*
@@ -205,6 +206,7 @@ typedef struct  s_main_args
 	t_token		*tkns[1024];
 	t_env		*env;
     char        *input;
+    int         last_exit_status;
 }               t_ma;
 
 /* ************************************************************************** */
@@ -238,9 +240,9 @@ typedef struct  s_simple_cmd_args
 /*                                   FUNCTIONS                                */
 /* ************************************************************************** */
 t_env           *duplicate_vars(t_ntc **first_node, char **envp);
-void            lexer(char *input,t_token **tkns, t_ntc **first_node);
+void            lexer(char *input,t_token **tkns, t_ntc **first_node, t_ma *ma);
 int             count_w_tks(char const *s, char c);
-char            **ft_split_tkns(char const *s, char c, t_ntc **first_node);
+char            **ft_split_tkns(char const *s, char c, t_ntc **first_node, t_ma *ma);
 t_token_type    clasify_token(char *value);
 t_astnode       *parser(t_ntc **first_node, t_token **tkns);
 t_astnode       *create_ast_node(t_ntc **first_node, t_nodetype type);
@@ -253,6 +255,7 @@ int             execute_pipeline(t_astnode *node, t_ma *ma);
 int             execute_simple_cmd(t_astnode *node, t_ma *ma);
 int execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node);
 t_astnode       *parse_word_list(t_ntc **first_node, t_token **c_tkn, t_token **tkns, t_astnode **last_word);
+int             builtin_exit(t_ma *ma);
 int             builtin_pwd(char **args, t_ma *ma);
 int             builtin_echo(char **args, int count_words, t_ma *ma);
 int             builtin_env(char **args, t_ma *ma);

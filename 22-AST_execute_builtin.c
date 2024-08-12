@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:07:05 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/12 00:32:33 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/12 01:49:29 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,7 @@ int execute_builtin(char **args, t_ma *ma)
     else if (ft_strcmp(args[0], "env") == 0)
         return (builtin_env(args, ma));
     else if (ft_strcmp(args[0], "exit") == 0)
-    {
-        free(ma->input);
-        free_memory(&(ma->first_node));
-        free_memory(&(ma->first_env));
-        clear_history();
-        exit(0);
-    };
+        return (builtin_exit(ma));
     return 1;
 }
 
