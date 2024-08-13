@@ -177,6 +177,7 @@ struct s_astnode
 		{
             int type;
             char *file;
+            int  fd_num; //added to handle cases like 2>output
             t_astnode *next; // Linked list for redirections
         } redirection;
     } data;
@@ -204,6 +205,7 @@ typedef struct  s_main_args
     t_ntc		*first_env;
 	t_token		*tkns[1024];
 	t_env		*env;
+    int         tmp_file_counter;// added for creation of temporary files in heredoc
 }               t_ma;
 
 /* ************************************************************************** */

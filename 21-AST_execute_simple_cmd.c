@@ -98,7 +98,7 @@ int execute_simple_cmd(t_astnode *node, t_ma *ma)
 
     a.saved_stdin = dup(STDIN_FILENO);
     a.saved_stdout = dup(STDOUT_FILENO);
-    /*if (handle_redirections(node->data.simple_cmd.redirections) != 0)
+    /*if (handle_redirections(node->data.simple_cmd.redirections, ma) != 0)
     {
         restore_io(a.saved_stdin, a.saved_stdout);
         return(1);

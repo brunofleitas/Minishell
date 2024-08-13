@@ -1,0 +1,1144 @@
+static int	check_valid_path(char *path)
+{
+	struct stat	sb;
+
+	if (stat(path, &sb) == -1)
+	{
+		perror("cd");
+		return (0);
+	}
+	if (!S_ISDIR(sb.st_mode)) //CHECK IF IT IS ALLOWED
+	{
+		fprintf(stderr, "cd: not a directory: %s\n", path);
+		return (0);
+	}
+	return (1);
+}
+
+static int	get_env_var(t_env **env, const char *name, char **value)
+{
+	int	i;
+	int	name_len;
+
+	i = 0;
+	name_len = strlen(name);
+	while ((*env)->var[i])
+	{
+		if (strncmp((*env)->var[i], name, name_len) == 0
+			&& (*env)->var[i][name_len] == '=')
+		{
+			*value = (*env)->var[i] + name_len + 1;
+			return (i);
+		}
+		i++;
+	}
+	*value = NULL;
+	return (-1);
+}
+
+static char	*get_home_directory(t_env **env)
+{
+	char	*home;
+
+	home = NULL;
+	get_env_var(env, "HOME", &home);
+	return (home);
+}
+
+char *get_cd_path(char **args, t_env **env)
+{
+    char *path;
+
+    if (args[1] == NULL || ft_strcmp(args[1], "~") == 0)
+	{
+        path = get_home_directory(env);
+        if (!path) 
+		{
+            fprintf(stderr, "cd: HOME not set\n");
+            return (NULL);
+        }
+    } 
+	else if (args[2] == NULL)
+        path = args[1];
+    else
+	{
+        fprintf(stderr, "cd: string not in pwd: %s\n", args[1]);
+        return (NULL);
+    }
+    return (path);
+}
+
+int validate_cd_path(char *path)
+{
+    if (check_valid_path(path) == 0)
+        return 0;
+    return 1;
+}
+
+int change_directory(char *path)
+{
+    if (chdir(path) != 0)
+	{
+        perror("cd");
+        return 1;
+    }
+    return 0;
+}
+
+
+int update_oldpwd(char *current_dir, t_ma *ma)
+{
+    char *oldpwd_str;
+	char *temp;
+    int i;
+
+    i = get_env_var(&ma->env, "OLDPWD", &temp);
+    if (i != -1)
+	{
+        oldpwd_str = ft_strdup_g_c("", &ma->first_env);
+        temp = ft_strjoin_g_c(oldpwd_str, "OLDPWD=", &ma->first_env);
+        oldpwd_str = temp;
+        temp = ft_strjoin_g_c(oldpwd_str, current_dir, &ma->first_env);
+        oldpwd_str = temp;
+        if (update_env_var(i, oldpwd_str, ma))
+		{
+            fprintf(stderr, "cd: failed to update OLDPWD environment variable\n");
+            return (1);
+        }
+    }
+    return (0);
+}
+
+int update_pwd(t_ma *ma)
+{
+    char *pwd_str;
+	char *temp;
+    char new_current_dir[PATH_MAX];
+    int i;
+
+    if (getcwd(new_current_dir, sizeof(new_current_dir)) == NULL)
+    {
+        perror("getcwd");
+        return (1);
+    }
+    i = get_env_var(&ma->env, "PWD", &temp);
+    if (i != -1)
+    {
+        pwd_str = ft_strdup_g_c("", &ma->first_env);
+        temp = ft_strjoin_g_c(pwd_str, "PWD=",  &ma->first_env);
+        pwd_str = temp;
+        temp = ft_strjoin_g_c(pwd_str, new_current_dir, &ma->first_env);
+        pwd_str = temp;
+        if (update_env_var(i, pwd_str, ma))
+        {
+            fprintf(stderr, "cd: failed to update PWD environment variable\n");
+            return (1);
+        }
+    }
+    return (0);
+}
+
+int update_env_variables(char *current_dir, t_ma *ma)
+{
+    if (update_oldpwd(current_dir, ma))
+        return 1;
+    if (update_pwd(ma))
+        return 1;
+    return 0;
+}
+
+int builtin_cd(char **args, t_ma *ma)
+{
+    char current_dir[PATH_MAX];
+    char *path;
+
+    path = get_cd_path(args, &ma->env);
+    if (!path)
+        return (1);
+	if (!validate_cd_path(path))
+        return (1);
+	if (getcwd(current_dir, sizeof(current_dir)) == NULL)
+    {
+        perror("getcwd");
+        return (1);
+    }
+    if (change_directory(path))
+        return (1);
+    if (update_env_variables(current_dir, ma))
+        return (1);
+    return (0);
+}
+
+int	find_env_var(t_env **env, char *var)
+{
+	int	len;
+	int	i;
+
+	len = 0;
+  while (var[len] && var[len] != '=')
+    len++;
+	i = 0;
+	while (i < (*env)->count)
+	{
+		if (ft_strncmp((*env)->var[i], var, len) == 0 && (*env)->var[i][len] == '=')
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+/*
+  Parameters:
+    env: Pointer to the environment variables.
+    i: Index of the variable to update.
+    var: New value for the variable.
+    first_node: Double pointer to the first t_ntc node.
+  Return value:
+    None.
+  Description:
+    Updates an existing environment variable at the given index.
+    Frees the old value and duplicates the new value. Handles 
+    errors if memory duplication fails.
+*/
+int	update_env_var(int i, const char *var, t_ma *ma)
+{
+	//free_ntc_prior(first_node, (*env)->var[i]);
+	ma->env->var[i] = ft_strdup_g_c(var, &(ma->first_env));
+	if (!(ma->env->var[i]))
+  {
+		perror("ft_strdup_g_c");
+    return (1);
+  }
+  return (0);
+}
+
+/*
+  Parameters:
+    env: Pointer to the environment variables.
+    var: Variable name to add.
+    first_node: Double pointer to the first t_ntc node.
+  Return value:
+    None.
+  Description:
+    Adds a new environment variable. Reallocates memory for the 
+    environment variables array, duplicates the variable name, 
+    and updates the environment variable count. Handles errors 
+    if memory allocation fails.
+*/
+static int	add_env_var(char *var, t_ma *ma)
+{
+	char	**new_var;
+  //printf("add_env_var-----------------------------START\n");
+  //print_env(*env);
+  //printf("\n\n\n\n");
+	new_var = ft_realloc_g_c(&(ma->first_env), ma->env->var, (ma->env->count + 2) * sizeof(char *));
+	if (!new_var)
+  {
+		//perror("realloc");
+    return (1);
+  }
+	ma->env->var = new_var;
+	ma->env->var[ma->env->count] = ft_strdup_g_c(var, &(ma->first_env));
+	if (!(*ma->env->var[ma->env->count]))
+  {
+		perror("ft_strdup_g_c");
+    return (1);
+  }
+  ma->env->count++;
+	ma->env->var[ma->env->count] = NULL;
+  //print_env(*env);
+  //printf("add_env_var-----------------------------END\n");
+  return (0);
+}
+
+/*
+  Parameters:
+    node: Pointer to the abstract syntax tree (AST) node.
+    first_node: Double pointer to the first node of type t_ntc.
+    env: Pointer to the environment variables structure.
+  Return value:
+    None.
+  Description:
+    Handles the "export" built-in shell command. Extracts the 
+    variable name from the simple command in the AST node. 
+    Searches for the variable in the environment variables. 
+    If the variable exists, it updates the variable's value. 
+    If the variable does not exist, it adds the variable to 
+    the environment.
+*/
+int	builtin_export(char **args, t_ma *ma)
+{
+	char    **tmp;
+  int     i;
+	char    *var;
+
+	tmp = args;
+  tmp++;
+  while (*tmp)
+  {
+    var = *tmp;
+	  i = find_env_var(&(ma->env), var);
+	  if (i >= 0)
+	  {
+    	if (!update_env_var(i, var,  ma))
+        return(0);
+    }
+	  else
+    {
+	    if (!add_env_var(var, ma))
+      {
+        return(0);
+      }
+    }
+    tmp++;
+  }
+  return (1);
+}
+
+
+static int find_env_var_unset(t_env **env, char *name)
+{
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+	while (i < (*env)->count)
+	{
+		while (name[j] && name[j] == (*env)->var[i][j])
+			j++;
+		if (name[j] == '\0' && (*env)->var[i][j] == '=')
+			return (i);
+		i++;
+	}
+	return (1);
+}
+
+int remove_env_var(t_env **env, char *name)
+{
+	int i;
+
+	i = find_env_var_unset(env, name);
+	if (i == 0)
+		return (1);
+	while (i < (*env)->count - 1)
+	{
+		(*env)->var[i] = (*env)->var[i + 1];
+		i++;
+	}
+	(*env)->var[(*env)->count - 1] = NULL;
+	(*env)->count = (*env)->count - 1;
+	return (0);
+}
+
+static int check_for_equal(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '=')
+		{
+			ft_putstr_fd("unset: ", 2);
+			ft_putstr_fd(str, 2);
+			ft_putstr_fd(": invalid parameter name\n", 2);
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+/*
+  Parameters:
+    env: Pointer to the environment variables.
+    name: Name of the variable to unset.
+  Return value:
+    Returns 0.
+  Description:
+    Unsets (removes) an environment variable. Finds the variable 
+    by name, frees its memory, shifts the subsequent variables in 
+    the array, and decreases the environment variable count.
+*/
+int	builtin_unset(char **args, t_ma *ma)
+{
+	int	i;
+
+	i = 1;
+	if (!args[1])
+	{
+		ft_putstr_fd("unset: not enough arguments\n", 2);
+		return (0);
+	}
+	while (args[i])
+	{
+		if (!check_for_equal(args[i]))
+		{
+			while (args[i])
+			{
+				if (find_env_var_unset(&ma->env, args[i]) != 0)
+					remove_env_var(&ma->env, args[i]);
+				i++;
+			}
+			break;
+		}
+		if (find_env_var_unset(&ma->env, args[i]) != 0)
+			remove_env_var(&ma->env, args[i]);
+		i++;
+	}
+	return (0);
+}
+
+
+static int	should_add_newline(char **args, int word_count)
+{
+	if (word_count > 1 && !(ft_strncmp(args[1], "-n", 2)))
+		return (0);
+	return (1);
+}
+
+/*
+  Parameters:
+    node: Pointer to the AST node.
+    first_node: Double pointer to the first t_ntc node.
+    i: Starting index of the words to join.
+  Return value:
+    Pointer to the concatenated string of words.
+  Description:
+    Joins the words from the simple command in the AST node into 
+    a single string, starting from the given index. Adds a space 
+    between each word. Handles memory allocation and errors.
+*/
+static char	*join_words(char **args, t_ntc **first_node, int i, int word_count)
+{
+	char	*result;
+	char	*temp;
+
+	result = ft_strdup_g_c("", first_node);
+	while (i < word_count)
+	{
+		temp = ft_strjoin_g_c(result, args[i], first_node);
+		//free_ntc_prior(first_node, result);
+		result = temp;
+		if (i < word_count - 1)
+		{
+			temp = ft_strjoin_g_c(result, " ", first_node);
+			//free_ntc_prior(first_node, result);
+			result = temp;
+		}
+		i++;
+	}
+	return (result);
+}
+
+/*
+  Parameters:
+    env: Pointer to the environment variables.
+    name: Name of the variable to unset.
+  Return value:
+    Returns 0.
+  Description:
+    Unsets (removes) an environment variable. Finds the variable 
+    by name, frees its memory, shifts the subsequent variables in 
+    the array, and decreases the environment variable count.
+*/
+int	builtin_echo(char **args, int word_count, t_ma *ma)
+{
+	int		newline;
+	int		i;
+	char	*result;
+	char	*temp;
+
+	newline = should_add_newline(args, word_count);
+	if (newline)
+		i = 1;
+	else
+		i = 2;
+	result = join_words(args, &(ma->first_node), i, word_count);
+	if (newline)
+	{
+		temp = ft_strjoin_g_c(result, "\n", &(ma->first_node));
+		//free_ntc_prior(first_node, result);
+		result = temp;
+	}
+	if (result)
+	{
+		printf("%s", result);
+		//free_ntc_prior(first_node, result);
+		return (0);
+	}
+	return (1);
+}
+
+
+/*
+  Parameters:
+    first_node: Double pointer to the first t_ntc node.
+  Return value:
+    Pointer to a string containing the current working directory,
+    or NULL if an error occurs.
+  Description:
+    Retrieves the current working directory using getcwd. If 
+    successful, duplicates the directory string and returns it. 
+    Prints an error message if getcwd fails.
+*/
+int	builtin_pwd(char **args, t_ma *ma)
+{
+	char	cwd[PATH_MAX];
+
+  if (args[1] != NULL)
+  {
+    ft_printf("pwd: too many arguments\n");
+    return (1);
+  }
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+  {
+		printf("%s\n", ft_strdup_g_c(cwd, &(ma->first_node)));
+    return (0);
+  }
+  else
+  {
+		ft_printf("getcwd() error");
+	  return (1);
+  }
+}
+
+
+/*
+  Parameters:
+    env: Array of environment variables.
+    first_node: Double pointer to the first t_ntc node.
+  Return value:
+    Pointer to a string containing all environment variables, 
+    each followed by a newline.
+  Description:
+    Concatenates all environment variables into a single string, 
+    each followed by a newline character. Allocates memory for 
+    the resulting string and handles errors if memory allocation 
+    fails.
+*/
+int	builtin_env(char **args, t_ma *ma)
+{
+	int		i;
+	size_t	total_length;
+	char	*result;
+
+	i = 0;
+	total_length = 0;
+	if (args[1] != NULL)
+	{
+		printf("env: too many arguments\n");
+		return (1);
+	}
+	while (ma->env->var[i] != NULL)
+	{
+		total_length += ft_strlen(ma->env->var[i]) + 1;
+		i++;
+	}
+	result = (char *)ft_calloc_g_c((total_length + 1), sizeof(char), &(ma->first_node));
+	if (!result)
+		return (1);
+	i = 0;
+	while (ma->env->var[i] != NULL)
+	{
+		ft_strlcat(result, ma->env->var[i], total_length + 1);
+		ft_strlcat(result, "\n", total_length + 1);
+		i++;
+	}
+	if (result)
+	{
+		printf("%s", result);
+		return (0);
+	}
+	return (1);
+}
+
+/* REDIRECTION START */
+
+/*
+  Parameters:
+    output: String to write to the file.
+    file_name: Name of the file to write to.
+  Return value:
+    None.
+  Description:
+    Opens the specified file for writing, creating it if it doesn't
+    exist, and truncating it if it does. Writes the output string 
+    to the file. Handles errors for opening and writing to the file.
+*/
+void	redirect_output(const char *output, const char *file_name)
+{
+	int	fd;
+
+	fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+	{
+		ft_printf("open() error");
+		return ;
+	}
+	if (write(fd, output, ft_strlen(output)) == -1)
+		ft_printf("write() error");
+	close(fd);
+}
+
+/*
+  Parameters:
+    output: String to append to the file.
+    file_name: Name of the file to append to.
+  Return value:
+    None.
+  Description:
+    Opens the specified file for appending, creating it if it doesn't
+    exist. Appends the output string to the file. Handles errors for 
+    opening and writing to the file.
+*/
+void	redirect_output_append(const char *output, const char *file_name)
+{
+	int	fd;
+
+	fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd == -1)
+	{
+		ft_printf("open() error");
+		return ;
+	}
+	if (write(fd, output, ft_strlen(output)) == -1)
+		ft_printf("write() error");
+	close(fd);
+}
+
+
+/* REDIRECTION END */
+
+/**
+ @brief Main execution function for the AST
+
+ This function serves as the entry point for executing the Abstract Syntax Tree (AST).
+ It determines the type of the node and calls the appropriate execution function.
+
+ @param node Pointer to the current AST node
+ @param env Pointer to the environment structure
+ @return int Returns the exit status of the executed command
+*/
+int execute_ast(t_astnode *node, t_ma *ma)
+{
+    if (!node)
+        return (0);
+    if (node->type == NODE_CMD_LINE)
+        return (execute_cmd_line(node, ma));
+    else if (node->type == NODE_PIPELINE)
+        return(execute_pipeline(node, ma));
+    else if (node->type == NODE_SIMPLE_CMD)
+        return(execute_simple_cmd(node, ma));
+    else
+    {
+        printf("%i\n", node->type);
+        ft_putstr_fd("Error: Unknown node type\n", STDERR_FILENO);// just an Idea I got if we want a file where we store all the errors
+        return (1);
+    }
+}
+
+/**
+ @brief Execute a command line node
+ This function handles the execution of a command line node, which can contain
+ multiple commands connected by AND (&&) or OR (||) operators.
+
+ @param node Pointer to the command line node
+ @param env Pointer to the environment structure
+ @return int Returns the exit status of the last executed command
+ */
+int execute_cmd_line(t_astnode *node, t_ma *ma)
+{
+    int left_result;
+    
+    //printf("execute_cmd_line start\n");
+    left_result = execute_ast(node->data.cmd_line.left, ma);
+    if (node->data.cmd_line.operator == TOKEN_AND)
+    {
+        if (left_result == 0)
+            return (execute_ast(node->data.cmd_line.right, ma));
+        return left_result;
+    }
+    else if (node->data.cmd_line.operator == TOKEN_OR)
+    {
+        if (left_result != 0)
+            return (execute_ast(node->data.cmd_line.right, ma));
+        return left_result;
+    }
+    //printf("execute_cmd_line end\n");
+    return (left_result);
+}
+
+
+static void setup_pipe(int pipe_fds[2])
+{
+    //printf("setup_pipe start\n");
+    if (pipe(pipe_fds) == -1)
+    {
+        perror("pipe");
+        exit(1);
+    }
+    //printf("setup_pipe end\n");
+}
+pid_t    fork_process()
+{
+    pid_t pid;
+    
+    //printf("fork_process start\n");
+    pid = fork();
+    if (pid == -1)
+    {
+        perror("fork");
+        exit(1);
+    }
+    //printf("fork_process end\n");
+    return (pid);
+}
+
+static void child_process(t_pip_args *a, t_astnode *simple_cmd, t_ma *ma)
+{
+    //printf("child_process start\n");
+    if (a->input_fd != STDIN_FILENO)
+    {
+        dup2(a->input_fd, STDIN_FILENO);
+        close(a->input_fd);
+    }
+    if (!a->last_cmd)
+    {
+        dup2(a->pipe_fds[1], STDOUT_FILENO);
+        close(a->pipe_fds[0]);
+        close(a->pipe_fds[1]);
+    }
+    //printf("child_process end\n");
+    exit(execute_ast(simple_cmd, ma)); //what is this function?
+}
+
+static void parent_process(t_pip_args *a)
+{
+    //printf("parent_process start\n");
+    if (a->input_fd != STDIN_FILENO)
+        close(a->input_fd);
+    if (!(a->last_cmd))
+    {
+        close(a->pipe_fds[1]);
+        a->input_fd = a->pipe_fds[0];
+    }
+    a->last_pid = a->pid;
+    //printf("parent_process end\n");
+}
+/**
+ @brief Execute a pipeline of commands
+
+ This function handles the execution of a pipeline node, which contains
+ multiple commands connected by pipes (|). It creates the necessary pipes
+ and forks child processes to execute each command in the pipeline.
+
+ @param node Pointer to the pipeline node
+ @param env Pointer to the environment structure
+ @return int Returns the exit status of the last command in the pipeline
+ */
+int execute_pipeline(t_astnode *node, t_ma *ma)
+{
+    t_pip_args  a;
+    int         i;
+    
+    //printf("execute_pipeline start\n");
+    i = 1;
+    a.input_fd = STDIN_FILENO;
+    if (node->data.pipeline.cmd_count == 1)
+        return (execute_ast(node->data.pipeline.cmds[0], ma));
+    else
+    {
+        while (i < node->data.pipeline.cmd_count)
+        {
+            a.last_cmd = (i == node->data.pipeline.cmd_count - 1);
+            if (!node->data.pipeline.cmd_count - 1)
+                setup_pipe(a.pipe_fds);
+            a.pid = fork_process();
+            if (a.pid == 0)
+                child_process(&a, node->data.pipeline.cmds[i], ma);
+            else
+                parent_process(&a);
+            i++;
+        }
+        waitpid(a.last_pid, &(a.status), 0);
+    }
+    //printf("execute_pipeline end\n");
+    return (WEXITSTATUS(a.status));
+}
+
+
+static int node_word_count(t_astnode *node)
+{
+    int         count;
+    t_astnode   *node_word;
+    
+    //printf("node_word_count start\n");
+    count = 0;
+    node_word = node->data.simple_cmd.words;
+    while (node_word)
+    {
+        count++;
+        node_word = node_word->data.word.next;
+    }
+    //printf("node_word_count end\n");
+    return (count);
+}
+/**
+ *  * @brief Restore the standard I/O to their original state
+ *
+ * This function restores the standard input and output to their saved states.
+ *
+ * @param saved_stdin The saved standard input file descriptor
+ * @param saved_stdout The saved standard output file descriptor
+*/
+static void restore_io(int saved_stdin, int saved_stdout)
+{
+    dup2(saved_stdin, STDIN_FILENO);
+    dup2(saved_stdout, STDOUT_FILENO);
+    close(saved_stdin);
+    close(saved_stdout);
+}
+
+static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
+{
+    t_astnode   *node_word;
+    char        **words_arr;
+    int         i;
+
+    i= 0;
+    node_word = node->data.simple_cmd.words;
+    *word_count = node_word_count(node);
+    words_arr = g_c(&(ma->first_node), (*word_count + 1) * sizeof(char *))->data;
+    if (!words_arr)
+    {
+        perror("malloc");
+        return NULL;
+    }
+    node_word = node->data.simple_cmd.words;
+    while(i < *word_count)
+    {
+        words_arr[i++] = ft_substr_g_c(node_word->data.word.value, 0, ft_strlen(node_word->data.word.value), &(ma->first_node));
+        node_word = node_word->data.word.next;
+    }
+    words_arr[*word_count] = NULL;
+    //printf("create_words_arr end\n");
+    return (words_arr);
+}
+
+/**
+* @brief Execute a simple command
+ *
+ * This function handles the execution of a simple command node. It prepares
+ * the arguments, checks if it's a builtin command, handles redirections,
+ * and either executes the builtin or forks a child process to execute an
+ * external command.
+ *
+ * @param node Pointer to the simple command node
+ * @param env Pointer to the environment structure
+ * @param first_node Double pointer to the first node in my garbage collector
+ * @return int Returns the exit status of the executed command
+ */
+int execute_simple_cmd(t_astnode *node, t_ma *ma)
+{
+    t_s_cmd_args   a;
+
+    //printf("execute_simple_cmd start\n");
+/*
+    t_astnode *tmp = node;
+    while (tmp->data.simple_cmd.words)
+    {
+        printf("node->data.simple_cmd.words->data.word.value = %s\n", tmp->data.simple_cmd.words->data.word.value);
+        tmp->data.simple_cmd.words = tmp->data.simple_cmd.words->data.word.next;
+    }*/
+
+    a.saved_stdin = dup(STDIN_FILENO);
+    a.saved_stdout = dup(STDOUT_FILENO);
+    /*if (handle_redirections(node->data.simple_cmd.redirections) != 0)
+    {
+        restore_io(a.saved_stdin, a.saved_stdout);
+        return(1);
+    }*/
+    a.words_arr = create_words_arr(node, &(a.word_count), ma);
+    if (!a.words_arr)
+    {
+        restore_io(a.saved_stdin, a.saved_stdout);
+        return(1);
+    }
+    //expand_wildcards(a.words_arr);
+    if (is_builtin(a.words_arr[0]))
+        a.status = execute_builtin(a.words_arr, ma);
+    else
+        a.status = execute_external_cmd(a.words_arr, ma);
+    free_ntc_prior(&(ma->first_node), a.words_arr);
+    restore_io(a.saved_stdin, a.saved_stdout);
+    //printf("execute_simple_cmd end\n");
+    return (a.status);
+}
+static int	count_words(char **args)
+{
+	char	**temp;
+	int		i;
+
+	i = 0;
+    temp = args;
+	while (temp[i])
+		i++;
+	return (i);
+}
+
+/**
+ * @brief Check if a command is a builtin
+ *
+ * This function checks if the given command is one of the builtin commands
+ * supported by the shell.
+ *
+ * @param simple_cmd The command to check
+ * @return int Returns 1 if the command is a builtin, 0 otherwise
+ */
+int is_builtin(const char *word)
+{
+    const char *builtins[7];
+    int i = 0;
+
+    i=0;
+    builtins[0] = "echo";
+    builtins[1] = "cd";
+    builtins[2] = "pwd";
+    builtins[3] = "export";
+    builtins[4] = "unset";
+    builtins[5] = "env";
+    builtins[6] = NULL;
+    while (builtins[i])
+    {
+        if (ft_strcmp(word, builtins[i]) == 0)
+            return (1);
+        i++;
+    }
+    return (0);
+}
+
+/**
+ * @brief Execute a builtin command
+ *
+ * This function executes the appropriate builtin command based on the
+ * command name. It handles echo, cd, pwd, export, unset, and env commands.
+ *
+ * @param args Array of command arguments
+ * @param env Pointer to the environment structure
+ * @return int Returns the exit status of the builtin command
+ */
+int execute_builtin(char **args, t_ma *ma)
+{
+    int word_count;
+
+    word_count = count_words(args);
+    if (ft_strcmp(args[0], "echo") == 0)
+        return (builtin_echo(args, word_count, ma));
+    else if (ft_strcmp(args[0], "cd") == 0)
+        return (builtin_cd(args, ma));
+    else if (ft_strcmp(args[0], "pwd") == 0)
+        return (builtin_pwd(args, ma));
+    else if (ft_strcmp(args[0], "export") == 0)
+        builtin_export(args, ma);
+    else if (ft_strcmp(args[0], "unset") == 0)
+        return (builtin_unset(args, ma));
+    else if (ft_strcmp(args[0], "env") == 0)
+        return (builtin_env(args, ma));
+    return 1;
+}
+
+
+static int	word_count(const char *s, char c)
+{
+	int	count;
+	int	in_word;
+
+	count = 0;
+	in_word = 0;
+	while (*s)
+	{
+		if (*s != c && in_word == 0)
+		{
+			in_word = 1;
+			count++;
+		}
+		else if (*s == c)
+			in_word = 0;
+		s++;
+	}
+	return (count);
+}
+
+static char	*get_n_token(const char **s, char c, t_ntc **first_node)
+{
+	const char	*start;
+
+	while (**s && **s == c)
+		(*s)++;
+	start = *s;
+	while (**s && **s != c)
+		(*s)++;
+	return (ft_substr_g_c(start, 0, *s - start, first_node));
+}
+
+static char	**ft_split(char const *s, char c, t_ntc **first_node)
+{
+	int		i;
+	int		words;
+	char	**split;
+
+	i = 0;
+	words = word_count(s, c);
+	split = (char **)(g_c(first_node, \
+								sizeof(char *) * (words + 1))->data);
+	if (!s || !split)
+		return (NULL);
+	while (i < words)
+		split[i++] = get_n_token(&s, c, first_node);
+	split[i] = NULL;
+	return (split);
+}
+
+//CHECK WHY SPLITS ARE NOT WORKING
+
+static int	get_env_var(t_env **env, const char *name, char **value)
+{
+	int	i;
+	int	name_len;
+
+	i = 0;
+	name_len = strlen(name);
+	while ((*env)->var[i])
+	{
+		if (ft_strncmp((*env)->var[i], name, name_len) == 0
+			&& (*env)->var[i][name_len] == '=')
+		{
+			*value = (*env)->var[i] + name_len + 1;
+			return (i);
+		}
+		i++;
+	}
+	*value = NULL;
+	return (-1);
+}
+
+char *join_path(const char *path, const char *cmd)
+{
+    char *full_path;
+    int len;
+
+    len = ft_strlen(path) + ft_strlen(cmd) + 2;
+    full_path = (char *)malloc(len);
+    if (!full_path)
+        return (NULL);
+    ft_strlcpy(full_path, path, len);
+    ft_strlcat(full_path, "/", len);
+    ft_strlcat(full_path, cmd, len);
+    return (full_path);
+}
+
+char *find_command_path(char *cmd, t_env **env, t_ntc **first_node)
+{
+    char **paths;
+    char *path_env;
+    char *cmd_path;
+    int i;
+
+    if (get_env_var(env, "PATH", &path_env) == -1 || !path_env)
+        return (NULL);
+    paths = ft_split(path_env, ':', first_node);
+    i = 0;
+    while (paths[i])
+    {
+        cmd_path = join_path(paths[i], cmd);
+        if (access(cmd_path, X_OK) == 0)
+        {
+            return (cmd_path);
+        }
+        i++;
+    }  
+    return (NULL); 
+}
+
+int execute_external_cmd(char **words_arr, t_ma *ma)
+{
+    pid_t pid;
+    char *command_path;
+    int status;
+    
+    if (words_arr[0][0] == '/' || words_arr[0][0] == '.' || words_arr[0][0] == '~')
+        command_path = strdup(words_arr[0]);
+    else
+        command_path = find_command_path(words_arr[0], &(ma->env), &(ma->first_env));
+    if (!command_path)
+    {
+        printf("command not found: %s\n", words_arr[0]);
+        return (1);
+    }
+    pid = fork_process();
+    if (pid == 0)
+    {
+        execve(command_path, words_arr, ma->env->var);
+        perror("execve");
+        exit(1);
+    }
+    else
+    {
+        waitpid(pid, &status, 0);
+        return (WEXITSTATUS(status));
+    }
+}
+
+/*
+  Parameters:
+    input: A string representing the user's input.
+  Return value:
+    None. This function does not return a value; instead, it processes the input
+      within the scope of the program.
+  Description:
+    This function reads and processes user input continuously until the user
+    enters "exit". It uses the readline library to capture user input,
+    compares the input against the "exit" cmd, adds the input to the 
+	history for convenience, processes the input using a lexer function, and 
+	finally frees the memory allocated for the input string after processing. 
+	The function also ensures to clear the history at the end of execution.
+*/
+int	main(int argc, char **argv, char **envp)
+{
+	t_ma 		ma;
+	t_astnode 	*root;
+	char		*input;
+
+	(void)argc;
+	(void)argv;
+	ma.first_node = NULL;
+	ma.first_env = NULL;
+	ma.env = duplicate_vars(&(ma.first_env), envp);
+	while (1)
+	{
+		input = readline(">>");
+		if (ft_strcmp(input, "") != 0)
+		{
+			if (ft_strcmp(input, "exit") == 0)
+			{
+				free(input);
+				free_memory(&(ma.first_node));
+				break ;
+			}
+			add_history(input);
+			lexer(input, ma.tkns, &(ma.first_node));
+			get_next_token(ma.tkns, 0);
+			root = parser(&(ma.first_node), ma.tkns);
+			execute_ast(root, &ma);
+			//printf("main\n");
+			//print_env(env);
+			free_memory(&(ma.first_node));
+		}
+	}
+	free_memory(&(ma.first_env));
+	clear_history();
+	//ft_printf("clear_history was executed\n");
+	return (0);
+}
