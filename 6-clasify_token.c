@@ -6,26 +6,11 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 21:49:28 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/05 12:45:11 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/13 01:53:41 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
-if (ft_strcmp(value, "echo") == 0)
-		return (ECHO);
-	if (ft_strcmp(value, "cd") == 0)
-		return (CD);
-	if (ft_strcmp(value, "pwd") == 0)
-		return (PWD);
-	if (ft_strcmp(value, "export") == 0)
-		return (EXPORT);
-	if (ft_strcmp(value, "unset") == 0)
-		return (UNSET);
-	if (ft_strcmp(value, "env") == 0)
-		return (ENV);
-	return (TOKEN_ERROR);
-*/
 
 static t_token_type	classify_cmd(char *value)
 {
@@ -53,6 +38,10 @@ static t_token_type	classify_operator(char *value)
 		return (TOKEN_AND);
 	if (ft_strcmp(value, "||") == 0)
 		return (TOKEN_OR);
+	if (ft_strcmp(value, "(") == 0)
+		return (TOKEN_LPAREN);
+	if (ft_strcmp(value, ")") == 0)
+		return (TOKEN_RPAREN);
 	return (TOKEN_ERROR);
 }
 

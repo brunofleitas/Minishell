@@ -200,12 +200,12 @@ Structs in the Union: Each struct within the union represents different types of
 
 typedef struct  s_main_args
 {
-    
+    char        *input;
 	t_ntc		*first_node;
     t_ntc		*first_env;
 	t_token		*tkns[1024];
+    t_token     **c_tkn;
 	t_env		*env;
-    char        *input;
     int         last_exit_status;
 }               t_ma;
 
@@ -240,21 +240,20 @@ typedef struct  s_simple_cmd_args
 /*                                   FUNCTIONS                                */
 /* ************************************************************************** */
 t_env           *duplicate_vars(t_ntc **first_node, char **envp);
-void            lexer(char *input,t_token **tkns, t_ntc **first_node, t_ma *ma);
+void            lexer(char *input, t_ma *ma);
 int             count_w_tks(char const *s, char c);
 char            **ft_split_tkns(char const *s, char c, t_ntc **first_node, t_ma *ma);
 t_token_type    clasify_token(char *value);
-t_astnode       *parser(t_ntc **first_node, t_token **tkns);
+t_astnode       *parser(t_ma *ma);
 t_astnode       *create_ast_node(t_ntc **first_node, t_nodetype type);
-t_astnode       *parse_cmd_line(t_ntc **first_node, t_token *c_tkn, t_token **tkns);
-t_token         *get_next_token(t_token **tkns, int t);
+t_astnode       *parse_cmd_line(t_ma *ma);
+void            get_next_token(t_ma *ma);
 int             execute_builtin(char **args, t_ma *ma);
 int             is_builtin(const char *word);
 int             execute_cmd_line(t_astnode *node, t_ma *ma);
 int             execute_pipeline(t_astnode *node, t_ma *ma);
 int             execute_simple_cmd(t_astnode *node, t_ma *ma);
-int execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node);
-t_astnode       *parse_word_list(t_ntc **first_node, t_token **c_tkn, t_token **tkns, t_astnode **last_word);
+int             execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node);
 int             builtin_exit(t_ma *ma);
 int             builtin_pwd(char **args, t_ma *ma);
 int             builtin_echo(char **args, int count_words, t_ma *ma);

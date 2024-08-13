@@ -6,26 +6,19 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:07:53 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/11 23:21:22 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/13 17:13:48 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token *get_next_token(t_token **tkns, int t) 
+void    get_next_token(t_ma *ma) 
 {
-    static int i;
-
-    if (t == 0)
+    if (ma->c_tkn)
     {
-        i = 0;
-        return  (NULL);
+        //printf("token : %s\n", ma->c_tkn[0]->value);
+        ma->c_tkn++;
     }
-    if (!tkns[i])
-    {
-        //printf("get_next_token: No more tokens, returning NULL\n");
-        return (NULL);
-    }
-    //printf("get_next_token: Returning token %s at index %d\n", tkns[i]->value, i); // Assuming tkns[i] has a 'value' field
-    return (tkns[i++]);
+    else
+        printf("No more tokens\n");
 }

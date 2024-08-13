@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:59:46 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/12 02:10:48 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/13 17:15:31 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void sigint_handler(int sig)
     (void)sig;
     write(STDOUT_FILENO, "\n", 1);
     rl_on_new_line();
-    rl_replace_line("", 0);
+    //rl_replace_line("", 0);
     rl_redisplay();
 }
 
@@ -52,22 +52,17 @@ int	main(int argc, char **argv, char **envp)
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, SIG_IGN);
 		ma.input = readline(">>");
-		// Handle Ctrl-D
 		if (ma.input == NULL)
         	builtin_exit(&ma);
 		if (ft_strcmp(ma.input, "") != 0)
 		{
-			// if (ft_strcmp(input, "exit") == 0)
-			// {
-			// 	free(input);
-			// 	free_memory(&(ma.first_node));
-			// 	break ;
-			// }
 			add_history(ma.input);
-			lexer(ma.input, ma.tkns, &(ma.first_node), &ma);
-			get_next_token(ma.tkns, 0);
-			root = parser(&(ma.first_node), ma.tkns);
+			lexer(ma.input, &ma);
+			//get_next_token(&ma);
+			root = parser(&ma);
+			//printf("parser end\n");
 			ma.last_exit_status = execute_ast(root, &ma);
+			//printf("execute_ast end\n");
 			//printf("main\n");
 			//print_env(env);
 			free_memory(&(ma.first_node));
