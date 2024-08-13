@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:52:15 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/07/26 02:59:05 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/14 01:55:37 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,7 @@ void handle_heredoc(const char *delimiter, t_ma *ma)
 
 
 
-int handle_12_redir(t_astnode *redir_node)
+void handle_12_redir(t_astnode *redir_node)
 {
     if (redir_node->data.redirection.type == TOKEN_REDIR_OUT)
     {
@@ -214,7 +214,6 @@ int handle_12_redir(t_astnode *redir_node)
         redirect_output_append(redir_node->data.redirection.file, 1);
         redirect_output_append(redir_node->data.redirection.file, 2);
     }
-
 }
 
 /**
@@ -225,9 +224,16 @@ int handle_12_redir(t_astnode *redir_node)
  */
 void handle_redirections(t_astnode *redir_node, t_ma *ma)
 {
+    int fd_num;
+
+    
     while (redir_node != NULL)
     {
-        int fd_num = redir_node->data.redirection.fd_num;
+        if (redir_node->data.redirection.type == TOKEN_REDIR_OUT_NUM
+            || redir_node->data.redirection.type == TOKEN_REDIR_APPEND_NUM)
+            fd_num = ma->c_tkn[0] - '0';
+        else
+            fd_num = 1;
         if (fd_num == '&')
             handle_12_redir(redir_node);
         else if (redir_node->data.redirection.type == TOKEN_REDIR_OUT)
