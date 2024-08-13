@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 19:14:08 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/13 14:48:00 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/13 17:33:19 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static char	*get_env(char *name, char **env)
 	return (NULL);
 }
 
-static void	handle_env_var(const char **s, char **result, int *result_len, char **env)
+static void	handle_env_var(const char **s, char **result, int *result_len, char **env, t_ntc **first_node)
 {
 	char	var_name[1024];
 	int		var_name_len;
@@ -44,7 +44,7 @@ static void	handle_env_var(const char **s, char **result, int *result_len, char 
 	env_value = get_env(var_name, env);
 	if (env_value)
 	{
-		*result = realloc(*result, *result_len + strlen(env_value) + 1);
+		*result = ft_realloc_g_c(first_node, *result, (*result_len + strlen(env_value) + 1));
 		if (*result)
 		{
 			strcpy(*result + *result_len, env_value);
@@ -53,9 +53,9 @@ static void	handle_env_var(const char **s, char **result, int *result_len, char 
 	}
 }
 
-static void	append_char(const char **s, char **result, int *result_len)
+static void	append_char(const char **s, char **result, int *result_len, t_ntc **first_node)
 {
-	*result = realloc(*result, *result_len + 2);
+	*result = ft_realloc_g_c(first_node, *result, *result_len + 2);
 	if (*result)
 	{
 		(*result)[(*result_len)++] = **s;
@@ -73,14 +73,14 @@ static void	generate_quotes(const char **s, char ***split, int *i, t_ntc **first
 (void)first_node;
 	quote = **s;
 	(*s)++;
-	result = strdup("");
+	result = ft_strdup_g_c("", first_node);
 	result_len = 0;
 	while (**s && **s != quote)
 	{
 		if (quote == '"' && **s == '$')
-			handle_env_var(s, &result, &result_len, env);
+			handle_env_var(s, &result, &result_len, env, first_node);
 		else
-			append_char(s, &result, &result_len);
+			append_char(s, &result, &result_len, first_node);
 	}
 	(*split)[(*i)++] = result;
 	if (**s == quote)
