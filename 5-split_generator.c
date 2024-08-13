@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 19:14:08 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/13 17:33:19 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/14 01:25:21 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,9 +166,31 @@ static void	generate_regular_tkns(const char **s, char ***split, int *i, \
 
 	word_length = 0;
 	while ((*s)[word_length] && !strchr(" ><&()|$", (*s)[word_length]))
-		word_length++;
+		if (ft_isdigit((*s)[word_length]) && ((*s)[word_length + 1] && (*s)[word_length + 1] == '>') && ((*s)[word_length + 2] && (*s)[word_length + 2] == '>'))
+			break ;
+		else if (ft_isdigit((*s)[word_length]) && ((*s)[word_length + 1] && (*s)[word_length + 1] == '>'))
+			break ;
+		else
+			word_length++;
 	(*split)[(*i)++] = ft_substr_g_c(*s, 0, word_length, first_node);
 	*s += word_length;
+}
+
+static void handle_redirection(const char **s, char ***split, int *i, t_ntc **first_node)
+{
+    if (ft_isdigit(**s) && (*(*s + 1) == '>' || (*(*s + 1) == '>' && *(*s + 2) == '>')))
+	{
+        char *token;
+        int length;
+        
+        if (*(*s + 1) == '>' && *(*s + 2) == '>')
+            length = 3;
+        else
+            length = 2;
+        token = ft_substr_g_c(*s, 0, length, first_node);
+        (*split)[(*i)++] = token;
+        *s += length;
+    }
 }
 
 /*
@@ -200,6 +222,8 @@ char	**ft_split_tkns(char const *s, char c, t_ntc **first_node, t_ma *ma)
 	{
 		if (*s == c)
 			s++;
+		else if (ft_isdigit(*s))
+            handle_redirection(&s, &split, &i, first_node);
 		else if (*s == '"' || *s == '\'')
 			generate_quotes(&s, &split, &i, first_node, ma->env->var);
 		else if ((*s == '>' && *(s + 1) == '>') || (*s == '<' && *(s

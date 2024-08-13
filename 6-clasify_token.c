@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 21:49:28 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/13 01:53:41 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/14 01:11:17 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,13 @@ static t_token_type	classify_cmd(char *value)
 
 static t_token_type	classify_operator(char *value)
 {
+	if (ft_isdigit(value[0]) && value[1] == '>')
+    {
+        if (value[2] == '>')
+            return (TOKEN_REDIR_APPEND_NUM); 
+        else
+            return (TOKEN_REDIR_OUT_NUM);
+    }
 	if (ft_strcmp(value, "<") == 0)
 		return (TOKEN_REDIR_IN);
 	if (ft_strcmp(value, ">") == 0)

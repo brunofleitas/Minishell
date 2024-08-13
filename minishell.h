@@ -83,7 +83,9 @@ typedef enum e_token_type
     TOKEN_DOUBLE_QUOTE,   // "
     TOKEN_REDIR_IN,       // <
     TOKEN_REDIR_OUT,      // >
+    TOKEN_REDIR_OUT_NUM,  // n>
     TOKEN_REDIR_APPEND,   // >>
+    TOKEN_REDIR_APPEND_NUM, // n>>
     TOKEN_HEREDOC,        // <<
     TOKEN_PIPE,           // |
     TOKEN_ENV_VAR,        // $...
