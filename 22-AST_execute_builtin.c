@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:07:05 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/11 15:52:22 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/13 16:38:55 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	count_words(char **args)
  */
 int is_builtin(const char *word)
 {
-    const char *builtins[7];
+    const char *builtins[8];
     int i = 0;
 
     i=0;
@@ -45,7 +45,8 @@ int is_builtin(const char *word)
     builtins[3] = "export";
     builtins[4] = "unset";
     builtins[5] = "env";
-    builtins[6] = NULL;
+    builtins[6] = "exit";
+    builtins[7] = NULL;
     while (builtins[i])
     {
         if (ft_strcmp(word, builtins[i]) == 0)
@@ -82,6 +83,8 @@ int execute_builtin(char **args, t_ma *ma)
         return (builtin_unset(args, ma));
     else if (ft_strcmp(args[0], "env") == 0)
         return (builtin_env(args, ma));
+    else if (ft_strcmp(args[0], "exit") == 0)
+        return (builtin_exit(ma));
     return 1;
 }
 

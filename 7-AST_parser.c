@@ -6,22 +6,18 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 12:40:58 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/11 12:41:00 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/13 15:57:00 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "minishell.h"
 
-t_astnode *parser(t_ntc **first_node, t_token **tkns) 
+t_astnode *parser(t_ma *ma)
 {
-    t_token     *c_tkn;
-    t_astnode   *cmd_line;
+    t_astnode   *root;
 
-    //printf("parser start\n");
-    c_tkn = NULL;
-    c_tkn = get_next_token(tkns, 1);
-    cmd_line = parse_cmd_line(first_node, c_tkn, tkns);
-    //printf("parser ends\n");
-    return (cmd_line);
+    root = NULL;
+    root = parse_cmd_line(ma);
+    return (root);
 }

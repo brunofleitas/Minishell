@@ -6,11 +6,20 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:59:46 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/11 16:03:08 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/13 17:15:31 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void sigint_handler(int sig)
+{
+    (void)sig;
+    write(STDOUT_FILENO, "\n", 1);
+    rl_on_new_line();
+    //rl_replace_line("", 0);
+    rl_redisplay();
+}
 
 /*
   Parameters:
@@ -30,36 +39,37 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_ma 		ma;
 	t_astnode 	*root;
-	char		*input;
 
+	
 	(void)argc;
 	(void)argv;
 	ma.first_node = NULL;
 	ma.first_env = NULL;
+	ma.last_exit_status = 0;
 	ma.env = duplicate_vars(&(ma.first_env), envp);
 	while (1)
 	{
-		input = readline(">>");
-		if (ft_strcmp(input, "") != 0)
+		signal(SIGINT, sigint_handler);
+		signal(SIGQUIT, SIG_IGN);
+		ma.input = readline(">>");
+		if (ma.input == NULL)
+        	builtin_exit(&ma);
+		if (ft_strcmp(ma.input, "") != 0)
 		{
-			if (ft_strcmp(input, "exit") == 0)
-			{
-				free(input);
-				free_memory(&(ma.first_node));
-				break ;
-			}
-			add_history(input);
-			lexer(input, ma.tkns, &(ma.first_node));
-			get_next_token(ma.tkns, 0);
-			root = parser(&(ma.first_node), ma.tkns);
-			execute_ast(root, &ma);
+			add_history(ma.input);
+			lexer(ma.input, &ma);
+			//get_next_token(&ma);
+			root = parser(&ma);
+			//printf("parser end\n");
+			ma.last_exit_status = execute_ast(root, &ma);
+			//printf("execute_ast end\n");
 			//printf("main\n");
 			//print_env(env);
 			free_memory(&(ma.first_node));
 		}
 	}
-	free_memory(&(ma.first_env));
-	clear_history();
+	// free_memory(&(ma.first_env));
+	// clear_history();
 	//ft_printf("clear_history was executed\n");
 	return (0);
 }

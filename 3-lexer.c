@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 15:03:22 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/05 17:35:15 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/13 16:58:07 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,22 @@
     Splits the input string into tkns. Stores each word in a new
     node of type t_token. Prints each word and frees split memory.
 */
-void	lexer(char *input,t_token **tkns, t_ntc **first_node)
+void	lexer(char *input, t_ma *ma)
 {
 	char	**split;
 	int		i;
 
 	i = 0;
-	split = ft_split_tkns(input, ' ', first_node);
+	split = ft_split_tkns(input, ' ', &(ma->first_node), ma);
 	while (split[i])
 	{
-		tkns[i] = g_c(first_node, sizeof(t_token))->data;
-		tkns[i]->value = split[i];
-		tkns[i]->type = clasify_token(tkns[i]->value);
+		ma->tkns[i] = g_c(&(ma->first_node), sizeof(t_token))->data;
+		ma->tkns[i]->value = split[i];
+		ma->tkns[i]->type = clasify_token(ma->tkns[i]->value);
 		//ft_printf("%s\nType : %i\n\n", tkns[i]->value, tkns[i]->type);
 		i++;
 	}
-	tkns[i] = NULL;
-	free_ntc_prior(first_node, split);
+	ma->tkns[i] = NULL;
+	ma->c_tkn = ma->tkns;
+	free_ntc_prior(&(ma->first_node), split);
 }

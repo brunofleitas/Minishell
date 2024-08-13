@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:07:15 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/11 13:07:17 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/13 17:07:45 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,9 +111,13 @@ int execute_simple_cmd(t_astnode *node, t_ma *ma)
     }
     //expand_wildcards(a.words_arr);
     if (is_builtin(a.words_arr[0]))
+    {
+        //printf("execute_builtin start\n");
         a.status = execute_builtin(a.words_arr, ma);
+        //printf("execute_builtin end\n");
+    }
     else
-        a.status = execute_external_cmd(a.words_arr, ma);
+        a.status = execute_external_cmd(a.words_arr, &(ma)->env, &(ma)->first_node);
     free_ntc_prior(&(ma->first_node), a.words_arr);
     restore_io(a.saved_stdin, a.saved_stdout);
     //printf("execute_simple_cmd end\n");
