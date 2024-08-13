@@ -84,20 +84,20 @@ void redirect_output_append(const char *file_name, int fd_num)
  * @return A dynamically allocated string representing the unique filename,
  *         or NULL if an error occurred.
  */
-char *generate_unique_filename(t_ma *ma)
+char *give_tmp_name(t_ma *ma)
 {
     char *temp_file_name;
     const char *base;
     char *counter_str;
 
     base = "/tmp/heredoc_";
-    counter_str = ft_itoa(ma->tmp_file_counter++);
+    counter_str = ft_itoa_gb(ma->tmp_file_counter++, &(ma->first_node));
     if (!counter_str)
     {
         perror("Error allocating memory for counter string");
         return NULL;
     }
-    temp_file_name = ft_strjoin(base, counter_str);
+    temp_file_name = ft_strjoin_g_c(base, counter_str, &(ma->first_node));
     free(counter_str);
     if (!temp_file_name)
     {
@@ -115,7 +115,7 @@ char *generate_unique_filename(t_ma *ma)
  * @param temp_file_name  The name of the temporary file.
  * @return                Returns 0 on success, -1 on failure.
  */
-static int write_to_tmp_file(int fd, const char *delimiter, const char *temp_file_name)
+static int write_to_tmp_file(int fd, const char *delimiter)
 {
     char *line;
 
@@ -161,7 +161,7 @@ int create_tmp_file(const char *temp_file_name, const char *delimiter)
         return -1;
     }
 
-    if (write_to_tmp_file(fd, delimiter, temp_file_name) == -1)
+    if (write_to_tmp_file(fd, delimiter) == -1)
     {
         close(fd);
         unlink(temp_file_name);
@@ -202,6 +202,21 @@ void handle_heredoc(const char *delimiter, t_ma *ma)
 
 
 
+int handle_12_redir(t_astnode *redir_node)
+{
+    if (redir_node->data.redirection.type == TOKEN_REDIR_OUT)
+    {
+        redirect_output(redir_node->data.redirection.file, 1);
+        redirect_output(redir_node->data.redirection.file, 2);
+    }
+    else if (redir_node->data.redirection.type == TOKEN_REDIR_APPEND)
+    {
+        redirect_output_append(redir_node->data.redirection.file, 1);
+        redirect_output_append(redir_node->data.redirection.file, 2);
+    }
+
+}
+
 /**
  * Handles the redirections specified in the given AST node.
  * 
@@ -213,7 +228,9 @@ void handle_redirections(t_astnode *redir_node, t_ma *ma)
     while (redir_node != NULL)
     {
         int fd_num = redir_node->data.redirection.fd_num;
-        if (redir_node->data.redirection.type == TOKEN_REDIR_OUT)
+        if (fd_num == '&')
+            handle_12_redir(redir_node);
+        else if (redir_node->data.redirection.type == TOKEN_REDIR_OUT)
             redirect_output(redir_node->data.redirection.file, fd_num);
         else if (redir_node->data.redirection.type == TOKEN_REDIR_APPEND)
             redirect_output_append(redir_node->data.redirection.file, fd_num);

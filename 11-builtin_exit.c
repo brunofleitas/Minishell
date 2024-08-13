@@ -14,7 +14,7 @@
 
 int builtin_exit(t_ma *ma)
 {
-    free(&(ma->input));
+    //free(&(ma->input)); //because memory was allocated on the stack not the heap
     free_memory(&(ma->first_node));
     free_memory(&(ma->first_env));
     clear_history();
