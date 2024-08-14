@@ -269,6 +269,7 @@ int             find_env_var(t_env **env, char *var);
 int             execute_ast(t_astnode *node, t_ma *ma);
 pid_t           fork_process();
 int	update_env_var(int i, const char *var, t_ma *ma);
+int handle_redirections(t_astnode *redir_node, t_ma *ma);
 
 void	print_env(t_env *env);
 

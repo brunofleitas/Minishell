@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:08:01 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/13 17:17:59 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/14 15:23:09 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ static t_astnode *parse_redirection_list(t_astnode **last_word, t_ma *ma)
         redir_node = create_ast_node(&(ma->first_node), NODE_REDIRECTION);
         redir_node->data.redirection.type = (*(ma->c_tkn))->type;
         get_next_token(ma);
-        if (!is_word_token((*(ma->c_tkn))->type))
+        if ((*(ma->c_tkn)) && !is_word_token((*(ma->c_tkn))->type))
         {
             fprintf(stderr, "Error: Expected filename after redirection\n");
             exit(1);
@@ -144,7 +144,7 @@ static t_astnode *parse_redirection_list(t_astnode **last_word, t_ma *ma)
             current->data.redirection.next = redir_node;
             current = redir_node;
         }
-        if (is_word_token((*(ma->c_tkn))->type))
+        if ((*(ma->c_tkn)) && is_word_token((*(ma->c_tkn))->type))
             (*last_word)->data.word.next = parse_word_list(last_word, ma);
     }
     if (current)

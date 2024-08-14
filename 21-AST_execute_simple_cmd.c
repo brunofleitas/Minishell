@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:07:15 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/13 17:07:45 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/14 15:35:09 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,11 +98,11 @@ int execute_simple_cmd(t_astnode *node, t_ma *ma)
 
     a.saved_stdin = dup(STDIN_FILENO);
     a.saved_stdout = dup(STDOUT_FILENO);
-    /*if (handle_redirections(node->data.simple_cmd.redirections, ma) != 0)
+    if (!handle_redirections(node->data.simple_cmd.redirections, ma))
     {
         restore_io(a.saved_stdin, a.saved_stdout);
         return(1);
-    }*/
+    }
     a.words_arr = create_words_arr(node, &(a.word_count), ma);
     if (!a.words_arr)
     {

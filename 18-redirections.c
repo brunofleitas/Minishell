@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:52:15 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/14 01:55:37 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/14 15:41:27 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ char *give_tmp_name(t_ma *ma)
         return NULL;
     }
     temp_file_name = ft_strjoin_g_c(base, counter_str, &(ma->first_node));
-    free(counter_str);
+    //free(counter_str);
     if (!temp_file_name)
     {
         perror("Error allocating memory for temporary file path");
@@ -129,16 +129,16 @@ static int write_to_tmp_file(int fd, const char *delimiter)
         }
         if (strcmp(line, delimiter) == 0)
         {
-            free(line);
+            //free(line);
             break;
         }
         if (write(fd, line, strlen(line)) == -1 || write(fd, "\n", 1) == -1)
         {
             perror("Error writing to temporary file");
-            free(line);
+            //free(line);
             return -1;
         }
-        free(line);
+        //free(line);
     }
     return (0);
 }
@@ -190,14 +190,14 @@ void handle_heredoc(const char *delimiter, t_ma *ma)
 
     if (create_tmp_file(temp_file_name, delimiter) == -1)
     {
-        free(temp_file_name);
+        //free(temp_file_name);
         return;
     }
     redirect_input(temp_file_name);
     if (unlink(temp_file_name) == -1)
         perror("Error unlinking temporary file");
 
-    free(temp_file_name);
+    //free(temp_file_name);
 }
 
 
@@ -222,22 +222,25 @@ void handle_12_redir(t_astnode *redir_node)
  * @param redir_node The AST node containing the redirections.
  * @param ma The main data structure of the program.
  */
-void handle_redirections(t_astnode *redir_node, t_ma *ma)
+int handle_redirections(t_astnode *redir_node, t_ma *ma)
 {
     int fd_num;
 
-    
+    //printf("handling redirections start\n");
     while (redir_node != NULL)
     {
         if (redir_node->data.redirection.type == TOKEN_REDIR_OUT_NUM
             || redir_node->data.redirection.type == TOKEN_REDIR_APPEND_NUM)
-            fd_num = ma->c_tkn[0] - '0';
+            fd_num = ma->c_tkn[0]->value[0] - '0';
         else
             fd_num = 1;
-        if (fd_num == '&')
+        if (fd_num == ('&' - '0'))
             handle_12_redir(redir_node);
         else if (redir_node->data.redirection.type == TOKEN_REDIR_OUT)
+        {
+            printf("redir_node->data.redirection.file = %s\n", redir_node->data.redirection.file);
             redirect_output(redir_node->data.redirection.file, fd_num);
+        }
         else if (redir_node->data.redirection.type == TOKEN_REDIR_APPEND)
             redirect_output_append(redir_node->data.redirection.file, fd_num);
         else if (redir_node->data.redirection.type == TOKEN_REDIR_IN)
@@ -246,4 +249,6 @@ void handle_redirections(t_astnode *redir_node, t_ma *ma)
             handle_heredoc(redir_node->data.redirection.file, ma);
         redir_node = redir_node->data.redirection.next;
     }
+    //printf("handling redirections end\n");
+    return (1);
 }
