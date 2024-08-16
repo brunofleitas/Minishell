@@ -109,6 +109,7 @@ int	count_w_tks(char const *s, char c)
 	int	counter;
 	int	i;
 
+	printf("--------------------count_w_tks---------------------\n");
 	counter = 0; 
 	i = 0;
 	if (*s == '\0')
@@ -124,5 +125,6 @@ int	count_w_tks(char const *s, char c)
 			counter++;
 		i++;
 	}
+	printf("Number of tkns: %d\n", counter);
 	return (counter);
 }

@@ -46,7 +46,7 @@ static void	populate(char *newstr, long long newn, int sign, int size)
 	newstr[size] = '\0';
 }
 
-char	*ft_itoa_gb(int n, t_ntc **first_node)
+char	*ft_itoa_g_c(int n, t_ntc **first_node)
 {
 	int			sign;
 	int			size;

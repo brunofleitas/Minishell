@@ -27,7 +27,7 @@ void	lexer(char *input, t_ma *ma)
 	int		i;
 
 	i = 0;
-	split = ft_split_tkns(input, ' ', &(ma->first_node), ma);
+	split = ft_split_tkns(' ', ma);
 	while (split[i])
 	{
 		ma->tkns[i] = g_c(&(ma->first_node), sizeof(t_token))->data;

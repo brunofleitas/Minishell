@@ -69,7 +69,7 @@ void    	*ft_realloc_g_c(t_ntc **first_node, void *existing_data,\
 /*                                 STRING                                     */
 /* ************************************************************************** */
 int			ft_atoi(const char *nptr);
-char		*ft_itoa_gb(int n, t_ntc **first_node);
+char		*ft_itoa_g_c(int n, t_ntc **first_node);
 char		**ft_split_g_c(char const *s, char c, t_ntc **first_node);
 char		*ft_strchr(const char *s, int c);
 char		*ft_strdup_g_c(const char *s, t_ntc **first_node);

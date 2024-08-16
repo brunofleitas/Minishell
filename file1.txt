@@ -1,0 +1,4 @@
+dup2 end
+redirect_output end
+execute_builtin start
+hello test

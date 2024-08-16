@@ -1,5 +1,5 @@
 CC		= cc
-CFLAGS 	= -g -Wall -Wextra -Werror
+CFLAGS 	= -g -Wall -Wextra -Werror 
 RM		= rm -rf
 LIBRARIES = -L./libft -lft
 LIBRARIES_PATH = -I./libft/headers

@@ -87,17 +87,9 @@ int execute_simple_cmd(t_astnode *node, t_ma *ma)
 {
     t_s_cmd_args   a;
 
-    //printf("execute_simple_cmd start\n");
-/*
-    t_astnode *tmp = node;
-    while (tmp->data.simple_cmd.words)
-    {
-        printf("node->data.simple_cmd.words->data.word.value = %s\n", tmp->data.simple_cmd.words->data.word.value);
-        tmp->data.simple_cmd.words = tmp->data.simple_cmd.words->data.word.next;
-    }*/
-
     a.saved_stdin = dup(STDIN_FILENO);
     a.saved_stdout = dup(STDOUT_FILENO);
+    //printf("execute_simple_cmd start\n");
     if (!handle_redirections(node->data.simple_cmd.redirections, ma))
     {
         restore_io(a.saved_stdin, a.saved_stdout);
@@ -112,7 +104,7 @@ int execute_simple_cmd(t_astnode *node, t_ma *ma)
     //expand_wildcards(a.words_arr);
     if (is_builtin(a.words_arr[0]))
     {
-        //printf("execute_builtin start\n");
+        printf("execute_builtin start\n");
         a.status = execute_builtin(a.words_arr, ma);
         //printf("execute_builtin end\n");
     }

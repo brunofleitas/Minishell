@@ -30,7 +30,7 @@ static char	*get_env(char *name, char **env)
 	return (NULL);
 }
 
-static void	handle_env_var(const char **s, char **result, int *result_len, char **env, t_ntc **first_node)
+static void	handle_env_var(const char **s, char **result, int *result_len, t_ma *ma)
 {
 	char	var_name[1024];
 	int		var_name_len;
@@ -41,10 +41,10 @@ static void	handle_env_var(const char **s, char **result, int *result_len, char 
 	while (ft_isalnum(**s) || **s == '_')
 		var_name[var_name_len++] = *(*s)++;
 	var_name[var_name_len] = '\0';
-	env_value = get_env(var_name, env);
+	env_value = get_env(var_name, &(ma->env));
 	if (env_value)
 	{
-		*result = ft_realloc_g_c(first_node, *result, (*result_len + strlen(env_value) + 1));
+		*result = ft_realloc_g_c(&(ma->first_node), *result, (*result_len + strlen(env_value) + 1));
 		if (*result)
 		{
 			strcpy(*result + *result_len, env_value);
@@ -53,9 +53,9 @@ static void	handle_env_var(const char **s, char **result, int *result_len, char 
 	}
 }
 
-static void	append_char(const char **s, char **result, int *result_len, t_ntc **first_node)
+static void	append_char(const char **s, char **result, int *result_len, t_ma *ma)
 {
-	*result = ft_realloc_g_c(first_node, *result, *result_len + 2);
+	*result = ft_realloc_g_c(&(ma->first_node), *result, *result_len + 2);
 	if (*result)
 	{
 		(*result)[(*result_len)++] = **s;
@@ -64,23 +64,22 @@ static void	append_char(const char **s, char **result, int *result_len, t_ntc **
 	(*s)++;
 }
 
-static void	generate_quotes(const char **s, char ***split, int *i, t_ntc **first_node, char **env)
+static void	generate_quotes(const char **s, char ***split, int *i, t_ma *ma)
 {
 	char	quote;
 	char	*result;
 	int		result_len;
 
-(void)first_node;
 	quote = **s;
 	(*s)++;
-	result = ft_strdup_g_c("", first_node);
+	result = ft_strdup_g_c("", &(ma->first_node));
 	result_len = 0;
 	while (**s && **s != quote)
 	{
 		if (quote == '"' && **s == '$')
-			handle_env_var(s, &result, &result_len, env, first_node);
+			handle_env_var(s, &result, &result_len, ma);
 		else
-			append_char(s, &result, &result_len, first_node);
+			append_char(s, &result, &result_len, ma);
 	}
 	(*split)[(*i)++] = result;
 	if (**s == quote)
@@ -98,9 +97,9 @@ static void	generate_quotes(const char **s, char ***split, int *i, t_ntc **first
 	positions to skip the operator.
 */
 static void	generate_double_operators(const char **s, char ***split, int *i, \
-															t_ntc **first_node)
+															t_ma *ma)
 {
-	(*split)[(*i)++] = ft_substr_g_c(*s, 0, 2, first_node);
+	(*split)[(*i)++] = ft_substr_g_c(*s, 0, 2, &(ma->first_node));
 	*s += 2;
 }
 
@@ -118,7 +117,7 @@ static void	generate_double_operators(const char **s, char ***split, int *i, \
 
 
 static void	generate_single_operators_and_specials(const char **s,
-		char ***split, int *i, t_ntc **first_node, t_ma *ma)
+		char ***split, int *i, t_ma *ma)
 {
 	int	len;
 	char	*temp;
@@ -127,22 +126,22 @@ static void	generate_single_operators_and_specials(const char **s,
 	len = 1;
 	if (**s == '$' && *(*s + 1) == '?')
 	{
-		(*split)[(*i)++] = ft_substr_g_c(ft_itoa_gb(ma->last_exit_status, first_node), 0, ft_strlen(ft_itoa_gb(ma->last_exit_status, first_node)), first_node);
+		(*split)[(*i)++] = ft_substr_g_c(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node)), 0, ft_strlen(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node))), &(ma->first_node));
 	}
 	else if (**s == '$')
 	{
 		while ((*s)[len] && (ft_isalnum((*s)[len]) || (*s)[len] == '_'))
 			len++;
-		temp = ft_substr_g_c(*s + 1, 0, len - 1, first_node);
+		temp = ft_substr_g_c(*s + 1, 0, len - 1, &(ma->first_node));
 		env_value = get_env(temp, ma->env->var);
 		if (env_value)
-			(*split)[(*i)++] = ft_strdup_g_c(env_value, first_node);
+			(*split)[(*i)++] = ft_strdup_g_c(env_value, &(ma->first_node));
 		else
-			(*split)[(*i)++] = ft_strdup_g_c("", first_node);
+			(*split)[(*i)++] = ft_strdup_g_c("", &(ma->first_node));
 	}
 	else
 	{
-		(*split)[(*i)++] = ft_substr_g_c(*s, 0, 1, first_node);
+		(*split)[(*i)++] = ft_substr_g_c(*s, 0, 1, &(ma->first_node));
 	}
 	*s += len;
 }
@@ -160,7 +159,7 @@ static void	generate_single_operators_and_specials(const char **s,
 	input string by the length of the extracted token.
 */
 static void	generate_regular_tkns(const char **s, char ***split, int *i, \
-																t_ntc **first_node)
+																t_ma *ma)
 {
 	int	word_length;
 
@@ -172,26 +171,26 @@ static void	generate_regular_tkns(const char **s, char ***split, int *i, \
 			break ;
 		else
 			word_length++;
-	(*split)[(*i)++] = ft_substr_g_c(*s, 0, word_length, first_node);
+	(*split)[(*i)++] = ft_substr_g_c(*s, 0, word_length, &(ma->first_node));
 	*s += word_length;
 }
 
-static void handle_redirection(const char **s, char ***split, int *i, t_ntc **first_node)
-{
-    if (ft_isdigit(**s) && (*(*s + 1) == '>' || (*(*s + 1) == '>' && *(*s + 2) == '>')))
-	{
-        char *token;
-        int length;
+// static void handle_redirection(const char **s, char ***split, int *i, t_ntc **first_node)
+// {
+//     if (ft_isdigit((*s)[0]) && (((*s)[1] == '>') || ((*s)[1] == '>' && (*s)[2] == '>')))
+// 	{
+//         char *token;
+//         int length;
         
-        if (*(*s + 1) == '>' && *(*s + 2) == '>')
-            length = 3;
-        else
-            length = 2;
-        token = ft_substr_g_c(*s, 0, length, first_node);
-        (*split)[(*i)++] = token;
-        *s += length;
-    }
-}
+//         if ((*s)[1] == '>' && (*s)[2] == '>')
+//             length = 3;
+//         else
+//             length = 2;
+//         token = ft_substr_g_c(*s, 0, length, first_node);
+//         (*split)[(*i)++] = token;
+//         *s += length;
+//     }
+// }
 
 /*
   Parameters:
@@ -209,32 +208,37 @@ static void handle_redirection(const char **s, char ***split, int *i, t_ntc **fi
 	initializes it accordingly. The last element of the array is set to NULL
 	to indicate the end.
 */
-char	**ft_split_tkns(char const *s, char c, t_ntc **first_node, t_ma *ma)
+char	**ft_split_tkns(char c, t_ma *ma)
 {
 	char	**split;
 	int		i;
+	char	*s;
 
+	s = ma->input;
 	i = 0;
-	split = g_c(first_node, (count_w_tks(s, c) + 1) * sizeof(char *))->data;
+	split = g_c(&(ma->first_node), (count_w_tks(s, c) + 1) * sizeof(char *))->data;
 	if (!s || !split)
 		return (NULL);
 	while (*s)
 	{
 		if (*s == c)
 			s++;
-		else if (ft_isdigit(*s))
-            handle_redirection(&s, &split, &i, first_node);
+		// else if (ft_isdigit(*s))
+        //     handle_redirection(&s, &split, &i, first_node);
 		else if (*s == '"' || *s == '\'')
-			generate_quotes(&s, &split, &i, first_node, ma->env->var);
+			generate_quotes(&s, &split, &i, ma);
 		else if ((*s == '>' && *(s + 1) == '>') || (*s == '<' && *(s
 					+ 1) == '<') || (*s == '&' && *(s + 1) == '&') || (*s == '|'
 				&& *(s + 1) == '|'))
-			generate_double_operators(&s, &split, &i, first_node);
+			generate_double_operators(&s, &split, &i, ma);
 		else if (*s == '>' || *s == '<' || *s == '(' || *s == ')' || *s == '|'
 			|| (*s == '$' && *(s + 1) == '?') || *s == '$')
-			generate_single_operators_and_specials(&s, &split, &i, first_node, ma);
+		{
+			printf("------------------------genereate_single_operators_and_specials----------------------------\n");
+			generate_single_operators_and_specials(&s, &split, &i, ma);			
+		}
 		else
-			generate_regular_tkns(&s, &split, &i, first_node);
+			generate_regular_tkns(&s, &split, &i, ma);
 	}
 	split[i] = NULL;
 	return (split);
