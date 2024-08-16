@@ -21,7 +21,7 @@
     Splits the input string into tkns. Stores each word in a new
     node of type t_token. Prints each word and frees split memory.
 */
-void	lexer(char *input, t_ma *ma)
+void	lexer(t_ma *ma)
 {
 	char	**split;
 	int		i;

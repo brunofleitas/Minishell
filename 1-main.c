@@ -57,7 +57,7 @@ int	main(int argc, char **argv, char **envp)
 		if (ft_strcmp(ma.input, "") != 0)
 		{
 			add_history(ma.input);
-			lexer(ma.input, &ma);
+			lexer(&ma);
 			//get_next_token(&ma);
 			root = parser(&ma);
 			//printf("parser end\n");

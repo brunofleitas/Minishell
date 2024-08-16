@@ -12,6 +12,17 @@
 
 #include "libft.h"
 
+/**
+ * @brief Duplicate a string and store it in a new memory location.
+ * 
+ * This function duplicates the string `s` and stores it in a new memory location.
+ * It also updates the global variable `g_c` with the newly allocated memory block.
+ * 
+ * @param s The string to be duplicated.
+ * @param first_node A pointer to the first node of a linked list.
+ * @return char* A pointer to the newly allocated memory block containing the duplicated string.
+ *         Returns NULL if memory allocation fails.
+ */
 char	*ft_strdup_g_c(const char *s, t_ntc **first_node)
 {
 	int		i;

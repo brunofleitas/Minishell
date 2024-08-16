@@ -41,7 +41,7 @@ static void	handle_env_var(const char **s, char **result, int *result_len, t_ma 
 	while (ft_isalnum(**s) || **s == '_')
 		var_name[var_name_len++] = *(*s)++;
 	var_name[var_name_len] = '\0';
-	env_value = get_env(var_name, &(ma->env));
+	env_value = get_env(var_name, (ma->env->var));
 	if (env_value)
 	{
 		*result = ft_realloc_g_c(&(ma->first_node), *result, (*result_len + strlen(env_value) + 1));
@@ -141,6 +141,7 @@ static void	generate_single_operators_and_specials(const char **s,
 	}
 	else
 	{
+		printf("standard cases\n");
 		(*split)[(*i)++] = ft_substr_g_c(*s, 0, 1, &(ma->first_node));
 	}
 	*s += len;
@@ -212,9 +213,9 @@ char	**ft_split_tkns(char c, t_ma *ma)
 {
 	char	**split;
 	int		i;
-	char	*s;
+	const char	*s;
 
-	s = ma->input;
+	s = (const char*)ma->input;
 	i = 0;
 	split = g_c(&(ma->first_node), (count_w_tks(s, c) + 1) * sizeof(char *))->data;
 	if (!s || !split)
