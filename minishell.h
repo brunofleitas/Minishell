@@ -245,7 +245,7 @@ typedef struct  s_simple_cmd_args
 /* ************************************************************************** */
 t_env           *duplicate_vars(t_ntc **first_node, char **envp);
 void            lexer(t_ma *ma);
-int             count_w_tks(char const *s, char c);
+int             count_tks(char const *s, char c);
 char            **ft_split_tkns(char c, t_ma *ma);
 t_token_type    clasify_token(char *value);
 t_astnode       *parser(t_ma *ma);

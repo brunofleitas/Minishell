@@ -104,12 +104,12 @@ static int	handle_single_operators_and_specials(const char *s, int *i)
 	are surrounded by the separator character or are adjacent to it but 
 	not immediately preceded by it.
 */
-int	count_w_tks(char const *s, char c)
+int	count_tks(char const *s, char c)
 {
 	int	counter;
 	int	i;
 
-	printf("--------------------count_w_tks---------------------\n");
+	printf("--------------------count_tks---------------------\n");
 	counter = 0; 
 	i = 0;
 	if (*s == '\0')
@@ -122,6 +122,8 @@ int	count_w_tks(char const *s, char c)
 			|| handle_single_operators_and_specials(s, &i))
 			counter++;
 		else if (s[i] != c && (i == 0 || s[i - 1] == c))
+			counter++;
+		else if (s[i] != c && s[i+1] == '\0')//added this because counter was wrong and not taking the last word
 			counter++;
 		i++;
 	}

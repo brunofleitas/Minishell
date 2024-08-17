@@ -103,19 +103,17 @@ static void	generate_double_operators(const char **s, char ***split, int *i, \
 	*s += 2;
 }
 
-/*
-  Parameters:
-    s: Pointer to the input string.
-    split: Pointer to the array of pointers to strings (tkns).
-    i: Pointer to an integer indicating the current index in the tkns array.
-  Description:
-    Extracts and stores a single operator or special character (including '$?') 
-	from the input string into the tkns array. The length of the substring 
-	depends on the specific operator or special character.
-    Advances the input string by the length of the extracted substring.
-*/
 
-
+/**
+ * Generates single operators and special characters from the input string (including '$?') 
+ * from the input string into the tkns array. The length of the substring 
+ * depends on the specific operator or special character.
+ * Advances the input string by the length of the extracted substring. 
+ * @param s The input string.
+ * @param split The array to store the generated strings.
+ * @param i The index of the current element in the split array.
+ * @param ma The main structure containing relevant data.
+ */
 static void	generate_single_operators_and_specials(const char **s,
 		char ***split, int *i, t_ma *ma)
 {
@@ -126,7 +124,8 @@ static void	generate_single_operators_and_specials(const char **s,
 	len = 1;
 	if (**s == '$' && *(*s + 1) == '?')
 	{
-		(*split)[(*i)++] = ft_substr_g_c(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node)), 0, ft_strlen(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node))), &(ma->first_node));
+		//(*split)[(*i)++] = ft_substr_g_c(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node)), 0, ft_strlen(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node))), &(ma->first_node));
+		(*split)[(*i)++] = ft_itoa_g_c(ma->last_exit_status, &(ma->first_node));
 	}
 	else if (**s == '$')
 	{
@@ -209,15 +208,22 @@ static void	generate_regular_tkns(const char **s, char ***split, int *i, \
 	initializes it accordingly. The last element of the array is set to NULL
 	to indicate the end.
 */
-char	**ft_split_tkns(char c, t_ma *ma)
+/**
+ * Splits a string into tokens based on a given delimiter.
+ *
+ * @param c The delimiter character.
+ * @param ma The memory allocator structure.
+ * @return An array of strings representing the tokens.
+ */
+char **ft_split_tkns(char c, t_ma *ma)
 {
-	char	**split;
-	int		i;
-	const char	*s;
+	char **split;
+	int i;
+	const char *s;
 
 	s = (const char*)ma->input;
 	i = 0;
-	split = g_c(&(ma->first_node), (count_w_tks(s, c) + 1) * sizeof(char *))->data;
+	split = g_c(&(ma->first_node), (count_tks(s, c) + 1) * sizeof(char *))->data;
 	if (!s || !split)
 		return (NULL);
 	while (*s)
