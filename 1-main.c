@@ -6,11 +6,13 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:59:46 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/13 17:15:31 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/19 17:18:04 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+//tester: https://github.com/LucasKuhn/minishell_tester/tree/main
 
 void sigint_handler(int sig)
 {
