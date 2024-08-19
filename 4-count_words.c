@@ -109,24 +109,26 @@ int	count_tks(char const *s, char c)
 	int	counter;
 	int	i;
 
-	printf("--------------------count_tks---------------------\n");
+	//printf("--------------------count_tks---------------------\n");
 	counter = 0; 
 	i = 0;
 	if (*s == '\0')
 		return (0);
 	while (s[i] != '\0')
 	{
-		if (s[i] == '"' || s[i] == '\'')
+		if (ft_isdigit(s[i]) && s[i + 1] == '>' && s[i + 2] == '>')
+			counter++;
+		else if (ft_isdigit(s[i]) && s[i + 1] == '>')
+			counter++;
+		else if (s[i] == '"' || s[i] == '\'')
 			counter += handle_quotes(s, &i);
 		else if (handle_double_operators(s, &i)
 			|| handle_single_operators_and_specials(s, &i))
 			counter++;
 		else if (s[i] != c && (i == 0 || s[i - 1] == c))
 			counter++;
-		else if (s[i] != c && s[i+1] == '\0')//added this because counter was wrong and not taking the last word
-			counter++;
 		i++;
 	}
-	printf("Number of tkns: %d\n", counter);
+	//printf("Number of tkns: %d\n", counter);
 	return (counter);
 }

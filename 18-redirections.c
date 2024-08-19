@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:52:15 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/14 15:41:27 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/19 10:10:44 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,12 +233,12 @@ void handle_12_redir(t_astnode *redir_node)
 int handle_redirections(t_astnode *redir_node, t_ma *ma)
 {
     // int fd_num;
-    printf("redir_node->data.redirection.type = %d\n", redir_node->data.redirection.type);
-    printf("redir_node->data.redirection.file = %s\n", redir_node->data.redirection.file);
-    printf("redir_node->data.redirection.fd_num = %d\n", redir_node->data.redirection.fd_num);
-    printf("redir_node->data.redirection.next = %p\n", redir_node->data.redirection.next);
+    //printf("redir_node->data.redirection.type = %d\n", redir_node->data.redirection.type);
+    //printf("redir_node->data.redirection.file = %s\n", redir_node->data.redirection.file);
+    //printf("redir_node->data.redirection.fd_num = %d\n", redir_node->data.redirection.fd_num);
+    //printf("redir_node->data.redirection.next = %p\n", redir_node->data.redirection.next);
 
-    printf("handling redirections start\n");
+    //printf("handling redirections start\n");
     while (redir_node != NULL)
     {
         /* if (redir_node->data.redirection.type == TOKEN_REDIR_OUT_NUM

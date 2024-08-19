@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:07:15 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/14 15:35:09 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/19 10:12:11 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
     char        **words_arr;
     int         i;
 
+    //printf("create_words_arr start\n");
     i= 0;
     node_word = node->data.simple_cmd.words;
     *word_count = node_word_count(node);
@@ -104,7 +105,7 @@ int execute_simple_cmd(t_astnode *node, t_ma *ma)
     //expand_wildcards(a.words_arr);
     if (is_builtin(a.words_arr[0]))
     {
-        printf("execute_builtin start\n");
+        //printf("execute_builtin start\n");
         a.status = execute_builtin(a.words_arr, ma);
         //printf("execute_builtin end\n");
     }
