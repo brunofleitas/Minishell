@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 19:14:08 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/19 10:11:03 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/19 21:45:11 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,14 @@ static void	handle_env_var(const char **s, char **result, int *result_len, t_ma 
 	}
 }
 
-static void	append_char(const char **s, char **result, int *result_len, t_ma *ma)
+static void	append_char(const char *s, char **result, int *result_len, t_ma *ma)
 {
 	*result = ft_realloc_g_c(&(ma->first_node), *result, *result_len + 2);
 	if (*result)
 	{
-		(*result)[(*result_len)++] = **s;
+		(*result)[(*result_len)++] = *s;
 		(*result)[*result_len] = '\0';
 	}
-	(*s)++;
 }
 
 static void	generate_quotes(const char **s, char ***split, int *i, t_ma *ma)
@@ -74,13 +73,18 @@ static void	generate_quotes(const char **s, char ***split, int *i, t_ma *ma)
 	(*s)++;
 	result = ft_strdup_g_c("", &(ma->first_node));
 	result_len = 0;
+	append_char(&quote, &result, &result_len, ma);
 	while (**s && **s != quote)
 	{
 		if (quote == '"' && **s == '$')
 			handle_env_var(s, &result, &result_len, ma);
 		else
-			append_char(s, &result, &result_len, ma);
+		{
+			append_char(*s, &result, &result_len, ma);
+			(*s)++;
+		}
 	}
+	append_char(&quote, &result, &result_len, ma);
 	(*split)[(*i)++] = result;
 	if (**s == quote)
 		(*s)++;
