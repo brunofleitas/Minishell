@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:50:08 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/06 15:23:56 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/19 22:05:58 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,22 @@ static char	*join_words(char **args, t_ntc **first_node, int i, int word_count)
 {
 	char	*result;
 	char	*temp;
+	char	*actual_arg;
 
 	result = ft_strdup_g_c("", first_node);
 	while (i < word_count)
 	{
-		temp = ft_strjoin_g_c(result, args[i], first_node);
-		//free_ntc_prior(first_node, result);
+		if (args[i][0] == '\'')
+			actual_arg = ft_strtrim(args[i], "'", first_node);
+		else if (args[i][0] == '\"')
+			actual_arg = ft_strtrim(args[i], "\"", first_node);
+		else
+			actual_arg = ft_strdup_g_c(args[i], first_node);
+		temp = ft_strjoin_g_c(result, actual_arg, first_node);
 		result = temp;
-		if (i < word_count - 1)
+		if (i < word_count - 1 || args[i][0] == '\'' || args[i][0] == '\"')
 		{
 			temp = ft_strjoin_g_c(result, " ", first_node);
-			//free_ntc_prior(first_node, result);
 			result = temp;
 		}
 		i++;

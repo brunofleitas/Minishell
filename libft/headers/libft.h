@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 16:43:44 by pcasagra          #+#    #+#             */
-/*   Updated: 2024/08/04 15:49:38 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/19 22:05:12 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int			ft_strcmp(const char *s1, const char *s2);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 char		*ft_strnstr(const char *big, const char *little, size_t len);
 char		*ft_strrchr(const char *s, int c);
-char		*ft_strtrim_g_c(char const *s1, char const *set, t_ntc **first_node);
+char		*ft_strtrim(char const *s1, char const *set, t_ntc **first_node);
 char		*ft_substr_g_c(char const *s, unsigned int start, size_t len, \
 															t_ntc **first_node);
 int			ft_tolower(int c);
