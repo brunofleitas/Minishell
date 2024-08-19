@@ -224,7 +224,8 @@ typedef struct  s_pipeline_args
     int     pipe_fds[2];
     int     input_fd;
     pid_t   pid;
-    pid_t   last_pid;
+    pid_t   *pid_arr;
+    // pid_t   last_pid;
     int     status;
     int     last_cmd;
 }               t_pip_args;
