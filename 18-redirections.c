@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:52:15 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/19 10:10:44 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/19 11:44:12 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ void redirect_input(const char *file_name)
  */
 void redirect_output(const char *file_name, int fd_num)
 {
-    printf("redirect_output start\n");
-    // printf("file_name = %s\n", file_name);
-    // printf("fd_num = %d\n", fd_num);
+    //printf("redirect_output start\n");
+    //printf("file_name = %s\n", file_name);
+    //printf("fd_num = %d\n", fd_num);
     int fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd == -1)
     {
@@ -53,12 +53,12 @@ void redirect_output(const char *file_name, int fd_num)
         printf("return\n");
         return;
     }
-    // printf("fd = %d\n", fd);
-    // printf("fd_num = %d\n", fd_num);
-    printf("dup2 start\n");
+    //printf("fd = %d\n", fd);
+    //printf("fd_num = %d\n", fd_num);
+    //printf("dup2 start\n");
     if (dup2(fd, fd_num) == -1)
         perror("Error redirecting output to file");
-    printf("dup2 end\n");
+    //printf("dup2 end\n");
     close(fd);
 }
 
@@ -255,11 +255,16 @@ int handle_redirections(t_astnode *redir_node, t_ma *ma)
         else  */if (redir_node->data.redirection.type == TOKEN_REDIR_OUT)
         {
             //printf("redir_node->data.redirection.file = %s\n", redir_node->data.redirection.file);
-            redirect_output(redir_node->data.redirection.file, 1/* fd_num */);
+            printf("redirect_output start\n");
+            redirect_output(redir_node->data.redirection.file, 1);/* fd_num */
             printf("redirect_output end\n");
         }
         else if (redir_node->data.redirection.type == TOKEN_REDIR_APPEND)
-            redirect_output_append(redir_node->data.redirection.file, 1/* fd_num */);
+        {
+            printf("redirect_output_append start\n");
+            redirect_output_append(redir_node->data.redirection.file, 1);/* fd_num */
+            printf("redirect_output_append end\n");
+        }
         else if (redir_node->data.redirection.type == TOKEN_REDIR_IN)
             redirect_input(redir_node->data.redirection.file);
         else if (redir_node->data.redirection.type == TOKEN_HEREDOC)
