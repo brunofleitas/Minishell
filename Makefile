@@ -1,4 +1,4 @@
-CC		= cc
+CC		= clang
 CFLAGS 	= -g -Wall -Wextra -Werror 
 RM		= rm -rf
 LIBRARIES = -L./libft -lft

@@ -1,0 +1,8 @@
+dup2 end
+redirect_output end
+handling redirections end
+execute create_words_arr
+execute create_words_arr end
+execute_builtin start
+hello test
+execute_builtin end

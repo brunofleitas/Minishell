@@ -127,6 +127,8 @@ int	count_tks(char const *s, char c)
 			counter++;
 		else if (s[i] != c && (i == 0 || s[i - 1] == c))
 			counter++;
+		else if (s[i] !=c && s[i + 1] == '\0')
+			counter++;
 		i++;
 	}
 	//printf("Number of tkns: %d\n", counter);
