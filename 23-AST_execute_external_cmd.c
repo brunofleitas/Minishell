@@ -62,7 +62,7 @@ static int	get_env_var(t_env **env, const char *name, char **value)
 	name_len = strlen(name);
 	while ((*env)->var[i])
 	{
-		if (strncmp((*env)->var[i], name, name_len) == 0
+		if (ft_strncmp((*env)->var[i], name, name_len) == 0
 			&& (*env)->var[i][name_len] == '=')
 		{
 			*value = (*env)->var[i] + name_len + 1;
@@ -74,13 +74,13 @@ static int	get_env_var(t_env **env, const char *name, char **value)
 	return (-1);
 }
 
-char *join_path(const char *path, const char *cmd)
+char *join_path(const char *path, const char *cmd, t_ntc **first_node)
 {
     char *full_path;
     int len;
 
-    len = strlen(path) + strlen(cmd) + 2;
-    full_path = (char *)malloc(len);
+    len = ft_strlen(path) + ft_strlen(cmd) + 2;
+    full_path = g_c(first_node, sizeof(char *) * len)->data;   
     if (!full_path)
         return (NULL);
     strcpy(full_path, path);
@@ -102,7 +102,7 @@ char *find_command_path(char *cmd, t_env **env, t_ntc **first_node)
     i = 0;
     while (paths[i])
     {
-        cmd_path = join_path(paths[i], cmd);
+        cmd_path = join_path(paths[i], cmd, first_node);
         if (access(cmd_path, X_OK) == 0)
         {
             //free(paths);  // Free the paths array
