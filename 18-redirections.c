@@ -129,7 +129,7 @@ static int write_to_tmp_file(int fd, const char *delimiter)
 
     while (1)
     {
-        line = readline(" >");
+        line = readline(" heredoc>");
         if (!line)
         {
             perror("Error reading input for heredoc");
@@ -255,15 +255,15 @@ int handle_redirections(t_astnode *redir_node, t_ma *ma)
         else  */if (redir_node->data.redirection.type == TOKEN_REDIR_OUT)
         {
             //printf("redir_node->data.redirection.file = %s\n", redir_node->data.redirection.file);
-            printf("redirect_output start\n");
+            // printf("redirect_output start\n");
             redirect_output(redir_node->data.redirection.file, 1);/* fd_num */
-            printf("redirect_output end\n");
+            // printf("redirect_output end\n");
         }
         else if (redir_node->data.redirection.type == TOKEN_REDIR_APPEND)
         {
-            printf("redirect_output_append start\n");
+            // printf("redirect_output_append start\n");
             redirect_output_append(redir_node->data.redirection.file, 1);/* fd_num */
-            printf("redirect_output_append end\n");
+            // printf("redirect_output_append end\n");
         }
         else if (redir_node->data.redirection.type == TOKEN_REDIR_IN)
             redirect_input(redir_node->data.redirection.file);
@@ -271,6 +271,6 @@ int handle_redirections(t_astnode *redir_node, t_ma *ma)
             handle_heredoc(redir_node->data.redirection.file, ma);
         redir_node = redir_node->data.redirection.next;
     }
-    printf("handling redirections end\n");
+    // printf("handling redirections end\n");
     return (1);
 }

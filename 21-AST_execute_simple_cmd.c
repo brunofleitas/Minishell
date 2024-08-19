@@ -93,33 +93,33 @@ int execute_simple_cmd(t_astnode *node, t_ma *ma)
     //printf("execute_simple_cmd start\n");
     if (!handle_redirections(node->data.simple_cmd.redirections, ma))
     {
-        printf("handle_redirections failed\n");
+        // printf("handle_redirections failed\n");
         restore_io(a.saved_stdin, a.saved_stdout);
-        printf("restore_io executed\n");
+        // printf("restore_io executed\n");
         return(1);
     }
-    printf("execute create_words_arr\n");
+    // printf("execute create_words_arr\n");
     a.words_arr = create_words_arr(node, &(a.word_count), ma);
     if (!a.words_arr)
     {
-        printf("a.words_arr = NULL\n");
+        // printf("a.words_arr = NULL\n");
         restore_io(a.saved_stdin, a.saved_stdout);
-        printf("restore_io executed\n");
+        // printf("restore_io executed\n");
         return(1);
     }
-    printf("execute create_words_arr end\n");
+    // printf("execute create_words_arr end\n");
     //expand_wildcards(a.words_arr);
     if (is_builtin(a.words_arr[0]))
     {
-        printf("execute_builtin start\n");
+        // printf("execute_builtin start\n");
         a.status = execute_builtin(a.words_arr, ma);
-        printf("execute_builtin end\n");
+        // printf("execute_builtin end\n");
     }
     else
         a.status = execute_external_cmd(a.words_arr, &(ma)->env, &(ma)->first_node);
     free_ntc_prior(&(ma->first_node), a.words_arr);
     restore_io(a.saved_stdin, a.saved_stdout);
-    printf("execute_simple_cmd end\n");
+    // printf("execute_simple_cmd end\n");
     return (a.status);
 }
 

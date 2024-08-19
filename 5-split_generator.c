@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 19:14:08 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/19 13:15:34 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/19 10:11:03 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ static void	generate_single_operators_and_specials(const char **s,
 	}
 	else
 	{
-		printf("standard cases\n");
+		// printf("standard cases\n");
 		(*split)[(*i)++] = ft_substr_g_c(*s, 0, 1, &(ma->first_node));
 	}
 	*s += len;
@@ -223,7 +223,6 @@ char **ft_split_tkns(char c, t_ma *ma)
 
 	s = (const char*)ma->input;
 	i = 0;
-	printf("%i\n", count_tks(s, c));
 	split = g_c(&(ma->first_node), (count_tks(s, c) + 1) * sizeof(char *))->data;
 	if (!s || !split)
 		return (NULL);
