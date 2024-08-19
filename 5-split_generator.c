@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 19:14:08 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/19 10:11:03 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/19 13:15:34 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,7 +223,8 @@ char **ft_split_tkns(char c, t_ma *ma)
 
 	s = (const char*)ma->input;
 	i = 0;
-	split = g_c(&(ma->first_node), (count_tks(s, c) + 10) * sizeof(char *))->data;
+	printf("%i\n", count_tks(s, c));
+	split = g_c(&(ma->first_node), (count_tks(s, c) + 1) * sizeof(char *))->data;
 	if (!s || !split)
 		return (NULL);
 	while (*s)

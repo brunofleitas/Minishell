@@ -117,18 +117,49 @@ int	count_tks(char const *s, char c)
 	while (s[i] != '\0')
 	{
 		if (ft_isdigit(s[i]) && s[i + 1] == '>' && s[i + 2] == '>')
+		{
+			printf("Found n>>\n");
 			counter++;
+			printf("Counter: %d\n", counter);
+		}
 		else if (ft_isdigit(s[i]) && s[i + 1] == '>')
+		{
+			printf("Found n>\n");
 			counter++;
+			printf("Counter: %d\n", counter);
+		}
 		else if (s[i] == '"' || s[i] == '\'')
+		{
+			printf("Found quotes\n");
 			counter += handle_quotes(s, &i);
+			printf("Counter: %d\n", counter);
+		}
 		else if (handle_double_operators(s, &i)
 			|| handle_single_operators_and_specials(s, &i))
+		{
+			printf("Found double operators\n");
 			counter++;
-		else if (s[i] != c && (i == 0 || s[i - 1] == c))
+			printf("Counter: %d\n", counter);
+		}
+		else if (s[i] != c && (i == 0 || s[i - 1] == c || ft_strchr(" ><&()|$", s[i - 1])))
+		{
+			printf("Found word tkn\n");
 			counter++;
-		else if (s[i] !=c && s[i + 1] == '\0')
-			counter++;
+			printf("Counter: %d\n", counter);
+		}
+		// else if (s[i] != c )
+		// {
+		// 	printf("Found tkn\n");
+		// 	counter++;
+		// 	printf("Counter: %d\n", counter);
+		// }
+		// else if (s[i] !=c && s[i + 1] == '\0')
+		// {
+		// 	printf("Found last tkn\n");
+		// 	counter++;
+		// 	printf("Counter: %d\n", counter);
+		// }
+		printf("%c\n", s[i]);
 		i++;
 	}
 	//printf("Number of tkns: %d\n", counter);
