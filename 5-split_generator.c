@@ -223,7 +223,7 @@ char **ft_split_tkns(char c, t_ma *ma)
 
 	s = (const char*)ma->input;
 	i = 0;
-	split = g_c(&(ma->first_node), (count_tks(s, c) + 1) * sizeof(char *))->data;
+	split = g_c(&(ma->first_node), (count_tks(s, c) + 10) * sizeof(char *))->data;
 	if (!s || !split)
 		return (NULL);
 	while (*s)

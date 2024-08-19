@@ -134,3 +134,6 @@ int	count_tks(char const *s, char c)
 	//printf("Number of tkns: %d\n", counter);
 	return (counter);
 }
+
+
+// echo hello test>file1.txt >file2.txt

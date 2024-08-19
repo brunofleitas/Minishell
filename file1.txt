@@ -1,3 +1,2 @@
 redirect_output end
 redirect_output start
-dup2 start

@@ -1,8 +1,0 @@
-redirect_output end
-hejlkf fghjdfsl
-redirect_output_append end
-hejlkf fghjdfsl
-redirect_output_append end
-hejlkf fghjddfgdfgfsl
-redirect_output_append end
-hejlkf fghjdd3fgdfgfsl
