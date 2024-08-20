@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:07:23 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/19 10:10:27 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/19 21:36:42 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int execute_pipeline(t_astnode *node, t_ma *ma)
     i = 0;
     a.input_fd = STDIN_FILENO;
     if (node->data.pipeline.cmd_count == 1)
-        return (execute_ast(node->data.pipeline.cmds[0], ma));
+        exit(execute_ast(node->data.pipeline.cmds[0], ma));
     else
     {
         a.pid_arr = g_c(&(ma->first_node), sizeof(pid_t) * (node->data.pipeline.cmd_count))->data;

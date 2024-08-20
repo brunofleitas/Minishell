@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 19:14:08 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/19 10:11:03 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/19 22:33:35 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,14 @@ static void	handle_env_var(const char **s, char **result, int *result_len, t_ma 
 	}
 }
 
-static void	append_char(const char **s, char **result, int *result_len, t_ma *ma)
+static void	append_char(const char *s, char **result, int *result_len, t_ma *ma)
 {
 	*result = ft_realloc_g_c(&(ma->first_node), *result, *result_len + 2);
 	if (*result)
 	{
-		(*result)[(*result_len)++] = **s;
+		(*result)[(*result_len)++] = *s;
 		(*result)[*result_len] = '\0';
 	}
-	(*s)++;
 }
 
 static void	generate_quotes(const char **s, char ***split, int *i, t_ma *ma)
@@ -74,13 +73,18 @@ static void	generate_quotes(const char **s, char ***split, int *i, t_ma *ma)
 	(*s)++;
 	result = ft_strdup_g_c("", &(ma->first_node));
 	result_len = 0;
+	append_char(&quote, &result, &result_len, ma);
 	while (**s && **s != quote)
 	{
 		if (quote == '"' && **s == '$')
 			handle_env_var(s, &result, &result_len, ma);
 		else
-			append_char(s, &result, &result_len, ma);
+		{
+			append_char(*s, &result, &result_len, ma);
+			(*s)++;
+		}
 	}
+	append_char(&quote, &result, &result_len, ma);
 	(*split)[(*i)++] = result;
 	if (**s == quote)
 		(*s)++;
@@ -146,6 +150,31 @@ static void	generate_single_operators_and_specials(const char **s,
 	*s += len;
 }
 
+char *ft_strremove_char(const char *str, char char_to_remove, t_ntc **first_node)
+{
+	char *result;
+	int i;
+	int j;
+
+    if (!str)
+        return NULL;
+	result = g_c(first_node, sizeof(char *)*(strlen(str) + 1))->data;
+    if (!result)
+        return NULL;
+	i = 0;
+	j = 0;
+    while (str[i] != '\0')
+    {
+        if (str[i] != char_to_remove)
+        {
+            result[j++] = str[i];
+        }
+        i++;
+    }
+    result[j] = '\0';
+    return (result);
+}
+
 /*
   Parameters:
     s: Pointer to the input string.
@@ -162,6 +191,8 @@ static void	generate_regular_tkns(const char **s, char ***split, int *i, \
 																t_ma *ma)
 {
 	int	word_length;
+	char	*temp;
+	char	*trimmed;
 
 	word_length = 0;
 	while ((*s)[word_length] && !strchr(" ><&()|$", (*s)[word_length]))
@@ -171,7 +202,10 @@ static void	generate_regular_tkns(const char **s, char ***split, int *i, \
 			break ;
 		else
 			word_length++;
-	(*split)[(*i)++] = ft_substr_g_c(*s, 0, word_length, &(ma->first_node));
+	temp = ft_substr_g_c(*s, 0, word_length, &(ma->first_node));
+	trimmed = ft_strremove_char(temp, '\'', &(ma->first_node));
+	trimmed = ft_strremove_char(trimmed, '\"', &(ma->first_node));
+	(*split)[(*i)++] = trimmed;
 	*s += word_length;
 }
 
@@ -240,10 +274,7 @@ char **ft_split_tkns(char c, t_ma *ma)
 			generate_double_operators(&s, &split, &i, ma);
 		else if (*s == '>' || *s == '<' || *s == '(' || *s == ')' || *s == '|'
 			|| (*s == '$' && *(s + 1) == '?') || *s == '$')
-		{
-			//printf("------------------------genereate_single_operators_and_specials----------------------------\n");
 			generate_single_operators_and_specials(&s, &split, &i, ma);			
-		}
 		else
 			generate_regular_tkns(&s, &split, &i, ma);
 	}
