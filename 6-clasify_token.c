@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 21:49:28 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/14 01:11:17 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/20 00:58:58 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static t_token_type	classify_operator(char *value)
 
 static t_token_type	classify_variable(char *value)
 {
-	if (value[0] == '$' && value[1] == '?')
+	if (ft_isdigit(value[0]) && value[1] == '\0')
 		return (TOKEN_EXIT_STATUS);
 	if (value[0] == '$')
 		return (TOKEN_ENV_VAR);

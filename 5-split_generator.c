@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 19:14:08 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/19 22:33:35 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/20 12:54:13 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ static void	generate_quotes(const char **s, char ***split, int *i, t_ma *ma)
 	char	quote;
 	char	*result;
 	int		result_len;
+	char	*exit_value;
 
 	quote = **s;
 	(*s)++;
@@ -76,8 +77,15 @@ static void	generate_quotes(const char **s, char ***split, int *i, t_ma *ma)
 	append_char(&quote, &result, &result_len, ma);
 	while (**s && **s != quote)
 	{
-		if (quote == '"' && **s == '$')
+		if (quote == '"' && **s == '$' && ft_isalnum(*(*s + 1)))
 			handle_env_var(s, &result, &result_len, ma);
+		else if (quote == '"' && **s == '$' && (*(*s + 1) == '?'))
+		{
+			exit_value = ft_substr_g_c(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node)), 0, ft_strlen(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node))), &(ma->first_node));
+			while (*exit_value)
+				append_char(exit_value++, &result, &result_len, ma);
+			(*s) += 2;
+		}
 		else
 		{
 			append_char(*s, &result, &result_len, ma);
@@ -129,9 +137,9 @@ static void	generate_single_operators_and_specials(const char **s,
 	if (**s == '$' && *(*s + 1) == '?')
 	{
 		(*split)[(*i)++] = ft_substr_g_c(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node)), 0, ft_strlen(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node))), &(ma->first_node));
-		//(*split)[(*i)++] = ft_itoa_g_c(ma->last_exit_status, &(ma->first_node));
+		(*s) += 1;
 	}
-	else if (**s == '$')
+	else if (**s == '$' && ft_isalnum(*(*s + 1)))
 	{
 		while ((*s)[len] && (ft_isalnum((*s)[len]) || (*s)[len] == '_'))
 			len++;
@@ -144,7 +152,6 @@ static void	generate_single_operators_and_specials(const char **s,
 	}
 	else
 	{
-		// printf("standard cases\n");
 		(*split)[(*i)++] = ft_substr_g_c(*s, 0, 1, &(ma->first_node));
 	}
 	*s += len;
@@ -152,27 +159,27 @@ static void	generate_single_operators_and_specials(const char **s,
 
 char *ft_strremove_char(const char *str, char char_to_remove, t_ntc **first_node)
 {
-	char *result;
-	int i;
-	int j;
+    char *result;
+    int i;
+    int j;
 
-    if (!str)
+    if (!str) {
         return NULL;
-	result = g_c(first_node, sizeof(char *)*(strlen(str) + 1))->data;
-    if (!result)
+    }
+    result = g_c(first_node, sizeof(char) * (strlen(str) + 1))->data;
+    if (!result) {
         return NULL;
-	i = 0;
-	j = 0;
-    while (str[i] != '\0')
-    {
-        if (str[i] != char_to_remove)
-        {
+    }
+    i = 0;
+    j = 0;
+    while (str[i] != '\0') {
+        if (str[i] != char_to_remove) {
             result[j++] = str[i];
         }
         i++;
     }
     result[j] = '\0';
-    return (result);
+    return result;
 }
 
 /*
@@ -193,19 +200,23 @@ static void	generate_regular_tkns(const char **s, char ***split, int *i, \
 	int	word_length;
 	char	*temp;
 	char	*trimmed;
+	char *result;
 
 	word_length = 0;
 	while ((*s)[word_length] && !strchr(" ><&()|$", (*s)[word_length]))
+	{
 		if (ft_isdigit((*s)[word_length]) && ((*s)[word_length + 1] && (*s)[word_length + 1] == '>') && ((*s)[word_length + 2] && (*s)[word_length + 2] == '>'))
 			break ;
 		else if (ft_isdigit((*s)[word_length]) && ((*s)[word_length + 1] && (*s)[word_length + 1] == '>'))
 			break ;
 		else
 			word_length++;
+	}
 	temp = ft_substr_g_c(*s, 0, word_length, &(ma->first_node));
 	trimmed = ft_strremove_char(temp, '\'', &(ma->first_node));
-	trimmed = ft_strremove_char(trimmed, '\"', &(ma->first_node));
-	(*split)[(*i)++] = trimmed;
+	result = ft_strremove_char(trimmed, '\"', &(ma->first_node));
+	result = ft_strtrim(result, " ", &(ma->first_node));
+	(*split)[(*i)++] = result;
 	*s += word_length;
 }
 
