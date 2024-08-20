@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:52:15 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/19 11:44:12 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/20 18:00:20 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,13 @@ void redirect_input(const char *file_name)
     fd = open(file_name, O_RDONLY);
     if (fd == -1)
     {
-        perror("Error opening file for input redirection");
+        write(2," No such file or directory", 27);
+        //perror();
         return;
     }
     if (dup2(fd, STDIN_FILENO) == -1)
     {
-        perror("Error redirecting input from file");
+        write(2, "Error redirecting input from file", 34);
     }
     close(fd);
 }
@@ -49,7 +50,7 @@ void redirect_output(const char *file_name, int fd_num)
     int fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd == -1)
     {
-        perror("Error opening file for output redirection");
+        write(2, " Permission denied", 18);
         printf("return\n");
         return;
     }
@@ -57,7 +58,7 @@ void redirect_output(const char *file_name, int fd_num)
     //printf("fd_num = %d\n", fd_num);
     //printf("dup2 start\n");
     if (dup2(fd, fd_num) == -1)
-        perror("Error redirecting output to file");
+        write(2, "Error redirecting output to file", 33);
     //printf("dup2 end\n");
     close(fd);
 }
@@ -74,11 +75,11 @@ void redirect_output_append(const char *file_name, int fd_num)
     int fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
     if (fd == -1)
     {
-        perror("Error opening file for append output redirection");
+        write(2, "Error opening file for append output redirection", 47);
         return;
     }
     if (dup2(fd, fd_num) == -1)
-        perror("Error redirecting output to file for append");
+        write(2, "Error redirecting output to file for append", 43);
     close(fd);
 }
 
@@ -102,14 +103,14 @@ char *give_tmp_name(t_ma *ma)
     counter_str = ft_itoa_g_c(ma->tmp_file_counter++, &(ma->first_node));
     if (!counter_str)
     {
-        perror("Error allocating memory for counter string");
+        write(2, "Error allocating memory for counter string", 42);
         return NULL;
     }
     temp_file_name = ft_strjoin_g_c(base, counter_str, &(ma->first_node));
     //free(counter_str);
     if (!temp_file_name)
     {
-        perror("Error allocating memory for temporary file path");
+        write(2, "Error allocating memory for temporary file path", 48);
         return NULL;
     }
     return (temp_file_name);
@@ -132,7 +133,7 @@ static int write_to_tmp_file(int fd, const char *delimiter)
         line = readline(" heredoc>");
         if (!line)
         {
-            perror("Error reading input for heredoc");
+            write(2, "Error reading input for heredoc", 32);
             return -1;
         }
         if (strcmp(line, delimiter) == 0)
@@ -142,7 +143,7 @@ static int write_to_tmp_file(int fd, const char *delimiter)
         }
         if (write(fd, line, strlen(line)) == -1 || write(fd, "\n", 1) == -1)
         {
-            perror("Error writing to temporary file");
+            write(2, "Error writing to temporary file", 32);
             //free(line);
             return -1;
         }
@@ -165,7 +166,7 @@ int create_tmp_file(const char *temp_file_name, const char *delimiter)
     fd = open(temp_file_name, O_RDWR | O_CREAT | O_EXCL, 0600);
     if (fd == -1)
     {
-        perror("Error creating temporary file for heredoc");
+        write(2, "Error creating temporary file for heredoc", 41);
         return -1;
     }
 
@@ -203,7 +204,7 @@ void handle_heredoc(const char *delimiter, t_ma *ma)
     }
     redirect_input(temp_file_name);
     if (unlink(temp_file_name) == -1)
-        perror("Error unlinking temporary file");
+        write(2, "Error unlinking temporary file", 30);
 
     //free(temp_file_name);
 }

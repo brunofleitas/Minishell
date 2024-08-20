@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:07:23 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/19 23:09:21 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/20 17:53:29 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void setup_pipe(int pipe_fds[2])
     //printf("setup_pipe start\n");
     if (pipe(pipe_fds) == -1)
     {
-        perror("pipe");
+        write(2, "pipe error\n", 11);
         exit(1);
     }
     //printf("setup_pipe end\n");
@@ -30,7 +30,7 @@ pid_t    fork_process()
     pid = fork();
     if (pid == -1)
     {
-        perror("fork");
+        write(2, "fork error\n", 11);
         exit(1);
     }
     //printf("fork_process end\n");
@@ -90,7 +90,7 @@ int execute_pipeline(t_astnode *node, t_ma *ma)
     if (node->data.pipeline.cmd_count == 1)
     {
         a.status = execute_ast(node->data.pipeline.cmds[0], ma);
-        exit(a.status);
+        return(a.status);
     }
     else
     {

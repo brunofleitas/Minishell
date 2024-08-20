@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 23:53:32 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/06 15:03:22 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/20 17:54:53 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static char	**allocate_env(t_ntc **first_node, int count)
 	new_envp = (char**)g_c(first_node, (count + 1) * sizeof(char *))->data;
 	if (!new_envp)
 	{
-		perror("malloc");
+		write(2, "malloc error\n", 13);
 		return (NULL);
 	}
 	return (new_envp);
@@ -64,7 +64,7 @@ t_env	*duplicate_vars(t_ntc **first_node, char **envp)
 		env->var[i] = ft_strdup_g_c(envp[i], first_node);
 		if (!env->var[i])
 		{
-			perror("ft_strdup_g_c");
+			write(2, "ft_strdup_g_c error\n", 20);
 			free_memory(first_node);
 			exit(1);
 			//free_env_vars(first_node, env);
