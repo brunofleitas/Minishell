@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+static int execute_exp_single_arg_cmd(char **words_arr, t_ma *ma);
+
 static int node_word_count(t_astnode *node)
 {
     int         count;
@@ -71,17 +73,58 @@ static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
     return (words_arr);
 }
 
+// /**
+// * @brief Execute a simple command
+//  *
+//  * This function handles the execution of a simple command node. It prepares
+//  * the arguments, checks if it's a builtin command, handles redirections,
+//  * and either executes the builtin or forks a child process to execute an
+//  * external command.
+//  *
+//  * @param node Pointer to the simple command node
+//  * @param env Pointer to the environment structure
+//  * @param first_node Double pointer to the first node in my garbage collector
+//  * @return int Returns the exit status of the executed command
+//  */
+// int execute_simple_cmd(t_astnode *node, t_ma *ma)
+// {
+//     t_s_cmd_args   a;
+
+//     a.saved_stdin = dup(STDIN_FILENO);
+//     a.saved_stdout = dup(STDOUT_FILENO);
+//     if (!handle_redirections(node->data.simple_cmd.redirections, ma))
+//     {
+//         restore_io(a.saved_stdin, a.saved_stdout);
+//         return(1);
+//     }
+//     a.words_arr = create_words_arr(node, &(a.word_count), ma);
+//     if (!a.words_arr)
+//     {
+//         restore_io(a.saved_stdin, a.saved_stdout);
+//         return(1);
+//     }
+//     wildcards(a.words_arr);
+//     if (is_builtin(a.words_arr[0]))
+//     {
+//         int exit_code = execute_builtin(a.words_arr, ma);
+//         return (exit_code);
+//     }
+//     else
+//         a.status = execute_external_cmd(a.words_arr, &(ma)->env, &(ma)->first_node);
+//     free_ntc_prior(&(ma->first_node), a.words_arr);
+//     restore_io(a.saved_stdin, a.saved_stdout);
+//     return (a.status);
+// }
+
 /**
-* @brief Execute a simple command
+ * @brief Execute a simple command
  *
  * This function handles the execution of a simple command node. It prepares
- * the arguments, checks if it's a builtin command, handles redirections,
- * and either executes the builtin or forks a child process to execute an
+ * the arguments, expands wildcards, and executes either a builtin or an
  * external command.
  *
  * @param node Pointer to the simple command node
- * @param env Pointer to the environment structure
- * @param first_node Double pointer to the first node in my garbage collector
+ * @param ma Pointer to the memory allocation structure
  * @return int Returns the exit status of the executed command
  */
 int execute_simple_cmd(t_astnode *node, t_ma *ma)
@@ -90,37 +133,47 @@ int execute_simple_cmd(t_astnode *node, t_ma *ma)
 
     a.saved_stdin = dup(STDIN_FILENO);
     a.saved_stdout = dup(STDOUT_FILENO);
-    //printf("execute_simple_cmd start\n");
     if (!handle_redirections(node->data.simple_cmd.redirections, ma))
     {
-        // printf("handle_redirections failed\n");
         restore_io(a.saved_stdin, a.saved_stdout);
-        // printf("restore_io executed\n");
-        return(1);
+        return (1);
     }
-    // printf("execute create_words_arr\n");
     a.words_arr = create_words_arr(node, &(a.word_count), ma);
     if (!a.words_arr)
     {
-        // printf("a.words_arr = NULL\n");
         restore_io(a.saved_stdin, a.saved_stdout);
-        // printf("restore_io executed\n");
-        return(1);
+        return (1);
     }
-    // printf("execute create_words_arr end\n");
-    //expand_wildcards(a.words_arr);
-    if (is_builtin(a.words_arr[0]))
-    {
-        // printf("execute_builtin start\n");
-        a.status = execute_builtin(a.words_arr, ma);
-        // printf("execute_builtin end\n");
-    }
-    else
-        a.status = execute_external_cmd(a.words_arr, &(ma)->env, &(ma)->first_node);
+    a.status = execute_exp_single_arg_cmd(a.words_arr, ma);
     free_ntc_prior(&(ma->first_node), a.words_arr);
     restore_io(a.saved_stdin, a.saved_stdout);
-    // printf("execute_simple_cmd end\n");
     return (a.status);
+}
+
+/**
+ * @brief Execute command with exp_single_arg wildcards
+ *
+ * This function expands wildcards in the argument array and executes
+ * the resulting command, either as a builtin or an external command.
+ *
+ * @param words_arr The initial argument array
+ * @param ma Pointer to the memory allocation structure
+ * @return int Returns the exit status of the executed command
+ */
+static int execute_exp_single_arg_cmd(char **words_arr, t_ma *ma)
+{
+    char    **exp_args;
+    int     status;
+
+    exp_args = expand_wildcards_in_args(words_arr, ma);
+    if (!exp_args)
+        return (1);
+    if (is_builtin(exp_args[0]))
+        status = execute_builtin(exp_args, ma);
+    else
+        status = execute_external_cmd(exp_args, &(ma)->env, &(ma)->first_node);
+        //maybe we should free exp_args here
+    return (status);
 }
 
 

@@ -11,6 +11,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <dirent.h> //added to handle wildcards
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
@@ -241,6 +242,15 @@ typedef struct  s_simple_cmd_args
     int     saved_stdout;
 }               t_s_cmd_args;
 
+/* *************************  EXPAND_WILDCARDS_ARGS  ********************* */
+
+typedef struct s_expand_wildcards_args
+{
+    char    **exp_args;
+    int     count;
+    int     capacity;
+}               t_wc_args;
+
 /* ************************************************************************** */
 /*                                   FUNCTIONS                                */
 /* ************************************************************************** */
@@ -269,11 +279,12 @@ int             builtin_cd(char **args, t_ma *ma);
 int             find_env_var(t_env **env, char *var);
 int             execute_ast(t_astnode *node, t_ma *ma);
 pid_t           fork_process();
-int	update_env_var(int i, const char *var, t_ma *ma);
-int handle_redirections(t_astnode *redir_node, t_ma *ma);
-
-void	print_env(t_env *env);
-
-
+int	            update_env_var(int i, const char *var, t_ma *ma);
+int             handle_redirections(t_astnode *redir_node, t_ma *ma);
+void	        print_env(t_env *env);
+char            **expand_wildcards_in_args(char **args, t_ma *ma);
+int	               expand_wildcard(t_wc_args *a, char *pattern, t_ma *ma);
+int             add_single_element(t_wc_args *a, char *name, t_ma *ma);
+int	            match_pattern(const char *str, const char *pattern);
 
 #endif
