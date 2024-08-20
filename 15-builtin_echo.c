@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:50:08 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/19 22:05:58 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/20 12:59:27 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,20 @@ static int	should_add_newline(char **args, int word_count)
 {
 	if (word_count > 1 && !(ft_strncmp(args[1], "-n", 2)))
 		return (0);
+	return (1);
+}
+
+int ft_isnum(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
 	return (1);
 }
 
@@ -58,7 +72,7 @@ static char	*join_words(char **args, t_ntc **first_node, int i, int word_count)
 			actual_arg = ft_strdup_g_c(args[i], first_node);
 		temp = ft_strjoin_g_c(result, actual_arg, first_node);
 		result = temp;
-		if (i < word_count - 1 || args[i][0] == '\'' || args[i][0] == '\"')
+		if ((i < word_count - 1) && (!ft_isnum(args[i])))
 		{
 			temp = ft_strjoin_g_c(result, " ", first_node);
 			result = temp;

@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:59:46 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/19 17:18:04 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/20 01:08:15 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	main(int argc, char **argv, char **envp)
 		signal(SIGQUIT, SIG_IGN);
 		ma.input = readline(">>");
 		if (ma.input == NULL)
-        	builtin_exit(&ma);
+        	builtin_exit(&ma, NULL);
 		if (ft_strcmp(ma.input, "") != 0)
 		{
 			add_history(ma.input);

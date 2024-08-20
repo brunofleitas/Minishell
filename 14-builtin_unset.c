@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:49:35 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/11 15:55:36 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/20 00:16:15 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,11 @@ int	builtin_unset(char **args, t_ma *ma)
 	int	i;
 
 	i = 1;
-	if (!args[1])
-	{
-		ft_putstr_fd("unset: not enough arguments\n", 2);
-		return (0);
-	}
+	// if (!args[1])
+	// {
+	// 	ft_putstr_fd("unset: not enough arguments\n", 2);
+	// 	return (0);
+	// }
 	while (args[i])
 	{
 		if (!check_for_equal(args[i]))

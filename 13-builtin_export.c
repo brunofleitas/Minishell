@@ -6,11 +6,25 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:56:05 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/11 15:46:31 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/20 12:11:32 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int is_valid_var(char *var)
+{
+  if (!ft_isalpha(*var) && *var != '_')
+    return (0);
+  var++;
+  while (*var && *var != '=')
+  {
+    if (!ft_isalnum(*var) && *var != '_')
+      return (0);
+    var++;
+  }
+  return (1);
+}
 
 /*
   Parameters:
@@ -125,12 +139,18 @@ int	builtin_export(char **args, t_ma *ma)
 	char    **tmp;
   int     i;
 	char    *var;
+  //int     status;
 
 	tmp = args;
   tmp++;
   while (*tmp)
   {
     var = *tmp;
+    if (!is_valid_var(var))
+    {
+      write(2, " not a valid identifier", 23);
+      return (1);
+    }
 	  i = find_env_var(&(ma->env), var);
 	  if (i >= 0)
 	  {
@@ -146,5 +166,5 @@ int	builtin_export(char **args, t_ma *ma)
     }
     tmp++;
   }
-  return (1);
+  return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:45:41 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/11 15:51:35 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/20 00:22:03 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,16 @@ int builtin_cd(char **args, t_ma *ma)
 {
     char current_dir[PATH_MAX];
     char *path;
+    int i;
 
+    i = 0;
+    while (args[i])
+        i++;
+    if (i > 2)
+    {
+        write(STDERR_FILENO, " too many arguments\n", 19);
+        return (1);
+    }
     path = get_cd_path(args, &ma->env);
     if (!path || !validate_cd_path(path))
         return (1);

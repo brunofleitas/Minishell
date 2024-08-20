@@ -127,14 +127,14 @@ int execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
         command_path = find_command_path(words_arr[0], env, first_node);
     if (!command_path)
     {
-        printf("command not found: %s\n", words_arr[0]);
-        return (1);
+        write(2, " command not found", 18);
+        return (127);
     }
     pid = fork_process();
     if (pid == 0)
     {
         execve(command_path, words_arr, (*env)->var);
-        perror("execve");
+        //perror("execve");
         exit(1);
     }
     else

@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:07:05 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/13 16:38:55 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/20 12:10:46 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,13 @@ int execute_builtin(char **args, t_ma *ma)
     else if (ft_strcmp(args[0], "pwd") == 0)
         return (builtin_pwd(args, ma));
     else if (ft_strcmp(args[0], "export") == 0)
-        builtin_export(args, ma);
+        return (builtin_export(args, ma));
     else if (ft_strcmp(args[0], "unset") == 0)
         return (builtin_unset(args, ma));
     else if (ft_strcmp(args[0], "env") == 0)
         return (builtin_env(args, ma));
     else if (ft_strcmp(args[0], "exit") == 0)
-        return (builtin_exit(ma));
+        return (builtin_exit(ma, args));
     return 1;
 }
 
