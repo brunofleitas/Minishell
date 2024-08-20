@@ -59,7 +59,7 @@ static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
     words_arr = g_c(&(ma->first_node), (*word_count + 1) * sizeof(char *))->data;
     if (!words_arr)
     {
-        perror("malloc");
+        write(2, "malloc error\n", 13);
         return NULL;
     }
     node_word = node->data.simple_cmd.words;

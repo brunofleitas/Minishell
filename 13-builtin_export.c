@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:56:05 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/20 12:11:32 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/20 17:56:44 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	update_env_var(int i, const char *var, t_ma *ma)
 	ma->env->var[i] = ft_strdup_g_c(var, &(ma->first_env));
 	if (!(ma->env->var[i]))
   {
-		perror("ft_strdup_g_c");
+		write(2, "ft_strdup_g_c error\n", 20);
     return (1);
   }
   return (0);
@@ -109,7 +109,7 @@ static int	add_env_var(char *var, t_ma *ma)
 	ma->env->var[ma->env->count] = ft_strdup_g_c(var, &(ma->first_env));
 	if (!(*ma->env->var[ma->env->count]))
   {
-		perror("ft_strdup_g_c");
+		write(2, "ft_strdup_g_c error\n", 20);
     return (1);
   }
   ma->env->count++;
