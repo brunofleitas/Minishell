@@ -39,8 +39,18 @@ void sigint_handler(int sig)
 */
 int	main(int argc, char **argv, char **envp)
 {
+<<<<<<< HEAD
 	t_ma 		ma;
 	t_astnode 	*root;
+=======
+	(void)argc;
+	(void)argv;
+	(void)envp;
+	char		*input;
+	t_ntc		*first_node;
+	t_token		*tkns[1024];
+	//t_astnode	*root;
+>>>>>>> origin
 
 	
 	(void)argc;
@@ -51,6 +61,7 @@ int	main(int argc, char **argv, char **envp)
 	ma.env = duplicate_vars(&(ma.first_env), envp);
 	while (1)
 	{
+<<<<<<< HEAD
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, SIG_IGN);
 		ma.input = readline(">>");
@@ -68,6 +79,23 @@ int	main(int argc, char **argv, char **envp)
 			//printf("main\n");
 			//print_env(env);
 			free_memory(&(ma.first_node));
+=======
+		//root = NULL;
+		input = readline(">>");
+		if (input)
+		{
+			if (ft_strcmp(input, "exit") == 0)
+			{
+				free(input);
+				break ;
+			}
+			add_history(input);
+			lexer(input, tkns, &first_node);
+			parser(&first_node, tkns);
+			//root = parse_cmd_line(&first_node, tkns);
+			//free_ast(&root);
+			free(input);
+>>>>>>> origin
 		}
 	}
 	// free_memory(&(ma.first_env));
@@ -91,8 +119,11 @@ Here's a high-level overview of steps you might take to construct the AST:
 
 4. **Error Handling**: Implement error handling in the parser to deal with syntax errors, providing meaningful error messages to the user.
 
+<<<<<<< HEAD
 Get_next_token function is used to initialize the i = 0;
 
+=======
+>>>>>>> origin
 After constructing the AST, the next steps in the shell's execution process would involve traversing the AST to interpret or execute the cmds represented by the tree.
 
 This process is crucial for a shell because it allows for the correct interpretation and execution of complex cmd lines, including handling of operators, cmd grouping, and redirections in a way that respects the intended precedence and associativity of operations.

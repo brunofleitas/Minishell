@@ -2,8 +2,14 @@
     "files.associations": {
         "minishell.h": "c",
         "stdio.h": "c",
+<<<<<<< HEAD
         "unistd.h": "c",
         "string.h": "c",
         "types.h": "c"
     }
+=======
+        "libft.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
+>>>>>>> origin
 }

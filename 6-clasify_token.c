@@ -11,6 +11,24 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+<<<<<<< HEAD:6-clasify_token.c
+=======
+/*
+if (ft_strcmp(value, "echo") == 0)
+		return (ECHO);
+	if (ft_strcmp(value, "cd") == 0)
+		return (CD);
+	if (ft_strcmp(value, "pwd") == 0)
+		return (PWD);
+	if (ft_strcmp(value, "export") == 0)
+		return (EXPORT);
+	if (ft_strcmp(value, "unset") == 0)
+		return (UNSET);
+	if (ft_strcmp(value, "env") == 0)
+		return (ENV);
+	return (TOKEN_ERROR);
+*/
+>>>>>>> origin:5-clasify_token.c
 
 static t_token_type	classify_cmd(char *value)
 {
@@ -54,7 +72,11 @@ static t_token_type	classify_operator(char *value)
 
 static t_token_type	classify_variable(char *value)
 {
+<<<<<<< HEAD:6-clasify_token.c
 	if (ft_isdigit(value[0]) && value[1] == '\0')
+=======
+	if (value[0] == '$' && value[1] == '?')
+>>>>>>> origin:5-clasify_token.c
 		return (TOKEN_EXIT_STATUS);
 	if (value[0] == '$')
 		return (TOKEN_ENV_VAR);

@@ -12,6 +12,7 @@
 
 #include "libft.h"
 
+<<<<<<< HEAD
 /**
  * @brief Duplicate a string and store it in a new memory location.
  * 
@@ -23,6 +24,8 @@
  * @return char* A pointer to the newly allocated memory block containing the duplicated string.
  *         Returns NULL if memory allocation fails.
  */
+=======
+>>>>>>> origin
 char	*ft_strdup_g_c(const char *s, t_ntc **first_node)
 {
 	int		i;
