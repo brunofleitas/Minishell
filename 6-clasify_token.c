@@ -6,29 +6,11 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 21:49:28 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/20 00:58:58 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/20 23:32:29 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-<<<<<<< HEAD:6-clasify_token.c
-=======
-/*
-if (ft_strcmp(value, "echo") == 0)
-		return (ECHO);
-	if (ft_strcmp(value, "cd") == 0)
-		return (CD);
-	if (ft_strcmp(value, "pwd") == 0)
-		return (PWD);
-	if (ft_strcmp(value, "export") == 0)
-		return (EXPORT);
-	if (ft_strcmp(value, "unset") == 0)
-		return (UNSET);
-	if (ft_strcmp(value, "env") == 0)
-		return (ENV);
-	return (TOKEN_ERROR);
-*/
->>>>>>> origin:5-clasify_token.c
 
 static t_token_type	classify_cmd(char *value)
 {
@@ -42,13 +24,6 @@ static t_token_type	classify_cmd(char *value)
 
 static t_token_type	classify_operator(char *value)
 {
-	if (ft_isdigit(value[0]) && value[1] == '>')
-    {
-        if (value[2] == '>')
-            return (TOKEN_REDIR_APPEND_NUM); 
-        else
-            return (TOKEN_REDIR_OUT_NUM);
-    }
 	if (ft_strcmp(value, "<") == 0)
 		return (TOKEN_REDIR_IN);
 	if (ft_strcmp(value, ">") == 0)
@@ -72,11 +47,7 @@ static t_token_type	classify_operator(char *value)
 
 static t_token_type	classify_variable(char *value)
 {
-<<<<<<< HEAD:6-clasify_token.c
 	if (ft_isdigit(value[0]) && value[1] == '\0')
-=======
-	if (value[0] == '$' && value[1] == '?')
->>>>>>> origin:5-clasify_token.c
 		return (TOKEN_EXIT_STATUS);
 	if (value[0] == '$')
 		return (TOKEN_ENV_VAR);

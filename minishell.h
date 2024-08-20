@@ -96,6 +96,7 @@ typedef enum e_token_type
     TOKEN_WILDCARD,       // *
     TOKEN_EOF,            // End of input
     TOKEN_ARGUMENT,       // Is there an input? maybe this one we delete at some point let's see
+    TOKEN_WORD,           // Word
     TOKEN_ERROR           // Error
 } 			t_token_type;
 

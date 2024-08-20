@@ -1,18 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_strdup_g_c.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcasagra <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 16:30:45 by pcasagra          #+#    #+#             */
-/*   Updated: 2024/02/28 16:32:31 by pcasagra         ###   ########.fr       */
+/*   Updated: 2024/08/20 23:34:56 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-<<<<<<< HEAD
 /**
  * @brief Duplicate a string and store it in a new memory location.
  * 
@@ -24,8 +23,6 @@
  * @return char* A pointer to the newly allocated memory block containing the duplicated string.
  *         Returns NULL if memory allocation fails.
  */
-=======
->>>>>>> origin
 char	*ft_strdup_g_c(const char *s, t_ntc **first_node)
 {
 	int		i;

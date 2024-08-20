@@ -29,21 +29,6 @@ t_ntc   *find_ntc(t_ntc **first_node, void *data_ptr)
     return (NULL);
 }
 
-
-t_ntc   *find_ntc(t_ntc **first_node, void *data_ptr) 
-{
-    t_ntc	*temp;
-    
-    temp = *first_node;
-    while (temp != NULL) 
-    {
-        if (temp->data != NULL && temp->data == data_ptr) 
-            return temp;
-        temp = temp->next;
-    }
-    return (NULL);
-}
-
 /*
 The free_ntc_prior function is used to free a node in the garbage collector
 list at any time during the execution of the program. It is usefull when we need

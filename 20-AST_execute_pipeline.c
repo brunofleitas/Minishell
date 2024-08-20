@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:07:23 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/20 17:53:29 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/20 23:28:07 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,8 @@ static void setup_pipe(int pipe_fds[2])
     //printf("setup_pipe start\n");
     if (pipe(pipe_fds) == -1)
     {
-<<<<<<< HEAD
         perror("pipe");
         exit(EXIT_FAILURE);
-=======
-        write(2, "pipe error\n", 11);
-        exit(1);
->>>>>>> 227ef545430f234a27f3c8848daceba198eb1a99
     }
     //printf("setup_pipe end\n");
 }
@@ -35,13 +30,8 @@ pid_t    fork_process()
     pid = fork();
     if (pid == -1)
     {
-<<<<<<< HEAD
         perror("fork");
         exit(EXIT_FAILURE);
-=======
-        write(2, "fork error\n", 11);
-        exit(1);
->>>>>>> 227ef545430f234a27f3c8848daceba198eb1a99
     }
     //printf("fork_process end\n");
     return (pid);
