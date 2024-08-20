@@ -19,7 +19,7 @@
 
 void print_error(const char *msg)
 {
-    write(STDERR_FILENO, msg, strlen(msg));
+    write(STDERR_FILENO, msg, ft_strlen(msg));
 }
 
 int builtin_exit(t_ma *ma, char **args)

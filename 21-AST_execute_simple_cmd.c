@@ -136,13 +136,13 @@ int execute_simple_cmd(t_astnode *node, t_ma *ma)
     if (!handle_redirections(node->data.simple_cmd.redirections, ma))
     {
         restore_io(a.saved_stdin, a.saved_stdout);
-        return (1);
+        return (EXIT_FAILURE);
     }
     a.words_arr = create_words_arr(node, &(a.word_count), ma);
     if (!a.words_arr)
     {
         restore_io(a.saved_stdin, a.saved_stdout);
-        return (1);
+        return (EXIT_FAILURE);
     }
     a.status = execute_exp_single_arg_cmd(a.words_arr, ma);
     free_ntc_prior(&(ma->first_node), a.words_arr);
@@ -167,7 +167,7 @@ static int execute_exp_single_arg_cmd(char **words_arr, t_ma *ma)
 
     exp_args = expand_wildcards_in_args(words_arr, ma);
     if (!exp_args)
-        return (1);
+        return (EXIT_FAILURE);
     if (is_builtin(exp_args[0]))
         status = execute_builtin(exp_args, ma);
     else

@@ -122,7 +122,7 @@ int execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
     int status;
     
     if (words_arr[0][0] == '/' || words_arr[0][0] == '.' || words_arr[0][0] == '~')
-        command_path = strdup(words_arr[0]);
+        command_path = ft_strdup_g_c(words_arr[0], first_node);
     else
         command_path = find_command_path(words_arr[0], env, first_node);
     if (!command_path)
@@ -135,7 +135,7 @@ int execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
     {
         execve(command_path, words_arr, (*env)->var);
         //perror("execve");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     else
     {

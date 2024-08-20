@@ -25,7 +25,7 @@
 int execute_ast(t_astnode *node, t_ma *ma)
 {
     if (!node)
-        return (0);
+        return (EXIT_SUCCESS);
     if (node->type == NODE_CMD_LINE)
         return (execute_cmd_line(node, ma));
     else if (node->type == NODE_PIPELINE)
@@ -36,7 +36,7 @@ int execute_ast(t_astnode *node, t_ma *ma)
     {
         printf("%i\n", node->type);
         ft_putstr_fd("Error: Unknown node type\n", STDERR_FILENO);// just an Idea I got if we want a file where we store all the errors
-        return (1);
+        return (EXIT_FAILURE);
     }
 }
 
@@ -59,13 +59,13 @@ int execute_cmd_line(t_astnode *node, t_ma *ma)
     {
         if (left_result == 0)
             return (execute_ast(node->data.cmd_line.right, ma));
-        return left_result;
+        return (left_result);
     }
     else if (node->data.cmd_line.operator == TOKEN_OR)
     {
         if (left_result != 0)
             return (execute_ast(node->data.cmd_line.right, ma));
-        return left_result;
+        return (left_result);
     }
     //printf("execute_cmd_line end\n");
     return (left_result);

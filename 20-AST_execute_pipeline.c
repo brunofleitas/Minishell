@@ -18,7 +18,7 @@ static void setup_pipe(int pipe_fds[2])
     if (pipe(pipe_fds) == -1)
     {
         perror("pipe");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     //printf("setup_pipe end\n");
 }
@@ -31,7 +31,7 @@ pid_t    fork_process()
     if (pid == -1)
     {
         perror("fork");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     //printf("fork_process end\n");
     return (pid);
@@ -111,13 +111,13 @@ int execute_pipeline(t_astnode *node, t_ma *ma)
         while (i < node->data.pipeline.cmd_count)
         {
             waitpid(a.pid_arr[i], &(a.status), 0);
+            if (i == node->data.pipeline.cmd_count - 1)
+                a.last_pid = a.status;
             i++;
         }
-        // int exit_status = WEXITSTATUS(a.status);
-        // printf("exit status: %d\n", exit_status);
     }
     //printf("execute_pipeline end\n");
-    return (WEXITSTATUS(a.status));// this needs to be changed because for the moment we are note getting the right exit status
+    return (WEXITSTATUS(a.last_pid));
 }
 // This implementation of simple command execution is incomplete. It does not handle the case where for exemple we have export PATH=new/path/added | env and then execute env again as it will only have been updated in the child process.
 

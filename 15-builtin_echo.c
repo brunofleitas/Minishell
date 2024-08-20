@@ -43,18 +43,16 @@ int ft_isnum(char *str)
 	return (1);
 }
 
-/*
-  Parameters:
-    node: Pointer to the AST node.
-    first_node: Double pointer to the first t_ntc node.
-    i: Starting index of the words to join.
-  Return value:
-    Pointer to the concatenated string of words.
-  Description:
-    Joins the words from the simple command in the AST node into 
-    a single string, starting from the given index. Adds a space 
-    between each word. Handles memory allocation and errors.
-*/
+
+/**
+ * Joins the words in the args array into a single string.
+ * 
+ * @param args The array of words to be joined.
+ * @param first_node The pointer to the first node of a linked list.
+ * @param i The starting index in the args array.
+ * @param word_count The number of words in the args array.
+ * @return The resulting string after joining the words.
+ */
 static char	*join_words(char **args, t_ntc **first_node, int i, int word_count)
 {
 	char	*result;
@@ -82,17 +80,27 @@ static char	*join_words(char **args, t_ntc **first_node, int i, int word_count)
 	return (result);
 }
 
-/*
-  Parameters:
-    env: Pointer to the environment variables.
-    name: Name of the variable to unset.
-  Return value:
-    Returns 0.
-  Description:
-    Unsets (removes) an environment variable. Finds the variable 
-    by name, frees its memory, shifts the subsequent variables in 
-    the array, and decreases the environment variable count.
-*/
+
+/**
+ * Executes the built-in echo command.
+ *
+ * This function takes an array of arguments, the number of words in the array,
+ * and a pointer to a structure `t_ma`. It determines whether a newline character
+ * should be added at the end of the output based on the arguments. It then joins
+ * the words in the array into a single string, excluding the first word if no
+ * newline is required. If a newline is required, it appends it to the result.
+ *
+ * After that, the function should implement the logic for executing the echo command.
+ * This logic is currently missing and needs to be implemented.
+ *
+ * Finally, if the result string is not NULL, it prints the result to the console
+ * using `printf` and returns `EXIT_SUCCESS`. Otherwise, it returns `EXIT_FAILURE`.
+ *
+ * @param args The array of arguments.
+ * @param word_count The number of words in the array.
+ * @param ma A pointer to the `t_ma` structure.
+ * @return The exit status of the echo command.
+ */
 int	builtin_echo(char **args, int word_count, t_ma *ma)
 {
 	int		newline;
@@ -112,11 +120,15 @@ int	builtin_echo(char **args, int word_count, t_ma *ma)
 		//free_ntc_prior(first_node, result);
 		result = temp;
 	}
+	// TODO: Implement the logic for executing the echo command
+	// ...
+	// Return the appropriate exit status
+	// ...
 	if (result)
 	{
 		printf("%s", result);
 		//free_ntc_prior(first_node, result);
-		return (0);
+		return (EXIT_SUCCESS);
 	}
-	return (1);
+	return (EXIT_FAILURE);
 }

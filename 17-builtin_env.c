@@ -36,7 +36,7 @@ int	builtin_env(char **args, t_ma *ma)
 	if (args[1] != NULL)
 	{
 		printf("env: too many arguments\n");
-		return (1);
+		return (EXIT_FAILURE);
 	}
 	while (ma->env->var[i] != NULL)
 	{
@@ -45,7 +45,8 @@ int	builtin_env(char **args, t_ma *ma)
 	}
 	result = (char *)ft_calloc_g_c((total_length + 1), sizeof(char), &(ma->first_node));
 	if (!result)
-		return (1);
+		return (EXIT_FAILURE);
+	
 	i = 0;
 	while (ma->env->var[i] != NULL)
 	{
@@ -56,9 +57,9 @@ int	builtin_env(char **args, t_ma *ma)
 	if (result)
 	{
 		printf("%s", result);
-		return (0);
+		return (EXIT_SUCCESS);
 	}
-	return (1);
+	return (EXIT_FAILURE);
 }
 
 /* ==9291== Conditional jump or move depends on uninitialised value(s)

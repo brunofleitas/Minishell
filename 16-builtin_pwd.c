@@ -36,11 +36,11 @@ int	builtin_pwd(char **args, t_ma *ma)
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
   {
 		printf("%s\n", ft_strdup_g_c(cwd, &(ma->first_node)));
-    return (0);
+    return (EXIT_SUCCESS);
   }
   else
   {
 		ft_printf("getcwd() error");
-	  return (1);
+	  return (EXIT_FAILURE);
   }
 }

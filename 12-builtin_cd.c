@@ -177,16 +177,16 @@ int builtin_cd(char **args, t_ma *ma)
     }
     path = get_cd_path(args, &ma->env);
     if (!path || !validate_cd_path(path))
-        return (1);
+        return (EXIT_FAILURE);
     if (getcwd(current_dir, sizeof(current_dir)) == NULL)
     {
         perror("getcwd");
-        return (1);
+        return (EXIT_SUCCESS);
     }
     if (change_directory(path))
-        return (1);
+        return (EXIT_FAILURE);
     if (update_env_variables(current_dir, ma))
-        return (1);
-    return (0);
+        return (EXIT_FAILURE);
+    return (EXIT_SUCCESS);
 }
 

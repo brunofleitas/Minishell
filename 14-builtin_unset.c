@@ -103,5 +103,6 @@ int	builtin_unset(char **args, t_ma *ma)
 			remove_env_var(&ma->env, args[i]);
 		i++;
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }
+//there are no checks for failure here it seems, is it normal?

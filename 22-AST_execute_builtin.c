@@ -85,7 +85,7 @@ int execute_builtin(char **args, t_ma *ma)
         return (builtin_env(args, ma));
     else if (ft_strcmp(args[0], "exit") == 0)
         return (builtin_exit(ma, args));
-    return 1;
+    return (EXIT_FAILURE);
 }
 
 

@@ -155,16 +155,16 @@ int	builtin_export(char **args, t_ma *ma)
 	  if (i >= 0)
 	  {
     	if (!update_env_var(i, var,  ma))
-        return(0);
+        return(EXIT_FAILURE);
     }
 	  else
     {
 	    if (!add_env_var(var, ma))
       {
-        return(0);
+        return(EXIT_FAILURE);
       }
     }
     tmp++;
   }
-  return (0);
+  return (EXIT_SUCCESS);
 }
