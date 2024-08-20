@@ -113,6 +113,8 @@ int execute_pipeline(t_astnode *node, t_ma *ma)
             waitpid(a.pid_arr[i], &(a.status), 0);
             i++;
         }
+        // int exit_status = WEXITSTATUS(a.status);
+        // printf("exit status: %d\n", exit_status);
     }
     //printf("execute_pipeline end\n");
     return (WEXITSTATUS(a.status));// this needs to be changed because for the moment we are note getting the right exit status
@@ -254,9 +256,7 @@ int execute_pipeline(t_astnode *node, t_ma *ma)
 //             i++;
 //         }
 
-//         // Wait for all child processes to finish, not just the last one
-//         for (i = 0; i < node->data.pipeline.cmd_count; i++)
-//             waitpid(a.last_pid, NULL, 0); // Ensure all processes are waited on properly
+//      
 
 //         return (0); // Return success, as we are assuming execute_ast handles command failures
 //     }
