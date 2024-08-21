@@ -181,7 +181,7 @@ int builtin_cd(char **args, t_ma *ma)
     if (getcwd(current_dir, sizeof(current_dir)) == NULL)
     {
         perror("getcwd");
-        return (EXIT_SUCCESS);
+        return (EXIT_FAILURE);
     }
     if (change_directory(path))
         return (EXIT_FAILURE);

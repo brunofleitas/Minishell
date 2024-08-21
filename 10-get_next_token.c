@@ -20,6 +20,6 @@ void    get_next_token(t_ma *ma)
         //printf("type : %d\n", ma->c_tkn[0]->type);
         ma->c_tkn++;
     }
-    else
-        printf("No more tokens\n");
+    // else
+    //     printf("No more tokens\n");
 }

@@ -76,7 +76,7 @@ static int redirect_output_append(const char *file_name, int fd_num)
     int fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
     if (fd == -1)
     {
-        write(2, "Error opening file for append output redirection", 47);
+        write(2, " Permission denied", 18);
         return(0);
     }
     if (dup2(fd, fd_num) == -1)
