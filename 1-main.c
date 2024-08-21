@@ -13,7 +13,8 @@
 #include "minishell.h"
 
 //tester: https://github.com/LucasKuhn/minishell_tester/tree/main
-
+//liveshare: https://prod.liveshare.vsengsaas.visualstudio.com/join?0623C96F2899D5C1DD0735373291B02F4DA7
+ 
 void sigint_handler(int sig)
 {
     (void)sig;
