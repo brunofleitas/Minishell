@@ -87,13 +87,13 @@ int execute_pipeline(t_astnode *node, t_ma *ma)
     //printf("execute_pipeline start\n");
     i = 0;
     a.input_fd = STDIN_FILENO;
-    // if (node->data.pipeline.cmd_count == 1)
-    // {
-    //     a.status = execute_ast(node->data.pipeline.cmds[0], ma);
-    //     return(a.status);
-    // }
-    // else
-    // {
+    if (node->data.pipeline.cmd_count == 1 && (node->data.pipeline.cmds[0]->data.simple_cmd.words[0].data.word.type == TOKEN_BUILTIN))
+    {
+        a.status = execute_ast(node->data.pipeline.cmds[0], ma);
+        return(a.status);
+    }
+    else
+    {
         a.pid_arr = g_c(&(ma->first_node), sizeof(pid_t) * (node->data.pipeline.cmd_count))->data;
         while (i < node->data.pipeline.cmd_count)
         {
@@ -115,8 +115,9 @@ int execute_pipeline(t_astnode *node, t_ma *ma)
                 a.last_pid = a.status;
             i++;
         }
-    //printf("execute_pipeline end\n");
-    return (WEXITSTATUS(a.last_pid));
+        //printf("execute_pipeline end\n");
+        return (WEXITSTATUS(a.last_pid));
+    }
 }
 // This implementation of simple command execution is incomplete. It does not handle the case where for exemple we have export PATH=new/path/added | env and then execute env again as it will only have been updated in the child process.
 

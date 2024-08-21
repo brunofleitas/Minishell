@@ -25,28 +25,31 @@ void print_error(const char *msg)
 int builtin_exit(t_ma *ma, char **args)
 {
     int exit_code = 0;
-    char *trimmed;
+    // char *trimmed;
 
-    trimmed = ft_strtrim(args[1], "\"", &(ma->first_node));
+    // trimmed = ft_strtrim(args[1], "\"", &(ma->first_node));
     //printf("exit code: %s\n", (args[1]));
     //printf("exit code: %s\n", trimmed);
     //printf("exit code: %d\n", ft_atoi(args[1]));
     if (args[1] == NULL)
         exit_code = 0;
-    else if (args[2] != NULL)
-    {
-        print_error("exit: too many arguments\n");
-        exit_code = 1;
-    }
-    else if (!ft_atoi(trimmed))
-    {
-        print_error("exit: numeric argument required\n");
-        exit_code = 2;
-    }
-    else
-    {
-        exit_code = ft_atoi(trimmed) % 256;
-    }
+    // else 
+    // {
+    //     if (args[2])
+    //     {
+    //         print_error("exit: too many arguments\n");
+    //         exit_code = 1;
+    //     }
+    //     else if (!ft_atoi(trimmed))
+    //     {
+    //         print_error("exit: numeric argument required\n");
+    //         exit_code = 2;
+    //     }
+    //     else
+    //     {
+    //         exit_code = ft_atoi(trimmed) % 256;
+    //     }
+    // }
     free_memory(&(ma->first_node));
     free_memory(&(ma->first_env));
     clear_history();

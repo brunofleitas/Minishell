@@ -17,7 +17,7 @@ static t_token_type	classify_cmd(char *value)
 	if (ft_strcmp(value, "echo") == 0 
 	|| ft_strcmp(value, "cd") == 0 || ft_strcmp(value, "pwd") == 0\
 	|| ft_strcmp(value, "export") == 0 || ft_strcmp(value, "unset") == 0\
-	|| ft_strcmp(value, "env") == 0)
+	|| ft_strcmp(value, "env") == 0 || ft_strcmp(value, "exit") == 0)
 		return (TOKEN_BUILTIN);
 	return (TOKEN_ERROR);
 }
