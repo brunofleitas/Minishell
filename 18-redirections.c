@@ -24,12 +24,12 @@ static int redirect_input(const char *file_name)
     fd = open(file_name, O_RDONLY);
     if (fd == -1)
     {
-        write(2," No such file or directory", 27);
+        perror(" ");
         return(0);
     }
     if (dup2(fd, STDIN_FILENO) == -1)
     {
-        write(2, "Error redirecting input from file", 34);
+        perror(" ");
         close(fd);
         return(0);
     }
@@ -51,12 +51,12 @@ static int redirect_output(const char *file_name, int fd_num)
     fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd == -1)
     {
-        write(2, " Permission denied", 18);
+        perror(" ");
         return(0);  
     }
     if (dup2(fd, fd_num) == -1)
     {
-        write(2, "Error redirecting output to file", 33);
+        perror(" ");
         close(fd);
         return(0);
     }
@@ -76,12 +76,12 @@ static int redirect_output_append(const char *file_name, int fd_num)
     int fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
     if (fd == -1)
     {
-        write(2, " Permission denied", 18);
+        perror(" ");
         return(0);
     }
     if (dup2(fd, fd_num) == -1)
     {
-        write(2, "Error redirecting output to file for append", 43);
+        perror(" ");
         close(fd);
         return(0);
     }
@@ -109,13 +109,13 @@ static char *give_tmp_name(t_ma *ma)
     counter_str = ft_itoa_g_c(ma->tmp_file_counter++, &(ma->first_node));
     if (!counter_str)
     {
-        write(2, "Error allocating memory for counter string", 42);
+        perror(" ");
         return (NULL);
     }
     temp_file_name = ft_strjoin_g_c(base, counter_str, &(ma->first_node));
     if (!temp_file_name)
     {
-        write(2, "Error allocating memory for temporary file path", 48);
+        perror(" ");
         return (NULL);
     }
     return (temp_file_name);
@@ -138,14 +138,14 @@ static int write_to_tmp_file(int fd, const char *delimiter)
         line = readline(" heredoc>");
         if (!line)
         {
-            write(2, "Error reading input for heredoc", 32);
+            perror(" ");
             return (0);
         }
         if (ft_strcmp(line, delimiter) == 0)
             break;
         if (write(fd, line, ft_strlen(line)) == -1 || write(fd, "\n", 1) == -1)
         {
-            write(2, "Error writing to temporary file", 32);
+            perror(" ");
             return (0);
         }
     }
@@ -166,7 +166,7 @@ static int create_tmp_file(const char *temp_file_name, const char *delimiter)
     fd = open(temp_file_name, O_RDWR | O_CREAT | O_EXCL, 0600);
     if (fd == -1)
     {
-        write(2, "Error creating temporary file for heredoc", 41);
+        perror(" ");
         return (0);
     }
 
@@ -200,7 +200,7 @@ static int handle_heredoc(const char *delimiter, t_ma *ma)
     redirect_input(temp_file_name);
     if (unlink(temp_file_name) == -1)
     {
-        write(2, "Error unlinking temporary file", 30);
+        perror(" ");
         return (0);
     }
     return (1);
@@ -218,7 +218,7 @@ int handle_redirections(t_astnode *redir_node, t_ma *ma)
 
     while (redir_node != NULL)
     {
-        if (redir_node->data.redirection.type == TOKEN_REDIR_OUT 
+         if (redir_node->data.redirection.type == TOKEN_REDIR_OUT 
             && !redirect_output(redir_node->data.redirection.file, 1))
             return (0);
         else if (redir_node->data.redirection.type == TOKEN_REDIR_APPEND 

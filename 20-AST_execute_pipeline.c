@@ -87,13 +87,13 @@ int execute_pipeline(t_astnode *node, t_ma *ma)
     //printf("execute_pipeline start\n");
     i = 0;
     a.input_fd = STDIN_FILENO;
-    if (node->data.pipeline.cmd_count == 1)
-    {
-        a.status = execute_ast(node->data.pipeline.cmds[0], ma);
-        return(a.status);
-    }
-    else
-    {
+    // if (node->data.pipeline.cmd_count == 1)
+    // {
+    //     a.status = execute_ast(node->data.pipeline.cmds[0], ma);
+    //     return(a.status);
+    // }
+    // else
+    // {
         a.pid_arr = g_c(&(ma->first_node), sizeof(pid_t) * (node->data.pipeline.cmd_count))->data;
         while (i < node->data.pipeline.cmd_count)
         {
@@ -115,7 +115,6 @@ int execute_pipeline(t_astnode *node, t_ma *ma)
                 a.last_pid = a.status;
             i++;
         }
-    }
     //printf("execute_pipeline end\n");
     return (WEXITSTATUS(a.last_pid));
 }
