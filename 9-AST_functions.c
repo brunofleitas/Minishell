@@ -109,18 +109,54 @@ static t_astnode *parse_word_list(t_astnode **last_word, t_ma *ma)
     return (head);
 }
 
+
+
+static void add_redir(t_astnode **first_redir_node, t_astnode **current, t_astnode *redir_node)
+{
+
+    if (!(*first_redir_node))
+    {
+        *first_redir_node = redir_node;
+        *current = *first_redir_node;
+    }
+    else
+    {
+       (*current)->data.redirection.next = redir_node;
+       *current = redir_node;
+    }
+}
+
+// static void terminate_list(t_astnode *node)
+// {
+//     int i;
+//     int j;
+//     t_astnode *current;
+
+//     i = node->data.simple_cmd.redir_in_count -1;
+//     j = node->data.simple_cmd.redir_out_count -1;
+//     // ft_printf("i = %i, j = %i\n", i, j);
+//     current = node->data.simple_cmd.redirections_in;
+//     while (i--)
+//         current = current->data.redirection.next;
+//     current->data.redirection.next = NULL;
+//     current = node->data.simple_cmd.redirections_out;
+//     while (j--)
+//         current = current->data.redirection.next;
+//     current->data.redirection.next = NULL;
+// }
+
 /* 
  * Parses a list of redirections.
  * Returns the head of a linked list of redirection nodes.
  */
-static t_astnode *parse_redirection_list(t_astnode **last_word, t_ma *ma)
+static void parse_redirection_list(t_astnode *node, t_astnode **last_word, t_ma *ma)
 {
-    t_astnode *head;
+    // t_astnode *head;
     t_astnode *current;
     t_astnode *redir_node;
     
     //printf("parse_redirection_list start\n");
-    head = NULL;
+    // head = NULL;
     current = NULL;
     while ((*(ma->c_tkn)) && is_redirection_token((*(ma->c_tkn))->type)) 
     {
@@ -133,24 +169,25 @@ static t_astnode *parse_redirection_list(t_astnode **last_word, t_ma *ma)
             exit(1);
         }
         redir_node->data.redirection.file = (*(ma->c_tkn))->value;
+        redir_node->data.redirection.next = NULL;
         get_next_token(ma);
-        if (!head) 
+        if (redir_node->data.redirection.type == TOKEN_REDIR_IN || redir_node->data.redirection.type == TOKEN_HEREDOC)
         {
-            head = redir_node;
-            current = head;
+            add_redir(&(node->data.simple_cmd.redirections_in), &(current), redir_node);
+            node->data.simple_cmd.redir_in_count++;
         }
-        else
+        else /* if (redir_node->data.redirection.type == TOKEN_REDIR_OUT || redir_node->data.redirection.type == TOKEN_REDIR_APPEND) */
         {
-            current->data.redirection.next = redir_node;
-            current = redir_node;
+            add_redir(&(node->data.simple_cmd.redirections_out), &(current), redir_node);
+            node->data.simple_cmd.redir_out_count++;
         }
         if ((*(ma->c_tkn)) && is_word_token((*(ma->c_tkn))->type))
             (*last_word)->data.word.next = parse_word_list(last_word, ma);
     }
-    if (current)
-        current->data.redirection.next = NULL;
+    // ft_printf("terminate list start\n");
+    // terminate_list(node);
     //printf("parse_redirection_list end\n");
-    return (head);
+    // return (head);
 }
 
 /* 
@@ -160,14 +197,36 @@ static t_astnode *parse_redirection_list(t_astnode **last_word, t_ma *ma)
  */
 static t_astnode *parse_simple_cmd(t_ma *ma)
 {
-    t_astnode *node;
-    t_astnode *last_word;
-    
+    t_astnode   *node;
+    t_astnode   *last_word;
+    // t_astnode   *current;
+    // int         i;
+    // int         j;
+
+    // i = 0;
+    // j = 0;
     //printf("parse_simple_cmd start\n");
     node = create_ast_node(&(ma->first_node), NODE_SIMPLE_CMD);
+    node->data.simple_cmd.words = NULL;
+    node->data.simple_cmd.redirections_in = NULL;
+    node->data.simple_cmd.redirections_out = NULL;
+    node->data.simple_cmd.redir_in_count = 0;
+    node->data.simple_cmd.redir_out_count = 0;
     node->data.simple_cmd.words = parse_word_list(&last_word, ma);
-    node->data.simple_cmd.redirections = parse_redirection_list(&last_word, ma);
-    //printf("parse_simple_cmd end\n");
+    parse_redirection_list(node, &last_word, ma);
+    // current = node->data.simple_cmd.redirections_in;
+    // while (current)
+    // {
+    //     ft_printf("redir_in %i, file name: %s\n", i++, node->data.simple_cmd.redirections_in->data.redirection.file);
+    //     current = current->data.redirection.next;
+    // }
+    // current = node->data.simple_cmd.redirections_out;
+    // while (current)
+    // {
+    //     ft_printf("redir_out %i, file name: %s\n", j++, node->data.simple_cmd.redirections_out->data.redirection.file);
+    //     current = current->data.redirection.next;
+    // }
+    // printf("parse_simple_cmd end\n");
     return (node);
 }
 

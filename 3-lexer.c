@@ -33,7 +33,7 @@ void	lexer(t_ma *ma)
 		ma->tkns[i] = g_c(&(ma->first_node), sizeof(t_token))->data;
 		ma->tkns[i]->value = split[i];
 		ma->tkns[i]->type = clasify_token(ma->tkns[i]->value);
-		//ft_printf("%s hey\nType : %i\n\n", ma->tkns[i]->value, ma->tkns[i]->type);
+		// ft_printf("%s\nType : %i\n\n", ma->tkns[i]->value, ma->tkns[i]->type);
 		i++;
 	}
 	ma->tkns[i] = NULL;

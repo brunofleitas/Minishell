@@ -12,29 +12,72 @@
 
 #include "minishell.h"
 
+int check_valid_file(char *path)
+{
+    struct stat sb;
+
+    if (stat(path, &sb) == -1)
+    {
+        //perror("Error checking file");
+        return (0);
+    }
+    if (!S_ISREG(sb.st_mode))  // Check if it's a regular file
+    {
+        perror("Not a regular file");
+        return (0);
+    }
+    return (1);
+}
+
 /**
  * Redirects the input from a file to the standard input.
  * 
  * @param file_name The name of the file to redirect input from.
  */
-static int redirect_input(const char *file_name)
+static int redirect_input(const char *file_name, t_ma *ma)
 {
     int fd;
+    char *trimmed;
 
-    fd = open(file_name, O_RDONLY);
-    if (fd == -1)
+    if (file_name[0] == '\"' || file_name[0] == '\'')
     {
-        perror(" ");
-        return(0);
+        trimmed = ft_strtrim(file_name, "\"\'", &(ma->first_node));
+        if (check_valid_file(trimmed))
+        {
+            fd = open(trimmed, O_RDONLY);
+            if (fd == -1)
+            {
+                perror(" ");
+                return(0);
+            }
+            if (dup2(fd, STDIN_FILENO) == -1)
+            {
+                perror(" ");
+                close(fd);
+                return(0);
+            }
+            close(fd);
+            return(1);
+        }
+        return (0);
     }
-    if (dup2(fd, STDIN_FILENO) == -1)
-    {
-        perror(" ");
+    else
+    { 
+        fd = open(file_name, O_RDONLY);
+        if (fd == -1)
+        {
+            perror(" ");
+            return(0);
+        }
+        if (dup2(fd, STDIN_FILENO) == -1)
+        {
+            perror(" ");
+            close(fd);
+            return(0);
+        }
         close(fd);
-        return(0);
+        return(1);
     }
-    close(fd);
-    return(1);
 }
 
 
@@ -44,24 +87,50 @@ static int redirect_input(const char *file_name)
  * @param file_name The name of the file to redirect the output to.
  * @param fd_num The file descriptor number to redirect.
  */
-static int redirect_output(const char *file_name, int fd_num)
+static int redirect_output(const char *file_name, int fd_num, t_ma *ma)
 {
     int fd; 
-    
-    fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fd == -1)
+    char *trimmed;
+
+    if (file_name[0] == '\"' || file_name[0] == '\'')
     {
-        perror(" ");
-        return(0);  
+        trimmed = ft_strtrim(file_name, "\"\'", &(ma->first_node));
+        if (check_valid_file(trimmed))
+        {
+            fd = open(trimmed, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            if (fd == -1)
+            {
+                perror(" ");
+                return(0);
+            }
+            if (dup2(fd, fd_num) == -1)
+            {
+                perror(" ");
+                close(fd);
+                return(0);
+            }
+            close(fd);
+            return(1);
+        }
+        return (0);
     }
-    if (dup2(fd, fd_num) == -1)
+    else
     {
-        perror(" ");
+        fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        if (fd == -1)
+        {
+            perror(" ");
+            return(0);  
+        }
+        if (dup2(fd, fd_num) == -1)
+        {
+            perror(" ");
+            close(fd);
+            return(0);
+        }
         close(fd);
-        return(0);
+        return(1);
     }
-    close(fd);
-    return(1);
 }
 
 
@@ -71,22 +140,50 @@ static int redirect_output(const char *file_name, int fd_num)
  * @param file_name The name of the file to redirect the output to.
  * @param fd_num The file descriptor number to redirect the output from.
  */
-static int redirect_output_append(const char *file_name, int fd_num)
+static int redirect_output_append(const char *file_name, int fd_num, t_ma *ma)
 {
-    int fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
-    if (fd == -1)
+    int fd;
+    char *trimmed;
+
+    if (file_name[0] == '\"' || file_name[0] == '\'')
     {
-        perror(" ");
-        return(0);
+        trimmed = ft_strtrim(file_name, "\"\'", &(ma->first_node));
+        if (check_valid_file(trimmed))
+        {
+            fd = open(trimmed, O_WRONLY | O_CREAT | O_APPEND, 0644);
+            if (fd == -1)
+            {
+                perror(" ");
+                return(0);
+            }
+            if (dup2(fd, fd_num) == -1)
+            {
+                perror(" ");
+                close(fd);
+                return(0);
+            }
+            close(fd);
+            return(1);
+        }
+        return (0);
     }
-    if (dup2(fd, fd_num) == -1)
+    else
     {
-        perror(" ");
+        fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
+        if (fd == -1)
+        {
+            perror(" ");
+            return(0);
+        }
+        if (dup2(fd, fd_num) == -1)
+        {
+            perror(" ");
+            close(fd);
+            return(0);
+        }
         close(fd);
-        return(0);
+        return(1);
     }
-    close(fd);
-    return(1);
 }
 
 
@@ -197,7 +294,7 @@ static int handle_heredoc(const char *delimiter, t_ma *ma)
         return(0);
     if (!create_tmp_file(temp_file_name, delimiter))
         return (0);
-    redirect_input(temp_file_name);
+    redirect_input(temp_file_name, ma);
     if (unlink(temp_file_name) == -1)
     {
         perror(" ");
@@ -219,13 +316,13 @@ int handle_redirections(t_astnode *redir_node, t_ma *ma)
     while (redir_node != NULL)
     {
          if (redir_node->data.redirection.type == TOKEN_REDIR_OUT 
-            && !redirect_output(redir_node->data.redirection.file, 1))
+            && !redirect_output(redir_node->data.redirection.file, 1, ma))
             return (0);
         else if (redir_node->data.redirection.type == TOKEN_REDIR_APPEND 
-            && !redirect_output_append(redir_node->data.redirection.file, 1))
+            && !redirect_output_append(redir_node->data.redirection.file, 1, ma))
             return (0);
         else if (redir_node->data.redirection.type == TOKEN_REDIR_IN 
-            && !redirect_input(redir_node->data.redirection.file))
+            && !redirect_input(redir_node->data.redirection.file, ma))
             return (0);
         else if (redir_node->data.redirection.type == TOKEN_HEREDOC 
             && !handle_heredoc(redir_node->data.redirection.file, ma))

@@ -164,9 +164,11 @@ struct s_astnode
         struct
 		{
             t_astnode *words;
-            t_astnode *redirections;
+            t_astnode *redirections_in;
+            t_astnode *redirections_out;
             int word_count;
-            int redirection_count;
+            int redir_in_count;
+            int redir_out_count;
         } simple_cmd;
 
         struct
@@ -285,5 +287,6 @@ char            **expand_wildcards_in_args(char **args, t_ma *ma);
 int	            expand_wildcard(t_wc_args *a, char *pattern, t_ma *ma);
 int             add_single_element(t_wc_args *a, char *name, t_ma *ma);
 int	            match_pattern(const char *str, const char *pattern);
+int             check_valid_file(char *path);
 
 #endif

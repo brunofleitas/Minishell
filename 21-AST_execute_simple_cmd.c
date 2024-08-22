@@ -51,6 +51,7 @@ static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
     t_astnode   *node_word;
     char        **words_arr;
     int         i;
+    char        *trimmed;
 
     //printf("create_words_arr start\n");
     i= 0;
@@ -65,7 +66,16 @@ static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
     node_word = node->data.simple_cmd.words;
     while(i < *word_count)
     {
-        words_arr[i++] = ft_substr_g_c(node_word->data.word.value, 0, ft_strlen(node_word->data.word.value), &(ma->first_node));
+        if (node_word->data.word.value[0] == '\"' || node_word->data.word.value[0] == '\'')
+        {
+            trimmed = ft_strtrim(node_word->data.word.value, "\"\'", &(ma->first_node));
+            if (check_valid_file(trimmed))
+                words_arr[i++] = trimmed;
+            else
+                words_arr[i++] = ft_substr_g_c(node_word->data.word.value, 0, ft_strlen(node_word->data.word.value), &(ma->first_node));
+        }
+        else
+            words_arr[i++] = ft_substr_g_c(node_word->data.word.value, 0, ft_strlen(node_word->data.word.value), &(ma->first_node));
         node_word = node_word->data.word.next;
     }
     words_arr[*word_count] = NULL;
@@ -133,7 +143,13 @@ int execute_simple_cmd(t_astnode *node, t_ma *ma)
 
     a.saved_stdin = dup(STDIN_FILENO);
     a.saved_stdout = dup(STDOUT_FILENO);
-    if (!handle_redirections(node->data.simple_cmd.redirections, ma))
+    if (!handle_redirections(node->data.simple_cmd.redirections_in, ma))
+    {
+        // printf("Error: Failed to handle redirections of inputs\n");
+        restore_io(a.saved_stdin, a.saved_stdout);
+        return (EXIT_FAILURE);
+    }
+    if (!handle_redirections(node->data.simple_cmd.redirections_out, ma))
     {
         restore_io(a.saved_stdin, a.saved_stdout);
         return (EXIT_FAILURE);
