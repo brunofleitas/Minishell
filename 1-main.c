@@ -61,13 +61,16 @@ int	main(int argc, char **argv, char **envp)
 		{
 			add_history(ma.input);
 			lexer(&ma);
-			//get_next_token(&ma);
-			root = parser(&ma);
-			//printf("parser end\n");
-			ma.last_exit_status = execute_ast(root, &ma);
-			// printf("execute_ast end\n");
-			//printf("main\n");
-			//print_env(env);
+			if (ma.tkns[0] != NULL)
+			{	
+				//get_next_token(&ma);
+				root = parser(&ma);
+				//printf("parser end\n");
+				ma.last_exit_status = execute_ast(root, &ma);
+				// printf("execute_ast end\n");
+				//printf("main\n");
+				//print_env(env);
+			}
 			free_memory(&(ma.first_node));
 		}
 	}

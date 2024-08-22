@@ -145,7 +145,7 @@ static void	generate_single_operators_and_specials(const char **s,
 	len = 1;
 	if (**s == '$' && *(*s + 1) == '?')
 	{
-		(*split)[(*i)++] = ft_substr_g_c(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node)), 0, ft_strlen(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node))), &(ma->first_node));
+		(*split)[(*i)++] = ft_itoa_g_c(ma->last_exit_status, &(ma->first_node));
 		(*s) += 1;
 	}
 	else if (**s == '$' && ft_isalnum(*(*s + 1)))
@@ -156,8 +156,6 @@ static void	generate_single_operators_and_specials(const char **s,
 		env_value = get_env(temp, ma->env->var);
 		if (env_value)
 			(*split)[(*i)++] = ft_strdup_g_c(env_value, &(ma->first_node));
-		else
-			(*split)[(*i)++] = ft_strdup_g_c("", &(ma->first_node));
 	}
 	else
 	{

@@ -31,23 +31,31 @@ void	lexer(t_ma *ma)
 
 	i = 0;
 	split = ft_split_tkns(' ', ma);
-	wildcards = expand_wildcards_in_args(split, ma);
-	while (wildcards[i])
+	if (split[0])
 	{
-		if (wildcards[i][0] == '\"')
-			trimmed = ft_strtrim(wildcards[i], "\"", &(ma->first_node));
-		else if (wildcards[i][0] == '\'')
-			trimmed = ft_strtrim(wildcards[i], "\'", &(ma->first_node));
-		else
-			trimmed = wildcards[i];
-		ma->tkns[i] = g_c(&(ma->first_node), sizeof(t_token))->data;
-		ma->tkns[i]->value = trimmed;
-		ma->tkns[i]->type = clasify_token(ma->tkns[i]->value);
-		//ft_printf("%s\nType : %i\n\n", ma->tkns[i]->value, ma->tkns[i]->type);
-		i++;
+		wildcards = expand_wildcards_in_args(split, ma);
+		while (wildcards[i])
+		{
+			if (wildcards[i][0] == '\"')
+				trimmed = ft_strtrim(wildcards[i], "\"", &(ma->first_node));
+			else if (wildcards[i][0] == '\'')
+				trimmed = ft_strtrim(wildcards[i], "\'", &(ma->first_node));
+			else
+				trimmed = wildcards[i];
+			ma->tkns[i] = g_c(&(ma->first_node), sizeof(t_token))->data;
+			ma->tkns[i]->value = trimmed;
+			ma->tkns[i]->type = clasify_token(ma->tkns[i]->value);
+			//ft_printf("%s\nType : %i\n\n", ma->tkns[i]->value, ma->tkns[i]->type);
+			i++;
+		}
+		ma->tkns[i] = NULL;
+		ma->c_tkn = ma->tkns;
 	}
-	ma->tkns[i] = NULL;
-	ma->c_tkn = ma->tkns;
+	else 
+	{
+		ma->tkns[0] = NULL;
+		ma->c_tkn = ma->tkns;
+	}
 	free_ntc_prior(&(ma->first_node), split);
 }
 

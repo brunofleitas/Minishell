@@ -51,7 +51,7 @@ static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
     t_astnode   *node_word;
     char        **words_arr;
     int         i;
-    char        *trimmed;
+    //char        *trimmed;
 
     //printf("create_words_arr start\n");
     i= 0;
@@ -66,15 +66,15 @@ static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
     node_word = node->data.simple_cmd.words;
     while(i < *word_count)
     {
-        if (node_word->data.word.value[0] == '\"' || node_word->data.word.value[0] == '\'')
-        {
-            trimmed = ft_strtrim(node_word->data.word.value, "\"\'", &(ma->first_node));
-            if (check_valid_file(trimmed))
-                words_arr[i++] = trimmed;
-            else
-                words_arr[i++] = ft_substr_g_c(node_word->data.word.value, 0, ft_strlen(node_word->data.word.value), &(ma->first_node));
-        }
-        else
+        // if (node_word->data.word.value[0] == '\"' || node_word->data.word.value[0] == '\'')
+        // {
+        //     trimmed = ft_strtrim(node_word->data.word.value, "\"\'", &(ma->first_node));
+        //     if (check_valid_file(trimmed))
+        //         words_arr[i++] = trimmed;
+        //     else
+        //         words_arr[i++] = ft_substr_g_c(node_word->data.word.value, 0, ft_strlen(node_word->data.word.value), &(ma->first_node));
+        // }
+        // else
             words_arr[i++] = ft_substr_g_c(node_word->data.word.value, 0, ft_strlen(node_word->data.word.value), &(ma->first_node));
         node_word = node_word->data.word.next;
     }
@@ -205,6 +205,7 @@ static int execute_exp_single_arg_cmd(char **words_arr, t_ma *ma)
     else
         status = execute_external_cmd(/* words_arr, &(ma)->env, &(ma)->first_node);// */exp_args, &(ma)->env, &(ma)->first_node);
         //maybe we should free exp_args here
+    //printf("status: %d\n", status);
     return (status);
 }
 
