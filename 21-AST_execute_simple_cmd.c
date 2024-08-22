@@ -155,6 +155,14 @@ int execute_simple_cmd(t_astnode *node, t_ma *ma)
         return (EXIT_FAILURE);
     }
     a.words_arr = create_words_arr(node, &(a.word_count), ma);
+//     char **temp = a.words_arr;
+//     if (!temp)
+//    printf("words_arr is NULL\n");
+//     while (*temp)
+//     {
+//         printf("word: %s\n", *temp);
+//         temp++;
+//     }
     if (!a.words_arr)
     {
         restore_io(a.saved_stdin, a.saved_stdout);
@@ -182,12 +190,20 @@ static int execute_exp_single_arg_cmd(char **words_arr, t_ma *ma)
     int     status;
 
     exp_args = expand_wildcards_in_args(words_arr, ma);
-    if (!exp_args)
-        return (EXIT_FAILURE);
-    if (is_builtin(exp_args[0]))
-        status = execute_builtin(exp_args, ma);
+    // if (!exp_args)
+    //      return (EXIT_FAILURE);
+    // char **temp = exp_args;
+    // if (!temp)
+    //     printf("words_arr is NULL\n");
+    // while (*temp)
+    // {
+    //     printf("word: %s\n", *temp);
+    //     temp++;
+    // }
+    if (is_builtin(/* words_arr[0]))// */exp_args[0]))
+        status = execute_builtin(/* words_arr, ma);// */exp_args, ma);
     else
-        status = execute_external_cmd(exp_args, &(ma)->env, &(ma)->first_node);
+        status = execute_external_cmd(/* words_arr, &(ma)->env, &(ma)->first_node);// */exp_args, &(ma)->env, &(ma)->first_node);
         //maybe we should free exp_args here
     return (status);
 }

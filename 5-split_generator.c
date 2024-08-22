@@ -53,12 +53,12 @@ static void	handle_env_var(const char **s, char **result, int *result_len, t_ma 
 	}
 }
 
-static void	append_char(const char *s, char **result, int *result_len, t_ma *ma)
+static void	append_char(char s, char **result, int *result_len, t_ma *ma)
 {
 	*result = ft_realloc_g_c(&(ma->first_node), *result, *result_len + 2);
 	if (*result)
 	{
-		(*result)[(*result_len)++] = *s;
+		(*result)[(*result_len)++] = s;
 		(*result)[*result_len] = '\0';
 	}
 }
@@ -74,7 +74,7 @@ static void	generate_quotes(const char **s, char ***split, int *i, t_ma *ma)
 	(*s)++;
 	result = ft_strdup_g_c("", &(ma->first_node));
 	result_len = 0;
-	append_char(&quote, &result, &result_len, ma);
+	append_char(quote, &result, &result_len, ma);
 	while (**s && **s != quote)
 	{
 		if (quote == '"' && **s == '$' && ft_isalnum(*(*s + 1)))
@@ -83,19 +83,28 @@ static void	generate_quotes(const char **s, char ***split, int *i, t_ma *ma)
 		{
 			exit_value = ft_substr_g_c(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node)), 0, ft_strlen(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node))), &(ma->first_node));
 			while (*exit_value)
-				append_char(exit_value++, &result, &result_len, ma);
+				append_char(*exit_value++, &result, &result_len, ma);
 			(*s) += 2;
 		}
 		else
 		{
-			append_char(*s, &result, &result_len, ma);
+			append_char(**s, &result, &result_len, ma); // Corrected: pass a single char
 			(*s)++;
 		}
 	}
-	append_char(&quote, &result, &result_len, ma);
-	(*split)[(*i)++] = result;
-	if (**s == quote)
+	if (((*(*s + 1)) && (*(*s + 1)) == '$') && ((*(*s + 2)) || (*(*s + 2) == ' ')))
+    {
+        append_char('\n', &result, &result_len, ma);
 		(*s)++;
+    }
+	if (((*(*s + 1)) && (*(*s + 1)) == '$') && (*(*s + 2) == '\0'))
+	{
+		append_char('\n', &result, &result_len, ma);
+		(*s)++;
+	}
+	append_char(quote, &result, &result_len, ma);
+	(*split)[(*i)++] = result;
+	(*s)++;
 }
 
 /*

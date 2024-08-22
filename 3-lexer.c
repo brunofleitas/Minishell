@@ -24,19 +24,85 @@
 void	lexer(t_ma *ma)
 {
 	char	**split;
+	char	**wildcards;
 	int		i;
+	char   *trimmed;
+	// char   *trimmed_dq;
 
 	i = 0;
 	split = ft_split_tkns(' ', ma);
-	while (split[i])
+	wildcards = expand_wildcards_in_args(split, ma);
+	while (wildcards[i])
 	{
+		if (wildcards[i][0] == '\"')
+			trimmed = ft_strtrim(wildcards[i], "\"", &(ma->first_node));
+		else if (wildcards[i][0] == '\'')
+			trimmed = ft_strtrim(wildcards[i], "\'", &(ma->first_node));
+		else
+			trimmed = wildcards[i];
 		ma->tkns[i] = g_c(&(ma->first_node), sizeof(t_token))->data;
-		ma->tkns[i]->value = split[i];
+		ma->tkns[i]->value = trimmed;
 		ma->tkns[i]->type = clasify_token(ma->tkns[i]->value);
-		// ft_printf("%s\nType : %i\n\n", ma->tkns[i]->value, ma->tkns[i]->type);
+		//ft_printf("%s\nType : %i\n\n", ma->tkns[i]->value, ma->tkns[i]->type);
 		i++;
 	}
 	ma->tkns[i] = NULL;
 	ma->c_tkn = ma->tkns;
 	free_ntc_prior(&(ma->first_node), split);
 }
+
+// void lexer(t_ma *ma)
+// {
+//     char    **wildcards;
+//     char    **split;
+//     int     i;
+//     char    *wildcard_pos;
+
+//     i = 0;
+//     split = ft_split_tkns(' ', ma);
+//     while (split[i])
+//     {
+//         if ((split[i][0] == '\"' || split[i][0] == '\'') && (wildcard_pos = ft_strchr(split[i], '*')))
+//         {
+//             // Temporarily replace wildcard with space
+//             *wildcard_pos = ' ';
+
+//             // Re-split the string into before, wildcard, and after
+//             char **temp_split = ft_split_tkns('*', split[i]);
+
+//             // Replace the current token with the first part
+//             split[i] = temp_split[0];
+            
+//             // Insert the remaining parts into split array
+//             int j = 1;
+//             while (temp_split[j])
+//             {
+//                 split = ft_realloc(split, (i + j + 1) * sizeof(char *));
+//                 split[i + j] = temp_split[j];
+//                 j++;
+//             }
+
+//             // Free the temporary split array (only the array itself, not the strings)
+//             free(temp_split);
+
+//             // Adjust the loop counter
+//             i += (j - 1);
+//         }
+//         i++;
+//     }
+
+//     wildcards = expand_wildcards_in_args(split, ma);
+//     i = 0;
+//     while (wildcards[i])
+//     {
+//         ma->tkns[i] = g_c(&(ma->first_node), sizeof(t_token))->data;
+//         ma->tkns[i]->value = wildcards[i];
+//         ma->tkns[i]->type = clasify_token(ma->tkns[i]->value);
+//         ft_printf("%s\nType : %i\n\n", ma->tkns[i]->value, ma->tkns[i]->type);
+//         i++;
+//     }
+//     ma->tkns[i] = NULL;
+//     ma->c_tkn = ma->tkns;
+//     free_ntc_prior(&(ma->first_node), split);
+// }
+

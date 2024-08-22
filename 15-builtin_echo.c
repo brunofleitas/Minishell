@@ -62,12 +62,12 @@ static char	*join_words(char **args, t_ntc **first_node, int i, int word_count)
 	result = ft_strdup_g_c("", first_node);
 	while (i < word_count)
 	{
-		if (args[i][0] == '\'')
-			actual_arg = ft_strtrim(args[i], "'", first_node);
-		else if (args[i][0] == '\"')
-			actual_arg = ft_strtrim(args[i], "\"", first_node);
-		else
-			actual_arg = ft_strdup_g_c(args[i], first_node);
+		// if (args[i][0] == '\'')
+		// 	actual_arg = ft_strtrim(args[i], "'", first_node);
+		// else if (args[i][0] == '\"')
+		// 	actual_arg = ft_strtrim(args[i], "\"", first_node);
+		// else
+		actual_arg = ft_strdup_g_c(args[i], first_node);
 		temp = ft_strjoin_g_c(result, actual_arg, first_node);
 		result = temp;
 		if ((i < word_count - 1) && (!ft_isnum(args[i])))
