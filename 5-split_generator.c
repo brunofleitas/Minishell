@@ -74,6 +74,7 @@ static void	generate_quotes(const char **s, char ***split, int *i, t_ma *ma)
 	(*s)++;
 	result = ft_strdup_g_c("", &(ma->first_node));
 	result_len = 0;
+	//printf("Char: %c\n", **s);
 	append_char(quote, &result, &result_len, ma);
 	while (**s && **s != quote)
 	{
@@ -88,6 +89,7 @@ static void	generate_quotes(const char **s, char ***split, int *i, t_ma *ma)
 		}
 		else
 		{
+			//printf("Char: %c\n", **s);
 			append_char(**s, &result, &result_len, ma); // Corrected: pass a single char
 			(*s)++;
 		}
@@ -102,7 +104,9 @@ static void	generate_quotes(const char **s, char ***split, int *i, t_ma *ma)
 		append_char('\n', &result, &result_len, ma);
 		(*s)++;
 	}
+	//printf("Char: %c\n", **s);
 	append_char(quote, &result, &result_len, ma);
+	//printf("Result: %s\n", result);
 	(*split)[(*i)++] = result;
 	(*s)++;
 }
@@ -275,6 +279,7 @@ char **ft_split_tkns(char c, t_ma *ma)
 
 	s = (const char*)ma->input;
 	i = 0;
+	//printf("Tkns: %d\n", count_tks(s, c));
 	split = g_c(&(ma->first_node), (count_tks(s, c) + 1) * sizeof(char *))->data;
 	if (!s || !split)
 		return (NULL);

@@ -75,6 +75,7 @@ static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
         //         words_arr[i++] = ft_substr_g_c(node_word->data.word.value, 0, ft_strlen(node_word->data.word.value), &(ma->first_node));
         // }
         // else
+        //printf("node_word->data.word.value: %s\n", node_word->data.word.value);
             words_arr[i++] = ft_substr_g_c(node_word->data.word.value, 0, ft_strlen(node_word->data.word.value), &(ma->first_node));
         node_word = node_word->data.word.next;
     }
@@ -186,10 +187,10 @@ int execute_simple_cmd(t_astnode *node, t_ma *ma)
  */
 static int execute_exp_single_arg_cmd(char **words_arr, t_ma *ma)
 {
-    char    **exp_args;
+    //char    **exp_args;
     int     status;
 
-    exp_args = expand_wildcards_in_args(words_arr, ma);
+    //exp_args = expand_wildcards_in_args(words_arr, ma);
     // if (!exp_args)
     //      return (EXIT_FAILURE);
     // char **temp = exp_args;
@@ -200,10 +201,10 @@ static int execute_exp_single_arg_cmd(char **words_arr, t_ma *ma)
     //     printf("word: %s\n", *temp);
     //     temp++;
     // }
-    if (is_builtin(/* words_arr[0]))// */exp_args[0]))
-        status = execute_builtin(/* words_arr, ma);// */exp_args, ma);
+    if (is_builtin(/* words_arr[0]))// */words_arr[0]))
+        status = execute_builtin(/* words_arr, ma);// */words_arr, ma);
     else
-        status = execute_external_cmd(/* words_arr, &(ma)->env, &(ma)->first_node);// */exp_args, &(ma)->env, &(ma)->first_node);
+        status = execute_external_cmd(/* words_arr, &(ma)->env, &(ma)->first_node);// */words_arr, &(ma)->env, &(ma)->first_node);
         //maybe we should free exp_args here
     //printf("status: %d\n", status);
     return (status);

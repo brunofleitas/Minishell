@@ -34,7 +34,7 @@ int execute_ast(t_astnode *node, t_ma *ma)
         return(execute_simple_cmd(node, ma));
     else
     {
-        printf("%i\n", node->type);
+        //printf("%i\n", node->type);
         ft_putstr_fd("Error: Unknown node type\n", STDERR_FILENO);// just an Idea I got if we want a file where we store all the errors
         return (EXIT_FAILURE);
     }

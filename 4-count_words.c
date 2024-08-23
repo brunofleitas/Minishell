@@ -116,6 +116,13 @@ int	count_tks(char const *s, char c)
 		return (0);
 	while (s[i] != '\0')
 	{
+		if (s[i] == '$' && s[i + 1] == '?')
+		{
+			// Handle $? as a separate token
+			counter++;
+			i += 2; // Skip the $? part
+			
+		}
 		if (ft_isdigit(s[i]) && s[i + 1] == '>' && s[i + 2] == '>')
 		{
 			// printf("Found n>>\n");
@@ -141,7 +148,7 @@ int	count_tks(char const *s, char c)
 			counter++;
 			// printf("Counter: %d\n", counter);
 		}
-		else if (s[i] != c && (i == 0 || s[i - 1] == c || ft_strchr(" ><&()|$", s[i - 1])))
+		else if (s[i] != c && (i == 0 || s[i - 1] == c || ft_strchr(" ><&()|$?", s[i - 1])))
 		{
 			// printf("Found word tkn\n");
 			counter++;
