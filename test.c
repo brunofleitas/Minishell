@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <unistd.h>
+#include <string.h>
 
 
 int main(int argc, char *argv[]) {
@@ -9,24 +13,21 @@ int main(int argc, char *argv[]) {
 
     while (1)
     {
-        printf(">>");
         char *input = NULL;
-        size_t len = 0;
-        ssize_t read = getline(&input, &len, stdin);
-        if (read == -1) {
-            if (errno == 0) {
-                // EOF detected
-                break;
-            } else {
-                perror("getline");
-                exit(EXIT_FAILURE);
-            }
-        }
-        if (input[0] != '\n')
+        input = readline(">>");
+        if (strcmp(input, "") != 0)      
         {
-            printf("> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<\n");
+            write(1, "> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<\n", 44);
+            //write(2, "> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<\n", 44);
+            //fflush(stdout);
+            exit(0);
+        }
+        else if (strcmp(input, "exit") == 0)
+        {
+            free(input);
+            exit(0);
         }
         free(input);
     }
-    return 0;
+    exit (0);
 }

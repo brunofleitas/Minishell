@@ -63,6 +63,50 @@ static void	append_char(char s, char **result, int *result_len, t_ma *ma)
 	}
 }
 
+// static void	generate_quotes(const char **s, char ***split, int *i, t_ma *ma)
+// {
+// 	char	quote;
+// 	char	*result;
+// 	int		result_len;
+// 	char	*exit_value;
+
+// 	quote = **s;
+// 	(*s)++;
+// 	result = ft_strdup_g_c("", &(ma->first_node));
+// 	result_len = 0;
+// 	append_char(quote, &result, &result_len, ma);
+// 	while (**s && **s != quote)
+// 	{
+// 		if (quote == '"' && **s == '$' && ft_isalnum(*(*s + 1)))
+// 			handle_env_var(s, &result, &result_len, ma);
+// 		else if (quote == '"' && **s == '$' && (*(*s + 1) == '?'))
+// 		{
+// 			exit_value = ft_substr_g_c(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node)), 0, ft_strlen(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node))), &(ma->first_node));
+// 			while (*exit_value)
+// 				append_char(*exit_value++, &result, &result_len, ma);
+// 			(*s) += 2;
+// 		}
+// 		else
+// 		{
+// 			append_char(**s, &result, &result_len, ma); 
+// 			(*s)++;
+// 		}
+// 	}
+// 	if (((*(*s + 1)) && (*(*s + 1)) == '$') && ((*(*s + 2)) || (*(*s + 2) == ' ')))
+//     {
+//         append_char('\n', &result, &result_len, ma);
+// 		(*s)++;
+//     }
+// 	if (((*(*s + 1)) && (*(*s + 1)) == '$') && (*(*s + 2) == '\0'))
+// 	{
+// 		append_char('\n', &result, &result_len, ma);
+// 		(*s)++;
+// 	}
+// 	append_char(quote, &result, &result_len, ma);
+// 	(*split)[(*i)++] = result;
+// 	(*s)++;
+// }
+
 static void	generate_quotes(const char **s, char ***split, int *i, t_ma *ma)
 {
 	char	quote;
@@ -74,12 +118,23 @@ static void	generate_quotes(const char **s, char ***split, int *i, t_ma *ma)
 	(*s)++;
 	result = ft_strdup_g_c("", &(ma->first_node));
 	result_len = 0;
-	//printf("Char: %c\n", **s);
 	append_char(quote, &result, &result_len, ma);
-	while (**s && **s != quote)
+
+	while (**s)
 	{
-		if (quote == '"' && **s == '$' && ft_isalnum(*(*s + 1)))
+		if (**s == quote && *(*s + 1) == quote)
+		{
+			(*s) += 2;
+			continue;
+		}
+		else if (**s == quote) 
+		{
+			break;
+		}
+		else if (quote == '"' && **s == '$' && ft_isalnum(*(*s + 1)))
+		{
 			handle_env_var(s, &result, &result_len, ma);
+		}
 		else if (quote == '"' && **s == '$' && (*(*s + 1) == '?'))
 		{
 			exit_value = ft_substr_g_c(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node)), 0, ft_strlen(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node))), &(ma->first_node));
@@ -89,8 +144,7 @@ static void	generate_quotes(const char **s, char ***split, int *i, t_ma *ma)
 		}
 		else
 		{
-			//printf("Char: %c\n", **s);
-			append_char(**s, &result, &result_len, ma); // Corrected: pass a single char
+			append_char(**s, &result, &result_len, ma);
 			(*s)++;
 		}
 	}
@@ -104,12 +158,11 @@ static void	generate_quotes(const char **s, char ***split, int *i, t_ma *ma)
 		append_char('\n', &result, &result_len, ma);
 		(*s)++;
 	}
-	//printf("Char: %c\n", **s);
 	append_char(quote, &result, &result_len, ma);
-	//printf("Result: %s\n", result);
 	(*split)[(*i)++] = result;
 	(*s)++;
 }
+
 
 /*
   Parameters:

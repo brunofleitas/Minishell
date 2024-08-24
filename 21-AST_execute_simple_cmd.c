@@ -38,13 +38,13 @@ static int node_word_count(t_astnode *node)
  * @param saved_stdin The saved standard input file descriptor
  * @param saved_stdout The saved standard output file descriptor
 */
-static void restore_io(int saved_stdin, int saved_stdout)
-{
-    dup2(saved_stdin, STDIN_FILENO);
-    dup2(saved_stdout, STDOUT_FILENO);
-    close(saved_stdin);
-    close(saved_stdout);
-}
+// static void restore_io(int saved_stdin, int saved_stdout)
+// {
+//     dup2(saved_stdin, STDIN_FILENO);
+//     dup2(saved_stdout, STDOUT_FILENO);
+//     close(saved_stdin);
+//     close(saved_stdout);
+// }
 
 static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
 {
@@ -147,13 +147,13 @@ int execute_simple_cmd(t_astnode *node, t_ma *ma)
     if (!handle_redirections(node->data.simple_cmd.redirections_in, ma))
     {
         // printf("Error: Failed to handle redirections of inputs\n");
-        restore_io(a.saved_stdin, a.saved_stdout);
+        //restore_io(a.saved_stdin, a.saved_stdout);
         return (EXIT_FAILURE);
     }
     if (!handle_redirections(node->data.simple_cmd.redirections_out, ma))
     {
-        restore_io(a.saved_stdin, a.saved_stdout);
-        return (EXIT_FAILURE);
+        //restore_io(a.saved_stdin, a.saved_stdout);
+        exit (EXIT_FAILURE);
     }
     a.words_arr = create_words_arr(node, &(a.word_count), ma);
 //     char **temp = a.words_arr;
@@ -164,15 +164,17 @@ int execute_simple_cmd(t_astnode *node, t_ma *ma)
 //         printf("word: %s\n", *temp);
 //         temp++;
 //     }
+    //write(1, a.words_arr[1], ft_strlen(a.words_arr[1]));
     if (!a.words_arr)
-    {
-        restore_io(a.saved_stdin, a.saved_stdout);
-        return (EXIT_FAILURE);
-    }
-    a.status = execute_exp_single_arg_cmd(a.words_arr, ma);
-    free_ntc_prior(&(ma->first_node), a.words_arr);
-    restore_io(a.saved_stdin, a.saved_stdout);
-    return (a.status);
+        exit(EXIT_FAILURE);
+    // {
+    //     restore_io(a.saved_stdin, a.saved_stdout);
+    //     return (EXIT_FAILURE);
+    // }
+     /* a.status =  */exit(execute_exp_single_arg_cmd(a.words_arr, ma));
+    // free_ntc_prior(&(ma->first_node), a.words_arr);
+    // restore_io(a.saved_stdin, a.saved_stdout);
+    // return (a.status);
 }
 
 /**
@@ -188,7 +190,7 @@ int execute_simple_cmd(t_astnode *node, t_ma *ma)
 static int execute_exp_single_arg_cmd(char **words_arr, t_ma *ma)
 {
     //char    **exp_args;
-    int     status;
+    //int     status;
 
     //exp_args = expand_wildcards_in_args(words_arr, ma);
     // if (!exp_args)
@@ -202,12 +204,15 @@ static int execute_exp_single_arg_cmd(char **words_arr, t_ma *ma)
     //     temp++;
     // }
     if (is_builtin(/* words_arr[0]))// */words_arr[0]))
-        status = execute_builtin(/* words_arr, ma);// */words_arr, ma);
+    {
+        /* status = */ execute_builtin(/* words_arr, ma);// */words_arr, ma);
+    }
     else
-        status = execute_external_cmd(/* words_arr, &(ma)->env, &(ma)->first_node);// */words_arr, &(ma)->env, &(ma)->first_node);
+        /* status =  */execute_external_cmd(/* words_arr, &(ma)->env, &(ma)->first_node);// */words_arr, &(ma)->env, &(ma)->first_node);
         //maybe we should free exp_args here
     //printf("status: %d\n", status);
-    return (status);
+   /*  fflush(stdout); */
+    return (EXIT_SUCCESS);
 }
 
 

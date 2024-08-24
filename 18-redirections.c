@@ -12,22 +12,6 @@
 
 #include "minishell.h"
 
-int check_valid_file(char *path)
-{
-    struct stat sb;
-
-    if (stat(path, &sb) == -1)
-    {
-        //perror("Error checking file");
-        return (0);
-    }
-    if (!S_ISREG(sb.st_mode))  // Check if it's a regular file
-    {
-        perror("Not a regular file");
-        return (0);
-    }
-    return (1);
-}
 
 /**
  * Redirects the input from a file to the standard input.
@@ -37,49 +21,21 @@ int check_valid_file(char *path)
 static int redirect_input(char *file_name)//, t_ma *ma)
 {
     int fd;
-    // char *trimmed;
 
-    // if (file_name[0] == '\"' || file_name[0] == '\'')
-    // {
-    //     trimmed = ft_strtrim(file_name, "\"\'", &(ma->first_node));
-    //     if (check_valid_file(trimmed))
-    //     {
-    //         fd = open(trimmed, O_RDONLY);
-    //         if (fd == -1)
-    //         {
-    //             perror(" ");
-    //             return(0);
-    //         }
-    //         if (dup2(fd, STDIN_FILENO) == -1)
-    //         {
-    //             perror(" ");
-    //             close(fd);
-    //             return(0);
-    //         }
-    //         close(fd);
-    //         return(1);
-    //     }
-    //     return (0);
-    // }
-    // else
-    //if (check_valid_file(file_name))
-    // { 
         fd = open(file_name, O_RDONLY);
         if (fd == -1)
         {
             perror(" ");
-            return(0);
+            exit(EXIT_FAILURE);
         }
         if (dup2(fd, STDIN_FILENO) == -1)
         {
             perror(" ");
             close(fd);
-            return(0);
+            exit(EXIT_FAILURE);
         }
         close(fd);
         return(1);
-    // }
-    // return (0);
 }
 
 
@@ -92,51 +48,25 @@ static int redirect_input(char *file_name)//, t_ma *ma)
 static int redirect_output(char *file_name, int fd_num)//, t_ma *ma)
 {
     int fd; 
-    // char *trimmed;
 
-    // if (file_name[0] == '\"' || file_name[0] == '\'')
-    // {
-    //     trimmed = ft_strtrim(file_name, "\"\'", &(ma->first_node));
-        
-    //     {
-    //         fd = open(trimmed, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    //         if (fd == -1)
-    //         {
-    //             perror(" ");
-    //             return(0);
-    //         }
-    //         if (dup2(fd, fd_num) == -1)
-    //         {
-    //             perror(" ");
-    //             close(fd);
-    //             return(0);
-    //         }
-    //         close(fd);
-    //         return(1);
-    //     }
-    //     return (0);
-    // }
-    // else
-    //if (check_valid_file(file_name))
-    // {
-        fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+
+        fd = open(file_name, O_RDWR | O_CREAT | O_TRUNC, 0644);
         if (fd == -1)
         {
             perror(" ");
-            return(0);  
+            exit(EXIT_FAILURE);  
         }
         if (dup2(fd, fd_num) == -1)
         {
             perror(" ");
             close(fd);
-            return(0);
+            exit(EXIT_FAILURE);
         }
         close(fd);
         return(1);
-    // }
-    // return (0);
-}
+    
 
+}
 
 /**
  * Redirects the output of a file descriptor to a file in append mode.
@@ -147,49 +77,21 @@ static int redirect_output(char *file_name, int fd_num)//, t_ma *ma)
 static int redirect_output_append(char *file_name, int fd_num)//, t_ma *ma)
 {
     int fd;
-    // char *trimmed;
 
-    // if (file_name[0] == '\"' || file_name[0] == '\'')
-    // {
-    //     trimmed = ft_strtrim(file_name, "\"\'", &(ma->first_node));
-    //     if (check_valid_file(trimmed))
-    //     {
-    //         fd = open(trimmed, O_WRONLY | O_CREAT | O_APPEND, 0644);
-    //         if (fd == -1)
-    //         {
-    //             perror(" ");
-    //             return(0);
-    //         }
-    //         if (dup2(fd, fd_num) == -1)
-    //         {
-    //             perror(" ");
-    //             close(fd);
-    //             return(0);
-    //         }
-    //         close(fd);
-    //         return(1);
-    //     }
-    //     return (0);
-    // }
-    // else
-    // if (check_valid_file(file_name))
-    // {
-        fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
+        fd = open(file_name, /* O_WRONLY  */ O_RDWR | O_CREAT | O_APPEND, 0644);
         if (fd == -1)
         {
             perror(" ");
-            return(0);
+            exit(EXIT_FAILURE);
         }
         if (dup2(fd, fd_num) == -1)
         {
             perror(" ");
             close(fd);
-            return(0);
+            exit(EXIT_FAILURE);
         }
         close(fd);
         return(1);
-    // }
-    // return (0);
 }
 
 

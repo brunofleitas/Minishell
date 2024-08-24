@@ -126,7 +126,8 @@ int	builtin_echo(char **args, int word_count, t_ma *ma)
 	// ...
 	if (result)
 	{
-		printf("%s", result);
+		write(1, result, ft_strlen(result));
+		//printf("%s", result);
 		//free_ntc_prior(first_node, result);
 		return (EXIT_SUCCESS);
 	}

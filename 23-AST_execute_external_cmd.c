@@ -117,57 +117,47 @@ char *find_command_path(char *cmd, t_env **env, t_ntc **first_node)
 
 int execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
 {
-    pid_t pid;
     char *command_path;
-    int status;
+    //int status;
     struct stat path_stat;
 
     // Check if the command is empty
     if (words_arr == NULL || words_arr[0] == NULL || words_arr[0][0] == '\0')
     {
-        return 0;  // Return 0 for an empty command
+        exit (0);  // Return 0 for an empty command
     }
-
+    // while (*words_arr)
+    // {
+    //     printf("word: %s\n", *words_arr);
+    //     words_arr++;
+    // }
     if (words_arr[0][0] == '/' || words_arr[0][0] == '.' || words_arr[0][0] == '~')
         command_path = ft_strdup_g_c(words_arr[0], first_node);
     else
         command_path = find_command_path(words_arr[0], env, first_node);
-    
     // Check if command_path was found
     if (!command_path)
     {
         write(2, " command not found\n", 19);
-        return (127);  // Return 127 if the command was not found
+        exit (127);  // Return 127 if the command was not found
     }
-
     // Check if the path is a directory
     if (stat(command_path, &path_stat) == 0 && S_ISDIR(path_stat.st_mode)) {
         write(2, " Is a directory\n", 16);
-        return 126;  // Return 126 if the path is a directory
+        exit (126);  // Return 126 if the path is a directory
     }
-
     // Check if the file exists
     if (access(command_path, F_OK) != 0) {
         perror("Error");
-        return 127;  // Return 127 for "No such file or directory"
+        exit (127);  // Return 127 for "No such file or directory"
     }
-
     // Check if the file is executable
     if (access(command_path, X_OK) != 0) {
         perror("Error");
-        return 126;  // Return 126 for "Permission denied"
+        exit(126);  // Return 126 for "Permission denied"
     }
 
-    pid = fork_process();
-    if (pid == 0)
-    {
-        execve(command_path, words_arr, (*env)->var);
-        perror("execve");
-        exit(EXIT_FAILURE);  // General error exit if execve fails unexpectedly
-    }
-    else
-    {
-        waitpid(pid, &status, 0);
-        return (WEXITSTATUS(status));  // Return the exit status of the child process
-    }
+    exit(execve(command_path, words_arr, (*env)->var));
+    // status = execve(command_path, words_arr, (*env)->var);
+    // return (status);
 }

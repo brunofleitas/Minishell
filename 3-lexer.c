@@ -31,13 +31,14 @@ void	lexer(t_ma *ma)
 
 	i = 0;
 	split = ft_split_tkns(' ', ma);
-	// printf("Split: %s\n", split[0]);
-	// printf("Split: %s\n", split[1]);
+	//  printf("Split: %s\n", split[0]);
+	//  printf("Split: %s\n", split[1]);
+	// printf("Split: %s\n", split[2]);
 	if (split[0])
 	{
 		wildcards = expand_wildcards_in_args(split, ma);
-		//printf("Wildcards: %s\n", wildcards[0]);
-		//printf("Wildcards: %s\n", wildcards[1]);
+		// printf("Wildcards: %s\n", wildcards[0]);
+		// printf("Wildcards: %s\n", wildcards[1]);
 		while (wildcards[i])
 		{
 			ma->tkns[i] = g_c(&(ma->first_node), sizeof(t_token))->data;

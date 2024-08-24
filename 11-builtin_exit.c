@@ -22,10 +22,10 @@ void print_error(const char *msg)
     write(STDERR_FILENO, msg, ft_strlen(msg));
 }
 
-int builtin_exit(t_ma *ma, char **args)
+void builtin_exit(t_ma *ma, char **args)
 {
     int exit_code = 0;
-    char *trimmed;
+    //char *trimmed;
 
     if (args == NULL || args[1] == NULL) 
     {
@@ -41,15 +41,15 @@ int builtin_exit(t_ma *ma, char **args)
     }
     else
     {
-        trimmed = ft_strtrim(args[1], "\"", &(ma->first_node));
-        if (trimmed == NULL || !ft_atoi(trimmed))
+        //trimmed = ft_strtrim(args[1], "\"", &(ma->first_node));
+        if (/* trimmed == NULL ||  */!ft_atoi(args[1]))
         {
             print_error("exit: numeric argument required\n");
             exit_code = 2;
         }
         else
         {
-            exit_code = ft_atoi(trimmed) % 256;
+            exit_code = ft_atoi(args[1]) % 256;
         }
     }
     free_memory(&(ma->first_node));

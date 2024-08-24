@@ -270,7 +270,7 @@ int             execute_cmd_line(t_astnode *node, t_ma *ma);
 int             execute_pipeline(t_astnode *node, t_ma *ma);
 int             execute_simple_cmd(t_astnode *node, t_ma *ma);
 int             execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node);
-int             builtin_exit(t_ma *ma, char **args);
+void             builtin_exit(t_ma *ma, char **args);
 int             builtin_pwd(char **args, t_ma *ma);
 int             builtin_echo(char **args, int count_words, t_ma *ma);
 int             builtin_env(char **args, t_ma *ma);

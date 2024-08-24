@@ -70,6 +70,8 @@ int	main(int argc, char **argv, char **envp)
 				// printf("execute_ast end\n");
 				//printf("main\n");
 				//print_env(env);
+				//usleep(80000);
+				//wait(NULL);
 			}
 			free_memory(&(ma.first_node));
 		}

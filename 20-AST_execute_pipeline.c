@@ -22,20 +22,20 @@ static void setup_pipe(int pipe_fds[2])
     }
     //printf("setup_pipe end\n");
 }
-pid_t    fork_process()
-{
-    pid_t pid;
+// pid_t    fork_process()
+// {
+//     pid_t pid;
     
-    //printf("fork_process start\n");
-    pid = fork();
-    if (pid == -1)
-    {
-        perror("fork");
-        exit(EXIT_FAILURE);
-    }
-    //printf("fork_process end\n");
-    return (pid);
-}
+//     //printf("fork_process start\n");
+//     return(fork());
+//     // if (pid == -1)
+//     // {
+//     //     perror("fork");
+//     //     return(EXIT_FAILURE);
+//     // }
+//     // //printf("fork_process end\n");
+//     // return (pid);
+// }
 
 static void child_process(t_pip_args *a, t_astnode *simple_cmd, t_ma *ma)
 {
@@ -55,7 +55,7 @@ static void child_process(t_pip_args *a, t_astnode *simple_cmd, t_ma *ma)
     exit(execute_ast(simple_cmd, ma)); //what is this function?
 }
 
-static void parent_process(t_pip_args *a, int i)
+static void parent_process(t_pip_args *a)
 {
     //printf("parent_process start\n");
     if (a->input_fd != STDIN_FILENO)
@@ -65,7 +65,6 @@ static void parent_process(t_pip_args *a, int i)
         close(a->pipe_fds[1]);
         a->input_fd = a->pipe_fds[0];
     }
-    a->pid_arr[i] = a->pid;
     //printf("parent_process end\n");
 }
 /**
@@ -83,41 +82,45 @@ int execute_pipeline(t_astnode *node, t_ma *ma)
 {
     t_pip_args  a;
     int         i;
+    // int         original_stdout;
     
     //printf("execute_pipeline start\n");
     i = 0;
     a.input_fd = STDIN_FILENO;
+    // original_stdout = dup(STDOUT_FILENO);
     if (node->data.pipeline.cmd_count == 1 && (node->data.pipeline.cmds[0]->data.simple_cmd.words[0].data.word.type == TOKEN_BUILTIN))
     {
         a.status = execute_ast(node->data.pipeline.cmds[0], ma);
+        // close(original_stdout);
         return(a.status);
     }
-    else
+    a.pid_arr = g_c(&(ma->first_node), sizeof(pid_t) * (node->data.pipeline.cmd_count))->data;
+    while (i < node->data.pipeline.cmd_count)
     {
-        a.pid_arr = g_c(&(ma->first_node), sizeof(pid_t) * (node->data.pipeline.cmd_count))->data;
-        while (i < node->data.pipeline.cmd_count)
-        {
-            a.last_cmd = (i == node->data.pipeline.cmd_count - 1);
-            if (!a.last_cmd)
-                setup_pipe(a.pipe_fds);
-            a.pid = fork_process();
-            if (a.pid == 0)
-                child_process(&a, node->data.pipeline.cmds[i], ma);
-            else
-                parent_process(&a, i);
-            i++;
-        }
-        i = 0;
-        while (i < node->data.pipeline.cmd_count)
-        {
-            waitpid(a.pid_arr[i], &(a.status), 0);
-            if (i == node->data.pipeline.cmd_count - 1)
-                a.last_pid = a.status;
-            i++;
-        }
-        //printf("execute_pipeline end\n");
-        return (WEXITSTATUS(a.last_pid));
+        a.last_cmd = (i == node->data.pipeline.cmd_count - 1);
+        if (!a.last_cmd)
+            setup_pipe(a.pipe_fds);
+        a.pid_arr[i] = fork();
+        if (a.pid_arr[i] == -1)
+            return(EXIT_FAILURE);
+        if (a.pid_arr[i] == 0)
+            child_process(&a, node->data.pipeline.cmds[i], ma);
+        else
+            parent_process(&a);
+        i++;
     }
+    // dup2(original_stdout, STDOUT_FILENO);
+    // close(original_stdout);
+    i = 0;
+    while (i < node->data.pipeline.cmd_count)
+    {
+        waitpid(a.pid_arr[i], &(a.status), 0);
+        if (i == node->data.pipeline.cmd_count - 1)
+            a.last_pid = a.status;
+        i++;
+    }
+    //printf("execute_pipeline end\n");
+    return (WEXITSTATUS(a.last_pid));
 }
 // This implementation of simple command execution is incomplete. It does not handle the case where for exemple we have export PATH=new/path/added | env and then execute env again as it will only have been updated in the child process.
 
