@@ -17,7 +17,6 @@
 #include <sys/wait.h>
 #include <signal.h>
 
-
 /*
   t_token_type: An enumeration representing different types of tkns encountered
   in a minishell environment.
@@ -41,30 +40,6 @@
 	TOKEN_DOUBLE_QUOTE: Represents a double-quoted string token.
 	TOKEN_ARGUMENT: Represents a general argument token.
 	TOKEN_ERROR: Represents an error token.
-*/
-/*
-typedef enum e_token_type
-{
-	TOKEN_ERROR ,
-	TOKEN_cmd_ECHO,
-	TOKEN_cmd_CD,
-	TOKEN_cmd_PWD,
-	TOKEN_cmd_EXPORT,
-	TOKEN_cmd_UNSET,
-	TOKEN_cmd_ENV,
-	TOKEN_REDIR_IN,
-	TOKEN_REDIR_OUT,
-	TOKEN_REDIR_APPEND,
-	TOKEN_HEREDOC,
-	TOKEN_PIPE,
-	TOKEN_AND,
-	TOKEN_OR,
-	TOKEN_ENV_VAR,
-	TOKEN_EXIT_STATUS,
-	TOKEN_SINGLE_QUOTE,
-	TOKEN_DOUBLE_QUOTE,
-	TOKEN_ARGUMENT,
-}				t_token_type;
 */
 
 typedef enum    e_builtins
@@ -258,6 +233,8 @@ typedef struct s_expand_wildcards_args
 t_env           *duplicate_vars(t_ntc **first_node, char **envp);
 void            lexer(t_ma *ma);
 int             count_tks(char const *s, char c);
+int             handle_special_cases(const char *s, int *i);
+int             handle_token_increments(const char *s, int *i);
 char            **ft_split_tkns(char c, t_ma *ma);
 t_token_type    clasify_token(char *value);
 t_astnode       *parser(t_ma *ma);
@@ -288,5 +265,23 @@ int	            expand_wildcard(t_wc_args *a, char *pattern, t_ma *ma);
 int             add_single_element(t_wc_args *a, char *name, t_ma *ma);
 int	            match_pattern(const char *str, const char *pattern);
 int             check_valid_file(char *path);
+
+void            generate_quotes(const char **s, char ***split, int *i, t_ma *ma);
+void            generate_double_operators(const char **s, char ***split, int *i, t_ma *ma);
+void            generate_single_operators_and_specials(const char **s, char ***split, int *i, t_ma *ma);
+void	        generate_regular_tkns(const char **s, char ***split, int *i, t_ma *ma);
+char            *get_env(char *name, char **env);
+void            handle_env_var(const char **s, char **result, t_ma *ma);
+void            append_char(char s, char **result, t_ma *ma);  
+void            handle_quote_content(const char **s, char **result, char quote, t_ma *ma);
+void            handle_newline_if_needed(const char **s, char **result, t_ma *ma);
+int             check_valid_path(char *path);
+char            *get_home_directory(t_env **env);
+int             validate_cd_path(char *path);
+int             change_directory(char *path);
+int             update_env_variables(char *current_dir, t_ma *ma);
+int             get_env_var(t_env **env, const char *name, char **value);
+int             update_oldpwd(char *current_dir, t_ma *ma);
+int             update_pwd(t_ma *ma);
 
 #endif

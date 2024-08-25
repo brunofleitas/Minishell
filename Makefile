@@ -5,24 +5,68 @@ LIBRARIES = -L./libft -lft
 LIBRARIES_PATH = -I./libft/headers
 LDFLAGS = -lreadline
 
-SRCS 	= 1-main.c 2-build_env_structure.c 3-lexer.c 4-count_words.c\
-		5-split_generator.c 6-clasify_token.c 7-AST_parser.c\
-		8-AST_create_node.c 9-AST_functions.c 10-get_next_token.c\
-		11-builtin_exit.c 12-builtin_cd.c 13-builtin_export.c 14-builtin_unset.c\
-		15-builtin_echo.c 16-builtin_pwd.c 17-builtin_env.c\
-		18-redirections.c 19-AST_execute.c 20-AST_execute_pipeline.c\
-		21-AST_execute_simple_cmd.c 22-AST_execute_builtin.c\
-		23-AST_execute_external_cmd.c 24-wc_expension.c 25-wc_expension_utils.c\
-		26-wc_match_pattern.c
-SRCSB 	= 1-main.c 2-build_env_structure.c 3-lexer.c 4-count_words.c\
-		5-split_generator.c 6-clasify_token.c 7-AST_parser.c\
-		8-AST_create_node.c 9-AST_functions.c 10-get_next_token.c\
-		11-builtin_exit.c 12-builtin_cd.c 13-builtin_export.c 14-builtin_unset.c\
-		15-builtin_echo.c 16-builtin_pwd.c 17-builtin_env.c\
-		18-redirections.c 19-AST_execute.c 20-AST_execute_pipeline.c\
-		21-AST_execute_simple_cmd.c 22-AST_execute_builtin.c\
-		23-AST_execute_external_cmd.c 24-wc_expension.c 25-wc_expension_utils.c\
-		26-wc_match_pattern.c
+	
+SRCS 	= 01-main.c \
+		  02-build_env_structure.c \
+		  03-lexer.c \
+		  04-count_words.c \
+		  05-count_words_utils.c \
+		  06-split_generator.c \
+		  07-token_generators.c \
+		  08-token_utils.c \
+		  09-clasify_token.c \
+		  10-AST_parser.c \
+		  11-AST_create_node.c \
+		  12-AST_functions.c \
+		  14-get_next_token.c\
+		  15-builtin_cd.c \
+		  16-builtin_cd_utils.c \
+		  17-builtin_export.c \
+		  18-builtin_unset.c \
+		  19-builtin_echo.c \
+		  20-builtin_pwd.c \
+		  21-builtin_env.c \
+		  22-builtin_exit.c \
+		  23-redirections.c \
+		  24-AST_execute.c \
+		  25-AST_execute_pipeline.c \
+		  26-AST_execute_simple_cmd.c \
+		  27-AST_execute_builtin.c \
+		  28-AST_execute_external_cmd.c \
+		  29-wc_expension.c \
+		  30-wc_expension_utils.c\
+		  31-wc_match_pattern.c 
+
+SRCSB 	= 01-main.c \
+		  02-build_env_structure.c \
+		  03-lexer.c \
+		  04-count_words.c \
+		  05-count_words_utils.c \
+		  06-split_generator.c \
+		  07-token_generators.c \
+		  08-token_utils.c \
+		  09-clasify_token.c \
+		  10-AST_parser.c \
+		  11-AST_create_node.c \
+		  12-AST_functions.c \
+		  14-get_next_token.c\
+		  15-builtin_cd.c \
+		  16-builtin_cd_utils.c \
+		  17-builtin_export.c \
+		  18-builtin_unset.c \
+		  19-builtin_echo.c \
+		  20-builtin_pwd.c \
+		  21-builtin_env.c \
+		  22-builtin_exit.c \
+		  23-redirections.c \
+		  24-AST_execute.c \
+		  25-AST_execute_pipeline.c \
+		  26-AST_execute_simple_cmd.c \
+		  27-AST_execute_builtin.c \
+		  28-AST_execute_external_cmd.c \
+		  29-wc_expension.c \
+		  30-wc_expension_utils.c\
+		  31-wc_match_pattern.c 
 		
 OBJS	= $(SRCS:.c=.o)
 OBJSB	= $(SRCSB:.c=.o)

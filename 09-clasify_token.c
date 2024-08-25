@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   6-clasify_token.c                                  :+:      :+:    :+:   */
+/*   6.9-clasify_token.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 21:49:28 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/20 23:32:29 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/25 07:39:32 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 static t_token_type	classify_cmd(char *value)
 {
-	if (ft_strcmp(value, "echo") == 0 
-	|| ft_strcmp(value, "cd") == 0 || ft_strcmp(value, "pwd") == 0\
-	|| ft_strcmp(value, "export") == 0 || ft_strcmp(value, "unset") == 0\
-	|| ft_strcmp(value, "env") == 0 || ft_strcmp(value, "exit") == 0)
+	if (ft_strcmp(value, "echo") == 0 || ft_strcmp(value, "cd") == 0
+		|| ft_strcmp(value, "pwd") == 0 || ft_strcmp(value, "export") == 0
+		|| ft_strcmp(value, "unset") == 0 || ft_strcmp(value, "env") == 0
+		|| ft_strcmp(value, "exit") == 0)
 		return (TOKEN_BUILTIN);
 	return (TOKEN_ERROR);
 }

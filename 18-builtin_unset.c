@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   14-builtin_unset.c                                 :+:      :+:    :+:   */
+/*   18-builtin_unset.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:49:35 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/20 00:16:15 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/25 08:22:01 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int find_env_var_unset(t_env **env, char *name)
+static int	find_env_var_unset(t_env **env, char *name)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
@@ -30,9 +30,9 @@ static int find_env_var_unset(t_env **env, char *name)
 	return (1);
 }
 
-int remove_env_var(t_env **env, char *name)
+int	remove_env_var(t_env **env, char *name)
 {
-	int i;
+	int	i;
 
 	i = find_env_var_unset(env, name);
 	if (i == 0)
@@ -47,9 +47,9 @@ int remove_env_var(t_env **env, char *name)
 	return (0);
 }
 
-static int check_for_equal(char *str)
+static int	check_for_equal(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -66,27 +66,11 @@ static int check_for_equal(char *str)
 	return (0);
 }
 
-/*
-  Parameters:
-    env: Pointer to the environment variables.
-    name: Name of the variable to unset.
-  Return value:
-    Returns 0.
-  Description:
-    Unsets (removes) an environment variable. Finds the variable 
-    by name, frees its memory, shifts the subsequent variables in 
-    the array, and decreases the environment variable count.
-*/
 int	builtin_unset(char **args, t_ma *ma)
 {
 	int	i;
 
 	i = 1;
-	// if (!args[1])
-	// {
-	// 	ft_putstr_fd("unset: not enough arguments\n", 2);
-	// 	return (0);
-	// }
 	while (args[i])
 	{
 		if (!check_for_equal(args[i]))
@@ -97,7 +81,7 @@ int	builtin_unset(char **args, t_ma *ma)
 					remove_env_var(&ma->env, args[i]);
 				i++;
 			}
-			break;
+			break ;
 		}
 		if (find_env_var_unset(&ma->env, args[i]) != 0)
 			remove_env_var(&ma->env, args[i]);
@@ -105,4 +89,3 @@ int	builtin_unset(char **args, t_ma *ma)
 	}
 	return (EXIT_SUCCESS);
 }
-//there are no checks for failure here it seems, is it normal?

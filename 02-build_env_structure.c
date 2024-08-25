@@ -12,6 +12,15 @@
 
 #include "minishell.h"
 
+/**
+ * @brief Counts the number of environment variables.
+ *
+ * This function iterates through the provided array of environment
+ * variables and counts the number of variables present.
+ *
+ * @param envp Array of environment variables.
+ * @return int The count of environment variables.
+ */
 static int	count_env_vars(char **envp)
 {
 	int	count;
@@ -22,11 +31,24 @@ static int	count_env_vars(char **envp)
 	return (count);
 }
 
+/**
+ * @brief Allocates memory for the environment variables.
+ *
+ * This function allocates memory for a new array of environment
+ * variables, including space for a NULL terminator. If the allocation
+ * fails, it writes an error message to standard error.
+ *
+ * @param first_node Pointer to the first node in the garbage collector
+ *                   linked list.
+ * @param count The number of environment variables.
+ * @return char** Pointer to the newly allocated array of environment
+ *                variables, or NULL if allocation fails.
+ */
 static char	**allocate_env(t_ntc **first_node, int count)
 {
 	char	**new_envp;
 
-	new_envp = (char**)g_c(first_node, (count + 1) * sizeof(char *))->data;
+	new_envp = (char **)g_c(first_node, (count + 1) * sizeof(char *))->data;
 	if (!new_envp)
 	{
 		write(2, "malloc error\n", 13);
@@ -34,20 +56,20 @@ static char	**allocate_env(t_ntc **first_node, int count)
 	}
 	return (new_envp);
 }
-/*
-static void	free_env_vars(t_ntc **first_node, t_env *env)
-{
-	int	i;
 
-	i = 0;
-	while (i < env->count)
-	{
-		free_ntc_prior(first_node, env->var[i]);
-		i++;
-	}
-	//free_ntc_prior(first_node, env);
-}
-*/
+/**
+ * @brief Duplicates the environment variables.
+ *
+ * This function creates a new t_env structure and duplicates the
+ * provided environment variables into it. It uses the garbage
+ * collector to manage memory allocation. If any allocation fails, it
+ * writes an error message to standard error and exits the program.
+ *
+ * @param first_node Pointer to the first node in the garbage collector
+ *                   linked list.
+ * @param envp Array of environment variables to duplicate.
+ * @return t_env* Pointer to the newly created t_env structure.
+ */
 t_env	*duplicate_vars(t_ntc **first_node, char **envp)
 {
 	t_env	*env;
@@ -67,23 +89,9 @@ t_env	*duplicate_vars(t_ntc **first_node, char **envp)
 			write(2, "ft_strdup_g_c error\n", 20);
 			free_memory(first_node);
 			exit(1);
-			//free_env_vars(first_node, env);
 		}
 		i++;
 	}
 	env->var[env->count] = NULL;
-	//print_env(env);
 	return (env);
-}
-
-void	print_env(t_env *env)
-{
-	int i;
-
-	i = 0;
-	while (env->var[i])
-	{
-		printf("%s\n", env->var[i]);
-		i++;
-	}
 }

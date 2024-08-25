@@ -1,23 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   7-AST_parser.c                                     :+:      :+:    :+:   */
+/*   14-get_next_token.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/11 12:40:58 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/13 15:57:00 by bfleitas         ###   ########.fr       */
+/*   Created: 2024/08/11 13:07:53 by bfleitas          #+#    #+#             */
+/*   Updated: 2024/08/25 07:53:05 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "minishell.h"
 
-t_astnode *parser(t_ma *ma)
+void	get_next_token(t_ma *ma)
 {
-    t_astnode   *root;
-
-    root = NULL;
-    root = parse_cmd_line(ma);
-    return (root);
+	if (ma->c_tkn)
+	{
+		ma->c_tkn++;
+	}
 }

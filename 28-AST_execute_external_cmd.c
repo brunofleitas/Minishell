@@ -53,27 +53,6 @@ static char	**ft_split(char const *s, char c, t_ntc **first_node)
 
 //CHECK WHY SPLITS ARE NOT WORKING
 
-static int	get_env_var(t_env **env, const char *name, char **value)
-{
-	int	i;
-	int	name_len;
-
-	i = 0;
-	name_len = strlen(name);
-	while ((*env)->var[i])
-	{
-		if (ft_strncmp((*env)->var[i], name, name_len) == 0
-			&& (*env)->var[i][name_len] == '=')
-		{
-			*value = (*env)->var[i] + name_len + 1;
-			return (i);
-		}
-		i++;
-	}
-	*value = NULL;
-	return (-1);
-}
-
 char *join_path(const char *path, const char *cmd, t_ntc **first_node)
 {
     char *full_path;
