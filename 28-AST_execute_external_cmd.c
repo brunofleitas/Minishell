@@ -115,7 +115,8 @@ int execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
     else
         command_path = find_command_path(words_arr[0], env, first_node);
     // Check if command_path was found
-    if (!command_path)
+
+        if (!command_path)
     {
         write(2, " command not found\n", 19);
         exit (127);  // Return 127 if the command was not found
@@ -135,8 +136,29 @@ int execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
         perror("Error");
         exit(126);  // Return 126 for "Permission denied"
     }
-
+    
     exit(execve(command_path, words_arr, (*env)->var));
     // status = execve(command_path, words_arr, (*env)->var);
     // return (status);
 }
+
+    // if (!command_path)
+    // {
+    //     write(2, " command not found\n", 19);
+    //     exit (127);  // Return 127 if the command was not found
+    // }
+    // // Check if the path is a directory
+    // if (stat(command_path, &path_stat) == 0 && S_ISDIR(path_stat.st_mode)) {
+    //     write(2, " Is a directory\n", 16);
+    //     exit (126);  // Return 126 if the path is a directory
+    // }
+    // // Check if the file exists
+    // if (access(command_path, F_OK) != 0) {
+    //     perror("Error");
+    //     exit (127);  // Return 127 for "No such file or directory"
+    // }
+    // // Check if the file is executable
+    // if (access(command_path, X_OK) != 0) {
+    //     perror("Error");
+    //     exit(126);  // Return 126 for "Permission denied"
+    // }

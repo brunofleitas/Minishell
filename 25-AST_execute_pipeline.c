@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   20-AST_execute_pipeline.c                          :+:      :+:    :+:   */
+/*   25-AST_execute_pipeline.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:07:23 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/20 23:28:07 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/25 16:11:50 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int execute_pipeline(t_astnode *node, t_ma *ma)
     i = 0;
     a.input_fd = STDIN_FILENO;
     // original_stdout = dup(STDOUT_FILENO);
-    if (node->data.pipeline.cmd_count == 1 && (node->data.pipeline.cmds[0]->data.simple_cmd.words[0].data.word.type == TOKEN_BUILTIN))
+    if (node->data.pipeline.cmd_count == 1 && (node->data.pipeline.cmds[0]->data.simple_cmd.words[0].data.word.type == TOKEN_BUILTIN) && (ft_strncmp(node->data.pipeline.cmds[0]->data.simple_cmd.words[0].data.word.value, "exit", 4) == 0))
     {
         a.status = execute_ast(node->data.pipeline.cmds[0], ma);
         // close(original_stdout);

@@ -1,12 +1,14 @@
+char	*gnl(int fd);
+#include <unistd.h>
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   18-redirections.c                                  :+:      :+:    :+:   */
+/*   23-redirections.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:52:15 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/20 18:00:20 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/25 15:39:35 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,16 +201,16 @@ static int handle_heredoc(const char *delimiter, t_ma *ma)
 
     temp_file_name = give_tmp_name(ma);
     if (!temp_file_name)
-        return(0);
+        return(1);
     if (!create_tmp_file(temp_file_name, delimiter))
-        return (0);
+        return (1);
     redirect_input(temp_file_name);
     if (unlink(temp_file_name) == -1)
     {
-        perror(" ");
-        return (0);
+        //perror(" ");
+        return (1);
     }
-    return (1);
+    return (0);
 }
 
 /**
@@ -217,7 +219,7 @@ static int handle_heredoc(const char *delimiter, t_ma *ma)
  * @param redir_node The AST node containing the redirections.
  * @param ma The main data structure of the program.
  */
-int handle_redirections(t_astnode *redir_node, t_ma *ma)
+int handle_redirections(t_astnode *redir_node, int in_c, t_ma *ma)
 {
     // int fd_num;
 
@@ -230,11 +232,18 @@ int handle_redirections(t_astnode *redir_node, t_ma *ma)
             && !redirect_output_append(redir_node->data.redirection.file, 1))
             return (0);
         else if (redir_node->data.redirection.type == TOKEN_REDIR_IN 
-            && !redirect_input(redir_node->data.redirection.file))
-            return (0);
+            && !redirect_input(redir_node->data.redirection.file) && in_c)
+        {
+            perror(" ");
+            exit(EXIT_FAILURE);
+        }
         else if (redir_node->data.redirection.type == TOKEN_HEREDOC 
-            && !handle_heredoc(redir_node->data.redirection.file, ma))
-            return (0);
+            && !handle_heredoc(redir_node->data.redirection.file, ma)
+            && in_c)
+        {
+            perror(" ");
+            exit(EXIT_FAILURE);
+        }
         redir_node = redir_node->data.redirection.next;
     }
     return (1);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   9-AST_functions.c                                  :+:      :+:    :+:   */
+/*   12-AST_functions.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:08:01 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/25 07:50:53 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/25 15:52:46 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,10 @@ static void	add_redir(t_astnode **first_redir_node, t_astnode **current,
 static void	parse_redirection_list(t_astnode *node, t_astnode **last_word,
 		t_ma *ma)
 {
-	t_astnode	*current_in;
-	t_astnode	*current_out;
 	t_astnode	*redir_node;
+	t_astnode *current;
 
-	current_in = NULL;
-	current_out = NULL;
+	current = NULL;
 	while ((*(ma->c_tkn)) && is_redirection_token((*(ma->c_tkn))->type))
 	{
 		redir_node = create_ast_node(&(ma->first_node), NODE_REDIRECTION);
@@ -106,13 +104,7 @@ static void	parse_redirection_list(t_astnode *node, t_astnode **last_word,
 		redir_node->data.redirection.file = (*(ma->c_tkn))->value;
 		redir_node->data.redirection.next = NULL;
 		get_next_token(ma);
-		if (redir_node->data.redirection.type == TOKEN_REDIR_IN
-			|| redir_node->data.redirection.type == TOKEN_HEREDOC)
-			add_redir(&(node->data.simple_cmd.redirections_in), &(current_in),
-				redir_node);
-		else
-			add_redir(&(node->data.simple_cmd.redirections_out), &(current_out),
-				redir_node);
+		add_redir(&(node->data.simple_cmd.redirections), &(current), redir_node);
 		if ((*(ma->c_tkn)) && is_word_token((*(ma->c_tkn))->type))
 			parse_word_list(node, last_word, ma);
 	}
@@ -126,8 +118,6 @@ static t_astnode	*parse_simple_cmd(t_ma *ma)
 	last_word = NULL;
 	node = create_ast_node(&(ma->first_node), NODE_SIMPLE_CMD);
 	node->data.simple_cmd.words = NULL;
-	node->data.simple_cmd.redirections_in = NULL;
-	node->data.simple_cmd.redirections_out = NULL;
 	parse_word_list(node, &last_word, ma);
 	parse_redirection_list(node, &last_word, ma);
 	return (node);

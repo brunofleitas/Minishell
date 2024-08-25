@@ -127,6 +127,13 @@ static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
 //     return (a.status);
 // }
 
+static int  input_is_critical(char *word)
+{
+    if (ft_strcmp(word, "cat") == 0 || ft_strcmp(word, "ls") == 0 || ft_strcmp(word, "echo") == 0)
+        return (1);
+    return (0);
+}
+
 /**
  * @brief Execute a simple command
  *
@@ -144,17 +151,8 @@ int execute_simple_cmd(t_astnode *node, t_ma *ma)
 
     a.saved_stdin = dup(STDIN_FILENO);
     a.saved_stdout = dup(STDOUT_FILENO);
-    if (!handle_redirections(node->data.simple_cmd.redirections_in, ma))
-    {
-        // printf("Error: Failed to handle redirections of inputs\n");
-        //restore_io(a.saved_stdin, a.saved_stdout);
-        return (EXIT_FAILURE);
-    }
-    if (!handle_redirections(node->data.simple_cmd.redirections_out, ma))
-    {
-        //restore_io(a.saved_stdin, a.saved_stdout);
-        exit (EXIT_FAILURE);
-    }
+    a.in_critical = input_is_critical(node->data.simple_cmd.words[0].data.word.value);
+    handle_redirections(node->data.simple_cmd.redirections, a.in_critical, ma);
     a.words_arr = create_words_arr(node, &(a.word_count), ma);
 //     char **temp = a.words_arr;
 //     if (!temp)

@@ -139,11 +139,8 @@ struct s_astnode
         struct
 		{
             t_astnode *words;
-            t_astnode *redirections_in;
-            t_astnode *redirections_out;
+            t_astnode *redirections;
             int word_count;
-            int redir_in_count;
-            int redir_out_count;
         } simple_cmd;
 
         struct
@@ -216,6 +213,7 @@ typedef struct  s_simple_cmd_args
     char    **words_arr;
     int     saved_stdin;
     int     saved_stdout;
+    int in_critical;
 }               t_s_cmd_args;
 
 /* *************************  EXPAND_WILDCARDS_ARGS  ********************* */
@@ -258,7 +256,7 @@ int             find_env_var(t_env **env, char *var);
 int             execute_ast(t_astnode *node, t_ma *ma);
 pid_t           fork_process();
 int	            update_env_var(int i, const char *var, t_ma *ma);
-int             handle_redirections(t_astnode *redir_node, t_ma *ma);
+int             handle_redirections(t_astnode *redir_node, int in_crical, t_ma *ma);
 void	        print_env(t_env *env);
 char            **expand_wildcards_in_args(char **args, t_ma *ma);
 int	            expand_wildcard(t_wc_args *a, char *pattern, t_ma *ma);
