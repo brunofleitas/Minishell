@@ -1,0 +1,14 @@
+var_expansion_pwd		echo $PWD
+var_expansion_path		echo $PATH
+var_expansion_fail		echo $doesnotexists6729723
+var_expansion_none		echo $
+var_expansion_surround	echo aaaa$PWDaaaa
+var_expansion_multi		echo $PWD $hi $PATH   $PWD
+var_expansion_end1		echo $PWD-end
+var_expansion_end2		echo $PWD_underscore
+var_expansion_end3		echo $PWD02428462
+var_invalid_name		echo $/imaslash
+var_expand_cmd_invalid	$PATH $PWD
+var_expand_cmd_empty	$a
+var_expand_cmd_ls		export a=ls; $a -a
+var_expand_cmd_invalid	export a=fail; $a -a

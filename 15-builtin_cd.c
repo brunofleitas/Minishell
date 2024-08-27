@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   15-builtin_cd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
+/*   By: bruno <bruno@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:45:41 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/25 08:41:04 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/27 16:43:00 by bruno            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	update_pwd(t_ma *ma)
 	return (0);
 }
 
-int	builtin_cd(char **args, t_ma *ma)
+void	builtin_cd(char **args, t_ma *ma)
 {
 	char	current_dir[PATH_MAX];
 	char	*path;
@@ -121,19 +121,29 @@ int	builtin_cd(char **args, t_ma *ma)
 	if (i > 2)
 	{
 		write(STDERR_FILENO, " too many arguments\n", 19);
-		return (1);
+		exit_or_setexit(1, 0, ma);
+		return ;
 	}
 	path = get_cd_path(args, &ma->env);
-	if (!path || !validate_cd_path(path))
-		return (EXIT_FAILURE);
+    if (!path || !validate_cd_path(path))
+    {
+        exit_or_setexit(1, 0, ma);
+        return;
+    }
 	if (getcwd(current_dir, sizeof(current_dir)) == NULL)
 	{
-		perror("getcwd");
-		return (EXIT_FAILURE);
+		exit_or_setexit(1, 0, ma);
+		return ;
 	}
-	if (change_directory(path))
-		return (EXIT_FAILURE);
-	if (update_env_variables(current_dir, ma))
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+    if (change_directory(path))
+    {
+        exit_or_setexit(1, 0, ma);
+        return;
+    }
+    if (update_env_variables(current_dir, ma))
+    {
+        exit_or_setexit(1, 0, ma);
+        return;
+    }
+    exit_or_setexit(0,0, ma);
 }

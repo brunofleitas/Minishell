@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   21-builtin_env.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
+/*   By: bruno <bruno@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:51:32 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/25 08:43:39 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/27 16:41:28 by bruno            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static char	*concatenate_env_vars(t_env *env, size_t total_length, t_ma *ma)
 	result = (char *)ft_calloc_g_c((total_length + 1), sizeof(char),
 			&(ma->first_node));
 	if (!result)
-		return (NULL);
+		exit_or_setexit(1,1, ma);
 	while (env->var[i] != NULL)
 	{
 		ft_strlcat(result, env->var[i], total_length + 1);
@@ -46,24 +46,24 @@ static char	*concatenate_env_vars(t_env *env, size_t total_length, t_ma *ma)
 	return (result);
 }
 
-int	builtin_env(char **args, t_ma *ma)
+void	builtin_env(char **args, t_ma *ma)
 {
 	size_t	total_length;
 	char	*result;
 
 	if (args[1] != NULL)
 	{
-		printf("env: too many arguments\n");
-		return (EXIT_FAILURE);
+		write(STDERR_FILENO, "env: too many arguments\n", 24);
+		exit_or_setexit(1,0, ma);
 	}
 	total_length = calculate_total_env_length(ma->env);
 	result = concatenate_env_vars(ma->env, total_length, ma);
 	if (result)
 	{
 		printf("%s", result);
-		return (EXIT_SUCCESS);
+		exit_or_setexit(0,0, ma);
 	}
-	return (EXIT_FAILURE);
+	exit_or_setexit(1,1, ma);
 }
 
 /* int	builtin_env(char **args, t_ma *ma)

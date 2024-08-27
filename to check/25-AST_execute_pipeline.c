@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   20-AST_execute_pipeline.c                          :+:      :+:    :+:   */
+/*   25-AST_execute_pipeline.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:07:23 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/20 23:28:07 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/25 16:11:50 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void setup_pipe(int pipe_fds[2])
 
 static void child_process(t_pip_args *a, t_astnode *simple_cmd, t_ma *ma)
 {
-    // printf("child_process start\n");
+    //printf("child_process start\n");
     if (a->input_fd != STDIN_FILENO)
     {
         dup2(a->input_fd, STDIN_FILENO);
@@ -51,9 +51,8 @@ static void child_process(t_pip_args *a, t_astnode *simple_cmd, t_ma *ma)
         close(a->pipe_fds[0]);
         close(a->pipe_fds[1]);
     }
-    ma->in_child_p = 1;
     //printf("child_process end\n");
-    execute_ast(simple_cmd, ma); //what is this function?
+    exit(execute_ast(simple_cmd, ma)); //what is this function?
 }
 
 static void parent_process(t_pip_args *a)
@@ -79,7 +78,7 @@ static void parent_process(t_pip_args *a)
  @param env Pointer to the environment structure
  @return int Returns the exit status of the last command in the pipeline
  */
-void execute_pipeline(t_astnode *node, t_ma *ma)
+int execute_pipeline(t_astnode *node, t_ma *ma)
 {
     t_pip_args  a;
     int         i;
@@ -89,11 +88,11 @@ void execute_pipeline(t_astnode *node, t_ma *ma)
     i = 0;
     a.input_fd = STDIN_FILENO;
     // original_stdout = dup(STDOUT_FILENO);
-    if (node->data.pipeline.cmd_count == 1 && (node->data.pipeline.cmds[0]->data.simple_cmd.words[0].data.word.type == TOKEN_BUILTIN))
+    if (node->data.pipeline.cmd_count == 1 && (node->data.pipeline.cmds[0]->data.simple_cmd.words[0].data.word.type == TOKEN_BUILTIN) && (ft_strncmp(node->data.pipeline.cmds[0]->data.simple_cmd.words[0].data.word.value, "exit", 4) == 0))
     {
-        execute_ast(node->data.pipeline.cmds[0], ma);
-        return;
+        a.status = execute_ast(node->data.pipeline.cmds[0], ma);
         // close(original_stdout);
+        return(a.status);
     }
     a.pid_arr = g_c(&(ma->first_node), sizeof(pid_t) * (node->data.pipeline.cmd_count))->data;
     while (i < node->data.pipeline.cmd_count)
@@ -103,7 +102,7 @@ void execute_pipeline(t_astnode *node, t_ma *ma)
             setup_pipe(a.pipe_fds);
         a.pid_arr[i] = fork();
         if (a.pid_arr[i] == -1)
-            exit_or_setexit(1, 1, ma);
+            return(EXIT_FAILURE);
         if (a.pid_arr[i] == 0)
             child_process(&a, node->data.pipeline.cmds[i], ma);
         else
@@ -117,16 +116,11 @@ void execute_pipeline(t_astnode *node, t_ma *ma)
     {
         waitpid(a.pid_arr[i], &(a.status), 0);
         if (i == node->data.pipeline.cmd_count - 1)
-            a.last_status = a.status;
+            a.last_pid = a.status;
         i++;
     }
-    if (WIFEXITED(a.last_status))
-        exit_or_setexit(WEXITSTATUS(a.last_status), 0, ma);
-    else if (WIFSIGNALED(a.last_status))
-        exit_or_setexit(WTERMSIG(a.last_status), 0, ma);
-    return;
     //printf("execute_pipeline end\n");
-    // return (WEXITSTATUS(a.last_status));
+    return (WEXITSTATUS(a.last_pid));
 }
 // This implementation of simple command execution is incomplete. It does not handle the case where for exemple we have export PATH=new/path/added | env and then execute env again as it will only have been updated in the child process.
 
@@ -220,7 +214,7 @@ void execute_pipeline(t_astnode *node, t_ma *ma)
 //         close(a->pipe_fds[1]); // Close the write end of the pipe
 //         a->input_fd = a->pipe_fds[0]; // Set the input for the next command to the read end of the pipe
 //     }
-//     a->last_status = a->pid; // Store the PID of the last forked child process
+//     a->last_pid = a->pid; // Store the PID of the last forked child process
 // }
 
 // /**

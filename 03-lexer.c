@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   3-lexer.c                                          :+:      :+:    :+:   */
+/*   03-lexer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
+/*   By: bruno <bruno@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 15:03:22 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/25 04:57:42 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/27 17:09:02 by bruno            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,11 @@ void	lexer(t_ma *ma)
 	{
 		wildcards = expand_wildcards_in_args(split, ma);
 		process_wildcards(wildcards, ma);
+	}
+	else 
+	{
+		ma->tkns[0] = NULL;
+		ma->c_tkn = ma->tkns;
 	}
 	free_ntc_prior(&(ma->first_node), split);
 }

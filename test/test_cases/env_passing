@@ -1,0 +1,5 @@
+env_pass				echo $a; export a=b; echo $a;
+env_pass_unset			echo $a; export a=b; echo $a; unset a; echo $a;
+env_pass_to_pipe		export a=b; echo a | echo $a
+env_pass_in_pipe		export a=b; echo $a | export a=c | echo $a
+env_pass_in_pipe_unset	export a=b; echo $a | unset a | echo $a

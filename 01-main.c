@@ -1,120 +1,95 @@
-#include <unistd.h>
-char	*gnl(int fd);
-#include <unistd.h>
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   1-main.c                                           :+:      :+:    :+:   */
+/*   01-main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
+/*   By: bruno <bruno@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:59:46 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/20 23:29:02 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/27 17:03:59 by bruno            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * @brief Signal handler for SIGINT.
- *
- * This function is called when the SIGINT signal is received. It handles the
- * interruption by writing a newline character to the standard output, moving
- * the readline cursor to a new line, replacing the current line with an empty
- * string, and redisplaying the readline prompt.
- *
- * @param sig The signal number.
- */
-void	sigint_handler(int sig)
+#include "minishell.h"
+
+//tester: https://github.com/LucasKuhn/minishell_tester/tree/main
+//liveshare: https://prod.liveshare.vsengsaas.visualstudio.com/join?0623C96F2899D5C1DD0735373291B02F4DA7
+ 
+void sigint_handler(int sig)
 {
-	(void)sig;
-	write(STDOUT_FILENO, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+    (void)sig;
+    write(STDOUT_FILENO, "\n", 1);
+    rl_on_new_line();
+    rl_replace_line("", 0);
+    rl_redisplay();
 }
 
-/**
- * @brief Initializes the t_ma structure.
- *
- * This function initializes the members of the t_ma structure. It sets the
- * first_node, first_env, and input pointers to NULL, initializes the
- * last_exit_status to 0, and duplicates the environment variables into the
- * env member.
- *
- * @param ma Pointer to the t_ma structure to initialize.
- * @param envp Array of environment variables.
- */
-static void	init_ma(t_ma *ma, char **envp)
-{
-	ma->first_node = NULL;
-	ma->first_env = NULL;
-	ma->input = NULL;
-	ma->last_exit_status = 0;
-	ma->env = duplicate_vars(&(ma->first_env), envp);
-}
-
-/**
- * @brief Processes the input command.
- *
- * This function processes the input command stored in the t_ma structure. If
- * the input is not an empty string, it adds the input to the history,
- * tokenizes it using the lexer, parses the tokens into an abstract syntax
- * tree (AST), and executes the AST. Finally, it frees the memory allocated
- * for the AST nodes.
- *
- * @param ma Pointer to the t_ma structure containing the input command and
- *           other relevant data.
- */
-static void	process_input(t_ma *ma)
-{
-	t_astnode	*root;
-
-	if (ft_strcmp(ma->input, "") != 0)
-	{
-		add_history(ma->input);
-		lexer(ma);
-		if (ma->tkns[0] != NULL)
-		{
-			root = parser(ma);
-			ma->last_exit_status = execute_ast(root, ma);
-		}
-		free_memory(&(ma->first_node));
-	}
-}
-
-/**
- * @brief Entry point of the minishell program.
- *
- * This function initializes the minishell environment and enters an
- * infinite loop to read and process user input. It sets up signal
- * handlers for SIGINT and SIGQUIT, initializes the t_ma structure,
- * and uses the readline library to display a prompt and read input
- * from the user. If the input is NULL (EOF), it calls the builtin_exit
- * function to exit the shell. Otherwise, it processes the input
- * command.
- *
- * @param argc Argument count.
- * @param argv Argument vector.
- * @param envp Environment variables.
- * @return int Exit status of the program.
- */
+/*
+  Parameters:
+    input: A string representing the user's input.
+  Return value:
+    None. This function does not return a value; instead, it processes the input
+      within the scope of the program.
+  Description:
+    This function reads and processes user input continuously until the user
+    enters "exit". It uses the readline library to capture user input,
+    compares the input against the "exit" cmd, adds the input to the 
+	history for convenience, processes the input using a lexer function, and 
+	finally frees the memory allocated for the input string after processing. 
+	The function also ensures to clear the history at the end of execution.
+*/
 int	main(int argc, char **argv, char **envp)
 {
-	t_ma	ma;
+	t_ma 		ma;
+	t_astnode 	*root;
 
+	
 	(void)argc;
 	(void)argv;
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, SIG_IGN);
-	init_ma(&ma, envp);
+	ma.first_node = NULL;
+	ma.first_env = NULL;
+	ma.last_exit_status = 0;
+	ma.in_child_p = 0;
+	ma.env = duplicate_vars(&(ma.first_env), envp);
+	int saved_stdin = dup(STDIN_FILENO);
+    int saved_stdout = dup(STDOUT_FILENO);
+	int temp_fd1;
+	int temp_fd2;
 	while (1)
 	{
-		ma.input = readline("\x1b[32mminishell>\x1b[0m");
+		signal(SIGINT, sigint_handler);
+		signal(SIGQUIT, SIG_IGN);
+		ma.input = readline("minisshell>>");
 		if (ma.input == NULL)
-			builtin_exit(&ma, NULL);
-		process_input(&ma);
+        	builtin_exit(&ma, NULL);
+		if (ft_strcmp(ma.input, "") != 0)
+		{
+			add_history(ma.input);
+			lexer(&ma);
+			if (ma.tkns[0] != NULL)
+			{	
+				//get_next_token(&ma);
+				root = parser(&ma);
+				//printf("parser end\n");
+				execute_ast(root, &ma);
+				// printf("execute_ast end\n");
+				//printf("main\n");
+				//print_env(env);
+			}
+			free_memory(&(ma.first_node));
+		}
+		temp_fd1 = dup(STDIN_FILENO);
+		temp_fd2 = dup(STDOUT_FILENO);
+		dup2(saved_stdin, STDIN_FILENO);
+		dup2(saved_stdout, STDOUT_FILENO);
+		close (temp_fd1);
+		close (temp_fd2);
 	}
+	// free_memory(&(ma.first_env));
+	// clear_history();
+	//ft_printf("clear_history was executed\n");
 	return (0);
 }
 

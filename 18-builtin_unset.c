@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   18-builtin_unset.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
+/*   By: bruno <bruno@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:49:35 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/25 08:22:01 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/27 16:41:45 by bruno            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	check_for_equal(char *str)
 	return (0);
 }
 
-int	builtin_unset(char **args, t_ma *ma)
+void	builtin_unset(char **args, t_ma *ma)
 {
 	int	i;
 
@@ -87,5 +87,5 @@ int	builtin_unset(char **args, t_ma *ma)
 			remove_env_var(&ma->env, args[i]);
 		i++;
 	}
-	return (EXIT_SUCCESS);
+	exit_or_setexit(0,0, ma);
 }

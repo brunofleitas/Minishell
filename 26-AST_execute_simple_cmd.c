@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static int execute_exp_single_arg_cmd(char **words_arr, t_ma *ma);
+static void execute_exp_single_arg_cmd(char **words_arr, t_ma *ma);
 
 static int node_word_count(t_astnode *node)
 {
@@ -38,22 +38,21 @@ static int node_word_count(t_astnode *node)
  * @param saved_stdin The saved standard input file descriptor
  * @param saved_stdout The saved standard output file descriptor
 */
-// static void restore_io(int saved_stdin, int saved_stdout)
-// {
-//     dup2(saved_stdin, STDIN_FILENO);
-//     dup2(saved_stdout, STDOUT_FILENO);
-//     close(saved_stdin);
-//     close(saved_stdout);
-// }
+void restore_io(int saved_stdin, int saved_stdout)
+{
+    dup2(saved_stdin, STDIN_FILENO);
+    dup2(saved_stdout, STDOUT_FILENO);
+    close(saved_stdin);
+    close(saved_stdout);
+}
 
 static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
 {
     t_astnode   *node_word;
     char        **words_arr;
     int         i;
-    //char        *trimmed;
 
-    //printf("create_words_arr start\n");
+
     i= 0;
     node_word = node->data.simple_cmd.words;
     *word_count = node_word_count(node);
@@ -66,17 +65,7 @@ static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
     node_word = node->data.simple_cmd.words;
     while(i < *word_count)
     {
-        // if (node_word->data.word.value[0] == '\"' || node_word->data.word.value[0] == '\'')
-        // {
-        //     trimmed = ft_strtrim(node_word->data.word.value, "\"\'", &(ma->first_node));
-        //     if (check_valid_file(trimmed))
-        //         words_arr[i++] = trimmed;
-        //     else
-        //         words_arr[i++] = ft_substr_g_c(node_word->data.word.value, 0, ft_strlen(node_word->data.word.value), &(ma->first_node));
-        // }
-        // else
-        //printf("node_word->data.word.value: %s\n", node_word->data.word.value);
-            words_arr[i++] = ft_substr_g_c(node_word->data.word.value, 0, ft_strlen(node_word->data.word.value), &(ma->first_node));
+        words_arr[i++] = ft_substr_g_c(node_word->data.word.value, 0, ft_strlen(node_word->data.word.value), &(ma->first_node));
         node_word = node_word->data.word.next;
     }
     words_arr[*word_count] = NULL;
@@ -127,9 +116,9 @@ static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
 //     return (a.status);
 // }
 
-static int  input_is_critical(char *word)
+static int  input_is_critical(char **word)
 {
-    if (ft_strcmp(word, "cat") == 0 || ft_strcmp(word, "ls") == 0 || ft_strcmp(word, "echo") == 0)
+    if (ft_strcmp(word[0], "cat") == 0 || ft_strcmp(word[0], "ls") == 0 || ((ft_strcmp(word[0], "echo") == 0) && word[1] == NULL))
         return (1);
     return (0);
 }
@@ -145,34 +134,24 @@ static int  input_is_critical(char *word)
  * @param ma Pointer to the memory allocation structure
  * @return int Returns the exit status of the executed command
  */
-int execute_simple_cmd(t_astnode *node, t_ma *ma)
+void execute_simple_cmd(t_astnode *node, t_ma *ma)
 {
-    t_s_cmd_args   a;
-
+    t_s_cmd_args    a;
+    
+    // int status_inp_redir;
+    // ft_printf("execute_simple_cmd start\n");
     a.saved_stdin = dup(STDIN_FILENO);
     a.saved_stdout = dup(STDOUT_FILENO);
-    a.in_critical = input_is_critical(node->data.simple_cmd.words[0].data.word.value);
-    handle_redirections(node->data.simple_cmd.redirections, a.in_critical, ma);
     a.words_arr = create_words_arr(node, &(a.word_count), ma);
-//     char **temp = a.words_arr;
-//     if (!temp)
-//    printf("words_arr is NULL\n");
-//     while (*temp)
-//     {
-//         printf("word: %s\n", *temp);
-//         temp++;
-//     }
-    //write(1, a.words_arr[1], ft_strlen(a.words_arr[1]));
-    if (!a.words_arr)
-        exit(EXIT_FAILURE);
-    // {
-    //     restore_io(a.saved_stdin, a.saved_stdout);
-    //     return (EXIT_FAILURE);
-    // }
-     /* a.status =  */exit(execute_exp_single_arg_cmd(a.words_arr, ma));
-    // free_ntc_prior(&(ma->first_node), a.words_arr);
-    // restore_io(a.saved_stdin, a.saved_stdout);
-    // return (a.status);
+    if(!a.words_arr)
+    {
+        exit_or_setexit(1, 0, ma);
+        return;
+    }
+    a.i_c = input_is_critical(a.words_arr);
+    if(!handle_redirections(node->data.simple_cmd.redirections, &a, ma))
+        return;
+    execute_exp_single_arg_cmd(a.words_arr, ma);
 }
 
 /**
@@ -185,93 +164,28 @@ int execute_simple_cmd(t_astnode *node, t_ma *ma)
  * @param ma Pointer to the memory allocation structure
  * @return int Returns the exit status of the executed command
  */
-static int execute_exp_single_arg_cmd(char **words_arr, t_ma *ma)
+static void execute_exp_single_arg_cmd(char **words_arr, t_ma *ma)
 {
-    //char    **exp_args;
-    //int     status;
+    char    **exp_args;
+    // int     status;
 
-    //exp_args = expand_wildcards_in_args(words_arr, ma);
-    // if (!exp_args)
-    //      return (EXIT_FAILURE);
-    // char **temp = exp_args;
-    // if (!temp)
-    //     printf("words_arr is NULL\n");
-    // while (*temp)
-    // {
-    //     printf("word: %s\n", *temp);
-    //     temp++;
-    // }
-    if (is_builtin(/* words_arr[0]))// */words_arr[0]))
+    exp_args = expand_wildcards_in_args(words_arr, ma);
+    if (!exp_args)
     {
-        /* status = */ execute_builtin(/* words_arr, ma);// */words_arr, ma);
+        exit_or_setexit(1, 0, ma);
+        return;
     }
-    else
-        /* status =  */execute_external_cmd(/* words_arr, &(ma)->env, &(ma)->first_node);// */words_arr, &(ma)->env, &(ma)->first_node);
-        //maybe we should free exp_args here
-    //printf("status: %d\n", status);
-   /*  fflush(stdout); */
-    return (EXIT_SUCCESS);
+    if (is_builtin(exp_args[0]))
+    {
+        // ft_printf("ma->in_child_p: %d\n", ma->in_child_p);// why does this execute or at least land in the exit code if the command is a builtin?
+        execute_builtin(exp_args, ma);
+        return;
+    }
+    // ft_printf("ma->in_child_p: %d\n", ma->in_child_p);
+    if (ma->in_child_p == 1)
+    {
+        // write(1, "executing external command\n", 27);
+        execute_external_cmd(exp_args, &(ma)->env, &(ma)->first_node);
+        return;
+    }
 }
-
-
-
-
-
-/*
-int execute_simple_cmd(t_astnode *node, t_env *env, t_ntc **first_node)
-{
-    int     words_count;                             // Variable to store the argument count
-    int     status;                                // Variable to store the status of the command execution
-    char    **args;                                // Pointer to hold the arguments array
-    int     saved_stdin = dup(STDIN_FILENO);       // Save the current standard input
-    int     saved_stdout = dup(STDOUT_FILENO);     // Save the current standard output
-
-    // Handle any redirections specified in the command
-    if (handle_redirections(node->data.simple_cmd.redirections) != 0)
-    {
-        restore_io(saved_stdin, saved_stdout);     // Restore standard I/O if redirections fail
-        return 1;                                  // Return with error status if redirections fail
-    }
-
-    // Prepare the arguments for the command execution
-    args = create_words_arr(first_node, node, env, &words_count);
-    if (!args)
-    {
-        restore_io(saved_stdin, saved_stdout);     // Restore standard I/O if argument preparation fails
-        return 1;                                  // Return with error status if argument preparation fails
-    }
-
-    // Expand any wildcards in the arguments
-    expand_wildcards(args);
-
-    // Check if the command is a builtin command
-    if (is_builtin(args[0]))
-    {
-        status = execute_builtin(args, env, first_node);  // Execute the builtin command
-    }
-    else
-    {
-        status = execute_external_cmd(args, env);  // Execute the external command by forking a child process
-    }
-
-    free_args(args);                              // Free the allocated memory for arguments
-    restore_io(saved_stdin, saved_stdout);        // Restore the original standard I/O
-    return status;                                // Return the status of the command execution
-}
-
-
- * @brief Restore the standard I/O to their original state
- *
- * This function restores the standard input and output to their saved states.
- *
- * @param saved_stdin The saved standard input file descriptor
- * @param saved_stdout The saved standard output file descriptor
-
-void restore_io(int saved_stdin, int saved_stdout)
-{
-    dup2(saved_stdin, STDIN_FILENO);  // Restore the saved standard input
-    dup2(saved_stdout, STDOUT_FILENO); // Restore the saved standard output
-    close(saved_stdin);               // Close the saved standard input descriptor
-    close(saved_stdout);              // Close the saved standard output descriptor
-}
-*/

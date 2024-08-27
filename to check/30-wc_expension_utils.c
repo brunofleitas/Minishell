@@ -54,7 +54,6 @@ int	expand_wildcard(t_wc_args *a, char *pattern, t_ma *ma)
 static int	process_directory(t_wc_args *a, DIR *dir, char *pattern, t_ma *ma)
 {
 	struct dirent	*entry;
-	
 
 	// printf("process_directory_start\n");
 	entry = readdir(dir);
@@ -66,7 +65,6 @@ static int	process_directory(t_wc_args *a, DIR *dir, char *pattern, t_ma *ma)
 			
 			if (!add_single_element(a, entry->d_name, ma))
 				return (0);
-			a->count_match++;
 		}
 		entry = readdir(dir);
 	}

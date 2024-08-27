@@ -1,0 +1,20 @@
+cd_prev			cd ..
+cd_0			cd..
+cd_1			cd ./srcs
+cd_2			cd .
+cd_3			cd ../../..
+cd_4			cd /
+cd_users		cd /Users
+cd_6			Cd .
+cd_7			cD .
+cd_8			cd /.
+cd_9			cd /././
+cd_10			cd //////////
+cd_11			cd $HOME
+cd_12			cd '//'
+cd_13			cd ''
+cd_14			cd '' ''
+cd_15			cd ' '
+cd_16			cd d
+cd_track_pwd		echo $PWD; cd ..; echo $PWD
+cd_track_oldpwd		echo $OLDPWD; cd ..; echo $OLDPWD

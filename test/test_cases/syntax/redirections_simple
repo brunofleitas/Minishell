@@ -1,0 +1,12 @@
+redir_in			cat infile; cat < infile
+redir_out			cat infile > outfile; cat outfile
+redir_append		echo a > outfile;
+redir_append2		echo a > outfile; echo b >> outfile; cat outfile
+redir_in_out_ls		cat < infile > outfile; ls -l --time-style=+
+redir_in_append_ls	cat < infile >> out; echo hah >> out; ls -l --time-style=+
+redir_infail		cat < fail
+redir_outfail		cat infile > readonly; ls -l --time-style=+
+redir_inoutfail		cat < fail > readonly; ls -l --time-style=+
+redir_outinfail		cat > readonly < fail; ls -l --time-style=+
+redir_heredoc		cat << EOF;hello;there;EOF
+redir_heredoc2		grep o << EOF > out;hello;there;EOF; ls -l --time-style=+

@@ -1,0 +1,4 @@
+redir_expand_quotes			cat < "infile"
+redir_expand_var			cat < $PATH
+redir_expand_var_quotes		cat < "$PATH"
+redir_expand_cmd			$fail < fail

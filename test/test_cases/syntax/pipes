@@ -1,0 +1,6 @@
+pipe			echo a | cat
+pipe2			echo a | echo b | cat
+pipe_grep		cat run.sh | grep a
+pipe_tail		cat run.sh | grep a | tail -1
+pipe_head		cat run.sh | grep a | head -1
+pipe_stream		cat /dev/urandom | head -3 | wc -l

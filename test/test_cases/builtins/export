@@ -1,0 +1,18 @@
+export_0		export test0
+export_1		export test1=
+export_2		export test2=1
+export_3		export test3=test=salut
+export_hi		export test="hi"
+export_hi2		export test="hi" test2="hi"
+export_hi3		export test="salut"
+export_4		export "salut"=test
+export_split	export A="variable with space"
+export_5		export test5=""
+export_color	export test=$COLORTERM=colorcolor
+export_user		export USER=itsame
+export_invalid_minus1	export A-
+export_invalid_minus2	export A-=123
+export_invalid_equal	export =
+export_invalid_numeric	export 123
+export_invalid_mutli	export A=a 123=4 B=b MINUS-
+export_invalid_mutli	export A------=a 123=4 B=b MINUS-

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   17-builtin_export.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
+/*   By: bruno <bruno@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:56:05 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/25 08:20:29 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/27 16:41:22 by bruno            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static int	add_env_var(char *var, t_ma *ma)
 	return (0);
 }
 
-int	builtin_export(char **args, t_ma *ma)
+void	builtin_export(char **args, t_ma *ma)
 {
 	char	**tmp;
 	int		i;
@@ -90,17 +90,30 @@ int	builtin_export(char **args, t_ma *ma)
 	while (*tmp)
 	{
 		var = *tmp;
-		if (!is_valid_var(var))
-		{
-			write(2, " not a valid identifier", 23);
-			return (1);
-		}
+    if (!is_valid_var(var))
+    {
+      write(2, " not a valid identifier", 23);
+      exit_or_setexit(1, 0, ma);
+      return;
+    }
 		i = find_env_var(&(ma->env), var);
-		if (i >= 0)
-			return (update_env_var(i, var, ma));
-		else
-			return (add_env_var(var, ma));
+			  if (i >= 0)
+	  {
+    	if (!update_env_var(i, var,  ma))
+      {
+        exit_or_setexit(0,0, ma);   
+        return;
+      }
+}
+	  else
+    {
+	    if (!add_env_var(var, ma))
+      {
+        exit_or_setexit(0,0, ma);
+        return;
+      }
+    }
 		tmp++;
 	}
-	return (EXIT_SUCCESS);
+	exit_or_setexit(0,0, ma);
 }

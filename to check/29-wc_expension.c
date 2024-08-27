@@ -34,7 +34,6 @@ char    **expand_wildcards_in_args(char **args, t_ma *ma)
     return (a.exp_args);
 }
 
-
 /**
  * @brief Expand wildcard patterns in a single argument
  *
@@ -50,18 +49,12 @@ char    **expand_wildcards_in_args(char **args, t_ma *ma)
  */
 static int expand_single_arg(t_wc_args *a , char *arg, t_ma *ma)
 {
-
     // printf("expand_single_arg_start\n");
-    a->count_match = 0;
-    if (ft_strchr(arg, '*') /* || ft_strchr(arg, '?') */)
+    //printf("arg: %s\n", arg);
+    if ((!(arg[0] == '\"' || arg[0] == '\'')) && (ft_strchr(arg, '*')) /* || ft_strchr(arg, '?') */)
     {
         if (!expand_wildcard(a, arg, ma))
             return (0);
-        if (!a->count_match)
-        {
-            if (!add_single_element(a, arg, ma))
-                return (0);
-        }
     }
     else
     {

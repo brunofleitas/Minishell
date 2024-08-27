@@ -185,6 +185,7 @@ typedef struct  s_main_args
 	t_env		*env;
     int         tmp_file_counter;// added for creation of temporary files in heredoc
     int         last_exit_status;
+    int         in_child_p;
 }               t_ma;
 
 /* ************************************************************************** */
@@ -199,7 +200,7 @@ typedef struct  s_pipeline_args
     int     input_fd;
     pid_t   pid;
     pid_t   *pid_arr;
-    int     last_pid;
+    int     last_status;
     int     status;
     int     last_cmd;
 }               t_pip_args;
@@ -213,7 +214,7 @@ typedef struct  s_simple_cmd_args
     char    **words_arr;
     int     saved_stdin;
     int     saved_stdout;
-    int in_critical;
+    int     i_c;//  in_critical is a flag that indicates if the command is critical or not. If the command is critical, the shell should exit if the command fails. If the command is not critical, the shell should continue executing the next command.
 }               t_s_cmd_args;
 
 /* *************************  EXPAND_WILDCARDS_ARGS  ********************* */
@@ -223,6 +224,7 @@ typedef struct s_expand_wildcards_args
     char    **exp_args;
     int     count;
     int     capacity;
+    int     count_match;
 }               t_wc_args;
 
 /* ************************************************************************** */
@@ -239,31 +241,32 @@ t_astnode       *parser(t_ma *ma);
 t_astnode       *create_ast_node(t_ntc **first_node, t_nodetype type);
 t_astnode       *parse_cmd_line(t_ma *ma);
 void            get_next_token(t_ma *ma);
-int             execute_builtin(char **args, t_ma *ma);
+void            execute_builtin(char **args, t_ma *ma);
+void            execute_ast(t_astnode *node, t_ma *ma);
+void            execute_cmd_line(t_astnode *node, t_ma *ma);
+void            execute_pipeline(t_astnode *node, t_ma *ma);
+void            execute_simple_cmd(t_astnode *node, t_ma *ma);
+void            execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node);
 int             is_builtin(const char *word);
-int             execute_cmd_line(t_astnode *node, t_ma *ma);
-int             execute_pipeline(t_astnode *node, t_ma *ma);
-int             execute_simple_cmd(t_astnode *node, t_ma *ma);
-int             execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node);
-void             builtin_exit(t_ma *ma, char **args);
-int             builtin_pwd(char **args, t_ma *ma);
-int             builtin_echo(char **args, int count_words, t_ma *ma);
-int             builtin_env(char **args, t_ma *ma);
-int             builtin_export(char **args, t_ma *ma);
-int             builtin_unset(char **args, t_ma *ma);
-int             builtin_cd(char **args, t_ma *ma);
+void            builtin_exit(t_ma *ma, char **args);
+void            builtin_pwd(char **args, t_ma *ma);
+void            builtin_echo(char **args, int count_words, t_ma *ma);
+void            builtin_env(char **args, t_ma *ma);
+void            builtin_export(char **args, t_ma *ma);
+void            builtin_unset(char **args, t_ma *ma);
+void            builtin_cd(char **args, t_ma *ma);
 int             find_env_var(t_env **env, char *var);
-int             execute_ast(t_astnode *node, t_ma *ma);
 pid_t           fork_process();
 int	            update_env_var(int i, const char *var, t_ma *ma);
-int             handle_redirections(t_astnode *redir_node, int in_crical, t_ma *ma);
+int             handle_redirections(t_astnode *redir_node, t_s_cmd_args *a, t_ma *ma);
 void	        print_env(t_env *env);
 char            **expand_wildcards_in_args(char **args, t_ma *ma);
 int	            expand_wildcard(t_wc_args *a, char *pattern, t_ma *ma);
 int             add_single_element(t_wc_args *a, char *name, t_ma *ma);
 int	            match_pattern(const char *str, const char *pattern);
 int             check_valid_file(char *path);
-
+void            restore_io(int saved_stdin, int saved_stdout);
+void            exit_or_setexit(int e, int e_flag, t_ma *ma);
 void            generate_quotes(const char **s, char ***split, int *i, t_ma *ma);
 void            generate_double_operators(const char **s, char ***split, int *i, t_ma *ma);
 void            generate_single_operators_and_specials(const char **s, char ***split, int *i, t_ma *ma);

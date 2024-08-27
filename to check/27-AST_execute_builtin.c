@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   22-AST_execute_builtin.c                           :+:      :+:    :+:   */
+/*   27-AST_execute_builtin.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:07:05 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/20 12:10:46 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/25 09:11:22 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,76 +56,58 @@ int is_builtin(const char *word)
     return (0);
 }
 
-
-// static void execute_builtin_child(char **args, t_ma *ma)
-// {  
-//     int word_count;
-
-//     word_count = count_words(args);
-//     if (ft_strcmp(args[0], "echo") == 0)
-//         exit(builtin_echo(args, word_count, ma));
-//     else if (ft_strcmp(args[0], "cd") == 0)
-//         exit(builtin_cd(args, ma));
-//     else if (ft_strcmp(args[0], "pwd") == 0)
-//         exit(builtin_pwd(args, ma));
-//     else if (ft_strcmp(args[0], "export") == 0)
-//         exit(builtin_export(args, ma));
-//     else if (ft_strcmp(args[0], "unset") == 0)
-//         exit(builtin_unset(args, ma));
-//     else if (ft_strcmp(args[0], "env") == 0)
-//         exit(builtin_env(args, ma));
-//     else if (ft_strcmp(args[0], "exit") == 0)
-//         builtin_exit(ma, args);
-//     exit(EXIT_FAILURE);
-
-// }
-
-
-
-void  execute_builtin(char **args, t_ma *ma)
+/**
+ * @brief Execute a builtin command
+ *
+ * This function executes the appropriate builtin command based on the
+ * command name. It handles echo, cd, pwd, export, unset, and env commands.
+ *
+ * @param args Array of command arguments
+ * @param env Pointer to the environment structure
+ * @return int Returns the exit status of the builtin command
+ */
+int execute_builtin(char **args, t_ma *ma)
 {
     int word_count;
 
     word_count = count_words(args);
-    if (ft_strcmp(args[0], "echo") == 0)
-        builtin_echo(args, word_count, ma);
-    else if (ft_strcmp(args[0], "cd") == 0)
-        builtin_cd(args, ma);
-    else if (ft_strcmp(args[0], "pwd") == 0)
-        builtin_pwd(args, ma);
-    else if (ft_strcmp(args[0], "export") == 0)
-        builtin_export(args, ma);
-    else if (ft_strcmp(args[0], "unset") == 0)
-        builtin_unset(args, ma);
-    else if (ft_strcmp(args[0], "env") == 0)
-        builtin_env(args, ma);
-    else if (ft_strcmp(args[0], "exit") == 0)
-        builtin_exit(ma, args);
+/*     if (isatty(STDIN_FILENO))
+    { */
+        if (ft_strcmp(args[0], "echo") == 0)
+            exit(builtin_echo(args, word_count, ma));
+        else if (ft_strcmp(args[0], "cd") == 0)
+            exit(builtin_cd(args, ma));
+        else if (ft_strcmp(args[0], "pwd") == 0)
+            exit(builtin_pwd(args, ma));
+        else if (ft_strcmp(args[0], "export") == 0)
+            exit(builtin_export(args, ma));
+        else if (ft_strcmp(args[0], "unset") == 0)
+            exit(builtin_unset(args, ma));
+        else if (ft_strcmp(args[0], "env") == 0)
+            exit(builtin_env(args, ma));
+        else if (ft_strcmp(args[0], "exit") == 0)
+            builtin_exit(ma, args);
+        exit(EXIT_FAILURE);  
+/*     }
     else
-        exit_or_setexit(1,1, ma);
+    {
+        if (ft_strcmp(args[0], "echo") == 0)
+            return(builtin_echo(args, word_count, ma));
+        else if (ft_strcmp(args[0], "cd") == 0)
+            return(builtin_cd(args, ma));
+        else if (ft_strcmp(args[0], "pwd") == 0)
+            return(builtin_pwd(args, ma));
+        else if (ft_strcmp(args[0], "export") == 0)
+            return(builtin_export(args, ma));
+        else if (ft_strcmp(args[0], "unset") == 0)
+            return(builtin_unset(args, ma));
+        else if (ft_strcmp(args[0], "env") == 0)
+            return(builtin_env(args, ma));
+        else if (ft_strcmp(args[0], "exit") == 0)
+            builtin_exit(ma, args);
+        return(EXIT_FAILURE);
+    } */
 }
-
-// /**
-//  * @brief Execute a builtin command
-//  *
-//  * This function executes the appropriate builtin command based on the
-//  * command name. It handles echo, cd, pwd, export, unset, and env commands.
-//  *
-//  * @param args Array of command arguments
-//  * @param env Pointer to the environment structure
-//  * @return int Returns the exit status of the builtin command
-//  */
-// void execute_builtin(char **args, t_ma *ma)
-// {
-//     // ft_printf( "execute_builtin start\n");
-//     if (ma->in_child_p)
-//     {
-//         // ft_printf("ma->in_child_p: %d\n", ma->in_child_p);
-//         execute_builtin_child(args, ma);
-//     }
-//     else
-//         execute_builtin_parent(args, ma);
-// }
 
 
 /*

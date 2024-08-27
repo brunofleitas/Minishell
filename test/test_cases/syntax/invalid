@@ -1,0 +1,9 @@
+syntax_err1			echo a |
+syntax_err2			echo a | echo b | 
+syntax_err3			cat <<<< infile
+syntax_err4			|
+syntax_err5			=
+syntax_redir_end1	cat <<
+syntax_redir_end2	cat >
+syntax_redir_bad1	cat << <
+syntax_redir_bad2	cat > <
