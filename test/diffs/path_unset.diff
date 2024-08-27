@@ -1,0 +1,12 @@
+diff of execution of:
+echo 'unset PATH; echo $PATH; cat infile' | tr ';' '\n' | [shell]
+--- expected	2024-08-28 01:30:52.102780051 +0200
++++ found	2024-08-28 01:30:52.118780247 +0200
+@@ -1,6 +1,6 @@
+ 
+ 
+ ======== stderr =======
+-[progname]: cat: No such file or directory
++[progname]: cat: command not found
+ ======== return =======
+ return value: 0

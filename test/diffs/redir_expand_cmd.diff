@@ -1,0 +1,11 @@
+diff of execution of:
+echo '$fail < fail' | tr ';' '\n' | [shell]
+--- expected	2024-08-28 01:30:43.398673799 +0200
++++ found	2024-08-28 01:30:44.562687952 +0200
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-[progname]: fail: No such file or directory
++
+ ======== return =======
+ return value: 1

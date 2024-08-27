@@ -1,0 +1,11 @@
+diff of execution of:
+echo 'cat <<' | tr ';' '\n' | [shell]
+--- expected	2024-08-28 01:30:48.816739823 +0200
++++ found	2024-08-28 01:30:50.008754399 +0200
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-[syntax error msg]
++
+ ======== return =======
+ return value: 1

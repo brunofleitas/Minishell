@@ -1,0 +1,12 @@
+diff of execution of:
+echo 'cat < *;' | tr ';' '\n' | [shell]
+--- expected	2024-08-28 01:30:53.998803324 +0200
++++ found	2024-08-28 01:30:54.015803534 +0200
+@@ -1,5 +1,6 @@
+ 
+ ======== stderr =======
+-[progname]: *: ambiguous redirect
++[progname]: ..: Is a directory
++[progname]: .: Is a directory
+ ======== return =======
+ return value: 1

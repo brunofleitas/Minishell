@@ -1,0 +1,17 @@
+diff of execution of:
+echo 'cat <<EOF <<OH;i;am;here;EOF;oh;OH' | tr ';' '\n' | [shell]
+--- expected	2024-08-28 01:30:45.012693426 +0200
++++ found	2024-08-28 01:30:45.032693670 +0200
+@@ -1,6 +1,11 @@
+ oh
+ 
+ ======== stderr =======
+-
++[progname]: i: command not found
++[progname]: am: command not found
++[progname]: here: command not found
++[progname]: EOF: command not found
++[progname]: oh: command not found
++[progname]: OH: command not found
+ ======== return =======
+ return value: 0

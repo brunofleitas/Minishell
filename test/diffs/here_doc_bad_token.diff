@@ -1,0 +1,11 @@
+diff of execution of:
+echo 'cat << ||||;ha;||||' | tr ';' '\n' | [shell]
+--- expected	2024-08-28 01:30:42.832666923 +0200
++++ found	2024-08-28 01:30:42.853667178 +0200
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-[syntax error msg]
++[progname]: Expected filename after redirection
+ ======== return =======
+ return value: 1

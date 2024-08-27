@@ -1,6 +1,9 @@
 #include <unistd.h>
 char	*gnl(int fd);
 #include <unistd.h>
+#include <unistd.h>
+char	*gnl(int fd);
+#include <unistd.h>
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -64,12 +67,12 @@ int	main(int argc, char **argv, char **envp)
 	{
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, SIG_IGN);
-		ma.input = !isatty(0) ? gnl(0) : readline("minisshell>>");
+		ma.input = !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : readline("minisshell>>");
 		if (ma.input == NULL)
         	builtin_exit(&ma, NULL);
 		if (ft_strcmp(ma.input, "") != 0)
 		{
-			!isatty(0) ? 0 : add_history(ma.input);
+			!isatty(0) ? 0 : !isatty(0) ? 0 : add_history(ma.input);
 			lexer(&ma);
 			if (ma.tkns[0] != NULL)
 			{	
@@ -142,8 +145,4 @@ int	main(int argc, char **argv, char **envp)
  * intended precedence and associativity of operations.
  */
 
-
-void __attribute__((destructor)) free_gnl_buffer();
-
-void free_gnl_buffer() { gnl(-1); }
 

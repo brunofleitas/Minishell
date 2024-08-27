@@ -1,0 +1,12 @@
+diff of execution of:
+echo 'echo $PWD-end' | tr ';' '\n' | [shell]
+--- expected	2024-08-28 01:30:52.597786124 +0200
++++ found	2024-08-28 01:30:52.611786295 +0200
+@@ -1,6 +1,6 @@
+-/home/bruno/Github42/Minishell/test/temp-end
++/home/bruno/Github42/Minishell/test/temp -end
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0

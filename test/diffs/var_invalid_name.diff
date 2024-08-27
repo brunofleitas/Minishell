@@ -1,0 +1,12 @@
+diff of execution of:
+echo 'echo $/imaslash' | tr ';' '\n' | [shell]
+--- expected	2024-08-28 01:30:52.709787498 +0200
++++ found	2024-08-28 01:30:52.724787682 +0200
+@@ -1,6 +1,6 @@
+-$/imaslash
++$ /imaslash
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
