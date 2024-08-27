@@ -1,0 +1,10 @@
+quotes_none			echo a     b c
+quotes_single		echo "a     b c"
+quotes_double		echo 'a     b c'
+quotes_both1		echo "'a     b c'"
+quotes_both2		echo '"a     b c"'
+quotes_mutli1		echo this"has"quotes'inside'of"'it'"
+quotes_mutli2		echo this"  "too end
+quotes_emtpy		echo "" ''
+quotes_specials1	echo '$PWD (echo a) | echo b'
+quotes_specials2	echo "$PWD (echo a) | echo b"

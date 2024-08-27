@@ -1,0 +1,13 @@
+diff of execution of:
+echo 'mkdir tmp; cd tmp; rmdir $PWD; pwd' | tr ';' '\n' | [shell]
+--- expected	2024-08-27 19:27:28.777763926 +0200
++++ found	2024-08-27 19:27:28.797764153 +0200
+@@ -1,6 +1,5 @@
+-/home/bruno/Github42/Minishell/test/temp/tmp
+ 
+ ======== stderr =======
+-
++getcwd() error
+ ======== return =======
+-return value: 0
++return value: 1

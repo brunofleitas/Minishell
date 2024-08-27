@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   18-builtin_unset.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bruno <bruno@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:49:35 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/27 16:41:45 by bruno            ###   ########.fr       */
+/*   Updated: 2024/08/27 17:40:02 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,11 @@
 static int	find_env_var_unset(t_env **env, char *name)
 {
 	int	i;
-	int	j;
 
 	i = 0;
-	j = 0;
 	while (i < (*env)->count)
 	{
-		while (name[j] && name[j] == (*env)->var[i][j])
-			j++;
-		if (name[j] == '\0' && (*env)->var[i][j] == '=')
+		if (ft_strncmp(name, (*env)->var[i], ft_strlen(name)) == 0 && (*env)->var[i][ft_strlen(name)] == '=')
 			return (i);
 		i++;
 	}

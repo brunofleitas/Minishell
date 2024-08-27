@@ -1,0 +1,5 @@
+parenthesis_redir_in		(cat | grep in) < infile
+parenthesis_redir_out		(cat infile | grep in) > outfile; cat outfile
+parenthesis_redir_in_out	(cat | grep in) < infile > outfile; cat outfile
+parenthesis_redir_fail		(cat | grep a) < fail
+parenthesis_redir_nested	(cat < infile | grep in) < readonly

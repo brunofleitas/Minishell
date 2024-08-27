@@ -1,0 +1,12 @@
+diff of execution of:
+echo 'echo a > readonly; echo $?' | tr ';' '\n' | [shell]
+--- expected	2024-08-27 19:27:26.841741996 +0200
++++ found	2024-08-27 19:27:26.857742177 +0200
+@@ -1,6 +1,6 @@
+ 1
+ 
+ ======== stderr =======
+-[progname]: readonly: Permission denied
++[progname]: Permission denied
+ ======== return =======
+ return value: 0

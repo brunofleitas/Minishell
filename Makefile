@@ -35,7 +35,8 @@ SRCS 	= 01-main.c \
 		  28-AST_execute_external_cmd.c \
 		  29-wc_expension.c \
 		  30-wc_expension_utils.c\
-		  31-wc_match_pattern.c 
+		  31-wc_match_pattern.c\
+		  get_next_line.c
 
 SRCSB 	= 01-main.c \
 		  02-build_env_structure.c \
@@ -84,6 +85,7 @@ bonus: $(BONUS)
 	$(CC) -Wall -Wextra -Werror $(LIBRARIES_PATH) -c $< -o $@
 
 $(NAME): $(OBJS) $(LIBFT)
+	cc get_next_line.c -c
 	$(CC) $(CFLAGS) $(OBJS) $(LIBRARIES) -o $(NAME) $(LDFLAGS)
 
 $(BONUS): $(OBJSB) $(LIBFT)

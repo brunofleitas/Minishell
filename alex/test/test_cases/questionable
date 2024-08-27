@@ -1,0 +1,13 @@
+questionable_export			export
+questionable_export_quotes	export a='"quotes"'; export
+questionable_export_spaces1	export a='    '; echo $a
+questionable_export_spaces2	export a="a    b"; echo $a
+questionable_SHLVL			echo $SHLVL
+questionable_glob_order		touch a b c A B C aa ab ac Aa Ab Ac aA aB aC; echo *
+questionable_redir_ambiguous	cat < *;
+questionable_exec_dot		.
+questionable_exec_dotdot	..
+questionable_exec_dotslash	./
+questionable_exec_dir		export PATH="$PATH:$PWD"; mkdir asdfg; asdfg
+questionable_cd_path		cd; ls
+questionable_pwd_rmdir		mkdir tmp; cd tmp; rmdir $PWD; pwd

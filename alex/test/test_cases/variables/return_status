@@ -1,0 +1,8 @@
+return			echo $?
+return_ok1		echo hi; echo $?
+return_ok2		echo hi; echo thisiaavariable$?thatneedsexpansion
+return_ko1		cat fail; echo $?
+return_ko2		echo a > readonly; echo $?
+return_ko3		cat < fail; echo $?
+return_exit_ko1	exit one two; echo $?
+return_exit_ko2	exit 1 2; echo $?

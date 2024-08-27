@@ -1,0 +1,6 @@
+and_pipe			echo a && echo b | grep b
+or_pipe				(echo a && cat fail) || echo b | grep b
+pipe_and			echo a | cat - fail && echo b
+pipe_or				echo a | cat || echo b
+and_pipe_and		echo a && echo b | cat - fail && echo c
+or_pipe_or			cat fail || echo a | cat || echo b

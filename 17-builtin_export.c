@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   17-builtin_export.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bruno <bruno@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:56:05 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/27 16:41:22 by bruno            ###   ########.fr       */
+/*   Updated: 2024/08/27 18:04:02 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,9 @@ void	builtin_export(char **args, t_ma *ma)
 		var = *tmp;
     if (!is_valid_var(var))
     {
-      write(2, " not a valid identifier", 23);
+	  write(2, "minishell: export: `", 20);
+	  write(2, var, ft_strlen(var));
+      write(2, "': not a valid identifier", 25);
       exit_or_setexit(1, 0, ma);
       return;
     }

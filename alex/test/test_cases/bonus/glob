@@ -1,0 +1,22 @@
+glob_simple			echo *
+glob_sorted			touch b c a; echo *
+glob_name			touch a.c b.c a.o b.o; echo *.c
+glob_ending			touch a.c b.c a.o b.o; echo a.*
+glob_both			touch a.c b.c a.o b.o; echo *.*
+glob_hidden			echo .*
+glob_hidden2		touch .hidden .test; echo .*; echo .hidd*
+glob_mutli			touch minini mini; echo *i*i*
+glob_not_found		echo fail*
+glob_empty			mkdir empty; cd empty; echo *; echo .*
+glob_cmd1			rm *; *
+glob_cmd2			rm *; touch ls; *
+glob_redir			rm readonly; cat *;
+glob_mutliple		echo * in* *
+glob_in_var			export a='*file'; echo $a
+glob_in_var_quotes	export a='"*file"'; echo $a
+glob_redir_ambiguous	touch a b c; cat *;
+glob_in_single_quotes	echo '*'
+glob_in_double_quotes	echo "*"
+glob_in_redir1			cat < *in;
+glob_in_redir2			cat > read*;
+glob_sdhfj			touch bonus bonus_bonus; echo bo*s

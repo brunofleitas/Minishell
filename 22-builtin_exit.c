@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 01:47:55 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/27 17:21:33 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/27 17:42:02 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,8 +149,12 @@ void	builtin_exit(t_ma *ma, char **args)
 	{
 		clean_exit(0, ma);
 	}
-	else
+	else if ((args[1] != NULL) && (ft_strncmp(args[1], "0", 2) == 0))
 	{
+        clean_exit(0, ma);
+    }
+    else
+    {
 		exit_code = validate_exit_args(args);
 		if (exit_code)
 		{

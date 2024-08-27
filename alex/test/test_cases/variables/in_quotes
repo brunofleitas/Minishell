@@ -1,0 +1,5 @@
+var_in_quotes_double		echo "$PWD"
+var_in_quotes_single		echo '$PWD'
+var_in_quotes_both1			echo '"$PWD"'
+var_in_quotes_both2			echo "'$PWD'"
+var_in_quotes_multi			echo " $PATH   $PWD $hi_"

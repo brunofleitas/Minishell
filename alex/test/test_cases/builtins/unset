@@ -1,0 +1,5 @@
+unset_user				unset USER; echo $?; echo $USER
+unset_unset				unset QWANTZ; echo $?; echo $QWANTZ
+unset_new				export A=a; unset A; echo $?
+unset_multiple			unset PWD OLDPWD USER PATH; echo $?; echo $PWD $OLDPWD $USER
+unset_multiple_unset	unset A B C D E

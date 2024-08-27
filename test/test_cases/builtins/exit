@@ -1,0 +1,12 @@
+exit			exit
+exit_0			exit 0
+exit_1			exit 1
+exit_neg		exit -42
+exit_alpha		exit alpha
+exit_many		exit 1 2 3
+exit_big		exit 9223372036854775807
+exit_too_big	exit 9223372036854775808
+exit_small		exit -9223372036854775808
+exit_too_small	exit -9223372036854775809
+exit_ls0		exit 0; ls
+exit_ls1		exit 1; ls

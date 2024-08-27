@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   15-builtin_cd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bruno <bruno@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:45:41 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/27 16:43:00 by bruno            ###   ########.fr       */
+/*   Updated: 2024/08/27 19:14:00 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ char	*get_cd_path(char **args, t_env **env)
 		path = args[1];
 	else
 	{
-		fprintf(stderr, "cd: string not in pwd: %s\n", args[1]);
+		write (STDERR_FILENO, "minishell: cd: ", 15);
+		write (STDERR_FILENO, "string not in pwd: ", 19);
 		return (NULL);
 	}
 	return (path);
@@ -120,7 +121,8 @@ void	builtin_cd(char **args, t_ma *ma)
 		i++;
 	if (i > 2)
 	{
-		write(STDERR_FILENO, " too many arguments\n", 19);
+		write(STDERR_FILENO, "minishell: cd: ", 15);
+		write(STDERR_FILENO, "too many arguments\n", 20);
 		exit_or_setexit(1, 0, ma);
 		return ;
 	}

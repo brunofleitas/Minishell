@@ -1,0 +1,12 @@
+and			echo a && echo b
+and_multi	echo a && echo b && echo c && echo d
+or			echo a || echo b
+or_multi	echo a || echo b || echo c || echo d
+and_or		echo a && echo b || echo c
+or_and		echo a || echo b && echo c
+and_false1	ls fail && echo a
+and_false2	echo a && ls fail
+and_false3	ls fail && ls fail
+or_false1	ls fail || echo a
+or_false2	echo a || ls fail
+or_false3	ls fail || ls fail

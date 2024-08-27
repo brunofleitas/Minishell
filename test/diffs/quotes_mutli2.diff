@@ -1,0 +1,12 @@
+diff of execution of:
+echo 'echo this"  "too end' | tr ';' '\n' | [shell]
+--- expected	2024-08-27 19:27:25.217723599 +0200
++++ found	2024-08-27 19:27:25.231723758 +0200
+@@ -1,6 +1,6 @@
+-this  too end
++this too end
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0

@@ -1,0 +1,5 @@
+special_reset_status	cat fail; $FAIL; echo $?
+special_empty_echo		echo - "" " " hello "$FAIL"
+special_unset_path		unset PATH; ls; /bin/ls; echo $PATH
+special_unset_pwd		unset PWD; cd ..; echo $PWD
+special_unset_oldpwd		unset OLDPWD; cd ..; echo $OLDPWD

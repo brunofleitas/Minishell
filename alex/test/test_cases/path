@@ -1,0 +1,10 @@
+path_normal				cat infile
+path_add_bad_exe		touch /home/[[USER]]/bin/asdfg; asdfg
+path_add_local			export PATH=$PATH':./'; echo $PATH; infile
+path_unset				unset PATH; echo $PATH; cat infile
+path_unset_local		unset PATH; echo $PATH; infile
+path_empty				export PATH=; echo $PATH; cat infile
+path_empty_local		export PATH=; echo $PATH; infile
+path_unknown			export PATH='/heeeello'; echo $PATH; cat infile
+path_empty_part			export PATH=$PATH':::::/hehe'; echo $PATH; cat infile
+path_empty_part_local	export PATH=$PATH':::::/hehe'; echo $PATH; infile

@@ -1,0 +1,5 @@
+bonus_syntax_invalid1	echo a &&
+bonus_syntax_invalid2	echo a ||
+bonus_syntax_invalid3	echo a || echo b &&
+bonus_syntax_invalid4	&& echo a	
+bonus_syntax_invalid5	&&

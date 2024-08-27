@@ -1,0 +1,11 @@
+diff of execution of:
+echo 'cd \'\'' | tr ';' '\n' | [shell]
+--- expected	2024-08-27 17:55:00.556499291 +0200
++++ found	2024-08-27 17:55:00.574499564 +0200
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-
++[progname]: cd: no such file or directory: 
+ ======== return =======
+ return value: 1

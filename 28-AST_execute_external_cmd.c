@@ -127,25 +127,33 @@ void execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
     // Check if command_path was found
     if (!command_path)
     {
-        write(2, " command not found\n", 19);
+        write(2, "minishell: ", 12);
+        write(2, words_arr[0], ft_strlen(words_arr[0]));
+        write(2, ": command not found\n", 21);
         exit(127);  // Return 127 if the command was not found
     }
 
     // Check if the path is a directory
-    if (stat(command_path, &path_stat) == 0 && S_ISDIR(path_stat.st_mode)) {
+    if (stat(command_path, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
+    {
+        write(2, "minishell: ", 11);
         write(2, " Is a directory\n", 16);
         exit(126);  // Return 126 if the path is a directory
     }
 
     // Check if the file exists
-    if (access(command_path, F_OK) != 0) {
-        perror("Error");
+    if (access(command_path, F_OK) != 0)
+    {
+        write(2, "minishell: ", 11);
+        write(2, ": No such file or directory\n", 29);
         exit(127);  // Return 127 for "No such file or directory"
     }
 
     // Check if the file is executable
-    if (access(command_path, X_OK) != 0) {
-        perror("Error");
+    if (access(command_path, X_OK) != 0)
+    {
+        write(2, "minishell: ", 11);
+        write(2, ": Permission denied\n", 20);
         exit(126);  // Return 126 for "Permission denied"
     }
 

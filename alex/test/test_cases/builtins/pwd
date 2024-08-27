@@ -1,0 +1,3 @@
+pwd				pwd
+pwd_with_arg	pwd hi
+pwd_cd			pwd; cd ..; pwd

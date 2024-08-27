@@ -1,0 +1,7 @@
+here_doc			cat << EOF;hi;ha;ho;EOF
+here_doc_var		cat << EOF;$PWD;EOF
+here_doc_quotes		cat << EOF;'$PWD';EOF
+here_doc_multivar	cat <<EOF; $PWD and $OLDPWD;ha;$PATH ;EOF
+here_doc_bad_token	cat << ||||;ha;||||
+here_doc_status1	cat << EOF;$?;EOF
+here_doc_status2	cat fail; cat << EOF;$?;EOF

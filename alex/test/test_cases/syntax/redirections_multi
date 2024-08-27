@@ -1,0 +1,8 @@
+redir_multi_in			cat < infile < infile < infile;
+redir_multi_in2			echo a > in; cat < in < infile < in;
+redir_multi_out			cat infile > out > out > out; ls -l --time-style=+
+redir_multi_out2		cat infile > out1 > out2 > out3; ls -l --time-style=+
+redir_multi_inout		cat < infile > out1 < infile > out2 > out3; ls -l --time-style=+
+redir_multi_same		cat < infile > infile; ls -l --time-style=+
+redir_multi_here		cat <<EOF <<OH;i;am;here;EOF;oh;OH
+redir_multi_append		echo a > out; cat infile > out >> out; ls -l --time-style=+
