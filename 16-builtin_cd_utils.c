@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 07:58:18 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/27 19:33:37 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/27 20:33:34 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ int	check_valid_path(char *path)
 
 	if (stat(path, &sb) == -1)
 	{
-		perror("cd");
+		// perror("cd");
+		write (2, "minishell: cd: ", 15);
+		write (2, path, ft_strlen(path));
+		write (2, ": No such file or directory\n", 28);
 		return (0);
 	}
 	if (!S_ISDIR(sb.st_mode))

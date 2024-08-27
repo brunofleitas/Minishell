@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:45:41 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/27 19:55:32 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/27 20:37:31 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,11 +120,13 @@ void	builtin_cd(char **args, t_ma *ma)
 		i++;
 	if (i > 2)
 	{
-		// write(STDERR_FILENO, "minishell: cd: ", 15);
-		write(STDERR_FILENO, "cd : too many arguments\n", 24);
+		write(STDERR_FILENO, "minishell: cd: ", 15);
+		write(STDERR_FILENO, "too many arguments\n", 19);
 		exit_or_setexit(1, 0, ma);
 		return ;
 	}
+	if (strcmp(args[1], "") == 0)
+		return ;
 	path = get_cd_path(args, &ma->env);
     if (!path || !validate_cd_path(path))
     {
