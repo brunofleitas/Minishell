@@ -1,4 +1,0 @@
-echo			echo hello
-echo_n			echo -n hello
-echo_n_multi	echo -n -n -n -n hello
-echo_multiple	echo hello world I am Alex

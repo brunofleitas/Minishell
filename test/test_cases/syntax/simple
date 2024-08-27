@@ -1,4 +1,0 @@
-echo		echo a
-echo_2		echo a b
-ls			ls
-ls_a		ls -a
