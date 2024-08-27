@@ -1,7 +1,7 @@
 diff of execution of:
 echo 'unset OLDPWD; cd ..; echo $OLDPWD' | tr ';' '\n' | [shell]
---- expected	2024-08-27 19:27:25.573727632 +0200
-+++ found	2024-08-27 19:27:25.593727859 +0200
+--- expected	2024-08-27 20:21:05.510023356 +0200
++++ found	2024-08-27 20:21:05.529023570 +0200
 @@ -1,6 +1,6 @@
 -/home/bruno/Github42/Minishell/test/temp
 +

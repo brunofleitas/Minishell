@@ -1,7 +1,7 @@
 diff of execution of:
 echo 'export PATH=$PATH\':./\'; echo $PATH; infile' | tr ';' '\n' | [shell]
---- expected	2024-08-27 19:27:25.693728991 +0200
-+++ found	2024-08-27 19:27:25.708729161 +0200
+--- expected	2024-08-27 20:21:05.629024696 +0200
++++ found	2024-08-27 20:21:05.644024865 +0200
 @@ -1,6 +1,6 @@
 -/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:./
 +

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   21-builtin_env.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bruno <bruno@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:51:32 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/27 16:41:28 by bruno            ###   ########.fr       */
+/*   Updated: 2024/08/27 19:50:17 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	builtin_env(char **args, t_ma *ma)
 
 	if (args[1] != NULL)
 	{
+		write(STDERR_FILENO, "Minishell: ", 11);
 		write(STDERR_FILENO, "env: too many arguments\n", 24);
 		exit_or_setexit(1,0, ma);
 	}

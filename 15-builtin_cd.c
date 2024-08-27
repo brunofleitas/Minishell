@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:45:41 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/27 19:14:00 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/27 19:55:32 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,7 @@ char	*get_cd_path(char **args, t_env **env)
 		path = args[1];
 	else
 	{
-		write (STDERR_FILENO, "minishell: cd: ", 15);
-		write (STDERR_FILENO, "string not in pwd: ", 19);
+		fprintf(stderr, "cd: string not in pwd: %s\n", args[1]);
 		return (NULL);
 	}
 	return (path);
@@ -121,8 +120,8 @@ void	builtin_cd(char **args, t_ma *ma)
 		i++;
 	if (i > 2)
 	{
-		write(STDERR_FILENO, "minishell: cd: ", 15);
-		write(STDERR_FILENO, "too many arguments\n", 20);
+		// write(STDERR_FILENO, "minishell: cd: ", 15);
+		write(STDERR_FILENO, "cd : too many arguments\n", 24);
 		exit_or_setexit(1, 0, ma);
 		return ;
 	}

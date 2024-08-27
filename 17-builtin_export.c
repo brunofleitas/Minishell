@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:56:05 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/27 18:04:02 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/27 20:06:44 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,32 +90,33 @@ void	builtin_export(char **args, t_ma *ma)
 	while (*tmp)
 	{
 		var = *tmp;
-    if (!is_valid_var(var))
-    {
-	  write(2, "minishell: export: `", 20);
-	  write(2, var, ft_strlen(var));
-      write(2, "': not a valid identifier", 25);
-      exit_or_setexit(1, 0, ma);
-      return;
-    }
+		if (!is_valid_var(var))
+		{
+			// write(2, " not a valid identifier", 23);
+			write(2, "minishell: export: `", 20);
+			write(2, var, ft_strlen(var));
+			write(2, "': not a valid identifier", 25);
+			exit_or_setexit(1, 0, ma);
+			return ;
+		}
 		i = find_env_var(&(ma->env), var);
-			  if (i >= 0)
-	  {
-    	if (!update_env_var(i, var,  ma))
-      {
-        exit_or_setexit(0,0, ma);   
-        return;
-      }
-}
-	  else
-    {
-	    if (!add_env_var(var, ma))
-      {
-        exit_or_setexit(0,0, ma);
-        return;
-      }
-    }
+		if (i >= 0)
+		{
+			if (!update_env_var(i, var, ma))
+			{
+				exit_or_setexit(0, 0, ma);
+				return ;
+			}
+		}
+		else
+		{
+			if (!add_env_var(var, ma))
+			{
+				exit_or_setexit(0, 0, ma);
+				return ;
+			}
+		}
 		tmp++;
 	}
-	exit_or_setexit(0,0, ma);
+	exit_or_setexit(0, 0, ma);
 }

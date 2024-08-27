@@ -1,7 +1,7 @@
 diff of execution of:
 echo 'cat <<EOF; $PWD and $OLDPWD;ha;$PATH ;EOF' | tr ';' '\n' | [shell]
---- expected	2024-08-27 19:27:16.637626399 +0200
-+++ found	2024-08-27 19:27:16.654626591 +0200
+--- expected	2024-08-27 20:20:56.605923082 +0200
++++ found	2024-08-27 20:20:56.626923318 +0200
 @@ -1,8 +1,11 @@
 - /home/bruno/Github42/Minishell/test/temp and /home/bruno/Github42/Minishell/test
 + $PWD and $OLDPWD
@@ -11,9 +11,9 @@ echo 'cat <<EOF; $PWD and $OLDPWD;ha;$PATH ;EOF' | tr ';' '\n' | [shell]
  
  ======== stderr =======
 -
-+[progname]:  Is a directory
++[progname]: /home/bruno/Github42/Minishell/test/temp: Is a directory
 +[progname]: ha: command not found
-+[progname]: : No such file or directory
++[progname]: /home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin: No such file or directory
 +[progname]: EOF: command not found
  ======== return =======
  return value: 0
