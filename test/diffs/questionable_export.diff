@@ -1,7 +1,7 @@
 diff of execution of:
 echo 'export' | tr ';' '\n' | [shell]
---- expected	2024-08-28 01:30:53.700799665 +0200
-+++ found	2024-08-28 01:30:53.724799960 +0200
+--- expected	2024-08-28 02:04:30.652448031 +0200
++++ found	2024-08-28 02:04:30.668448329 +0200
 @@ -1,82 +1,5 @@
 -declare -x BAMF_DESKTOP_FILE_HINT="/var/lib/snapd/desktop/applications/code_code.desktop"
 -declare -x CHROME_DESKTOP="code-url-handler.desktop"

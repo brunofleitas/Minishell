@@ -1,7 +1,7 @@
 diff of execution of:
 echo 'cat < infile > out1 < infile > out2 > out3; ls -l --time-style=+' | tr ';' '\n' | [shell]
---- expected	2024-08-28 01:30:44.921692319 +0200
-+++ found	2024-08-28 01:30:44.941692562 +0200
+--- expected	2024-08-28 02:04:27.877396214 +0200
++++ found	2024-08-28 02:04:27.897396588 +0200
 @@ -1,11 +1,11 @@
  total 8
  -rw-rw-r-- 1 bruno bruno 34  infile

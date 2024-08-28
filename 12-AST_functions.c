@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   12-AST_functions.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bruno <bruno@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:08:01 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/27 17:14:19 by bruno            ###   ########.fr       */
+/*   Updated: 2024/08/28 02:04:06 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,9 +133,14 @@ static void parse_redirection_list(t_astnode *node, t_astnode **last_word, t_ma 
         redir_node = create_ast_node(&(ma->first_node), NODE_REDIRECTION);
         redir_node->data.redirection.type = (*(ma->c_tkn))->type;
         get_next_token(ma);
+        if (ma->c_tkn == NULL || *(ma->c_tkn) == NULL)
+        {
+            write(2, "minishell : syntax error near unexpected token \n", 48); //ADDED THIS FOR test_cases/syntax/invalid for example cat >
+            exit(1);
+        }
         if ((*(ma->c_tkn)) && !is_word_token((*(ma->c_tkn))->type))
         {
-            fprintf(stderr, "Error: Expected filename after redirection\n");
+            write(2, "minishell : syntax error near unexpected token \n", 48); //ADDED THIS FOR test_cases/syntax/invalid for example cat > <
             exit(1);
         }
         redir_node->data.redirection.file = (*(ma->c_tkn))->value;
@@ -242,6 +247,11 @@ static t_astnode *parse_pipeline(t_ma *ma)
     while (((*(ma->c_tkn))) && (*(ma->c_tkn))->type == TOKEN_PIPE) 
     {
         get_next_token(ma);
+        if (ma->c_tkn == NULL || *(ma->c_tkn) == NULL)
+        {
+            write(2, "minishell : syntax error near unexpected token \n", 48); //ADDED THIS FOR test_cases/syntax/invalid for example | or echo a |
+            exit(1);
+        }
         node->data.pipeline.cmd_count++;
         node->data.pipeline.cmds = ft_realloc_g_c(&(ma->first_node),\
                                         node->data.pipeline.cmds,\
