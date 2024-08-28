@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:45:41 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/27 20:37:31 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/28 02:14:06 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void	builtin_cd(char **args, t_ma *ma)
 		exit_or_setexit(1, 0, ma);
 		return ;
 	}
-	if (strcmp(args[1], "") == 0)
+	if (args[1] && strcmp(args[1], "") == 0)
 		return ;
 	path = get_cd_path(args, &ma->env);
     if (!path || !validate_cd_path(path))

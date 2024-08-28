@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:56:05 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/27 20:06:44 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/28 02:16:28 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,32 @@ static int	add_env_var(char *var, t_ma *ma)
 	return (0);
 }
 
+void print_env(t_env *env)
+{
+	int i;
+
+	i = 0;
+	while (i < env->count)
+	{
+		write(1, "declare -x ", 11);
+		write(1, env->var[i], ft_strlen(env->var[i]));
+		write(1, "\n", 1);
+		i++;
+	}
+}
+
 void	builtin_export(char **args, t_ma *ma)
 {
 	char	**tmp;
 	int		i;
 	char	*var;
 
+	if (!args[1])
+	{
+		print_env(ma->env);
+		exit_or_setexit(0, 0, ma);
+		return ;
+	}
 	tmp = args;
 	tmp++;
 	while (*tmp)
