@@ -1,0 +1,13 @@
+diff of execution of:
+echo 'cat < fail; echo $?' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:12
++++ found	2024-08-29 22:59:12
+@@ -1,6 +1,6 @@
+-1
++127
+ 
+ ======== stderr =======
+-bash: línea 1: fail: No such file or directory
++minishell: fail: No such file or directory
+ ======== return =======
+ return value: 0

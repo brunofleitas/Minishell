@@ -1,10 +1,10 @@
 diff of execution of:
 echo 'export a="a    b"; echo $a' | tr ';' '\n' | [shell]
---- expected	2024-08-28 02:16:30.928939551 +0200
-+++ found	2024-08-28 02:16:30.943939833 +0200
+--- expected	2024-08-29 22:59:07
++++ found	2024-08-29 22:59:07
 @@ -1,6 +1,6 @@
 -a b
-+a
++a    b
  
  ======== stderr =======
  

@@ -1,11 +1,12 @@
 diff of execution of:
 echo 'export PATH="$PATH:$PWD"; mkdir asdfg; asdfg' | tr ';' '\n' | [shell]
---- expected	2024-08-28 02:16:31.222945069 +0200
-+++ found	2024-08-28 02:16:32.409967348 +0200
-@@ -1,5 +1,5 @@
+--- expected	2024-08-29 22:59:08
++++ found	2024-08-29 22:59:08
+@@ -1,5 +1,6 @@
  
  ======== stderr =======
--[progname]: asdfg: command not found
-+double free or corruption (out)
+-bash: línea 3: asdfg: orden no encontrada
++minishell: mkdir: command not found
++minishell: asdfg: command not found
  ======== return =======
  return value: 1

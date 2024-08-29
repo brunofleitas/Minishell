@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   7-token_generators.c                               :+:      :+:    :+:   */
+/*   07-token_generators.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 06:18:08 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/25 07:33:31 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/29 21:32:07 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,7 @@ void	generate_single_operators_and_specials(const char **s,
 	*s += len;
 }
 
-char	*ft_strremove_char(const char *str, char char_to_remove,
-		t_ntc **first_node)
+static char	*ft_strremove_quotes(const char *str, t_ntc **first_node)
 {
 	char	*result;
 	int		i;
@@ -82,11 +81,32 @@ char	*ft_strremove_char(const char *str, char char_to_remove,
 	j = 0;
 	while (str[i] != '\0')
 	{
-		if (str[i] != char_to_remove)
+		if (str[i] != '\'' &&  str[i] != '"')
 		{
-			result[j++] = str[i];
+			result[j++] = str[i++];
+			// i++;
 		}
-		i++;
+		else 
+		{
+			if (str[i] == '"')
+			{
+				i++;
+				while (str[i] != '"')
+					result[j++] = str [i++];
+				if (str[i])
+					i++;
+			}
+			else if (str[i] == '\'')
+			{
+				i++;
+				while (str[i] != '\'')
+					result[j++] = str [i++];
+				if (str[i])
+					i++;
+			}
+		
+		}
+		// i++;
 	}
 	result[j] = '\0';
 	return (result);
@@ -98,15 +118,34 @@ void	generate_regular_tkns(const char **s, char ***split, int *i,
 	int		word_length;
 	char	*temp;
 	char	*trimmed;
-	char	*result;
+	//char	*result;
 
 	word_length = 0;
-	while ((*s)[word_length] && !strchr(" ><&()|$", (*s)[word_length]))
-		word_length++;
+	while ((*s)[word_length])
+	{
+		if ((*s)[word_length] == '"') 
+		{
+			word_length++;
+			while (!((*s)[word_length] == '"'))
+				word_length++;
+			word_length++;
+		}
+		else if ((*s)[word_length] == '\'')
+		{
+			word_length++;
+			while (!((*s)[word_length] == '\''))
+				word_length++;
+			word_length++;
+		}
+		else if (!ft_strchr(" ><&()|$", (*s)[word_length]))
+			word_length++;
+		else
+			break;
+	}
 	temp = ft_substr_g_c(*s, 0, word_length, &(ma->first_node));
-	trimmed = ft_strremove_char(temp, '\'', &(ma->first_node));
-	result = ft_strremove_char(trimmed, '\"', &(ma->first_node));
-	result = ft_strtrim(result, " ", &(ma->first_node));
-	(*split)[(*i)++] = result;
+	trimmed = ft_strremove_quotes(temp, &(ma->first_node));
+	// result = ft_strremove_char(trimmed, '\"', &(ma->first_node));
+	//result = ft_strtrim(result, " ", &(ma->first_node));
+	(*split)[(*i)++] = trimmed;
 	*s += word_length;
 }

@@ -1,0 +1,14 @@
+diff of execution of:
+echo 'cat << EOF;$PWD;EOF' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:15
++++ found	2024-08-29 22:59:15
+@@ -1,6 +1,7 @@
+-/Users/bruno/Github_42/Minishell/test/temp
++$PWD
+ 
+ ======== stderr =======
+-
++minishell: /Users/bruno/Github_42/Minishell/test/temp: Is a directory
++minishell: EOF: command not found
+ ======== return =======
+ return value: 0

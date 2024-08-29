@@ -13,6 +13,9 @@ char	*gnl(int fd);
 #include <unistd.h>
 char	*gnl(int fd);
 #include <unistd.h>
+#include <unistd.h>
+char	*gnl(int fd);
+#include <unistd.h>
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -37,7 +40,7 @@ void sigint_handler(int sig)
     (void)sig;
     write(STDOUT_FILENO, "\n", 1);
     rl_on_new_line();
-    rl_replace_line("", 0);
+    //rl_replace_line("", 0);
     rl_redisplay();
 }
 
@@ -76,12 +79,12 @@ int	main(int argc, char **argv, char **envp)
 	{
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, SIG_IGN);
-		ma.input = !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : readline("minisshell>>");
+		ma.input = !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : readline("minisshell>>");
 		if (ma.input == NULL)
         	builtin_exit(&ma, NULL);
 		if (ft_strcmp(ma.input, "") != 0)
 		{
-			!isatty(0) ? 0 : !isatty(0) ? 0 : !isatty(0) ? 0 : !isatty(0) ? 0 : !isatty(0) ? 0 : add_history(ma.input);
+			!isatty(0) ? 0 : !isatty(0) ? 0 : add_history(ma.input);
 			lexer(&ma);
 			if (ma.tkns[0] != NULL)
 			{	

@@ -1,0 +1,11 @@
+diff of execution of:
+echo 'exit 9223372036854775808' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:09
++++ found	2024-08-29 22:59:09
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: exit: 9223372036854775808: se requiere un argumento numérico
++minishell: exit: 9223372036854775808: numeric argument required
+ ======== return =======
+ return value: 1

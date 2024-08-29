@@ -1,0 +1,11 @@
+diff of execution of:
+echo 'echo a | echo b |' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:13
++++ found	2024-08-29 22:59:13
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 2: error sintáctico: no se esperaba el final del fichero
++[syntax error msg]
+ ======== return =======
+ return value: 1

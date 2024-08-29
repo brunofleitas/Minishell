@@ -1,203 +1,593 @@
-==> diffs/questionable_exec_dir.diff <==
+==> diffs/cd_0.diff <==
 diff of execution of:
-echo 'export PATH="$PATH:$PWD"; mkdir asdfg; asdfg' | tr ';' '\n' | [shell]
---- expected	2024-08-28 02:16:31.222945069 +0200
-+++ found	2024-08-28 02:16:32.409967348 +0200
+echo 'cd..' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:09
++++ found	2024-08-29 22:59:09
 @@ -1,5 +1,5 @@
  
  ======== stderr =======
--[progname]: asdfg: command not found
-+double free or corruption (out)
+-bash: línea 1: cd..: orden no encontrada
++minishell: cd..: command not found
+ ======== return =======
+ return value: 1
+
+==> diffs/cd_1.diff <==
+diff of execution of:
+echo 'cd ./srcs' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:09
++++ found	2024-08-29 22:59:09
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: cd: ./srcs: No such file or directory
++minishell: cd: ./srcs: No such file or directory
+ ======== return =======
+ return value: 1
+
+==> diffs/cd_14.diff <==
+diff of execution of:
+echo 'cd \\'\\' \\'\\'' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:10
++++ found	2024-08-29 22:59:10
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: cd: demasiados argumentos
++minishell: cd: too many arguments
+ ======== return =======
+ return value: 1
+
+==> diffs/cd_15.diff <==
+diff of execution of:
+echo 'cd \\' \\'' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:10
++++ found	2024-08-29 22:59:10
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: cd:  : No such file or directory
++minishell: cd:  : No such file or directory
+ ======== return =======
+ return value: 1
+
+==> diffs/cd_16.diff <==
+diff of execution of:
+echo 'cd d' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:10
++++ found	2024-08-29 22:59:10
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: cd: d: No such file or directory
++minishell: cd: d: No such file or directory
+ ======== return =======
+ return value: 1
+
+==> diffs/env_unset.diff <==
+diff of execution of:
+echo 'unset USER; env | grep USER' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:09
++++ found	2024-08-29 22:59:09
+@@ -1,7 +1,7 @@
+-USER_ZDOTDIR=/Users/bruno
+ __CF_USER_TEXT_ENCODING=0x1F5:0x0:0x8
++USER_ZDOTDIR=/Users/bruno
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
+
+==> diffs/exit_alpha.diff <==
+diff of execution of:
+echo 'exit alpha' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:09
++++ found	2024-08-29 22:59:09
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: exit: alpha: se requiere un argumento numérico
++minishell: exit: alpha: numeric argument required
+ ======== return =======
+ return value: 1
+
+==> diffs/exit_many.diff <==
+diff of execution of:
+echo 'exit 1 2 3' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:09
++++ found	2024-08-29 22:59:09
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: exit: demasiados argumentos
++minishell: exit: too many arguments
+ ======== return =======
+ return value: 1
+
+==> diffs/exit_too_big.diff <==
+diff of execution of:
+echo 'exit 9223372036854775808' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:09
++++ found	2024-08-29 22:59:09
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: exit: 9223372036854775808: se requiere un argumento numérico
++minishell: exit: 9223372036854775808: numeric argument required
+ ======== return =======
+ return value: 1
+
+==> diffs/exit_too_small.diff <==
+diff of execution of:
+echo 'exit -9223372036854775809' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:09
++++ found	2024-08-29 22:59:09
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: exit: -9223372036854775809: se requiere un argumento numérico
++minishell: exit: -9223372036854775809: numeric argument required
+ ======== return =======
+ return value: 1
+
+==> diffs/export_invalid_equal.diff <==
+diff of execution of:
+echo 'export =' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:11
++++ found	2024-08-29 22:59:11
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: export: `=': no es un identificador válido
++minishell: export: `=': not a valid identifier
+ ======== return =======
+ return value: 1
+
+==> diffs/export_invalid_minus1.diff <==
+diff of execution of:
+echo 'export A-' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:11
++++ found	2024-08-29 22:59:11
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: export: `A-': no es un identificador válido
++minishell: export: `A-': not a valid identifier
+ ======== return =======
+ return value: 1
+
+==> diffs/export_invalid_minus2.diff <==
+diff of execution of:
+echo 'export A-=123' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:11
++++ found	2024-08-29 22:59:11
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: export: `A-=123': no es un identificador válido
++minishell: export: `A-=123': not a valid identifier
+ ======== return =======
+ return value: 1
+
+==> diffs/export_invalid_mutli.diff <==
+diff of execution of:
+echo 'export A------=a 123=4 B=b MINUS-' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:11
++++ found	2024-08-29 22:59:11
+@@ -1,7 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: export: `A------=a': no es un identificador válido
+-bash: línea 1: export: `123=4': no es un identificador válido
+-bash: línea 1: export: `MINUS-': no es un identificador válido
++minishell: export: `A------=a': not a valid identifier
+ ======== return =======
+ return value: 1
+
+==> diffs/export_invalid_numeric.diff <==
+diff of execution of:
+echo 'export 123' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:11
++++ found	2024-08-29 22:59:11
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: export: `123': no es un identificador válido
++minishell: export: `123': not a valid identifier
+ ======== return =======
+ return value: 1
+
+==> diffs/here_doc.diff <==
+diff of execution of:
+echo 'cat << EOF;hi;ha;ho;EOF' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:15
++++ found	2024-08-29 22:59:15
+@@ -1,8 +1,11 @@
+ hi
+ ha
+ ho
+ 
+ ======== stderr =======
+-
++minishell: hi: command not found
++minishell: ha: command not found
++minishell: ho: command not found
++minishell: EOF: command not found
+ ======== return =======
+ return value: 0
+
+==> diffs/here_doc_bad_token.diff <==
+diff of execution of:
+echo 'cat << ||||;ha;||||' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:15
++++ found	2024-08-29 22:59:15
+@@ -1,6 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: error sintáctico cerca del elemento inesperado `||'
+-bash: línea 1: `cat << ||||'
++[syntax error msg]
+ ======== return =======
+ return value: 1
+
+==> diffs/here_doc_multivar.diff <==
+diff of execution of:
+echo 'cat <<EOF; $PWD and $OLDPWD;ha;$PATH ;EOF' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:15
++++ found	2024-08-29 22:59:15
+@@ -1,8 +1,11 @@
+- /Users/bruno/Github_42/Minishell/test/temp and /Users/bruno/Github_42/Minishell/test
++ $PWD and $OLDPWD
+ ha
+-/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin 
++$PATH 
+ 
+ ======== stderr =======
+-
++minishell: /Users/bruno/Github_42/Minishell/test/temp: Is a directory
++minishell: ha: command not found
++minishell: /opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin: No such file or directory
++minishell: EOF: command not found
+ ======== return =======
+ return value: 0
+
+==> diffs/here_doc_quotes.diff <==
+diff of execution of:
+echo 'cat << EOF;\\'$PWD\\';EOF' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:15
++++ found	2024-08-29 22:59:15
+@@ -1,6 +1,6 @@
+-'/Users/bruno/Github_42/Minishell/test/temp'
++'$PWD'
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
+
+==> diffs/here_doc_status1.diff <==
+diff of execution of:
+echo 'cat << EOF;$?;EOF' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:15
++++ found	2024-08-29 22:59:16
+@@ -1,6 +1,7 @@
+-0
++$?
+ 
+ ======== stderr =======
+-
++minishell: 0: command not found
++minishell: EOF: command not found
+ ======== return =======
+ return value: 0
+
+==> diffs/here_doc_status2.diff <==
+diff of execution of:
+echo 'cat fail; cat << EOF;$?;EOF' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:16
++++ found	2024-08-29 22:59:16
+@@ -1,6 +1,8 @@
+-1
++$?
+ 
+ ======== stderr =======
+ cat: fail: No such file or directory
++minishell: 0: command not found
++minishell: EOF: command not found
+ ======== return =======
+ return value: 0
+
+==> diffs/here_doc_var.diff <==
+diff of execution of:
+echo 'cat << EOF;$PWD;EOF' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:15
++++ found	2024-08-29 22:59:15
+@@ -1,6 +1,7 @@
+-/Users/bruno/Github_42/Minishell/test/temp
++$PWD
+ 
+ ======== stderr =======
+-
++minishell: /Users/bruno/Github_42/Minishell/test/temp: Is a directory
++minishell: EOF: command not found
+ ======== return =======
+ return value: 0
+
+==> diffs/path_add_bad_exe.diff <==
+diff of execution of:
+echo 'touch /home/bruno/bin/asdfg; asdfg' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:07
++++ found	2024-08-29 22:59:07
+@@ -1,6 +1,6 @@
+ 
+ ======== stderr =======
+ touch: /home/bruno/bin/asdfg: No such file or directory
+-bash: línea 2: asdfg: orden no encontrada
++minishell: asdfg: command not found
+ ======== return =======
+ return value: 1
+
+==> diffs/path_add_local.diff <==
+diff of execution of:
+echo 'export PATH=$PATH\\':./\\'; echo $PATH; infile' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:07
++++ found	2024-08-29 22:59:07
+@@ -1,6 +1,6 @@
+-/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:./
+ 
++
+ ======== stderr =======
+-bash: línea 3: infile: Permission denied
++minishell: infile: command not found
+ ======== return =======
+ return value: 0
+
+==> diffs/path_empty.diff <==
+diff of execution of:
+echo 'export PATH=; echo $PATH; cat infile' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:07
++++ found	2024-08-29 22:59:07
+@@ -1,6 +1,6 @@
+ 
+ 
+ ======== stderr =======
+-bash: línea 3: cat: No such file or directory
++minishell: cat: command not found
+ ======== return =======
+ return value: 0
+
+==> diffs/path_empty_local.diff <==
+diff of execution of:
+echo 'export PATH=; echo $PATH; infile' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:07
++++ found	2024-08-29 22:59:07
+@@ -1,6 +1,6 @@
+ 
+ 
+ ======== stderr =======
+-bash: línea 3: infile: Permission denied
++minishell: infile: command not found
+ ======== return =======
+ return value: 0
+
+==> diffs/path_empty_part.diff <==
+diff of execution of:
+echo 'export PATH=$PATH\\':::::/hehe\\'; echo $PATH; cat infile' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:07
++++ found	2024-08-29 22:59:07
+@@ -1,8 +1,6 @@
+-/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:::::/hehe
+-infile content
+-infile second line
+ 
+-======== stderr =======
+ 
++======== stderr =======
++minishell: cat: command not found
+ ======== return =======
+ return value: 0
+
+==> diffs/path_empty_part_local.diff <==
+diff of execution of:
+echo 'export PATH=$PATH\\':::::/hehe\\'; echo $PATH; infile' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:07
++++ found	2024-08-29 22:59:07
+@@ -1,6 +1,6 @@
+-/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:::::/hehe
+ 
++
+ ======== stderr =======
+-bash: línea 3: infile: Permission denied
++minishell: infile: command not found
+ ======== return =======
+ return value: 0
+
+==> diffs/path_unknown.diff <==
+diff of execution of:
+echo 'export PATH=\\'/heeeello\\'; echo $PATH; cat infile' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:07
++++ found	2024-08-29 22:59:07
+@@ -1,6 +1,6 @@
+ /heeeello
+ 
+ ======== stderr =======
+-bash: línea 3: cat: orden no encontrada
++minishell: cat: command not found
+ ======== return =======
+ return value: 0
+
+==> diffs/path_unset.diff <==
+diff of execution of:
+echo 'unset PATH; echo $PATH; cat infile' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:07
++++ found	2024-08-29 22:59:07
+@@ -1,6 +1,6 @@
+ 
+ 
+ ======== stderr =======
+-bash: línea 3: cat: No such file or directory
++minishell: cat: command not found
+ ======== return =======
+ return value: 0
+
+==> diffs/path_unset_local.diff <==
+diff of execution of:
+echo 'unset PATH; echo $PATH; infile' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:07
++++ found	2024-08-29 22:59:07
+@@ -1,6 +1,6 @@
+ 
+ 
+ ======== stderr =======
+-bash: línea 3: infile: Permission denied
++minishell: infile: command not found
+ ======== return =======
+ return value: 0
+
+==> diffs/questionable_SHLVL.diff <==
+diff of execution of:
+echo 'echo $SHLVL' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:07
++++ found	2024-08-29 22:59:07
+@@ -1,6 +1,6 @@
+-3
++2
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
+
+==> diffs/questionable_exec_dir.diff <==
+diff of execution of:
+echo 'export PATH="$PATH:$PWD"; mkdir asdfg; asdfg' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:08
++++ found	2024-08-29 22:59:08
+@@ -1,5 +1,6 @@
+ 
+ ======== stderr =======
+-bash: línea 3: asdfg: orden no encontrada
++minishell: mkdir: command not found
++minishell: asdfg: command not found
  ======== return =======
  return value: 1
 
 ==> diffs/questionable_exec_dot.diff <==
 diff of execution of:
 echo '.' | tr ';' '\n' | [shell]
---- expected	2024-08-28 02:16:31.082942441 +0200
-+++ found	2024-08-28 02:16:31.098942742 +0200
+--- expected	2024-08-29 22:59:08
++++ found	2024-08-29 22:59:08
 @@ -1,6 +1,5 @@
  
  ======== stderr =======
--[progname]: .: filename argument required
--[progname]: usage: . filename [arguments]
-+[progname]: .: Is a directory
+-bash: línea 1: .: argumento de nombre de fichero requerido
+-.: modo de empleo: . fichero [argumentos]
++minishell: .: Is a directory
  ======== return =======
  return value: 1
 
 ==> diffs/questionable_exec_dotdot.diff <==
 diff of execution of:
 echo '..' | tr ';' '\n' | [shell]
---- expected	2024-08-28 02:16:31.122943192 +0200
-+++ found	2024-08-28 02:16:31.144943605 +0200
+--- expected	2024-08-29 22:59:08
++++ found	2024-08-29 22:59:08
 @@ -1,5 +1,5 @@
  
  ======== stderr =======
--[progname]: ..: command not found
-+[progname]: ..: Is a directory
+-bash: línea 1: ..: orden no encontrada
++minishell: ..: Is a directory
+ ======== return =======
+ return value: 1
+
+==> diffs/questionable_exec_dotslash.diff <==
+diff of execution of:
+echo './' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:08
++++ found	2024-08-29 22:59:08
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: ./: Is a directory
++minishell: ./: Is a directory
  ======== return =======
  return value: 1
 
 ==> diffs/questionable_export.diff <==
 diff of execution of:
 echo 'export' | tr ';' '\n' | [shell]
---- expected	2024-08-28 02:16:30.812937374 +0200
-+++ found	2024-08-28 02:16:30.826937637 +0200
-@@ -1,82 +1,82 @@
--declare -x BAMF_DESKTOP_FILE_HINT="/var/lib/snapd/desktop/applications/code_code.desktop"
--declare -x CHROME_DESKTOP="code-url-handler.desktop"
+--- expected	2024-08-29 22:59:07
++++ found	2024-08-29 22:59:07
+@@ -1,40 +1,40 @@
 -declare -x COLORTERM="truecolor"
--declare -x DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus"
--declare -x DEBUGINFOD_URLS="https://debuginfod.ubuntu.com "
--declare -x DESKTOP_SESSION="ubuntu"
--declare -x DISPLAY=":0"
--declare -x GDK_BACKEND="x11"
--declare -x GDK_BACKEND_VSCODE_SNAP_ORIG=""
--declare -x GDMSESSION="ubuntu"
--declare -x GIO_LAUNCHED_DESKTOP_FILE="/var/lib/snapd/desktop/applications/code_code.desktop"
--declare -x GIO_LAUNCHED_DESKTOP_FILE_PID="205565"
--declare -x GIO_MODULE_DIR="/home/bruno/snap/code/common/.cache/gio-modules"
--declare -x GIO_MODULE_DIR_VSCODE_SNAP_ORIG=""
--declare -x GIT_ASKPASS="/snap/code/167/usr/share/code/resources/app/extensions/git/dist/askpass.sh"
--declare -x GJS_DEBUG_OUTPUT="stderr"
--declare -x GJS_DEBUG_TOPICS="JS ERROR;JS LOG"
--declare -x GNOME_DESKTOP_SESSION_ID="this-is-deprecated"
--declare -x GNOME_SETUP_DISPLAY=":1"
--declare -x GNOME_SHELL_SESSION_MODE="ubuntu"
--declare -x GSETTINGS_SCHEMA_DIR="/home/bruno/snap/code/167/.local/share/glib-2.0/schemas"
--declare -x GSETTINGS_SCHEMA_DIR_VSCODE_SNAP_ORIG=""
--declare -x GSM_SKIP_SSH_AGENT_WORKAROUND="true"
--declare -x GTK_EXE_PREFIX="/snap/code/167/usr"
--declare -x GTK_EXE_PREFIX_VSCODE_SNAP_ORIG=""
--declare -x GTK_IM_MODULE_FILE="/home/bruno/snap/code/common/.cache/immodules/immodules.cache"
--declare -x GTK_IM_MODULE_FILE_VSCODE_SNAP_ORIG=""
--declare -x GTK_MODULES="gail:atk-bridge"
--declare -x GTK_PATH="/snap/code/167/usr/lib/x86_64-linux-gnu/gtk-3.0"
--declare -x GTK_PATH_VSCODE_SNAP_ORIG=""
--declare -x HOME="/home/bruno"
--declare -x IM_CONFIG_CHECK_ENV="1"
--declare -x IM_CONFIG_PHASE="1"
--declare -x INVOCATION_ID="06b97646426041c49051bec3c8da554c"
--declare -x JOURNAL_STREAM="8:12063"
--declare -x LANG="en_US.UTF-8"
--declare -x LESSCLOSE="/usr/bin/lesspipe %s %s"
--declare -x LESSOPEN="| /usr/bin/lesspipe %s"
--declare -x LOCPATH="/snap/code/167/usr/lib/locale"
--declare -x LOCPATH_VSCODE_SNAP_ORIG=""
+-declare -x COMMAND_MODE="unix2003"
+-declare -x GIT_ASKPASS="/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass.sh"
+-declare -x HOME="/Users/bruno"
+-declare -x HOMEBREW_CELLAR="/opt/homebrew/Cellar"
+-declare -x HOMEBREW_PREFIX="/opt/homebrew"
+-declare -x HOMEBREW_REPOSITORY="/opt/homebrew"
+-declare -x INFOPATH="/opt/homebrew/share/info:/opt/homebrew/share/info:"
+-declare -x LANG="es_ES.UTF-8"
 -declare -x LOGNAME="bruno"
--declare -x LS_COLORS="rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:"
--declare -x MANAGERPID="1227"
--declare -x MEMORY_PRESSURE_WATCH="/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/session.slice/org.gnome.Shell@wayland.service/memory.pressure"
--declare -x MEMORY_PRESSURE_WRITE="c29tZSAyMDAwMDAgMjAwMDAwMAA="
--declare -x OLDPWD="/home/bruno/Github42/Minishell/test"
--declare -x ORIGINAL_XDG_CURRENT_DESKTOP="ubuntu:GNOME"
--declare -x PATH="/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin"
--declare -x PWD="/home/bruno/Github42/Minishell/test/temp"
--declare -x QT_ACCESSIBILITY="1"
--declare -x QT_IM_MODULE="ibus"
--declare -x SESSION_MANAGER="local/bruno42:@/tmp/.ICE-unix/1396,unix/bruno42:/tmp/.ICE-unix/1396"
--declare -x SHELL="/bin/bash"
--declare -x SSH_AUTH_SOCK="/run/user/1000/keyring/ssh"
--declare -x SYSTEMD_EXEC_PID="1430"
+-declare -x LaunchInstanceID="CA304FFA-E941-471B-B80F-EEC62BDE3794"
+-declare -x MallocNanoZone="0"
+-declare -x OLDPWD="/Users/bruno/Github_42/Minishell/test"
+-declare -x ORIGINAL_XDG_CURRENT_DESKTOP="undefined"
+-declare -x PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin"
+-declare -x PWD="/Users/bruno/Github_42/Minishell/test/temp"
+-declare -x SECURITYSESSIONID="186b2"
+-declare -x SHELL="/bin/zsh"
+-declare -x SSH_AUTH_SOCK="/private/tmp/com.apple.launchd.hcBou38jjP/Listeners"
 -declare -x TERM="xterm-256color"
 -declare -x TERM_PROGRAM="vscode"
 -declare -x TERM_PROGRAM_VERSION="1.92.2"
+-declare -x TMPDIR="/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/"
 -declare -x USER="bruno"
--declare -x USERNAME="bruno"
+-declare -x USER_ZDOTDIR="/Users/bruno"
 -declare -x VSCODE_GIT_ASKPASS_EXTRA_ARGS=""
--declare -x VSCODE_GIT_ASKPASS_MAIN="/snap/code/167/usr/share/code/resources/app/extensions/git/dist/askpass-main.js"
--declare -x VSCODE_GIT_ASKPASS_NODE="/snap/code/167/usr/share/code/code"
--declare -x VSCODE_GIT_IPC_HANDLE="/run/user/1000/vscode-git-405f793557.sock"
--declare -x WAYLAND_DISPLAY="wayland-0"
--declare -x XAUTHORITY="/run/user/1000/.mutter-Xwaylandauth.8SKXS2"
--declare -x XDG_CONFIG_DIRS="/etc/xdg/xdg-ubuntu:/etc/xdg"
--declare -x XDG_CONFIG_DIRS_VSCODE_SNAP_ORIG="/etc/xdg/xdg-ubuntu:/etc/xdg"
--declare -x XDG_CURRENT_DESKTOP="Unity"
--declare -x XDG_DATA_DIRS="/home/bruno/snap/code/167/.local/share:/home/bruno/snap/code/167:/snap/code/167/usr/share:/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop"
--declare -x XDG_DATA_DIRS_VSCODE_SNAP_ORIG="/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop"
--declare -x XDG_MENU_PREFIX="gnome-"
--declare -x XDG_RUNTIME_DIR="/run/user/1000"
--declare -x XDG_SESSION_CLASS="user"
--declare -x XDG_SESSION_DESKTOP="ubuntu"
--declare -x XDG_SESSION_TYPE="wayland"
--declare -x XMODIFIERS="@im=ibus"
-+declare -x SHELL=/bin/bash
-+declare -x SESSION_MANAGER=local/bruno42:@/tmp/.ICE-unix/1396,unix/bruno42:/tmp/.ICE-unix/1396
-+declare -x QT_ACCESSIBILITY=1
-+declare -x COLORTERM=truecolor
-+declare -x XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
-+declare -x XDG_MENU_PREFIX=gnome-
-+declare -x TERM_PROGRAM_VERSION=1.92.2
-+declare -x XDG_CONFIG_DIRS_VSCODE_SNAP_ORIG=/etc/xdg/xdg-ubuntu:/etc/xdg
-+declare -x GNOME_DESKTOP_SESSION_ID=this-is-deprecated
-+declare -x GDK_BACKEND_VSCODE_SNAP_ORIG=
-+declare -x GNOME_SHELL_SESSION_MODE=ubuntu
-+declare -x GIO_MODULE_DIR_VSCODE_SNAP_ORIG=
-+declare -x SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
-+declare -x MEMORY_PRESSURE_WRITE=c29tZSAyMDAwMDAgMjAwMDAwMAA=
-+declare -x XMODIFIERS=@im=ibus
-+declare -x DESKTOP_SESSION=ubuntu
-+declare -x BAMF_DESKTOP_FILE_HINT=/var/lib/snapd/desktop/applications/code_code.desktop
-+declare -x GTK_MODULES=gail:atk-bridge
-+declare -x PWD=/home/bruno/Github42/Minishell/test/temp
-+declare -x GSETTINGS_SCHEMA_DIR=/home/bruno/snap/code/167/.local/share/glib-2.0/schemas
-+declare -x LOGNAME=bruno
-+declare -x XDG_SESSION_DESKTOP=ubuntu
-+declare -x GTK_EXE_PREFIX=/snap/code/167/usr
-+declare -x XDG_SESSION_TYPE=wayland
-+declare -x SYSTEMD_EXEC_PID=1430
-+declare -x XAUTHORITY=/run/user/1000/.mutter-Xwaylandauth.8SKXS2
-+declare -x VSCODE_GIT_ASKPASS_NODE=/snap/code/167/usr/share/code/code
-+declare -x IM_CONFIG_CHECK_ENV=1
-+declare -x GJS_DEBUG_TOPICS=JS ERROR;JS LOG
-+declare -x HOME=/home/bruno
-+declare -x USERNAME=bruno
-+declare -x IM_CONFIG_PHASE=1
-+declare -x LANG=en_US.UTF-8
-+declare -x LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:
-+declare -x XDG_CURRENT_DESKTOP=Unity
-+declare -x MEMORY_PRESSURE_WATCH=/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/session.slice/org.gnome.Shell@wayland.service/memory.pressure
-+declare -x WAYLAND_DISPLAY=wayland-0
-+declare -x GIT_ASKPASS=/snap/code/167/usr/share/code/resources/app/extensions/git/dist/askpass.sh
-+declare -x INVOCATION_ID=06b97646426041c49051bec3c8da554c
-+declare -x MANAGERPID=1227
-+declare -x CHROME_DESKTOP=code-url-handler.desktop
-+declare -x GJS_DEBUG_OUTPUT=stderr
-+declare -x VSCODE_GIT_ASKPASS_EXTRA_ARGS=
-+declare -x GNOME_SETUP_DISPLAY=:1
-+declare -x GSETTINGS_SCHEMA_DIR_VSCODE_SNAP_ORIG=
-+declare -x GTK_IM_MODULE_FILE_VSCODE_SNAP_ORIG=
-+declare -x LESSCLOSE=/usr/bin/lesspipe %s %s
-+declare -x XDG_SESSION_CLASS=user
-+declare -x TERM=xterm-256color
-+declare -x GTK_PATH=/snap/code/167/usr/lib/x86_64-linux-gnu/gtk-3.0
-+declare -x LESSOPEN=| /usr/bin/lesspipe %s
-+declare -x USER=bruno
-+declare -x GTK_PATH_VSCODE_SNAP_ORIG=
-+declare -x VSCODE_GIT_IPC_HANDLE=/run/user/1000/vscode-git-405f793557.sock
-+declare -x DISPLAY=:0
-+declare -x LOCPATH=/snap/code/167/usr/lib/locale
-+declare -x GSM_SKIP_SSH_AGENT_WORKAROUND=true
-+declare -x QT_IM_MODULE=ibus
-+declare -x GTK_EXE_PREFIX_VSCODE_SNAP_ORIG=
-+declare -x XDG_RUNTIME_DIR=/run/user/1000
-+declare -x XDG_DATA_DIRS_VSCODE_SNAP_ORIG=/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
-+declare -x DEBUGINFOD_URLS=https://debuginfod.ubuntu.com 
-+declare -x VSCODE_GIT_ASKPASS_MAIN=/snap/code/167/usr/share/code/resources/app/extensions/git/dist/askpass-main.js
-+declare -x JOURNAL_STREAM=8:12063
-+declare -x XDG_DATA_DIRS=/home/bruno/snap/code/167/.local/share:/home/bruno/snap/code/167:/snap/code/167/usr/share:/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
-+declare -x GDK_BACKEND=x11
-+declare -x PATH=/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin
-+declare -x GDMSESSION=ubuntu
-+declare -x ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
-+declare -x GTK_IM_MODULE_FILE=/home/bruno/snap/code/common/.cache/immodules/immodules.cache
-+declare -x DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
-+declare -x LOCPATH_VSCODE_SNAP_ORIG=
-+declare -x GIO_MODULE_DIR=/home/bruno/snap/code/common/.cache/gio-modules
-+declare -x GIO_LAUNCHED_DESKTOP_FILE_PID=205565
-+declare -x GIO_LAUNCHED_DESKTOP_FILE=/var/lib/snapd/desktop/applications/code_code.desktop
-+declare -x OLDPWD=/home/bruno/Github42/Minishell/test
+-declare -x VSCODE_GIT_ASKPASS_MAIN="/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass-main.js"
+-declare -x VSCODE_GIT_ASKPASS_NODE="/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin).app/Contents/MacOS/Code Helper (Plugin)"
+-declare -x VSCODE_GIT_IPC_HANDLE="/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/vscode-git-57e233b12e.sock"
+-declare -x VSCODE_INJECTION="1"
+-declare -x XPC_FLAGS="0x0"
+-declare -x XPC_SERVICE_NAME="0"
+-declare -x ZDOTDIR="/Users/bruno"
+-declare -x __CFBundleIdentifier="com.microsoft.VSCode"
+-declare -x __CF_USER_TEXT_ENCODING="0x1F5:0x0:0x8"
 +declare -x TERM_PROGRAM=vscode
++declare -x TERM=xterm-256color
++declare -x SHELL=/bin/zsh
++declare -x HOMEBREW_REPOSITORY=/opt/homebrew
++declare -x TMPDIR=/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/
++declare -x TERM_PROGRAM_VERSION=1.92.2
++declare -x ZDOTDIR=/Users/bruno
++declare -x ORIGINAL_XDG_CURRENT_DESKTOP=undefined
++declare -x MallocNanoZone=0
++declare -x USER=bruno
++declare -x COMMAND_MODE=unix2003
++declare -x SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.hcBou38jjP/Listeners
++declare -x __CF_USER_TEXT_ENCODING=0x1F5:0x0:0x8
++declare -x PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin
++declare -x LaunchInstanceID=CA304FFA-E941-471B-B80F-EEC62BDE3794
++declare -x USER_ZDOTDIR=/Users/bruno
++declare -x __CFBundleIdentifier=com.microsoft.VSCode
++declare -x PWD=/Users/bruno/Github_42/Minishell/test/temp
++declare -x LANG=es_ES.UTF-8
++declare -x VSCODE_GIT_ASKPASS_EXTRA_ARGS=
++declare -x XPC_FLAGS=0x0
++declare -x XPC_SERVICE_NAME=0
++declare -x VSCODE_INJECTION=1
++declare -x HOME=/Users/bruno
++declare -x VSCODE_GIT_ASKPASS_MAIN=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass-main.js
++declare -x HOMEBREW_PREFIX=/opt/homebrew
++declare -x LOGNAME=bruno
++declare -x VSCODE_GIT_IPC_HANDLE=/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/vscode-git-57e233b12e.sock
++declare -x VSCODE_GIT_ASKPASS_NODE=/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin).app/Contents/MacOS/Code Helper (Plugin)
++declare -x GIT_ASKPASS=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass.sh
++declare -x INFOPATH=/opt/homebrew/share/info:/opt/homebrew/share/info:
++declare -x HOMEBREW_CELLAR=/opt/homebrew/Cellar
++declare -x SECURITYSESSIONID=186b2
++declare -x COLORTERM=truecolor
++declare -x OLDPWD=/Users/bruno/Github_42/Minishell/test
  
  ======== stderr =======
  
@@ -206,167 +596,97 @@ echo 'export' | tr ';' '\n' | [shell]
 
 ==> diffs/questionable_export_quotes.diff <==
 diff of execution of:
-echo 'export a=\'"quotes"\'; export' | tr ';' '\n' | [shell]
---- expected	2024-08-28 02:16:30.850938087 +0200
-+++ found	2024-08-28 02:16:30.870938462 +0200
-@@ -1,83 +1,83 @@
--declare -x BAMF_DESKTOP_FILE_HINT="/var/lib/snapd/desktop/applications/code_code.desktop"
--declare -x CHROME_DESKTOP="code-url-handler.desktop"
+echo 'export a=\\'"quotes"\\'; export' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:07
++++ found	2024-08-29 22:59:07
+@@ -1,41 +1,41 @@
 -declare -x COLORTERM="truecolor"
--declare -x DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus"
--declare -x DEBUGINFOD_URLS="https://debuginfod.ubuntu.com "
--declare -x DESKTOP_SESSION="ubuntu"
--declare -x DISPLAY=":0"
--declare -x GDK_BACKEND="x11"
--declare -x GDK_BACKEND_VSCODE_SNAP_ORIG=""
--declare -x GDMSESSION="ubuntu"
--declare -x GIO_LAUNCHED_DESKTOP_FILE="/var/lib/snapd/desktop/applications/code_code.desktop"
--declare -x GIO_LAUNCHED_DESKTOP_FILE_PID="205565"
--declare -x GIO_MODULE_DIR="/home/bruno/snap/code/common/.cache/gio-modules"
--declare -x GIO_MODULE_DIR_VSCODE_SNAP_ORIG=""
--declare -x GIT_ASKPASS="/snap/code/167/usr/share/code/resources/app/extensions/git/dist/askpass.sh"
--declare -x GJS_DEBUG_OUTPUT="stderr"
--declare -x GJS_DEBUG_TOPICS="JS ERROR;JS LOG"
--declare -x GNOME_DESKTOP_SESSION_ID="this-is-deprecated"
--declare -x GNOME_SETUP_DISPLAY=":1"
--declare -x GNOME_SHELL_SESSION_MODE="ubuntu"
--declare -x GSETTINGS_SCHEMA_DIR="/home/bruno/snap/code/167/.local/share/glib-2.0/schemas"
--declare -x GSETTINGS_SCHEMA_DIR_VSCODE_SNAP_ORIG=""
--declare -x GSM_SKIP_SSH_AGENT_WORKAROUND="true"
--declare -x GTK_EXE_PREFIX="/snap/code/167/usr"
--declare -x GTK_EXE_PREFIX_VSCODE_SNAP_ORIG=""
--declare -x GTK_IM_MODULE_FILE="/home/bruno/snap/code/common/.cache/immodules/immodules.cache"
--declare -x GTK_IM_MODULE_FILE_VSCODE_SNAP_ORIG=""
--declare -x GTK_MODULES="gail:atk-bridge"
--declare -x GTK_PATH="/snap/code/167/usr/lib/x86_64-linux-gnu/gtk-3.0"
--declare -x GTK_PATH_VSCODE_SNAP_ORIG=""
--declare -x HOME="/home/bruno"
--declare -x IM_CONFIG_CHECK_ENV="1"
--declare -x IM_CONFIG_PHASE="1"
--declare -x INVOCATION_ID="06b97646426041c49051bec3c8da554c"
--declare -x JOURNAL_STREAM="8:12063"
--declare -x LANG="en_US.UTF-8"
--declare -x LESSCLOSE="/usr/bin/lesspipe %s %s"
--declare -x LESSOPEN="| /usr/bin/lesspipe %s"
--declare -x LOCPATH="/snap/code/167/usr/lib/locale"
--declare -x LOCPATH_VSCODE_SNAP_ORIG=""
+-declare -x COMMAND_MODE="unix2003"
+-declare -x GIT_ASKPASS="/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass.sh"
+-declare -x HOME="/Users/bruno"
+-declare -x HOMEBREW_CELLAR="/opt/homebrew/Cellar"
+-declare -x HOMEBREW_PREFIX="/opt/homebrew"
+-declare -x HOMEBREW_REPOSITORY="/opt/homebrew"
+-declare -x INFOPATH="/opt/homebrew/share/info:/opt/homebrew/share/info:"
+-declare -x LANG="es_ES.UTF-8"
 -declare -x LOGNAME="bruno"
--declare -x LS_COLORS="rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:"
--declare -x MANAGERPID="1227"
--declare -x MEMORY_PRESSURE_WATCH="/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/session.slice/org.gnome.Shell@wayland.service/memory.pressure"
--declare -x MEMORY_PRESSURE_WRITE="c29tZSAyMDAwMDAgMjAwMDAwMAA="
--declare -x OLDPWD="/home/bruno/Github42/Minishell/test"
--declare -x ORIGINAL_XDG_CURRENT_DESKTOP="ubuntu:GNOME"
--declare -x PATH="/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin"
--declare -x PWD="/home/bruno/Github42/Minishell/test/temp"
--declare -x QT_ACCESSIBILITY="1"
--declare -x QT_IM_MODULE="ibus"
--declare -x SESSION_MANAGER="local/bruno42:@/tmp/.ICE-unix/1396,unix/bruno42:/tmp/.ICE-unix/1396"
--declare -x SHELL="/bin/bash"
--declare -x SSH_AUTH_SOCK="/run/user/1000/keyring/ssh"
--declare -x SYSTEMD_EXEC_PID="1430"
+-declare -x LaunchInstanceID="CA304FFA-E941-471B-B80F-EEC62BDE3794"
+-declare -x MallocNanoZone="0"
+-declare -x OLDPWD="/Users/bruno/Github_42/Minishell/test"
+-declare -x ORIGINAL_XDG_CURRENT_DESKTOP="undefined"
+-declare -x PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin"
+-declare -x PWD="/Users/bruno/Github_42/Minishell/test/temp"
+-declare -x SECURITYSESSIONID="186b2"
+-declare -x SHELL="/bin/zsh"
+-declare -x SSH_AUTH_SOCK="/private/tmp/com.apple.launchd.hcBou38jjP/Listeners"
 -declare -x TERM="xterm-256color"
 -declare -x TERM_PROGRAM="vscode"
 -declare -x TERM_PROGRAM_VERSION="1.92.2"
+-declare -x TMPDIR="/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/"
 -declare -x USER="bruno"
--declare -x USERNAME="bruno"
+-declare -x USER_ZDOTDIR="/Users/bruno"
 -declare -x VSCODE_GIT_ASKPASS_EXTRA_ARGS=""
--declare -x VSCODE_GIT_ASKPASS_MAIN="/snap/code/167/usr/share/code/resources/app/extensions/git/dist/askpass-main.js"
--declare -x VSCODE_GIT_ASKPASS_NODE="/snap/code/167/usr/share/code/code"
--declare -x VSCODE_GIT_IPC_HANDLE="/run/user/1000/vscode-git-405f793557.sock"
--declare -x WAYLAND_DISPLAY="wayland-0"
--declare -x XAUTHORITY="/run/user/1000/.mutter-Xwaylandauth.8SKXS2"
--declare -x XDG_CONFIG_DIRS="/etc/xdg/xdg-ubuntu:/etc/xdg"
--declare -x XDG_CONFIG_DIRS_VSCODE_SNAP_ORIG="/etc/xdg/xdg-ubuntu:/etc/xdg"
--declare -x XDG_CURRENT_DESKTOP="Unity"
--declare -x XDG_DATA_DIRS="/home/bruno/snap/code/167/.local/share:/home/bruno/snap/code/167:/snap/code/167/usr/share:/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop"
--declare -x XDG_DATA_DIRS_VSCODE_SNAP_ORIG="/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop"
--declare -x XDG_MENU_PREFIX="gnome-"
--declare -x XDG_RUNTIME_DIR="/run/user/1000"
--declare -x XDG_SESSION_CLASS="user"
--declare -x XDG_SESSION_DESKTOP="ubuntu"
--declare -x XDG_SESSION_TYPE="wayland"
--declare -x XMODIFIERS="@im=ibus"
+-declare -x VSCODE_GIT_ASKPASS_MAIN="/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass-main.js"
+-declare -x VSCODE_GIT_ASKPASS_NODE="/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin).app/Contents/MacOS/Code Helper (Plugin)"
+-declare -x VSCODE_GIT_IPC_HANDLE="/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/vscode-git-57e233b12e.sock"
+-declare -x VSCODE_INJECTION="1"
+-declare -x XPC_FLAGS="0x0"
+-declare -x XPC_SERVICE_NAME="0"
+-declare -x ZDOTDIR="/Users/bruno"
+-declare -x __CFBundleIdentifier="com.microsoft.VSCode"
+-declare -x __CF_USER_TEXT_ENCODING="0x1F5:0x0:0x8"
 -declare -x a="\"quotes\""
-+declare -x SHELL=/bin/bash
-+declare -x SESSION_MANAGER=local/bruno42:@/tmp/.ICE-unix/1396,unix/bruno42:/tmp/.ICE-unix/1396
-+declare -x QT_ACCESSIBILITY=1
-+declare -x COLORTERM=truecolor
-+declare -x XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
-+declare -x XDG_MENU_PREFIX=gnome-
-+declare -x TERM_PROGRAM_VERSION=1.92.2
-+declare -x XDG_CONFIG_DIRS_VSCODE_SNAP_ORIG=/etc/xdg/xdg-ubuntu:/etc/xdg
-+declare -x GNOME_DESKTOP_SESSION_ID=this-is-deprecated
-+declare -x GDK_BACKEND_VSCODE_SNAP_ORIG=
-+declare -x GNOME_SHELL_SESSION_MODE=ubuntu
-+declare -x GIO_MODULE_DIR_VSCODE_SNAP_ORIG=
-+declare -x SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
-+declare -x MEMORY_PRESSURE_WRITE=c29tZSAyMDAwMDAgMjAwMDAwMAA=
-+declare -x XMODIFIERS=@im=ibus
-+declare -x DESKTOP_SESSION=ubuntu
-+declare -x BAMF_DESKTOP_FILE_HINT=/var/lib/snapd/desktop/applications/code_code.desktop
-+declare -x GTK_MODULES=gail:atk-bridge
-+declare -x PWD=/home/bruno/Github42/Minishell/test/temp
-+declare -x GSETTINGS_SCHEMA_DIR=/home/bruno/snap/code/167/.local/share/glib-2.0/schemas
-+declare -x LOGNAME=bruno
-+declare -x XDG_SESSION_DESKTOP=ubuntu
-+declare -x GTK_EXE_PREFIX=/snap/code/167/usr
-+declare -x XDG_SESSION_TYPE=wayland
-+declare -x SYSTEMD_EXEC_PID=1430
-+declare -x XAUTHORITY=/run/user/1000/.mutter-Xwaylandauth.8SKXS2
-+declare -x VSCODE_GIT_ASKPASS_NODE=/snap/code/167/usr/share/code/code
-+declare -x IM_CONFIG_CHECK_ENV=1
-+declare -x GJS_DEBUG_TOPICS=JS ERROR;JS LOG
-+declare -x HOME=/home/bruno
-+declare -x USERNAME=bruno
-+declare -x IM_CONFIG_PHASE=1
-+declare -x LANG=en_US.UTF-8
-+declare -x LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:
-+declare -x XDG_CURRENT_DESKTOP=Unity
-+declare -x MEMORY_PRESSURE_WATCH=/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/session.slice/org.gnome.Shell@wayland.service/memory.pressure
-+declare -x WAYLAND_DISPLAY=wayland-0
-+declare -x GIT_ASKPASS=/snap/code/167/usr/share/code/resources/app/extensions/git/dist/askpass.sh
-+declare -x INVOCATION_ID=06b97646426041c49051bec3c8da554c
-+declare -x MANAGERPID=1227
-+declare -x CHROME_DESKTOP=code-url-handler.desktop
-+declare -x GJS_DEBUG_OUTPUT=stderr
-+declare -x VSCODE_GIT_ASKPASS_EXTRA_ARGS=
-+declare -x GNOME_SETUP_DISPLAY=:1
-+declare -x GSETTINGS_SCHEMA_DIR_VSCODE_SNAP_ORIG=
-+declare -x GTK_IM_MODULE_FILE_VSCODE_SNAP_ORIG=
-+declare -x LESSCLOSE=/usr/bin/lesspipe %s %s
-+declare -x XDG_SESSION_CLASS=user
-+declare -x TERM=xterm-256color
-+declare -x GTK_PATH=/snap/code/167/usr/lib/x86_64-linux-gnu/gtk-3.0
-+declare -x LESSOPEN=| /usr/bin/lesspipe %s
-+declare -x USER=bruno
-+declare -x GTK_PATH_VSCODE_SNAP_ORIG=
-+declare -x VSCODE_GIT_IPC_HANDLE=/run/user/1000/vscode-git-405f793557.sock
-+declare -x DISPLAY=:0
-+declare -x LOCPATH=/snap/code/167/usr/lib/locale
-+declare -x GSM_SKIP_SSH_AGENT_WORKAROUND=true
-+declare -x QT_IM_MODULE=ibus
-+declare -x GTK_EXE_PREFIX_VSCODE_SNAP_ORIG=
-+declare -x XDG_RUNTIME_DIR=/run/user/1000
-+declare -x XDG_DATA_DIRS_VSCODE_SNAP_ORIG=/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
-+declare -x DEBUGINFOD_URLS=https://debuginfod.ubuntu.com 
-+declare -x VSCODE_GIT_ASKPASS_MAIN=/snap/code/167/usr/share/code/resources/app/extensions/git/dist/askpass-main.js
-+declare -x JOURNAL_STREAM=8:12063
-+declare -x XDG_DATA_DIRS=/home/bruno/snap/code/167/.local/share:/home/bruno/snap/code/167:/snap/code/167/usr/share:/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
-+declare -x GDK_BACKEND=x11
-+declare -x PATH=/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin
-+declare -x GDMSESSION=ubuntu
-+declare -x ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
-+declare -x GTK_IM_MODULE_FILE=/home/bruno/snap/code/common/.cache/immodules/immodules.cache
-+declare -x DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
-+declare -x LOCPATH_VSCODE_SNAP_ORIG=
-+declare -x GIO_MODULE_DIR=/home/bruno/snap/code/common/.cache/gio-modules
-+declare -x GIO_LAUNCHED_DESKTOP_FILE_PID=205565
-+declare -x GIO_LAUNCHED_DESKTOP_FILE=/var/lib/snapd/desktop/applications/code_code.desktop
-+declare -x OLDPWD=/home/bruno/Github42/Minishell/test
 +declare -x TERM_PROGRAM=vscode
-+declare -x a=quotes
++declare -x TERM=xterm-256color
++declare -x SHELL=/bin/zsh
++declare -x HOMEBREW_REPOSITORY=/opt/homebrew
++declare -x TMPDIR=/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/
++declare -x TERM_PROGRAM_VERSION=1.92.2
++declare -x ZDOTDIR=/Users/bruno
++declare -x ORIGINAL_XDG_CURRENT_DESKTOP=undefined
++declare -x MallocNanoZone=0
++declare -x USER=bruno
++declare -x COMMAND_MODE=unix2003
++declare -x SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.hcBou38jjP/Listeners
++declare -x __CF_USER_TEXT_ENCODING=0x1F5:0x0:0x8
++declare -x PATH=/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin
++declare -x LaunchInstanceID=CA304FFA-E941-471B-B80F-EEC62BDE3794
++declare -x USER_ZDOTDIR=/Users/bruno
++declare -x __CFBundleIdentifier=com.microsoft.VSCode
++declare -x PWD=/Users/bruno/Github_42/Minishell/test/temp
++declare -x LANG=es_ES.UTF-8
++declare -x VSCODE_GIT_ASKPASS_EXTRA_ARGS=
++declare -x XPC_FLAGS=0x0
++declare -x XPC_SERVICE_NAME=0
++declare -x VSCODE_INJECTION=1
++declare -x HOME=/Users/bruno
++declare -x VSCODE_GIT_ASKPASS_MAIN=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass-main.js
++declare -x HOMEBREW_PREFIX=/opt/homebrew
++declare -x LOGNAME=bruno
++declare -x VSCODE_GIT_IPC_HANDLE=/var/folders/1k/snmc95211t7fx2g2fgf6yp880000gn/T/vscode-git-57e233b12e.sock
++declare -x VSCODE_GIT_ASKPASS_NODE=/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin).app/Contents/MacOS/Code Helper (Plugin)
++declare -x GIT_ASKPASS=/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass.sh
++declare -x INFOPATH=/opt/homebrew/share/info:/opt/homebrew/share/info:
++declare -x HOMEBREW_CELLAR=/opt/homebrew/Cellar
++declare -x SECURITYSESSIONID=186b2
++declare -x COLORTERM=truecolor
++declare -x OLDPWD=/Users/bruno/Github_42/Minishell/test
++declare -x a="quotes"
  
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
+
+==> diffs/questionable_export_spaces1.diff <==
+diff of execution of:
+echo 'export a=\\'    \\'; echo $a' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:07
++++ found	2024-08-29 22:59:07
+@@ -1,6 +1,6 @@
++    
+ 
+-
  ======== stderr =======
  
  ======== return =======
@@ -375,11 +695,11 @@ echo 'export a=\'"quotes"\'; export' | tr ';' '\n' | [shell]
 ==> diffs/questionable_export_spaces2.diff <==
 diff of execution of:
 echo 'export a="a    b"; echo $a' | tr ';' '\n' | [shell]
---- expected	2024-08-28 02:16:30.928939551 +0200
-+++ found	2024-08-28 02:16:30.943939833 +0200
+--- expected	2024-08-29 22:59:07
++++ found	2024-08-29 22:59:07
 @@ -1,6 +1,6 @@
 -a b
-+a
++a    b
  
  ======== stderr =======
  
@@ -389,11 +709,11 @@ echo 'export a="a    b"; echo $a' | tr ';' '\n' | [shell]
 ==> diffs/questionable_glob_order.diff <==
 diff of execution of:
 echo 'touch a b c A B C aa ab ac Aa Ab Ac aA aB aC; echo *' | tr ';' '\n' | [shell]
---- expected	2024-08-28 02:16:31.004940977 +0200
-+++ found	2024-08-28 02:16:31.022941315 +0200
+--- expected	2024-08-29 22:59:07
++++ found	2024-08-29 22:59:08
 @@ -1,6 +1,6 @@
--a A aa aA Aa ab aB Ab ac aC Ac b B c C infile readonly
-+aC infile .. Aa B ac C A readonly Ab ab aB aa aA b c Ac a .
+-a aa ab ac b c infile readonly
++. .. readonly infile ac ab a aa c b
  
  ======== stderr =======
  
@@ -403,10 +723,10 @@ echo 'touch a b c A B C aa ab ac Aa Ab Ac aA aB aC; echo *' | tr ';' '\n' | [she
 ==> diffs/questionable_pwd_rmdir.diff <==
 diff of execution of:
 echo 'mkdir tmp; cd tmp; rmdir $PWD; pwd' | tr ';' '\n' | [shell]
---- expected	2024-08-28 02:16:32.480968680 +0200
-+++ found	2024-08-28 02:16:32.501969074 +0200
+--- expected	2024-08-29 22:59:08
++++ found	2024-08-29 22:59:08
 @@ -1,6 +1,5 @@
--/home/bruno/Github42/Minishell/test/temp/tmp
+-/Users/bruno/Github_42/Minishell/test/temp/tmp
  
  ======== stderr =======
 -
@@ -418,25 +738,457 @@ echo 'mkdir tmp; cd tmp; rmdir $PWD; pwd' | tr ';' '\n' | [shell]
 ==> diffs/questionable_redir_ambiguous.diff <==
 diff of execution of:
 echo 'cat < *;' | tr ';' '\n' | [shell]
---- expected	2024-08-28 02:16:31.045941747 +0200
-+++ found	2024-08-28 02:16:31.061942047 +0200
-@@ -1,5 +1,6 @@
+--- expected	2024-08-29 22:59:08
++++ found	2024-08-29 22:59:08
+@@ -1,5 +1,7 @@
++infile content
++infile second line
  
  ======== stderr =======
--[progname]: *: ambiguous redirect
-+[progname]: ..: Is a directory
-+[progname]: .: Is a directory
+-bash: línea 1: *: redireccionamiento ambiguo
++cat: ..: Is a directory
+ ======== return =======
+-return value: 1
++return value: 0
+
+==> diffs/redir_expand_cmd.diff <==
+diff of execution of:
+echo '$fail < fail' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:15
++++ found	2024-08-29 22:59:15
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: fail: No such file or directory
++
  ======== return =======
  return value: 1
 
-==> diffs/questionable_SHLVL.diff <==
+==> diffs/redir_expand_var.diff <==
 diff of execution of:
-echo 'echo $SHLVL' | tr ';' '\n' | [shell]
---- expected	2024-08-28 02:16:30.964940227 +0200
-+++ found	2024-08-28 02:16:30.980940527 +0200
+echo 'cat < $PATH' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:15
++++ found	2024-08-29 22:59:15
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: /opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin: No such file or directory
++minishell: /opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin: No such file or directory
+ ======== return =======
+ return value: 1
+
+==> diffs/redir_expand_var_quotes.diff <==
+diff of execution of:
+echo 'cat < "$PATH"' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:15
++++ found	2024-08-29 22:59:15
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: /opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin: No such file or directory
++minishell: /opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.12/bin: No such file or directory
+ ======== return =======
+ return value: 1
+
+==> diffs/redir_heredoc.diff <==
+diff of execution of:
+echo 'cat << EOF;hello;there;EOF' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:15
++++ found	2024-08-29 22:59:15
+@@ -1,7 +1,9 @@
+ hello
+ there
+ 
+ ======== stderr =======
+-
++minishell: hello: command not found
++minishell: there: command not found
++minishell: EOF: command not found
+ ======== return =======
+ return value: 0
+
+==> diffs/redir_heredoc2.diff <==
+diff of execution of:
+echo 'grep o << EOF > out;hello;there;EOF; ls -l --time-style=+' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:15
++++ found	2024-08-29 22:59:15
+@@ -1,6 +1,9 @@
+ 
+ ======== stderr =======
++minishell: hello: command not found
++minishell: there: command not found
++minishell: EOF: command not found
+ ls: unrecognized option `--time-style=+'
+ usage: ls [-@ABCFGHILOPRSTUWabcdefghiklmnopqrstuvwxy1%,] [--color=when] [-D format] [file ...]
+ ======== return =======
+ return value: 1
+
+==> diffs/redir_infail.diff <==
+diff of execution of:
+echo 'cat < fail' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:15
++++ found	2024-08-29 22:59:15
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: fail: No such file or directory
++minishell: fail: No such file or directory
+ ======== return =======
+ return value: 1
+
+==> diffs/redir_inoutfail.diff <==
+diff of execution of:
+echo 'cat < fail > readonly; ls -l --time-style=+' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:15
++++ found	2024-08-29 22:59:15
+@@ -1,7 +1,7 @@
+ 
+ ======== stderr =======
+-bash: línea 1: fail: No such file or directory
++minishell: fail: No such file or directory
+ ls: unrecognized option `--time-style=+'
+ usage: ls [-@ABCFGHILOPRSTUWabcdefghiklmnopqrstuvwxy1%,] [--color=when] [-D format] [file ...]
+ ======== return =======
+ return value: 1
+
+==> diffs/redir_multi_here.diff <==
+diff of execution of:
+echo 'cat <<EOF <<OH;i;am;here;EOF;oh;OH' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:14
++++ found	2024-08-29 22:59:14
+@@ -1,6 +1,11 @@
+ oh
+ 
+ ======== stderr =======
+-
++minishell: i: command not found
++minishell: am: command not found
++minishell: here: command not found
++minishell: EOF: command not found
++minishell: oh: command not found
++minishell: OH: command not found
+ ======== return =======
+ return value: 0
+
+==> diffs/redir_outfail.diff <==
+diff of execution of:
+echo 'cat infile > readonly; ls -l --time-style=+' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:15
++++ found	2024-08-29 22:59:15
+@@ -1,7 +1,7 @@
+ 
+ ======== stderr =======
+-bash: línea 1: readonly: Permission denied
++minishell: readonly: Permission denied
+ ls: unrecognized option `--time-style=+'
+ usage: ls [-@ABCFGHILOPRSTUWabcdefghiklmnopqrstuvwxy1%,] [--color=when] [-D format] [file ...]
+ ======== return =======
+ return value: 1
+
+==> diffs/redir_outinfail.diff <==
+diff of execution of:
+echo 'cat > readonly < fail; ls -l --time-style=+' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:15
++++ found	2024-08-29 22:59:15
+@@ -1,7 +1,7 @@
+ 
+ ======== stderr =======
+-bash: línea 1: readonly: Permission denied
++minishell: readonly: Permission denied
+ ls: unrecognized option `--time-style=+'
+ usage: ls [-@ABCFGHILOPRSTUWabcdefghiklmnopqrstuvwxy1%,] [--color=when] [-D format] [file ...]
+ ======== return =======
+ return value: 1
+
+==> diffs/return_exit_ko1.diff <==
+diff of execution of:
+echo 'exit one two; echo $?' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:12
++++ found	2024-08-29 22:59:12
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: exit: one: se requiere un argumento numérico
++minishell: exit: too many arguments
+ ======== return =======
+ return value: 1
+
+==> diffs/return_exit_ko2.diff <==
+diff of execution of:
+echo 'exit 1 2; echo $?' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:12
++++ found	2024-08-29 22:59:12
+@@ -1,6 +1,5 @@
+-1
+ 
+ ======== stderr =======
+-bash: línea 1: exit: demasiados argumentos
++minishell: exit: too many arguments
+ ======== return =======
+-return value: 0
++return value: 1
+
+==> diffs/return_ko2.diff <==
+diff of execution of:
+echo 'echo a > readonly; echo $?' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:12
++++ found	2024-08-29 22:59:12
+@@ -1,6 +1,5 @@
+-1
+ 
+ ======== stderr =======
+-bash: línea 1: readonly: Permission denied
++minishell: readonly: Permission denied
+ ======== return =======
+-return value: 0
++return value: 1
+
+==> diffs/return_ko3.diff <==
+diff of execution of:
+echo 'cat < fail; echo $?' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:12
++++ found	2024-08-29 22:59:12
 @@ -1,6 +1,6 @@
--3
-+2
+-1
++127
+ 
+ ======== stderr =======
+-bash: línea 1: fail: No such file or directory
++minishell: fail: No such file or directory
+ ======== return =======
+ return value: 0
+
+==> diffs/return_ok2.diff <==
+diff of execution of:
+echo 'echo hi; echo thisiaavariable$?thatneedsexpansion' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:12
++++ found	2024-08-29 22:59:12
+@@ -1,7 +1,7 @@
+ hi
+-thisiaavariable0thatneedsexpansion
++thisiaavariable 0 thatneedsexpansion
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
+
+==> diffs/special_reset_status.diff <==
+diff of execution of:
+echo 'cat fail; $FAIL; echo $?' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:11
++++ found	2024-08-29 22:59:11
+@@ -1,6 +1,6 @@
+-0
++1
+ 
+ ======== stderr =======
+ cat: fail: No such file or directory
+ ======== return =======
+ return value: 0
+
+==> diffs/special_unset_oldpwd.diff <==
+diff of execution of:
+echo 'unset OLDPWD; cd ..; echo $OLDPWD' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:11
++++ found	2024-08-29 22:59:11
+@@ -1,6 +1,6 @@
+-/Users/bruno/Github_42/Minishell/test/temp
+ 
++
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
+
+==> diffs/special_unset_path.diff <==
+diff of execution of:
+echo 'unset PATH; ls; /bin/ls; echo $PATH' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:11
++++ found	2024-08-29 22:59:11
+@@ -1,8 +1,8 @@
+ infile
+ readonly
+ 
+ 
+ ======== stderr =======
+-bash: línea 2: ls: No such file or directory
++minishell: ls: command not found
+ ======== return =======
+ return value: 0
+
+==> diffs/special_unset_pwd.diff <==
+diff of execution of:
+echo 'unset PWD; cd ..; echo $PWD' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:11
++++ found	2024-08-29 22:59:11
+@@ -1,6 +1,6 @@
+-/Users/bruno/Github_42/Minishell/test
+ 
++
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
+
+==> diffs/syntax_err1.diff <==
+diff of execution of:
+echo 'echo a |' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:13
++++ found	2024-08-29 22:59:13
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 2: error sintáctico: no se esperaba el final del fichero
++[syntax error msg]
+ ======== return =======
+ return value: 1
+
+==> diffs/syntax_err2.diff <==
+diff of execution of:
+echo 'echo a | echo b |' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:13
++++ found	2024-08-29 22:59:13
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 2: error sintáctico: no se esperaba el final del fichero
++[syntax error msg]
+ ======== return =======
+ return value: 1
+
+==> diffs/syntax_err3.diff <==
+diff of execution of:
+echo 'cat <<<< infile' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:13
++++ found	2024-08-29 22:59:13
+@@ -1,6 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: error sintáctico cerca del elemento inesperado `<'
+-bash: línea 1: `cat <<<< infile'
++[syntax error msg]
+ ======== return =======
+ return value: 1
+
+==> diffs/syntax_err4.diff <==
+diff of execution of:
+echo '|' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:13
++++ found	2024-08-29 22:59:13
+@@ -1,6 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: error sintáctico cerca del elemento inesperado `|'
+-bash: línea 1: `|'
++[syntax error msg]
+ ======== return =======
+ return value: 1
+
+==> diffs/syntax_err5.diff <==
+diff of execution of:
+echo '=' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:13
++++ found	2024-08-29 22:59:13
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: =: orden no encontrada
++minishell: =: command not found
+ ======== return =======
+ return value: 1
+
+==> diffs/syntax_redir_bad1.diff <==
+diff of execution of:
+echo 'cat << <' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:13
++++ found	2024-08-29 22:59:13
+@@ -1,6 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: error sintáctico cerca del elemento inesperado `<'
+-bash: línea 1: `cat << <'
++[syntax error msg]
+ ======== return =======
+ return value: 1
+
+==> diffs/syntax_redir_bad2.diff <==
+diff of execution of:
+echo 'cat > <' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:13
++++ found	2024-08-29 22:59:13
+@@ -1,6 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: error sintáctico cerca del elemento inesperado `<'
+-bash: línea 1: `cat > <'
++[syntax error msg]
+ ======== return =======
+ return value: 1
+
+==> diffs/syntax_redir_end1.diff <==
+diff of execution of:
+echo 'cat <<' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:13
++++ found	2024-08-29 22:59:13
+@@ -1,6 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: error sintáctico cerca del elemento inesperado `newline'
+-bash: línea 1: `cat <<'
++[syntax error msg]
+ ======== return =======
+ return value: 1
+
+==> diffs/syntax_redir_end2.diff <==
+diff of execution of:
+echo 'cat >' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:13
++++ found	2024-08-29 22:59:13
+@@ -1,6 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: error sintáctico cerca del elemento inesperado `newline'
+-bash: línea 1: `cat >'
++[syntax error msg]
+ ======== return =======
+ return value: 1
+
+==> diffs/var_expand_cmd_invalid.diff <==
+diff of execution of:
+echo 'export a=fail; $a -a' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:13
++++ found	2024-08-29 22:59:13
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 2: fail: orden no encontrada
++minishell: fail: command not found
+ ======== return =======
+ return value: 1
+
+==> diffs/var_expansion_end1.diff <==
+diff of execution of:
+echo 'echo $PWD-end' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:12
++++ found	2024-08-29 22:59:12
+@@ -1,6 +1,6 @@
+-/Users/bruno/Github_42/Minishell/test/temp-end
++/Users/bruno/Github_42/Minishell/test/temp -end
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
+
+==> diffs/var_invalid_name.diff <==
+diff of execution of:
+echo 'echo $/imaslash' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:13
++++ found	2024-08-29 22:59:13
+@@ -1,6 +1,6 @@
+-$/imaslash
++$ /imaslash
  
  ======== stderr =======
  

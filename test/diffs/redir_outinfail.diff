@@ -1,0 +1,13 @@
+diff of execution of:
+echo 'cat > readonly < fail; ls -l --time-style=+' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:15
++++ found	2024-08-29 22:59:15
+@@ -1,7 +1,7 @@
+ 
+ ======== stderr =======
+-bash: línea 1: readonly: Permission denied
++minishell: readonly: Permission denied
+ ls: unrecognized option `--time-style=+'
+ usage: ls [-@ABCFGHILOPRSTUWabcdefghiklmnopqrstuvwxy1%,] [--color=when] [-D format] [file ...]
+ ======== return =======
+ return value: 1

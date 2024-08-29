@@ -1,0 +1,11 @@
+diff of execution of:
+echo 'exit alpha' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:09
++++ found	2024-08-29 22:59:09
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: exit: alpha: se requiere un argumento numérico
++minishell: exit: alpha: numeric argument required
+ ======== return =======
+ return value: 1

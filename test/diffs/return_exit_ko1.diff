@@ -1,0 +1,11 @@
+diff of execution of:
+echo 'exit one two; echo $?' | tr ';' '\n' | [shell]
+--- expected	2024-08-29 22:59:12
++++ found	2024-08-29 22:59:12
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: exit: one: se requiere un argumento numérico
++minishell: exit: too many arguments
+ ======== return =======
+ return value: 1
