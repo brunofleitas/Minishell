@@ -1,0 +1,11 @@
+diff of execution of:
+echo 'export A-=123' | tr ';' '\n' | [shell]
+--- expected	2024-08-30 23:21:53
++++ found	2024-08-30 23:21:53
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: export: `A-=123': no es un identificador válido
++minishell: export: `A-=123': not a valid identifier
+ ======== return =======
+ return value: 1

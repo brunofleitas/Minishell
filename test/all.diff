@@ -1,11 +1,66 @@
+==> diffs/export_invalid_equal.diff <==
 diff of execution of:
-echo 'export a=fail; $a -a' | tr ';' '\n' | [shell]
---- expected	2024-08-30 23:11:52
-+++ found	2024-08-30 23:11:52
+echo 'export =' | tr ';' '\n' | [shell]
+--- expected	2024-08-30 23:21:53
++++ found	2024-08-30 23:21:53
 @@ -1,5 +1,5 @@
  
  ======== stderr =======
--bash: línea 2: fail: orden no encontrada
-+minishell: fail: command not found
+-bash: línea 1: export: `=': no es un identificador válido
++minishell: export: `=': not a valid identifier
+ ======== return =======
+ return value: 1
+
+==> diffs/export_invalid_minus1.diff <==
+diff of execution of:
+echo 'export A-' | tr ';' '\n' | [shell]
+--- expected	2024-08-30 23:21:53
++++ found	2024-08-30 23:21:53
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: export: `A-': no es un identificador válido
++minishell: export: `A-': not a valid identifier
+ ======== return =======
+ return value: 1
+
+==> diffs/export_invalid_minus2.diff <==
+diff of execution of:
+echo 'export A-=123' | tr ';' '\n' | [shell]
+--- expected	2024-08-30 23:21:53
++++ found	2024-08-30 23:21:53
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: export: `A-=123': no es un identificador válido
++minishell: export: `A-=123': not a valid identifier
+ ======== return =======
+ return value: 1
+
+==> diffs/export_invalid_mutli.diff <==
+diff of execution of:
+echo 'export A------=a 123=4 B=b MINUS-' | tr ';' '\n' | [shell]
+--- expected	2024-08-30 23:21:53
++++ found	2024-08-30 23:21:53
+@@ -1,7 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: export: `A------=a': no es un identificador válido
+-bash: línea 1: export: `123=4': no es un identificador válido
+-bash: línea 1: export: `MINUS-': no es un identificador válido
++minishell: export: `A------=a': not a valid identifier
+ ======== return =======
+ return value: 1
+
+==> diffs/export_invalid_numeric.diff <==
+diff of execution of:
+echo 'export 123' | tr ';' '\n' | [shell]
+--- expected	2024-08-30 23:21:53
++++ found	2024-08-30 23:21:53
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-bash: línea 1: export: `123': no es un identificador válido
++minishell: export: `123': not a valid identifier
  ======== return =======
  return value: 1

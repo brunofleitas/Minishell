@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 07:19:53 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/29 23:13:20 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/30 23:42:00 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,11 @@ void	handle_quote_content(const char **s, char **result, char quote,
 		{
 			(*s) += 2;
 			continue ;
+		}
+		if (**s == quote && *(*s + 1) == '=')
+		{
+			(*s)++;
+			append_char(*(*s)++, result, ma);
 		}
 		else if (**s == quote)
 			break ;
