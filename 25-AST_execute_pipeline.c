@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:07:23 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/28 17:32:41 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/30 01:15:52 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,8 @@ void execute_pipeline(t_astnode *node, t_ma *ma)
     i = 0;
     a.input_fd = STDIN_FILENO;
     // original_stdout = dup(STDOUT_FILENO);
-    if (node->data.pipeline.cmd_count == 1 && (node->data.pipeline.cmds[0]->data.simple_cmd.words[0].data.word.type == TOKEN_BUILTIN))
+    if (node->data.pipeline.cmd_count == 1 && 
+    (node->data.pipeline.cmds[0]->data.simple_cmd.words && (node->data.pipeline.cmds[0]->data.simple_cmd.words[0].data.word.type == TOKEN_BUILTIN)))//added here a sef\g fault check
     {
         execute_ast(node->data.pipeline.cmds[0], ma);
         return;

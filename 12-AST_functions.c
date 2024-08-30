@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:08:01 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/28 02:04:06 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/30 01:03:35 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,8 @@ static t_astnode *parse_simple_cmd(t_ma *ma)
     node->data.simple_cmd.redirections = NULL;
     parse_word_list(node, &last_word, ma);
     parse_redirection_list(node, &last_word, ma);
+    // printf("%i", node->data.simple_cmd.redirections->data.redirection.type);
+    // printf("%s", node->data.simple_cmd.redirections->data.redirection.file);
     // ft_printf("node->data.simple_cmd.redirection_in : %p\n" ,node->data.simple_cmd.redirections_in);
     // ft_printf("node->data.simple_cmd.redirection_out : %p\n" ,node->data.simple_cmd.redirections_out);
     // ft_printf("node->data.simple_cmd.words : %p\n" ,node->data.simple_cmd.words);

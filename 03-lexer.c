@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 15:03:22 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/29 21:35:47 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/30 22:42:38 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ static void	process_wildcards(char **wildcards, t_ma *ma)
 		ma->tkns[i]->type = clasify_token(wildcards[i]);
 		trimmed = trim_wildcard(wildcards[i], ma);
 		ma->tkns[i]->value = trimmed;
+		// printf("%s\n", ma->tkns[i]->value);
+		// printf("%i\n", ma->tkns[i]->type);
 		i++;
 	}
 	ma->tkns[i] = NULL;

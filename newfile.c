@@ -12,6 +12,12 @@ char	*gnl(int fd);
 #include <unistd.h>
 char	*gnl(int fd);
 #include <unistd.h>
+char	*gnl(int fd);
+#include <unistd.h>
+char	*gnl(int fd);
+#include <unistd.h>
+char	*gnl(int fd);
+#include <unistd.h>
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -59,7 +65,7 @@ int	main(int argc, char **argv, char **envp)
     (void)envp;
     while(1)
     {
-		input = !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : readline(">>");
+		input = !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : readline(">>");
         printf("input: %s\n", input);
     }
 	

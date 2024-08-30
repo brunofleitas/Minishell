@@ -142,6 +142,8 @@ void execute_simple_cmd(t_astnode *node, t_ma *ma)
     // ft_printf("execute_simple_cmd start\n");
     a.saved_stdin = dup(STDIN_FILENO);
     a.saved_stdout = dup(STDOUT_FILENO);
+    if(!handle_redirections(node->data.simple_cmd.redirections, &a, ma))
+        return;
     a.words_arr = create_words_arr(node, &(a.word_count), ma);
     if(!a.words_arr)
     {

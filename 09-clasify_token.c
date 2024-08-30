@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   6.9-clasify_token.c                                :+:      :+:    :+:   */
+/*   09-clasify_token.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 21:49:28 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/25 07:39:32 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/30 00:50:19 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ t_token_type	clasify_token(char *value)
 	token_type = classify_string(value);
 	if (token_type != TOKEN_ERROR)
 		return (token_type);
-	if (ft_strlen(value) > 0)
+	if (ft_strlen(value) > 0 || !value)
 		return (TOKEN_WORD);
 	return (TOKEN_ERROR);
 }

@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 06:18:08 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/29 21:32:07 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/30 23:11:49 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,34 +35,64 @@ void	generate_double_operators(const char **s, char ***split, int *i,
 	*s += 2;
 }
 
-void	generate_single_operators_and_specials(const char **s,
-		char ***split, int *i, t_ma *ma)
+void generate_single_operators_and_specials(const char **s,
+                                            char ***split, int *i, t_ma *ma)
 {
-	int		len;
-	char	*temp;
-	char	*env_value;
+    int len = 1;
+    char *temp;
+    char *env_value;
+    int len_after;
+    char *ad_word;
 
+    // Case: Handle special variable $?
+    if (**s == '$' && *(*s + 1) == '?')
+    {
+        (*split)[(*i)++] = ft_itoa_g_c(ma->last_exit_status, &(ma->first_node));
+        (*s) += 2; // Move past "$?"
+        return;
+    }
 	len = 1;
-	if (**s == '$' && *(*s + 1) == '?')
-	{
-		(*split)[(*i)++] = ft_itoa_g_c(ma->last_exit_status, &(ma->first_node));
-		(*s) += 1;
-	}
-	else if (**s == '$' && ft_isalnum(*(*s + 1)))
-	{
-		while ((*s)[len] && (ft_isalnum((*s)[len]) || (*s)[len] == '_'))
-			len++;
-		temp = ft_substr_g_c(*s + 1, 0, len - 1, &(ma->first_node));
-		env_value = get_env(temp, ma->env->var);
-		if (env_value)
-			(*split)[(*i)++] = ft_strdup_g_c(env_value, &(ma->first_node));
-	}
-	else
-	{
-		(*split)[(*i)++] = ft_substr_g_c(*s, 0, 1, &(ma->first_node));
-	}
-	*s += len;
+    // Case: Handle environment variables starting with $
+    if (**s == '$')
+    { // Start after the '$'
+        if (ft_isalnum(*(*s + 1)) || *(*s + 1) == '_')
+        {
+            // Find the length of the variable name
+            while ((*s)[len] && (ft_isalnum((*s)[len]) || (*s)[len] == '_'))
+                len++;
+            // Extract variable name
+            temp = ft_substr_g_c(*s + 1, 0, len - 1, &(ma->first_node));
+            env_value = get_env(temp, ma->env->var);
+            if (env_value)
+            {
+                // If there is something after the variable name, handle it
+                len_after = len;
+                while ((*s)[len_after] && !ft_strchr(" ><&()|$", (*s)[len_after]))
+                    len_after++;
+                // Extract the part after the variable name
+                ad_word = ft_substr_g_c(*s, len, len_after - len, &(ma->first_node));
+                (*split)[(*i)++] = ft_strjoin_g_c(env_value, ad_word, &(ma->first_node));
+                len = len_after;
+			}
+        }
+        else
+        {
+             while ((*s)[len] && !ft_strchr(" ><&()|$", (*s)[len]))
+                    len++;
+			// Case: Variable with no alphanumeric characters, treat as plain text
+            (*split)[(*i)++] = ft_substr_g_c(*s, 0, len, &(ma->first_node));
+        }
+    }
+    else
+    {
+        // Case: Handle single operators and specials
+        (*split)[(*i)++] = ft_substr_g_c(*s, 0, 1, &(ma->first_node));
+    }
+
+    // Move the string pointer forward
+    *s += len;
 }
+
 
 static char	*ft_strremove_quotes(const char *str, t_ntc **first_node)
 {
