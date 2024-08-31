@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:45:41 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/28 02:14:06 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/31 01:17:14 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,29 @@ char	*get_cd_path(char **args, t_env **env)
 	return (path);
 }
 
+static int	add_env_var(char *var, t_ma *ma)
+{
+	char	**new_var;
+
+	new_var = ft_realloc_g_c(&(ma->first_env), ma->env->var, (ma->env->count
+				+ 2) * sizeof(char *));
+	if (!new_var)
+	{
+		perror("realloc");
+		return (1);
+	}
+	ma->env->var = new_var;
+	ma->env->var[ma->env->count] = ft_strdup_g_c(var, &(ma->first_env));
+	if (!(*ma->env->var[ma->env->count]))
+	{
+		write(2, "ft_strdup_g_c error\n", 20);
+		return (1);
+	}
+	ma->env->count++;
+	ma->env->var[ma->env->count] = NULL;
+	return (0);
+}
+
 int	update_oldpwd(char *current_dir, t_ma *ma)
 {
 	char	*oldpwd_str;
@@ -63,6 +86,10 @@ int	update_oldpwd(char *current_dir, t_ma *ma)
 	int		i;
 
 	i = get_env_var(&ma->env, "OLDPWD", &temp);
+	if (i == -1)
+	{
+		add_env_var(ft_strjoin_g_c("OLDPWD=", current_dir, &ma->first_env), ma);
+	}
 	if (i != -1)
 	{
 		oldpwd_str = ft_strdup_g_c("", &ma->first_env);
@@ -93,6 +120,10 @@ int	update_pwd(t_ma *ma)
 		return (1);
 	}
 	i = get_env_var(&ma->env, "PWD", &temp);
+	if (i == -1)
+	{
+		add_env_var(ft_strjoin_g_c("PWD=", new_current_dir, &ma->first_env), ma);
+	}
 	if (i != -1)
 	{
 		pwd_str = ft_strdup_g_c("", &ma->first_env);

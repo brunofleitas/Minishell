@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:56:05 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/28 02:16:28 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/31 00:33:32 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,8 @@ void	builtin_export(char **args, t_ma *ma)
 			write(2, "minishell: export: `", 20);
 			write(2, var, ft_strlen(var));
 			write(2, "': not a valid identifier", 25);
-			exit_or_setexit(1, 0, ma);
-			return ;
+			//exit_or_setexit(0, 0, ma);
+			//return ;
 		}
 		i = find_env_var(&(ma->env), var);
 		if (i >= 0)

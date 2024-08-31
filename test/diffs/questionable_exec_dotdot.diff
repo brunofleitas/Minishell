@@ -1,0 +1,11 @@
+diff of execution of:
+echo '..' | tr ';' '\n' | [shell]
+--- expected	2024-08-31 02:08:35.632276318 +0200
++++ found	2024-08-31 02:08:35.652276740 +0200
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-[progname]: ..: command not found
++[progname]: ..: Is a directory
+ ======== return =======
+ return value: 1

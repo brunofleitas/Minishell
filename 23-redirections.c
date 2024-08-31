@@ -14,6 +14,8 @@ char	*gnl(int fd);
 #include <unistd.h>
 char	*gnl(int fd);
 #include <unistd.h>
+char	*gnl(int fd);
+#include <unistd.h>
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -166,7 +168,7 @@ static int write_to_tmp_file(int fd, const char *delimiter)
 
     while (1)
     {
-        line = !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : readline(" heredoc>");
+        line = !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : readline(" heredoc>");
         if (!line)
         {
             // perror(" ");

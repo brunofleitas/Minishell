@@ -1,0 +1,11 @@
+diff of execution of:
+echo 'export PATH="$PATH:$PWD"; mkdir asdfg; asdfg' | tr ';' '\n' | [shell]
+--- expected	2024-08-31 02:08:35.732278426 +0200
++++ found	2024-08-31 02:08:35.752278848 +0200
+@@ -1,5 +1,6 @@
+ 
+ ======== stderr =======
++[progname]: mkdir: command not found
+ [progname]: asdfg: command not found
+ ======== return =======
+ return value: 1

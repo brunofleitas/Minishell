@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 01:47:55 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/27 19:39:57 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/08/31 02:08:23 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <unistd.h>
+
+#include "minishell.h"
+#include <ctype.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <limits.h>
 
 int is_valid_argument(char *arg)
 { 

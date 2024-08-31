@@ -105,9 +105,11 @@ void execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
 
     // Check if the command is empty
     command_path = NULL;
+    // printf("words_arr[0]: %s\n", words_arr[0]);
+    // printf("words_arr[0][0]: %c\n", words_arr[0][0]);
     if (words_arr == NULL || words_arr[0] == NULL || words_arr[0][0] == '\0')
     {
-        exit(0);  // Return 0 for an empty command
+        exit (0);  // Return 0 for an empty command
     }
     // current = words_arr;
     // while (*current)

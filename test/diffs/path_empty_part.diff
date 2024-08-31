@@ -1,0 +1,15 @@
+diff of execution of:
+echo 'export PATH=$PATH\':::::/hehe\'; echo $PATH; cat infile' | tr ';' '\n' | [shell]
+--- expected	2024-08-31 02:08:33.526231904 +0200
++++ found	2024-08-31 02:08:33.549232389 +0200
+@@ -1,8 +1,6 @@
+-/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:::::/hehe
+-infile content
+-infile second line
+ 
+-======== stderr =======
+ 
++======== stderr =======
++[progname]: cat: command not found
+ ======== return =======
+ return value: 0

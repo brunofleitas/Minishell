@@ -1,0 +1,17 @@
+diff of execution of:
+echo 'cat << EOF;hello;there;EOF' | tr ';' '\n' | [shell]
+--- expected	2024-08-31 02:08:29.998157405 +0200
++++ found	2024-08-31 02:08:30.031158103 +0200
+@@ -1,7 +1,9 @@
+-hello
+-there
+ 
+-======== stderr =======
+ 
++======== stderr =======
++[progname]: Inappropriate ioctl for device
++[progname]: hello: command not found
++[progname]: there: command not found
++[progname]: EOF: command not found
+ ======== return =======
+ return value: 0

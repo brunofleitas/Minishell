@@ -1,0 +1,12 @@
+diff of execution of:
+echo 'export a=\'    \'; echo $a' | tr ';' '\n' | [shell]
+--- expected	2024-08-31 02:08:35.294269193 +0200
++++ found	2024-08-31 02:08:35.316269656 +0200
+@@ -1,6 +1,6 @@
+-
++    
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0

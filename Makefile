@@ -85,6 +85,7 @@ bonus: $(BONUS)
 	$(CC) -Wall -Wextra -Werror $(LIBRARIES_PATH) -c $< -o $@
 
 $(NAME): $(OBJS) $(LIBFT)
+	cc get_next_line.c -c
 	$(CC) $(CFLAGS) $(OBJS) $(LIBRARIES) -o $(NAME) $(LDFLAGS)
 
 $(BONUS): $(OBJSB) $(LIBFT)

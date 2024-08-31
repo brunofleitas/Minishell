@@ -1,0 +1,12 @@
+diff of execution of:
+echo '.' | tr ';' '\n' | [shell]
+--- expected	2024-08-31 02:08:35.582275264 +0200
++++ found	2024-08-31 02:08:35.606275770 +0200
+@@ -1,6 +1,5 @@
+ 
+ ======== stderr =======
+-[progname]: .: filename argument required
+-[progname]: usage: . filename [arguments]
++[progname]: .: Is a directory
+ ======== return =======
+ return value: 1
