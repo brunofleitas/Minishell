@@ -1,7 +1,7 @@
 diff of execution of:
 echo 'echo hi; echo thisiaavariable$?thatneedsexpansion' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:04:25.295693208 +0200
-+++ found	2024-09-01 20:04:25.379693286 +0200
+--- expected	2024-09-01 20:35:40.597095331 +0200
++++ found	2024-09-01 20:35:40.661096207 +0200
 @@ -1,7 +1,7 @@
  hi
 -thisiaavariable0thatneedsexpansion

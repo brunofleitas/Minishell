@@ -1,7 +1,7 @@
 diff of execution of:
 echo 'cat << EOF;hello;there;EOF' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:04:16.456684919 +0200
-+++ found	2024-09-01 20:04:16.517684977 +0200
+--- expected	2024-09-01 20:35:31.541970185 +0200
++++ found	2024-09-01 20:35:31.598970979 +0200
 @@ -1,7 +1,9 @@
  hello
  there

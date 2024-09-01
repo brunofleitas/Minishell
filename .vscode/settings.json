@@ -4,7 +4,8 @@
         "stdio.h": "c",
         "unistd.h": "c",
         "string.h": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "*.tcc": "c"
     },
     "42header.username": "bfleitas",
     "42header.email": "bfleitas@student.42luxembourg"
