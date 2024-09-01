@@ -21,7 +21,7 @@ char	*gnl(int fd);
  * 
  * @param file_name The name of the file to redirect input from.
  */
-static int redirect_input(char *file_name, t_ma *ma)
+static int redirect_input(char *file_name, t_s_cmd_args *a, t_ma *ma)
 {
     int fd;
 
@@ -39,6 +39,7 @@ static int redirect_input(char *file_name, t_ma *ma)
             return(0);
         }
         close(fd);
+        a->s_inredir += 1;
         return(1);
 }
 
@@ -197,7 +198,7 @@ static int create_tmp_file(const char *temp_file_name, const char *delimiter)
  * @param delimiter The delimiter used to mark the end of the heredoc input.
  * @param ma The main structure containing the necessary information for the shell.
  */
-static int handle_heredoc(const char *delimiter, t_ma *ma)
+static int handle_heredoc(const char *delimiter, t_s_cmd_args *a, t_ma *ma)
 {
     char *temp_file_name;
 
@@ -206,7 +207,7 @@ static int handle_heredoc(const char *delimiter, t_ma *ma)
         return(0);
     if (!create_tmp_file(temp_file_name, delimiter))
         return (0);
-    redirect_input(temp_file_name, ma);
+    redirect_input(temp_file_name, a, ma);
     if (unlink(temp_file_name) == -1)
         return (0);
     printf("\n");
@@ -255,9 +256,9 @@ int handle_redirections(t_astnode *redir_node, t_s_cmd_args *a, t_ma *ma)
             (redir_node->data.redirection.type == TOKEN_REDIR_APPEND 
             && !redirect_output_append(redir_node->data.redirection.file, 1, ma))||
             (redir_node->data.redirection.type == TOKEN_REDIR_IN 
-            && !redirect_input(redir_node->data.redirection.file, ma)) ||
+            && !redirect_input(redir_node->data.redirection.file, a, ma)) ||
             (redir_node->data.redirection.type == TOKEN_HEREDOC 
-            && !handle_heredoc(redir_node->data.redirection.file, ma)))
+            && !handle_heredoc(redir_node->data.redirection.file, a, ma)))
             {
                 if ((redir_node->data.redirection.type == TOKEN_REDIR_IN  || 
                 redir_node->data.redirection.type == TOKEN_HEREDOC) && !a->i_c)

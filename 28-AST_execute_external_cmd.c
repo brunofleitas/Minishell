@@ -58,26 +58,33 @@ char *join_path(const char *path, const char *cmd, t_ntc **first_node)
 {
     char *full_path;
     int len;
+    int len_path;
+    int len_cmd;
 
-    len = ft_strlen(path) + ft_strlen(cmd) + 2;
-    full_path = g_c(first_node, sizeof(char *) * len)->data;   
+    len_path = ft_strlen(path);
+    len_cmd = ft_strlen(cmd);
+    len = len_path + len_cmd + 2;
+    full_path = g_c(first_node, sizeof(char) * len)->data;   
     if (!full_path)
         return (NULL);
-    strcpy(full_path, path);
-    strcat(full_path, "/");
-    strcat(full_path, cmd);
+    ft_strlcpy(full_path, path, len);
+    ft_strlcat(full_path, "/", len);
+    ft_strlcat(full_path, cmd, len);
     return (full_path);
 }
 
-char *find_command_path(char *cmd, t_env **env, t_ntc **first_node)
+static char *find_command_path(char *cmd, t_env **env, int *p_ue, t_ntc **first_node)
 {
     char **paths;
     char *path_env;
     char *cmd_path;
     int i;
-
-    if (get_env_var(env, "PATH", &path_env) == -1 || !path_env)
+   
+    if (get_env_var(env, "PATH", &path_env) == -1)
+    {
+        *p_ue = 1;
         return (NULL);
+    }
     paths = ft_split(path_env, ':', first_node);  // Assuming ft_split exists
     i = 0;
     while (paths[i])
@@ -92,7 +99,7 @@ char *find_command_path(char *cmd, t_env **env, t_ntc **first_node)
         i++;
     }
     //free(paths);  // Free the paths array
-    return (NULL); // Command not found
+    return (NULL); // Command not found or path was not set, if the path was unset then the shell checks if the command that was not found is a file in the current directory.
 }
 
 void execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
@@ -102,8 +109,9 @@ void execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
     // int status;
     // char **current;
     struct stat path_stat;
-
+    int    p_ue; // flag added to check if path was unset or empty
     // Check if the command is empty
+    p_ue = 0;
     command_path = NULL;
     // printf("words_arr[0]: %s\n", words_arr[0]);
     // printf("words_arr[0][0]: %c\n", words_arr[0][0]);
@@ -122,12 +130,30 @@ void execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
     else
     {
         // ft_printf("find_command_path_start\n");
-        command_path = find_command_path(words_arr[0], env, first_node);
+        command_path = find_command_path(words_arr[0], env, &p_ue, first_node);
         // ft_printf("find_command_path_end\n");
     }
     // ft_printf("command_path: %s\n", command_path);
     
     // Check if command_path was found
+    if (p_ue)
+    {
+        if (access(words_arr[0], F_OK) != 0)
+        {
+            // perror("minishell: ");
+            write(2, "minishell: ", 11);
+            write(2, words_arr[0], ft_strlen(words_arr[0]));
+            write(2, ": No such file or directory\n", 28);
+            exit(127);  // Return 127 for "No such file or directory"
+        }
+        if (access(words_arr[0], X_OK) != 0)
+        {
+            write(2, "minishell: ", 11);
+            write(2, words_arr[0], ft_strlen(words_arr[0]));
+            write(2, ": Permission denied\n", 20);
+            exit(126);  // Return 126 for "Permission denied"
+        }
+    }
     if (!command_path)
     {
         // write(2, " command not found\n", 19);

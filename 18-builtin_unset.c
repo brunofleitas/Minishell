@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static int	find_env_var_unset(t_env **env, char *name)
+static int	find_env_var_u(t_env **env, char *name)
 {
 	int	i;
 
@@ -23,14 +23,15 @@ static int	find_env_var_unset(t_env **env, char *name)
 			return (i);
 		i++;
 	}
-	return (1);
+	// return (1); modified but it might break something so jus in case
+	return (0);
 }
 
 int	remove_env_var(t_env **env, char *name)
 {
 	int	i;
 
-	i = find_env_var_unset(env, name);
+	i = find_env_var(env, name);
 	if (i == 0)
 		return (1);
 	while (i < (*env)->count - 1)
@@ -73,13 +74,13 @@ void	builtin_unset(char **args, t_ma *ma)
 		{
 			while (args[i])
 			{
-				if (find_env_var_unset(&ma->env, args[i]) != 0)
+				if (find_env_var_u(&ma->env, args[i]) /* != 0 */)
 					remove_env_var(&ma->env, args[i]);
 				i++;
 			}
 			break ;
 		}
-		if (find_env_var_unset(&ma->env, args[i]) != 0)
+		if (find_env_var_u(&ma->env, args[i]) != 0)
 			remove_env_var(&ma->env, args[i]);
 		i++;
 	}

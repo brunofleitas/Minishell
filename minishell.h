@@ -191,7 +191,6 @@ typedef struct  s_main_args
     int         saved_stdin;
     int         saved_stdout;
 }               t_ma;
-
 /* ************************************************************************** */
 /*                                   AST EXECUTION                            */
 /* ************************************************************************** */
@@ -216,9 +215,8 @@ typedef struct  s_simple_cmd_args
     int     word_count;
     int     status;
     char    **words_arr;
-    int     saved_stdin;
-    int     saved_stdout;
     int     i_c;//  in_critical is a flag that indicates if the command is critical or not. If the command is critical, the shell should exit if the command fails. If the command is not critical, the shell should continue executing the next command.
+    int     s_inredir; // successfull input redirection or heredoc
 }               t_s_cmd_args;
 
 /* *************************  EXPAND_WILDCARDS_ARGS  ********************* */

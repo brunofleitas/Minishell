@@ -12,12 +12,25 @@
 
 #include "libft.h"
 
-size_t	ft_strlcat(char *dst, const char *src, size_t size)
+
+/**
+ * Concatenates the string pointed to by src to the end of the string
+ * pointed to by dst, up to a maximum of size - 1 characters, ensuring
+ * that the result is null-terminated.
+ *
+ * @param dst   The destination string.
+ * @param src   The source string.
+ * @param size  The size of the destination buffer.
+ * @return      The total length of the string that would have been
+ *              created if enough space had been available, excluding
+ *              the null-terminating character.
+ */
+size_t ft_strlcat(char *dst, const char *src, size_t size)
 {
-	size_t	dst_len;
-	size_t	src_len;
-	size_t	i;
-	size_t	j;
+	size_t dst_len;
+	size_t src_len;
+	size_t i;
+	size_t j;
 
 	dst_len = ft_strlen(dst);
 	src_len = ft_strlen(src);

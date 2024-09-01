@@ -45,16 +45,45 @@ int	find_env_var(t_env **env, char *var)
 	return (-1);
 }
 
-int	update_env_var(int i, const char *var, t_ma *ma)
+// int	update_env_var(int i, const char *var, t_ma *ma)
+// {
+// 	ma->env->var[i] = ft_strdup_g_c(var, &(ma->first_env));
+// 	if (!(ma->env->var[i]))
+// 	{
+// 		write(2, "ft_strdup_g_c error\n", 20);
+// 		return (1);
+// 	}
+// 	return (0);
+// }
+
+int update_env_var(int i, const char *var, t_ma *ma)
 {
-	ma->env->var[i] = ft_strdup_g_c(var, &(ma->first_env));
-	if (!(ma->env->var[i]))
-	{
-		write(2, "ft_strdup_g_c error\n", 20);
-		return (1);
-	}
-	return (0);
+    char *existing_value;
+    char *new_value;
+    char *var_name;
+    char *var_value;
+    
+    var_name = ft_strndup_g_c(var, ft_strchr(var, '=') - var);  // Extract variable name
+    var_value = ft_strdup_g_c(ft_strchr(var, '=') + 1);  // Extract variable value
+    if (ft_strcmp(var_name, "PATH") == 0) 
+    {
+        existing_value = ft_strdup(ma->env->var[i] + ft_strlen(var_name) + 1);
+        new_value = ft_strjoin(existing_value, var_value);
+        free(existing_value);
+    } 
+    else
+        new_value = ft_strdup(var_value);
+    free(ma->env->var[i]);
+    ma->env->var[i] = ft_strjoin(var_name, "=");
+    ma->env->var[i] = ft_strjoin(ma->env->var[i], new_value);
+
+    free(new_value);
+    free(var_name);
+    free(var_value);
+
+    return (ma->env->var[i] ? 0 : 1);
 }
+
 
 static int	add_env_var(char *var, t_ma *ma)
 {

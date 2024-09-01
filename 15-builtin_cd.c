@@ -18,13 +18,15 @@ int	get_env_var(t_env **env, const char *name, char **value)
 	int	name_len;
 
 	i = 0;
-	name_len = strlen(name);
+	name_len = ft_strlen(name);
 	while ((*env)->var[i])
 	{
-		if (strncmp((*env)->var[i], name, name_len) == 0
+		if (ft_strncmp((*env)->var[i], name, name_len) == 0
 			&& (*env)->var[i][name_len] == '=')
 		{
 			*value = (*env)->var[i] + name_len + 1;
+			if(value[0][0] == '\0')
+				return (-1);// this was added to check if PATH is empty
 			return (i);
 		}
 		i++;

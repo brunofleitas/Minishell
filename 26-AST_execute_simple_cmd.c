@@ -101,9 +101,14 @@ static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
 //     return (a.status);
 // }
 
-static int  input_is_critical(char **word)
+static int  input_is_critical(t_astnode *first_word_node)
 {
-    if (ft_strcmp(word[0], "cat") == 0 || ft_strcmp(word[0], "ls") == 0 || ((ft_strcmp(word[0], "echo") == 0) && word[1] == NULL))
+    char        *command;
+    t_astnode   *next_word;
+
+    command = first_word_node->data.word.value;
+    next_word = first_word_node->data.word.next;
+    if (ft_strcmp(command, "cat") == 0 || ft_strcmp(command, "ls") == 0 || ((ft_strcmp(command, "echo") == 0) && next_word == NULL))
         return (1);
     return (0);
 }
@@ -125,8 +130,8 @@ void execute_simple_cmd(t_astnode *node, t_ma *ma)
     
     // int status_inp_redir;
     // ft_printf("execute_simple_cmd start\n");
-    a.saved_stdin = dup(STDIN_FILENO);
-    a.saved_stdout = dup(STDOUT_FILENO);
+    a.s_inredir = 0;
+    a.i_c = input_is_critical(node->data.simple_cmd.words);
     if(!handle_redirections(node->data.simple_cmd.redirections, &a, ma))
         return;
     a.words_arr = create_words_arr(node, &(a.word_count), ma);
@@ -135,9 +140,8 @@ void execute_simple_cmd(t_astnode *node, t_ma *ma)
         exit_or_setexit(1, 0, ma);
         return;
     }
-    a.i_c = input_is_critical(a.words_arr);
-    if(!handle_redirections(node->data.simple_cmd.redirections, &a, ma))
-        return;
+    // if (a.i_c && !a.s_inredir)
+    //     verif_input_available)
     execute_exp_single_arg_cmd(a.words_arr, ma);
 }
 
