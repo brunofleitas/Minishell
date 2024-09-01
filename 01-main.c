@@ -77,7 +77,8 @@ int	main(int argc, char **argv, char **envp)
 
 	
 	(void)argc;
-	(void)argv;
+	ma.program = argv[0];
+	ma.l_program = ft_strlen(ma.program);
 	ma.first_node = NULL;
 	ma.first_env = NULL;
 	ma.last_exit_status = 0;

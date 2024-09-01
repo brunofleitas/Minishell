@@ -177,6 +177,8 @@ Structs in the Union: Each struct within the union represents different types of
 
 typedef struct  s_main_args
 {
+    char        *program;
+    int         l_program;
     char        *input;
 	t_ntc		*first_node;
     t_ntc		*first_env;
