@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static void execute_exp_single_arg_cmd(char **words_arr, t_ma *ma);
+static void execute_words_arr(char **words_arr, t_ma *ma);
 
 static int node_word_count(t_astnode *node)
 {
@@ -142,7 +142,7 @@ void execute_simple_cmd(t_astnode *node, t_ma *ma)
     }
     // if (a.i_c && !a.s_inredir)
     //     verif_input_available)
-    execute_exp_single_arg_cmd(a.words_arr, ma);
+    execute_words_arr(a.words_arr, ma);
 }
 
 /**
@@ -155,28 +155,21 @@ void execute_simple_cmd(t_astnode *node, t_ma *ma)
  * @param ma Pointer to the memory allocation structure
  * @return int Returns the exit status of the executed command
  */
-static void execute_exp_single_arg_cmd(char **words_arr, t_ma *ma)
+static void execute_words_arr(char **words_arr, t_ma *ma)
 {
-    char    **exp_args;
     // int     status;
 
-    exp_args = expand_wildcards_in_args(words_arr, ma);
-    if (!exp_args)
-    {
-        exit_or_setexit(1, 0, ma);
-        return;
-    }
-    if (is_builtin(exp_args[0]))
+    if (is_builtin(words_arr[0]))
     {
         // ft_printf("ma->in_child_p: %d\n", ma->in_child_p);// why does this execute or at least land in the exit code if the command is a builtin?
-        execute_builtin(exp_args, ma);
+        execute_builtin(words_arr, ma);
         return;
     }
     // ft_printf("ma->in_child_p: %d\n", ma->in_child_p);
     if (ma->in_child_p == 1)
     {
         // write(1, "executing external command\n", 27);
-        execute_external_cmd(exp_args, &(ma)->env, &(ma)->first_node);
+        execute_external_cmd(words_arr, &(ma)->env, &(ma)->first_node);
         return;
     }
 }

@@ -1,31 +1,4 @@
-#include <unistd.h>
-char	*gnl(int fd);
-#include <unistd.h>
-#include <unistd.h>
-char	*gnl(int fd);
-#include <unistd.h>
-#include <unistd.h>
-char	*gnl(int fd);
-#include <unistd.h>
-#include <unistd.h>
-char	*gnl(int fd);
-#include <unistd.h>
-#include <unistd.h>
-char	*gnl(int fd);
-#include <unistd.h>
-#include <unistd.h>
-char	*gnl(int fd);
-#include <unistd.h>
-#include <unistd.h>
-char	*gnl(int fd);
-#include <unistd.h>
-#include <unistd.h>
-char	*gnl(int fd);
-#include <unistd.h>
-#include <unistd.h>
-char	*gnl(int fd);
-#include <unistd.h>
-#include <unistd.h>
+
 char	*gnl(int fd);
 #include <unistd.h>
 /* ************************************************************************** */

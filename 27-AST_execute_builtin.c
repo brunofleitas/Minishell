@@ -82,25 +82,25 @@ int is_builtin(const char *word)
 
 
 
-void  execute_builtin(char **args, t_ma *ma)
+void  execute_builtin(char **words_arr, t_ma *ma)
 {
     int word_count;
 
-    word_count = count_words(args);
-    if (ft_strcmp(args[0], "echo") == 0)
-        builtin_echo(args, word_count, ma);
-    else if (ft_strcmp(args[0], "cd") == 0)
-        builtin_cd(args, ma);
-    else if (ft_strcmp(args[0], "pwd") == 0)
-        builtin_pwd(args, ma);
-    else if (ft_strcmp(args[0], "export") == 0)
-        builtin_export(args, ma);
-    else if (ft_strcmp(args[0], "unset") == 0)
-        builtin_unset(args, ma);
-    else if (ft_strcmp(args[0], "env") == 0)
-        builtin_env(args, ma);
-    else if (ft_strcmp(args[0], "exit") == 0)
-        builtin_exit(ma, args);
+    word_count = count_words(words_arr);
+    if (ft_strcmp(words_arr[0], "echo") == 0)
+        builtin_echo(words_arr, word_count, ma);
+    else if (ft_strcmp(words_arr[0], "cd") == 0)
+        builtin_cd(words_arr, ma);
+    else if (ft_strcmp(words_arr[0], "pwd") == 0)
+        builtin_pwd(words_arr, ma);
+    else if (ft_strcmp(words_arr[0], "export") == 0)
+        builtin_export(words_arr, ma);
+    else if (ft_strcmp(words_arr[0], "unset") == 0)
+        builtin_unset(words_arr, ma);
+    else if (ft_strcmp(words_arr[0], "env") == 0)
+        builtin_env(words_arr, ma);
+    else if (ft_strcmp(words_arr[0], "exit") == 0)
+        builtin_exit(ma, words_arr);
     else
         exit_or_setexit(1,1, ma);
 }

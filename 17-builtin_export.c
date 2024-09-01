@@ -45,43 +45,15 @@ int	find_env_var(t_env **env, char *var)
 	return (-1);
 }
 
-// int	update_env_var(int i, const char *var, t_ma *ma)
-// {
-// 	ma->env->var[i] = ft_strdup_g_c(var, &(ma->first_env));
-// 	if (!(ma->env->var[i]))
-// 	{
-// 		write(2, "ft_strdup_g_c error\n", 20);
-// 		return (1);
-// 	}
-// 	return (0);
-// }
-
-int update_env_var(int i, const char *var, t_ma *ma)
+int	update_env_var(int i, const char *var, t_ma *ma)
 {
-    char *existing_value;
-    char *new_value;
-    char *var_name;
-    char *var_value;
-    
-    var_name = ft_strndup_g_c(var, ft_strchr(var, '=') - var);  // Extract variable name
-    var_value = ft_strdup_g_c(ft_strchr(var, '=') + 1);  // Extract variable value
-    if (ft_strcmp(var_name, "PATH") == 0) 
-    {
-        existing_value = ft_strdup(ma->env->var[i] + ft_strlen(var_name) + 1);
-        new_value = ft_strjoin(existing_value, var_value);
-        free(existing_value);
-    } 
-    else
-        new_value = ft_strdup(var_value);
-    free(ma->env->var[i]);
-    ma->env->var[i] = ft_strjoin(var_name, "=");
-    ma->env->var[i] = ft_strjoin(ma->env->var[i], new_value);
-
-    free(new_value);
-    free(var_name);
-    free(var_value);
-
-    return (ma->env->var[i] ? 0 : 1);
+	ma->env->var[i] = ft_strdup_g_c(var, &(ma->first_env));
+	if (!(ma->env->var[i]))
+	{
+		write(2, "ft_strdup_g_c error\n", 20);
+		return (1);
+	}
+	return (0);
 }
 
 
@@ -122,36 +94,36 @@ void print_env(t_env *env)
 	}
 }
 
-void	builtin_export(char **args, t_ma *ma)
+void	builtin_export(char **words_arr, t_ma *ma)
 {
-	char	**tmp;
+	char	**words_cpy;
 	int		i;
-	char	*var;
+	char	*new_var_val;
 
-	if (!args[1])
+	if (!words_arr[1])
 	{
 		print_env(ma->env);
 		exit_or_setexit(0, 0, ma);
 		return ;
 	}
-	tmp = args;
-	tmp++;
-	while (*tmp)
+	words_cpy = words_arr;
+	words_cpy++;
+	while (*words_cpy)
 	{
-		var = *tmp;
-		if (!is_valid_var(var))
+		new_var_val = *words_cpy;
+		if (!is_valid_var(new_var_val))
 		{
 			// write(2, " not a valid identifier", 23);
 			write(2, "minishell: export: `", 20);
-			write(2, var, ft_strlen(var));
+			write(2, new_var_val, ft_strlen(new_var_val));
 			write(2, "': not a valid identifier", 25);
 			//exit_or_setexit(0, 0, ma);
 			//return ;
 		}
-		i = find_env_var(&(ma->env), var);
+		i = find_env_var(&(ma->env), new_var_val);
 		if (i >= 0)
 		{
-			if (!update_env_var(i, var, ma))
+			if (!update_env_var(i, new_var_val, ma))
 			{
 				exit_or_setexit(0, 0, ma);
 				return ;
@@ -159,13 +131,13 @@ void	builtin_export(char **args, t_ma *ma)
 		}
 		else
 		{
-			if (!add_env_var(var, ma))
+			if (!add_env_var(new_var_val, ma))
 			{
 				exit_or_setexit(0, 0, ma);
 				return ;
 			}
 		}
-		tmp++;
+		words_cpy++;
 	}
 	exit_or_setexit(0, 0, ma);
 }

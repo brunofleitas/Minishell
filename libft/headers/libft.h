@@ -73,6 +73,7 @@ char		*ft_itoa_g_c(int n, t_ntc **first_node);
 char		**ft_split_g_c(char const *s, char c, t_ntc **first_node);
 char		*ft_strchr(const char *s, int c);
 char		*ft_strdup_g_c(const char *s, t_ntc **first_node);
+char    	*ft_strndup_g_c(const char *s, size_t n, t_ntc **first_node);
 void		ft_striteri(char *s, void (*f)(unsigned int, char *));
 char		*ft_strjoin_g_c(char const *s1, char const *s2, t_ntc **first_node);
 size_t		ft_strlcat(char *dst, const char *src, size_t size);
