@@ -1,7 +1,7 @@
 diff of execution of:
 echo 'grep o << EOF > out;hello;there;EOF; ls -l --time-style=+' | tr ';' '\n' | [shell]
---- expected	2024-09-01 21:07:27.987550203 +0200
-+++ found	2024-09-01 21:07:28.011550201 +0200
+--- expected	2024-09-02 00:01:35.399837598 +0200
++++ found	2024-09-02 00:01:35.425852275 +0200
 @@ -1,9 +1,11 @@
  total 8
  -rw-rw-r-- 1 bruno bruno 34  infile

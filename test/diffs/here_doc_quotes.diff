@@ -1,7 +1,7 @@
 diff of execution of:
 echo 'cat << EOF;\'$PWD\';EOF' | tr ';' '\n' | [shell]
---- expected	2024-09-01 21:07:28.149550188 +0200
-+++ found	2024-09-01 21:07:28.174550185 +0200
+--- expected	2024-09-02 00:01:35.561929050 +0200
++++ found	2024-09-02 00:01:35.585942598 +0200
 @@ -1,6 +1,7 @@
 -'/home/bruno/Github42/Minishell/test/temp'
 +'$PWD'

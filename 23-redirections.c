@@ -265,7 +265,7 @@ int handle_redirections(t_astnode *redir_node, t_s_cmd_args *a, t_ma *ma)
             {
                 if ((redir_node->data.redirection.type == TOKEN_REDIR_IN  || 
                 redir_node->data.redirection.type == TOKEN_HEREDOC) && !a->i_c)
-                    exit_or_setexit(1,1, ma);
+                    exit_or_setexit(1,0, ma);
                 else
                 {
                     restore_io(ma);
