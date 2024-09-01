@@ -64,10 +64,18 @@ static void	populate(char *newstr, char const *s1, char const *set, int lnewstr)
 	newstr[i] = '\0';
 }
 
-char	*ft_strtrim(char const *s1, char const *set, t_ntc **first_node)
+/**
+ * Removes leading and trailing characters specified in `set` from the string `s1`.
+ * 
+ * @param s1 The string to be trimmed.
+ * @param set The set of characters to be removed.
+ * @param first_node A pointer to the first node of a linked list.
+ * @return A new string with leading and trailing characters removed, or NULL if memory allocation fails.
+ */
+char *ft_strtrim_g_c(char const *s1, char const *set, t_ntc **first_node)
 {
-	int		lnewstr;
-	char	*newstr;
+	int lnewstr;
+	char *newstr;
 
 	lnewstr = calclength(s1, set);
 	newstr = g_c(first_node, (lnewstr + 1) * sizeof(char))->data;

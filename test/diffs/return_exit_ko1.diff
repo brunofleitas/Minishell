@@ -1,0 +1,11 @@
+diff of execution of:
+echo 'exit one two; echo $?' | tr ';' '\n' | [shell]
+--- expected	2024-09-01 20:04:25.957693824 +0200
++++ found	2024-09-01 20:04:26.063693922 +0200
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-[progname]: exit: one: numeric argument required
++[progname]: exit: too many arguments
+ ======== return =======
+ return value: 1

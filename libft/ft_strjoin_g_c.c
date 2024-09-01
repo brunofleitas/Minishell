@@ -12,6 +12,14 @@
 
 #include "libft.h"
 
+/**
+ * Concatenates two strings and returns the result.
+ * 
+ * @param s1 The first string to be concatenated.
+ * @param s2 The second string to be concatenated.
+ * @param first_node A pointer to the first node of a linked list.
+ * @return The concatenated string, or NULL if either s1 or s2 is NULL.
+ */
 char	*ft_strjoin_g_c(char const *s1, char const *s2, t_ntc **first_node)
 {
 	int		s1s2len;

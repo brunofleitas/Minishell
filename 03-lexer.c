@@ -30,9 +30,9 @@
 static char	*trim_wildcard(char *wildcard, t_ma *ma)
 {
 	if (wildcard[0] == '\"')
-		return (ft_strtrim(wildcard, "\"", &(ma->first_node)));
+		return (ft_strtrim_g_c(wildcard, "\"", &(ma->first_node)));
 	else if (wildcard[0] == '\'')
-		return (ft_strtrim(wildcard, "\'", &(ma->first_node)));
+		return (ft_strtrim_g_c(wildcard, "\'", &(ma->first_node)));
 	return (wildcard);
 }
 

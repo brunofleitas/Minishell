@@ -21,14 +21,15 @@ char	*gnl(int fd);
  * 
  * @param file_name The name of the file to redirect input from.
  */
-static int redirect_input(char *file_name, t_s_cmd_args *a, t_ma *ma)
+static int redirect_input(char *file_name, t_s_cmd_args *a/* , t_ma *ma */)
 {
     int fd;
 
         fd = open(file_name, O_RDONLY);
         if (fd == -1)
         {
-            write(2, ma->program, ma->l_program);
+            // write(2, ma->program, ma->l_program);doesn't work need to find out why
+            write(2, "minishell: ", 11);
             write(2, file_name, ft_strlen(file_name));
             write(2, ": No such file or directory\n", 28);
             return(0);
@@ -50,14 +51,15 @@ static int redirect_input(char *file_name, t_s_cmd_args *a, t_ma *ma)
  * @param file_name The name of the file to redirect the output to.
  * @param fd_num The file descriptor number to redirect.
  */
-static int redirect_output(char *file_name, int fd_num, t_ma *ma)
+static int redirect_output(char *file_name, int fd_num/* , t_ma *ma */)
 {
     int fd; 
 
-        fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0664);
         if (fd == -1)
         {
-            write(2, ma->program, ma->l_program);
+            // write(2, ma->program, ma->l_program); doesn't work need to find out why
+            write(2, "minishell: ", 11);
             write(2, file_name, ft_strlen(file_name));
             write(2, ": Permission denied\n", 21);
             return(0);
@@ -79,14 +81,15 @@ static int redirect_output(char *file_name, int fd_num, t_ma *ma)
  * @param file_name The name of the file to redirect the output to.
  * @param fd_num The file descriptor number to redirect the output from.
  */
-static int redirect_output_append(char *file_name, int fd_num, t_ma *ma)
+static int redirect_output_append(char *file_name, int fd_num/* , t_ma *ma */)
 {
     int fd;
 
-        fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
+        fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0664);
         if (fd == -1)
         {
-            write(2, ma->program, ma->l_program);
+            // write(2, ma->program, ma->l_program); doesn't work need to find out why
+            write(2, "minishell: ", 11);
             write(2, file_name, ft_strlen(file_name));
             write(2, ": Permission denied\n", 21);
             return(0);
@@ -207,7 +210,7 @@ static int handle_heredoc(const char *delimiter, t_s_cmd_args *a, t_ma *ma)
         return(0);
     if (!create_tmp_file(temp_file_name, delimiter))
         return (0);
-    redirect_input(temp_file_name, a, ma);
+    redirect_input(temp_file_name, a/* , ma */);
     if (unlink(temp_file_name) == -1)
         return (0);
     printf("\n");
@@ -252,11 +255,11 @@ int handle_redirections(t_astnode *redir_node, t_s_cmd_args *a, t_ma *ma)
     while (redir_node != NULL)
     {
         if ((redir_node->data.redirection.type == TOKEN_REDIR_OUT 
-            && !redirect_output(redir_node->data.redirection.file, 1, ma)) ||
+            && !redirect_output(redir_node->data.redirection.file, 1/* , ma */)) ||
             (redir_node->data.redirection.type == TOKEN_REDIR_APPEND 
-            && !redirect_output_append(redir_node->data.redirection.file, 1, ma))||
+            && !redirect_output_append(redir_node->data.redirection.file, 1/* , ma */))||
             (redir_node->data.redirection.type == TOKEN_REDIR_IN 
-            && !redirect_input(redir_node->data.redirection.file, a, ma)) ||
+            && !redirect_input(redir_node->data.redirection.file, a/* , ma */)) ||
             (redir_node->data.redirection.type == TOKEN_HEREDOC 
             && !handle_heredoc(redir_node->data.redirection.file, a, ma)))
             {
@@ -266,7 +269,7 @@ int handle_redirections(t_astnode *redir_node, t_s_cmd_args *a, t_ma *ma)
                 else
                 {
                     restore_io(ma);
-                    exit_or_setexit(1,1, ma);
+                    exit_or_setexit(1, 0, ma);
                     return (0);
                 }
             }

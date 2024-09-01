@@ -50,10 +50,12 @@ int	main(int argc, char **argv, char **envp)
 
 	
 	(void)argc;
-	ma.program = argv[0];
-	ma.l_program = ft_strlen(ma.program);
 	ma.first_node = NULL;
 	ma.first_env = NULL;
+	ma.program = ft_strjoin_g_c(argv[0], ": ", &(ma.first_node));
+	ma.program = ft_strtrim_g_c(ma.program, "./", &(ma.first_node));
+	ma.l_program = ft_strlen(ma.program);
+	// write(1, ma.program, ma.l_program);
 	ma.last_exit_status = 0;
 	ma.in_child_p = 0;
 	ma.env = duplicate_vars(&(ma.first_env), envp);
