@@ -1,8 +1,8 @@
 ==> diffs/export_invalid_mutli.diff <==
 diff of execution of:
 echo 'export A------=a 123=4 B=b MINUS-' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:25.131880245 +0200
-+++ found	2024-09-01 20:35:25.198881190 +0200
+--- expected	2024-09-01 21:07:27.019550296 +0200
++++ found	2024-09-01 21:07:27.052550293 +0200
 @@ -1,7 +1,5 @@
  
  ======== stderr =======
@@ -15,8 +15,8 @@ echo 'export A------=a 123=4 B=b MINUS-' | tr ';' '\n' | [shell]
 ==> diffs/here_doc.diff <==
 diff of execution of:
 echo 'cat << EOF;hi;ha;ho;EOF' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:32.990990362 +0200
-+++ found	2024-09-01 20:35:33.077991571 +0200
+--- expected	2024-09-01 21:07:28.040550198 +0200
++++ found	2024-09-01 21:07:28.066550196 +0200
 @@ -1,8 +1,11 @@
  hi
  ha
@@ -34,20 +34,20 @@ echo 'cat << EOF;hi;ha;ho;EOF' | tr ';' '\n' | [shell]
 ==> diffs/here_doc_multivar.diff <==
 diff of execution of:
 echo 'cat <<EOF; $PWD and $OLDPWD;ha;$PATH ;EOF' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:33.587998654 +0200
-+++ found	2024-09-01 20:35:33.685000002 +0200
+--- expected	2024-09-01 21:07:28.205550182 +0200
++++ found	2024-09-01 21:07:28.231550180 +0200
 @@ -1,8 +1,11 @@
-- /home/pcasagra/42/minishell_brunos_branch/test/temp and /home/pcasagra/42/minishell_brunos_branch/test
+- /home/bruno/Github42/Minishell/test/temp and /home/bruno/Github42/Minishell/test
 + $PWD and $OLDPWD
  ha
--/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/pcasagra/clion-2024.1.2/bin/clion.sh:/home/pcasagra/clion-2024.1.2/bin/clion.sh 
+-/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin 
 +$PATH 
  
  ======== stderr =======
 -
-+[progname]: /home/pcasagra/42/minishell_brunos_branch/test/temp: Is a directory
++[progname]: /home/bruno/Github42/Minishell/test/temp: Is a directory
 +[progname]: ha: command not found
-+[progname]: /usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/pcasagra/clion-2024.1.2/bin/clion.sh:/home/pcasagra/clion-2024.1.2/bin/clion.sh: No such file or directory
++[progname]: /home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin: No such file or directory
 +[progname]: EOF: command not found
  ======== return =======
  return value: 0
@@ -55,10 +55,10 @@ echo 'cat <<EOF; $PWD and $OLDPWD;ha;$PATH ;EOF' | tr ';' '\n' | [shell]
 ==> diffs/here_doc_quotes.diff <==
 diff of execution of:
 echo 'cat << EOF;\'$PWD\';EOF' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:33.429996459 +0200
-+++ found	2024-09-01 20:35:33.492997335 +0200
+--- expected	2024-09-01 21:07:28.149550188 +0200
++++ found	2024-09-01 21:07:28.174550185 +0200
 @@ -1,6 +1,7 @@
--'/home/pcasagra/42/minishell_brunos_branch/test/temp'
+-'/home/bruno/Github42/Minishell/test/temp'
 +'$PWD'
  
  ======== stderr =======
@@ -71,8 +71,8 @@ echo 'cat << EOF;\'$PWD\';EOF' | tr ';' '\n' | [shell]
 ==> diffs/here_doc_status1.diff <==
 diff of execution of:
 echo 'cat << EOF;$?;EOF' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:33.904003044 +0200
-+++ found	2024-09-01 20:35:33.973004002 +0200
+--- expected	2024-09-01 21:07:28.313550172 +0200
++++ found	2024-09-01 21:07:28.340550170 +0200
 @@ -1,6 +1,7 @@
 -0
 +$?
@@ -87,8 +87,8 @@ echo 'cat << EOF;$?;EOF' | tr ';' '\n' | [shell]
 ==> diffs/here_doc_status2.diff <==
 diff of execution of:
 echo 'cat fail; cat << EOF;$?;EOF' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:34.087005584 +0200
-+++ found	2024-09-01 20:35:34.193007053 +0200
+--- expected	2024-09-01 21:07:28.373550166 +0200
++++ found	2024-09-01 21:07:28.398550164 +0200
 @@ -1,6 +1,8 @@
 -1
 +$?
@@ -103,15 +103,15 @@ echo 'cat fail; cat << EOF;$?;EOF' | tr ';' '\n' | [shell]
 ==> diffs/here_doc_var.diff <==
 diff of execution of:
 echo 'cat << EOF;$PWD;EOF' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:33.189993127 +0200
-+++ found	2024-09-01 20:35:33.320994945 +0200
+--- expected	2024-09-01 21:07:28.096550193 +0200
++++ found	2024-09-01 21:07:28.119550191 +0200
 @@ -1,6 +1,7 @@
--/home/pcasagra/42/minishell_brunos_branch/test/temp
+-/home/bruno/Github42/Minishell/test/temp
 +$PWD
  
  ======== stderr =======
 -
-+[progname]: /home/pcasagra/42/minishell_brunos_branch/test/temp: Is a directory
++[progname]: /home/bruno/Github42/Minishell/test/temp: Is a directory
 +[progname]: EOF: command not found
  ======== return =======
  return value: 0
@@ -119,10 +119,10 @@ echo 'cat << EOF;$PWD;EOF' | tr ';' '\n' | [shell]
 ==> diffs/path_add_local.diff <==
 diff of execution of:
 echo 'export PATH=$PATH\':./\'; echo $PATH; infile' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:17.466771203 +0200
-+++ found	2024-09-01 20:35:17.562772578 +0200
+--- expected	2024-09-01 21:07:32.157549805 +0200
++++ found	2024-09-01 21:07:32.178549803 +0200
 @@ -1,6 +1,6 @@
--/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/pcasagra/clion-2024.1.2/bin/clion.sh:/home/pcasagra/clion-2024.1.2/bin/clion.sh:./
+-/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:./
 +
  
  ======== stderr =======
@@ -133,10 +133,10 @@ echo 'export PATH=$PATH\':./\'; echo $PATH; infile' | tr ';' '\n' | [shell]
 ==> diffs/path_empty_part.diff <==
 diff of execution of:
 echo 'export PATH=$PATH\':::::/hehe\'; echo $PATH; cat infile' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:18.554786780 +0200
-+++ found	2024-09-01 20:35:18.633787910 +0200
+--- expected	2024-09-01 21:07:32.461549776 +0200
++++ found	2024-09-01 21:07:32.484549773 +0200
 @@ -1,8 +1,6 @@
--/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/pcasagra/clion-2024.1.2/bin/clion.sh:/home/pcasagra/clion-2024.1.2/bin/clion.sh:::::/hehe
+-/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:::::/hehe
 -infile content
 -infile second line
  
@@ -150,10 +150,10 @@ echo 'export PATH=$PATH\':::::/hehe\'; echo $PATH; cat infile' | tr ';' '\n' | [
 ==> diffs/path_empty_part_local.diff <==
 diff of execution of:
 echo 'export PATH=$PATH\':::::/hehe\'; echo $PATH; infile' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:18.726789240 +0200
-+++ found	2024-09-01 20:35:18.815790513 +0200
+--- expected	2024-09-01 21:07:32.512549771 +0200
++++ found	2024-09-01 21:07:32.534549769 +0200
 @@ -1,6 +1,6 @@
--/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/pcasagra/clion-2024.1.2/bin/clion.sh:/home/pcasagra/clion-2024.1.2/bin/clion.sh:::::/hehe
+-/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:::::/hehe
 +
  
  ======== stderr =======
@@ -164,8 +164,8 @@ echo 'export PATH=$PATH\':::::/hehe\'; echo $PATH; infile' | tr ';' '\n' | [shel
 ==> diffs/questionable_exec_dir.diff <==
 diff of execution of:
 echo 'export PATH="$PATH:$PWD"; mkdir asdfg; asdfg' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:15.791747156 +0200
-+++ found	2024-09-01 20:35:15.896748668 +0200
+--- expected	2024-09-01 21:07:35.176566681 +0200
++++ found	2024-09-01 21:07:35.198566678 +0200
 @@ -1,5 +1,6 @@
  
  ======== stderr =======
@@ -177,8 +177,8 @@ echo 'export PATH="$PATH:$PWD"; mkdir asdfg; asdfg' | tr ';' '\n' | [shell]
 ==> diffs/questionable_exec_dot.diff <==
 diff of execution of:
 echo '.' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:15.288739921 +0200
-+++ found	2024-09-01 20:35:15.389741374 +0200
+--- expected	2024-09-01 21:07:35.027566695 +0200
++++ found	2024-09-01 21:07:35.048566693 +0200
 @@ -1,6 +1,5 @@
  
  ======== stderr =======
@@ -191,8 +191,8 @@ echo '.' | tr ';' '\n' | [shell]
 ==> diffs/questionable_exec_dotdot.diff <==
 diff of execution of:
 echo '..' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:15.453742295 +0200
-+++ found	2024-09-01 20:35:15.532743432 +0200
+--- expected	2024-09-01 21:07:35.075566690 +0200
++++ found	2024-09-01 21:07:35.098566688 +0200
 @@ -1,5 +1,5 @@
  
  ======== stderr =======
@@ -204,70 +204,80 @@ echo '..' | tr ';' '\n' | [shell]
 ==> diffs/questionable_export.diff <==
 diff of execution of:
 echo 'export' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:14.110722948 +0200
-+++ found	2024-09-01 20:35:14.170723813 +0200
-@@ -1,72 +1,72 @@
+--- expected	2024-09-01 21:07:34.161549613 +0200
++++ found	2024-09-01 21:07:34.185549611 +0200
+@@ -1,82 +1,82 @@
+-declare -x BAMF_DESKTOP_FILE_HINT="/var/lib/snapd/desktop/applications/code_code.desktop"
 -declare -x CHROME_DESKTOP="code-url-handler.desktop"
 -declare -x COLORTERM="truecolor"
 -declare -x DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus"
+-declare -x DEBUGINFOD_URLS="https://debuginfod.ubuntu.com "
 -declare -x DESKTOP_SESSION="ubuntu"
 -declare -x DISPLAY=":0"
 -declare -x GDK_BACKEND="x11"
+-declare -x GDK_BACKEND_VSCODE_SNAP_ORIG=""
 -declare -x GDMSESSION="ubuntu"
--declare -x GIO_LAUNCHED_DESKTOP_FILE="/usr/share/applications/code.desktop"
--declare -x GIO_LAUNCHED_DESKTOP_FILE_PID="2342"
--declare -x GIT_ASKPASS="/usr/share/code/resources/app/extensions/git/dist/askpass.sh"
+-declare -x GIO_LAUNCHED_DESKTOP_FILE="/var/lib/snapd/desktop/applications/code_code.desktop"
+-declare -x GIO_LAUNCHED_DESKTOP_FILE_PID="2378"
+-declare -x GIO_MODULE_DIR="/home/bruno/snap/code/common/.cache/gio-modules"
+-declare -x GIO_MODULE_DIR_VSCODE_SNAP_ORIG=""
+-declare -x GIT_ASKPASS="/snap/code/167/usr/share/code/resources/app/extensions/git/dist/askpass.sh"
 -declare -x GJS_DEBUG_OUTPUT="stderr"
 -declare -x GJS_DEBUG_TOPICS="JS ERROR;JS LOG"
 -declare -x GNOME_DESKTOP_SESSION_ID="this-is-deprecated"
 -declare -x GNOME_SETUP_DISPLAY=":1"
 -declare -x GNOME_SHELL_SESSION_MODE="ubuntu"
+-declare -x GSETTINGS_SCHEMA_DIR="/home/bruno/snap/code/167/.local/share/glib-2.0/schemas"
+-declare -x GSETTINGS_SCHEMA_DIR_VSCODE_SNAP_ORIG=""
+-declare -x GSM_SKIP_SSH_AGENT_WORKAROUND="true"
+-declare -x GTK_EXE_PREFIX="/snap/code/167/usr"
+-declare -x GTK_EXE_PREFIX_VSCODE_SNAP_ORIG=""
+-declare -x GTK_IM_MODULE_FILE="/home/bruno/snap/code/common/.cache/immodules/immodules.cache"
+-declare -x GTK_IM_MODULE_FILE_VSCODE_SNAP_ORIG=""
 -declare -x GTK_MODULES="gail:atk-bridge"
--declare -x HOME="/home/pcasagra"
+-declare -x GTK_PATH="/snap/code/167/usr/lib/x86_64-linux-gnu/gtk-3.0"
+-declare -x GTK_PATH_VSCODE_SNAP_ORIG=""
+-declare -x HOME="/home/bruno"
 -declare -x IM_CONFIG_CHECK_ENV="1"
 -declare -x IM_CONFIG_PHASE="1"
--declare -x INVOCATION_ID="e94f03fe0a6c4e15909f802cd253c84f"
--declare -x JOURNAL_STREAM="8:7897"
+-declare -x INVOCATION_ID="248b531331b04749aa65647cbc2afda2"
+-declare -x JOURNAL_STREAM="8:15631"
 -declare -x LANG="en_US.UTF-8"
--declare -x LC_ADDRESS="de_DE.UTF-8"
--declare -x LC_IDENTIFICATION="de_DE.UTF-8"
--declare -x LC_MEASUREMENT="de_DE.UTF-8"
--declare -x LC_MONETARY="de_DE.UTF-8"
--declare -x LC_NAME="de_DE.UTF-8"
--declare -x LC_NUMERIC="de_DE.UTF-8"
--declare -x LC_PAPER="de_DE.UTF-8"
--declare -x LC_TELEPHONE="de_DE.UTF-8"
--declare -x LC_TIME="de_DE.UTF-8"
 -declare -x LESSCLOSE="/usr/bin/lesspipe %s %s"
 -declare -x LESSOPEN="| /usr/bin/lesspipe %s"
--declare -x LOGNAME="pcasagra"
--declare -x LS_COLORS="rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:"
--declare -x MANAGERPID="1201"
--declare -x OLDPWD="/home/pcasagra/42/minishell_brunos_branch/test"
+-declare -x LOCPATH="/snap/code/167/usr/lib/locale"
+-declare -x LOCPATH_VSCODE_SNAP_ORIG=""
+-declare -x LOGNAME="bruno"
+-declare -x LS_COLORS="rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:"
+-declare -x MANAGERPID="1207"
+-declare -x MEMORY_PRESSURE_WATCH="/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/session.slice/org.gnome.Shell@wayland.service/memory.pressure"
+-declare -x MEMORY_PRESSURE_WRITE="c29tZSAyMDAwMDAgMjAwMDAwMAA="
+-declare -x OLDPWD="/home/bruno/Github42/Minishell/test"
 -declare -x ORIGINAL_XDG_CURRENT_DESKTOP="ubuntu:GNOME"
--declare -x PATH="/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/pcasagra/clion-2024.1.2/bin/clion.sh:/home/pcasagra/clion-2024.1.2/bin/clion.sh"
--declare -x PWD="/home/pcasagra/42/minishell_brunos_branch/test/temp"
+-declare -x PATH="/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin"
+-declare -x PWD="/home/bruno/Github42/Minishell/test/temp"
 -declare -x QT_ACCESSIBILITY="1"
 -declare -x QT_IM_MODULE="ibus"
--declare -x SESSION_MANAGER="local/pcasagra-VirtualBox:@/tmp/.ICE-unix/1346,unix/pcasagra-VirtualBox:/tmp/.ICE-unix/1346"
+-declare -x SESSION_MANAGER="local/bruno42:@/tmp/.ICE-unix/1375,unix/bruno42:/tmp/.ICE-unix/1375"
 -declare -x SHELL="/bin/bash"
--declare -x SSH_AGENT_LAUNCHER="gnome-keyring"
 -declare -x SSH_AUTH_SOCK="/run/user/1000/keyring/ssh"
--declare -x SYSTEMD_EXEC_PID="1383"
+-declare -x SYSTEMD_EXEC_PID="1420"
 -declare -x TERM="xterm-256color"
 -declare -x TERM_PROGRAM="vscode"
--declare -x TERM_PROGRAM_VERSION="1.90.0"
--declare -x USER="pcasagra"
--declare -x USERNAME="pcasagra"
+-declare -x TERM_PROGRAM_VERSION="1.92.2"
+-declare -x USER="bruno"
+-declare -x USERNAME="bruno"
 -declare -x VSCODE_GIT_ASKPASS_EXTRA_ARGS=""
--declare -x VSCODE_GIT_ASKPASS_MAIN="/usr/share/code/resources/app/extensions/git/dist/askpass-main.js"
--declare -x VSCODE_GIT_ASKPASS_NODE="/usr/share/code/code"
--declare -x VSCODE_GIT_IPC_HANDLE="/run/user/1000/vscode-git-806976d2ff.sock"
+-declare -x VSCODE_GIT_ASKPASS_MAIN="/snap/code/167/usr/share/code/resources/app/extensions/git/dist/askpass-main.js"
+-declare -x VSCODE_GIT_ASKPASS_NODE="/snap/code/167/usr/share/code/code"
+-declare -x VSCODE_GIT_IPC_HANDLE="/run/user/1000/vscode-git-405f793557.sock"
 -declare -x WAYLAND_DISPLAY="wayland-0"
--declare -x XAUTHORITY="/run/user/1000/.mutter-Xwaylandauth.RHKKT2"
+-declare -x XAUTHORITY="/run/user/1000/.mutter-Xwaylandauth.BAFCT2"
 -declare -x XDG_CONFIG_DIRS="/etc/xdg/xdg-ubuntu:/etc/xdg"
+-declare -x XDG_CONFIG_DIRS_VSCODE_SNAP_ORIG="/etc/xdg/xdg-ubuntu:/etc/xdg"
 -declare -x XDG_CURRENT_DESKTOP="Unity"
--declare -x XDG_DATA_DIRS="/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop"
+-declare -x XDG_DATA_DIRS="/home/bruno/snap/code/167/.local/share:/home/bruno/snap/code/167:/snap/code/167/usr/share:/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop"
+-declare -x XDG_DATA_DIRS_VSCODE_SNAP_ORIG="/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop"
 -declare -x XDG_MENU_PREFIX="gnome-"
 -declare -x XDG_RUNTIME_DIR="/run/user/1000"
 -declare -x XDG_SESSION_CLASS="user"
@@ -275,71 +285,81 @@ echo 'export' | tr ';' '\n' | [shell]
 -declare -x XDG_SESSION_TYPE="wayland"
 -declare -x XMODIFIERS="@im=ibus"
 +declare -x SHELL=/bin/bash
-+declare -x SESSION_MANAGER=local/pcasagra-VirtualBox:@/tmp/.ICE-unix/1346,unix/pcasagra-VirtualBox:/tmp/.ICE-unix/1346
++declare -x SESSION_MANAGER=local/bruno42:@/tmp/.ICE-unix/1375,unix/bruno42:/tmp/.ICE-unix/1375
 +declare -x QT_ACCESSIBILITY=1
 +declare -x COLORTERM=truecolor
 +declare -x XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
-+declare -x SSH_AGENT_LAUNCHER=gnome-keyring
 +declare -x XDG_MENU_PREFIX=gnome-
-+declare -x TERM_PROGRAM_VERSION=1.90.0
++declare -x TERM_PROGRAM_VERSION=1.92.2
++declare -x XDG_CONFIG_DIRS_VSCODE_SNAP_ORIG=/etc/xdg/xdg-ubuntu:/etc/xdg
 +declare -x GNOME_DESKTOP_SESSION_ID=this-is-deprecated
-+declare -x LC_ADDRESS=de_DE.UTF-8
++declare -x GDK_BACKEND_VSCODE_SNAP_ORIG=
 +declare -x GNOME_SHELL_SESSION_MODE=ubuntu
-+declare -x LC_NAME=de_DE.UTF-8
++declare -x GIO_MODULE_DIR_VSCODE_SNAP_ORIG=
 +declare -x SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
++declare -x MEMORY_PRESSURE_WRITE=c29tZSAyMDAwMDAgMjAwMDAwMAA=
 +declare -x XMODIFIERS=@im=ibus
 +declare -x DESKTOP_SESSION=ubuntu
-+declare -x LC_MONETARY=de_DE.UTF-8
++declare -x BAMF_DESKTOP_FILE_HINT=/var/lib/snapd/desktop/applications/code_code.desktop
 +declare -x GTK_MODULES=gail:atk-bridge
-+declare -x PWD=/home/pcasagra/42/minishell_brunos_branch/test/temp
-+declare -x LOGNAME=pcasagra
++declare -x PWD=/home/bruno/Github42/Minishell/test/temp
++declare -x GSETTINGS_SCHEMA_DIR=/home/bruno/snap/code/167/.local/share/glib-2.0/schemas
++declare -x LOGNAME=bruno
 +declare -x XDG_SESSION_DESKTOP=ubuntu
++declare -x GTK_EXE_PREFIX=/snap/code/167/usr
 +declare -x XDG_SESSION_TYPE=wayland
-+declare -x SYSTEMD_EXEC_PID=1383
-+declare -x XAUTHORITY=/run/user/1000/.mutter-Xwaylandauth.RHKKT2
-+declare -x VSCODE_GIT_ASKPASS_NODE=/usr/share/code/code
++declare -x SYSTEMD_EXEC_PID=1420
++declare -x XAUTHORITY=/run/user/1000/.mutter-Xwaylandauth.BAFCT2
++declare -x VSCODE_GIT_ASKPASS_NODE=/snap/code/167/usr/share/code/code
 +declare -x IM_CONFIG_CHECK_ENV=1
 +declare -x GJS_DEBUG_TOPICS=JS ERROR;JS LOG
-+declare -x HOME=/home/pcasagra
-+declare -x USERNAME=pcasagra
++declare -x HOME=/home/bruno
++declare -x USERNAME=bruno
 +declare -x IM_CONFIG_PHASE=1
 +declare -x LANG=en_US.UTF-8
-+declare -x LC_PAPER=de_DE.UTF-8
-+declare -x LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
++declare -x LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:
 +declare -x XDG_CURRENT_DESKTOP=Unity
++declare -x MEMORY_PRESSURE_WATCH=/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/session.slice/org.gnome.Shell@wayland.service/memory.pressure
 +declare -x WAYLAND_DISPLAY=wayland-0
-+declare -x GIT_ASKPASS=/usr/share/code/resources/app/extensions/git/dist/askpass.sh
-+declare -x INVOCATION_ID=e94f03fe0a6c4e15909f802cd253c84f
-+declare -x MANAGERPID=1201
++declare -x GIT_ASKPASS=/snap/code/167/usr/share/code/resources/app/extensions/git/dist/askpass.sh
++declare -x INVOCATION_ID=248b531331b04749aa65647cbc2afda2
++declare -x MANAGERPID=1207
 +declare -x CHROME_DESKTOP=code-url-handler.desktop
 +declare -x GJS_DEBUG_OUTPUT=stderr
 +declare -x VSCODE_GIT_ASKPASS_EXTRA_ARGS=
 +declare -x GNOME_SETUP_DISPLAY=:1
++declare -x GSETTINGS_SCHEMA_DIR_VSCODE_SNAP_ORIG=
++declare -x GTK_IM_MODULE_FILE_VSCODE_SNAP_ORIG=
 +declare -x LESSCLOSE=/usr/bin/lesspipe %s %s
 +declare -x XDG_SESSION_CLASS=user
-+declare -x LC_IDENTIFICATION=de_DE.UTF-8
 +declare -x TERM=xterm-256color
++declare -x GTK_PATH=/snap/code/167/usr/lib/x86_64-linux-gnu/gtk-3.0
 +declare -x LESSOPEN=| /usr/bin/lesspipe %s
-+declare -x USER=pcasagra
-+declare -x VSCODE_GIT_IPC_HANDLE=/run/user/1000/vscode-git-806976d2ff.sock
++declare -x USER=bruno
++declare -x GTK_PATH_VSCODE_SNAP_ORIG=
++declare -x VSCODE_GIT_IPC_HANDLE=/run/user/1000/vscode-git-405f793557.sock
 +declare -x DISPLAY=:0
-+declare -x LC_TELEPHONE=de_DE.UTF-8
++declare -x LOCPATH=/snap/code/167/usr/lib/locale
++declare -x GSM_SKIP_SSH_AGENT_WORKAROUND=true
 +declare -x QT_IM_MODULE=ibus
-+declare -x LC_MEASUREMENT=de_DE.UTF-8
++declare -x GTK_EXE_PREFIX_VSCODE_SNAP_ORIG=
 +declare -x XDG_RUNTIME_DIR=/run/user/1000
-+declare -x LC_TIME=de_DE.UTF-8
-+declare -x VSCODE_GIT_ASKPASS_MAIN=/usr/share/code/resources/app/extensions/git/dist/askpass-main.js
-+declare -x JOURNAL_STREAM=8:7897
-+declare -x XDG_DATA_DIRS=/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
++declare -x XDG_DATA_DIRS_VSCODE_SNAP_ORIG=/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
++declare -x DEBUGINFOD_URLS=https://debuginfod.ubuntu.com 
++declare -x VSCODE_GIT_ASKPASS_MAIN=/snap/code/167/usr/share/code/resources/app/extensions/git/dist/askpass-main.js
++declare -x JOURNAL_STREAM=8:15631
++declare -x XDG_DATA_DIRS=/home/bruno/snap/code/167/.local/share:/home/bruno/snap/code/167:/snap/code/167/usr/share:/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
 +declare -x GDK_BACKEND=x11
-+declare -x PATH=/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/pcasagra/clion-2024.1.2/bin/clion.sh:/home/pcasagra/clion-2024.1.2/bin/clion.sh
++declare -x PATH=/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin
 +declare -x GDMSESSION=ubuntu
 +declare -x ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
++declare -x GTK_IM_MODULE_FILE=/home/bruno/snap/code/common/.cache/immodules/immodules.cache
 +declare -x DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
-+declare -x GIO_LAUNCHED_DESKTOP_FILE_PID=2342
-+declare -x GIO_LAUNCHED_DESKTOP_FILE=/usr/share/applications/code.desktop
-+declare -x LC_NUMERIC=de_DE.UTF-8
-+declare -x OLDPWD=/home/pcasagra/42/minishell_brunos_branch/test
++declare -x LOCPATH_VSCODE_SNAP_ORIG=
++declare -x GIO_MODULE_DIR=/home/bruno/snap/code/common/.cache/gio-modules
++declare -x GIO_LAUNCHED_DESKTOP_FILE_PID=2378
++declare -x GIO_LAUNCHED_DESKTOP_FILE=/var/lib/snapd/desktop/applications/code_code.desktop
++declare -x OLDPWD=/home/bruno/Github42/Minishell/test
 +declare -x TERM_PROGRAM=vscode
  
  ======== stderr =======
@@ -350,70 +370,80 @@ echo 'export' | tr ';' '\n' | [shell]
 ==> diffs/questionable_export_quotes.diff <==
 diff of execution of:
 echo 'export a=\'"quotes"\'; export' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:14.221724548 +0200
-+++ found	2024-09-01 20:35:14.301725701 +0200
-@@ -1,73 +1,73 @@
+--- expected	2024-09-01 21:07:34.212549608 +0200
++++ found	2024-09-01 21:07:34.235549606 +0200
+@@ -1,83 +1,83 @@
+-declare -x BAMF_DESKTOP_FILE_HINT="/var/lib/snapd/desktop/applications/code_code.desktop"
 -declare -x CHROME_DESKTOP="code-url-handler.desktop"
 -declare -x COLORTERM="truecolor"
 -declare -x DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus"
+-declare -x DEBUGINFOD_URLS="https://debuginfod.ubuntu.com "
 -declare -x DESKTOP_SESSION="ubuntu"
 -declare -x DISPLAY=":0"
 -declare -x GDK_BACKEND="x11"
+-declare -x GDK_BACKEND_VSCODE_SNAP_ORIG=""
 -declare -x GDMSESSION="ubuntu"
--declare -x GIO_LAUNCHED_DESKTOP_FILE="/usr/share/applications/code.desktop"
--declare -x GIO_LAUNCHED_DESKTOP_FILE_PID="2342"
--declare -x GIT_ASKPASS="/usr/share/code/resources/app/extensions/git/dist/askpass.sh"
+-declare -x GIO_LAUNCHED_DESKTOP_FILE="/var/lib/snapd/desktop/applications/code_code.desktop"
+-declare -x GIO_LAUNCHED_DESKTOP_FILE_PID="2378"
+-declare -x GIO_MODULE_DIR="/home/bruno/snap/code/common/.cache/gio-modules"
+-declare -x GIO_MODULE_DIR_VSCODE_SNAP_ORIG=""
+-declare -x GIT_ASKPASS="/snap/code/167/usr/share/code/resources/app/extensions/git/dist/askpass.sh"
 -declare -x GJS_DEBUG_OUTPUT="stderr"
 -declare -x GJS_DEBUG_TOPICS="JS ERROR;JS LOG"
 -declare -x GNOME_DESKTOP_SESSION_ID="this-is-deprecated"
 -declare -x GNOME_SETUP_DISPLAY=":1"
 -declare -x GNOME_SHELL_SESSION_MODE="ubuntu"
+-declare -x GSETTINGS_SCHEMA_DIR="/home/bruno/snap/code/167/.local/share/glib-2.0/schemas"
+-declare -x GSETTINGS_SCHEMA_DIR_VSCODE_SNAP_ORIG=""
+-declare -x GSM_SKIP_SSH_AGENT_WORKAROUND="true"
+-declare -x GTK_EXE_PREFIX="/snap/code/167/usr"
+-declare -x GTK_EXE_PREFIX_VSCODE_SNAP_ORIG=""
+-declare -x GTK_IM_MODULE_FILE="/home/bruno/snap/code/common/.cache/immodules/immodules.cache"
+-declare -x GTK_IM_MODULE_FILE_VSCODE_SNAP_ORIG=""
 -declare -x GTK_MODULES="gail:atk-bridge"
--declare -x HOME="/home/pcasagra"
+-declare -x GTK_PATH="/snap/code/167/usr/lib/x86_64-linux-gnu/gtk-3.0"
+-declare -x GTK_PATH_VSCODE_SNAP_ORIG=""
+-declare -x HOME="/home/bruno"
 -declare -x IM_CONFIG_CHECK_ENV="1"
 -declare -x IM_CONFIG_PHASE="1"
--declare -x INVOCATION_ID="e94f03fe0a6c4e15909f802cd253c84f"
--declare -x JOURNAL_STREAM="8:7897"
+-declare -x INVOCATION_ID="248b531331b04749aa65647cbc2afda2"
+-declare -x JOURNAL_STREAM="8:15631"
 -declare -x LANG="en_US.UTF-8"
--declare -x LC_ADDRESS="de_DE.UTF-8"
--declare -x LC_IDENTIFICATION="de_DE.UTF-8"
--declare -x LC_MEASUREMENT="de_DE.UTF-8"
--declare -x LC_MONETARY="de_DE.UTF-8"
--declare -x LC_NAME="de_DE.UTF-8"
--declare -x LC_NUMERIC="de_DE.UTF-8"
--declare -x LC_PAPER="de_DE.UTF-8"
--declare -x LC_TELEPHONE="de_DE.UTF-8"
--declare -x LC_TIME="de_DE.UTF-8"
 -declare -x LESSCLOSE="/usr/bin/lesspipe %s %s"
 -declare -x LESSOPEN="| /usr/bin/lesspipe %s"
--declare -x LOGNAME="pcasagra"
--declare -x LS_COLORS="rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:"
--declare -x MANAGERPID="1201"
--declare -x OLDPWD="/home/pcasagra/42/minishell_brunos_branch/test"
+-declare -x LOCPATH="/snap/code/167/usr/lib/locale"
+-declare -x LOCPATH_VSCODE_SNAP_ORIG=""
+-declare -x LOGNAME="bruno"
+-declare -x LS_COLORS="rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:"
+-declare -x MANAGERPID="1207"
+-declare -x MEMORY_PRESSURE_WATCH="/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/session.slice/org.gnome.Shell@wayland.service/memory.pressure"
+-declare -x MEMORY_PRESSURE_WRITE="c29tZSAyMDAwMDAgMjAwMDAwMAA="
+-declare -x OLDPWD="/home/bruno/Github42/Minishell/test"
 -declare -x ORIGINAL_XDG_CURRENT_DESKTOP="ubuntu:GNOME"
--declare -x PATH="/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/pcasagra/clion-2024.1.2/bin/clion.sh:/home/pcasagra/clion-2024.1.2/bin/clion.sh"
--declare -x PWD="/home/pcasagra/42/minishell_brunos_branch/test/temp"
+-declare -x PATH="/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin"
+-declare -x PWD="/home/bruno/Github42/Minishell/test/temp"
 -declare -x QT_ACCESSIBILITY="1"
 -declare -x QT_IM_MODULE="ibus"
--declare -x SESSION_MANAGER="local/pcasagra-VirtualBox:@/tmp/.ICE-unix/1346,unix/pcasagra-VirtualBox:/tmp/.ICE-unix/1346"
+-declare -x SESSION_MANAGER="local/bruno42:@/tmp/.ICE-unix/1375,unix/bruno42:/tmp/.ICE-unix/1375"
 -declare -x SHELL="/bin/bash"
--declare -x SSH_AGENT_LAUNCHER="gnome-keyring"
 -declare -x SSH_AUTH_SOCK="/run/user/1000/keyring/ssh"
--declare -x SYSTEMD_EXEC_PID="1383"
+-declare -x SYSTEMD_EXEC_PID="1420"
 -declare -x TERM="xterm-256color"
 -declare -x TERM_PROGRAM="vscode"
--declare -x TERM_PROGRAM_VERSION="1.90.0"
--declare -x USER="pcasagra"
--declare -x USERNAME="pcasagra"
+-declare -x TERM_PROGRAM_VERSION="1.92.2"
+-declare -x USER="bruno"
+-declare -x USERNAME="bruno"
 -declare -x VSCODE_GIT_ASKPASS_EXTRA_ARGS=""
--declare -x VSCODE_GIT_ASKPASS_MAIN="/usr/share/code/resources/app/extensions/git/dist/askpass-main.js"
--declare -x VSCODE_GIT_ASKPASS_NODE="/usr/share/code/code"
--declare -x VSCODE_GIT_IPC_HANDLE="/run/user/1000/vscode-git-806976d2ff.sock"
+-declare -x VSCODE_GIT_ASKPASS_MAIN="/snap/code/167/usr/share/code/resources/app/extensions/git/dist/askpass-main.js"
+-declare -x VSCODE_GIT_ASKPASS_NODE="/snap/code/167/usr/share/code/code"
+-declare -x VSCODE_GIT_IPC_HANDLE="/run/user/1000/vscode-git-405f793557.sock"
 -declare -x WAYLAND_DISPLAY="wayland-0"
--declare -x XAUTHORITY="/run/user/1000/.mutter-Xwaylandauth.RHKKT2"
+-declare -x XAUTHORITY="/run/user/1000/.mutter-Xwaylandauth.BAFCT2"
 -declare -x XDG_CONFIG_DIRS="/etc/xdg/xdg-ubuntu:/etc/xdg"
+-declare -x XDG_CONFIG_DIRS_VSCODE_SNAP_ORIG="/etc/xdg/xdg-ubuntu:/etc/xdg"
 -declare -x XDG_CURRENT_DESKTOP="Unity"
--declare -x XDG_DATA_DIRS="/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop"
+-declare -x XDG_DATA_DIRS="/home/bruno/snap/code/167/.local/share:/home/bruno/snap/code/167:/snap/code/167/usr/share:/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop"
+-declare -x XDG_DATA_DIRS_VSCODE_SNAP_ORIG="/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop"
 -declare -x XDG_MENU_PREFIX="gnome-"
 -declare -x XDG_RUNTIME_DIR="/run/user/1000"
 -declare -x XDG_SESSION_CLASS="user"
@@ -422,71 +452,81 @@ echo 'export a=\'"quotes"\'; export' | tr ';' '\n' | [shell]
 -declare -x XMODIFIERS="@im=ibus"
 -declare -x a="\"quotes\""
 +declare -x SHELL=/bin/bash
-+declare -x SESSION_MANAGER=local/pcasagra-VirtualBox:@/tmp/.ICE-unix/1346,unix/pcasagra-VirtualBox:/tmp/.ICE-unix/1346
++declare -x SESSION_MANAGER=local/bruno42:@/tmp/.ICE-unix/1375,unix/bruno42:/tmp/.ICE-unix/1375
 +declare -x QT_ACCESSIBILITY=1
 +declare -x COLORTERM=truecolor
 +declare -x XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
-+declare -x SSH_AGENT_LAUNCHER=gnome-keyring
 +declare -x XDG_MENU_PREFIX=gnome-
-+declare -x TERM_PROGRAM_VERSION=1.90.0
++declare -x TERM_PROGRAM_VERSION=1.92.2
++declare -x XDG_CONFIG_DIRS_VSCODE_SNAP_ORIG=/etc/xdg/xdg-ubuntu:/etc/xdg
 +declare -x GNOME_DESKTOP_SESSION_ID=this-is-deprecated
-+declare -x LC_ADDRESS=de_DE.UTF-8
++declare -x GDK_BACKEND_VSCODE_SNAP_ORIG=
 +declare -x GNOME_SHELL_SESSION_MODE=ubuntu
-+declare -x LC_NAME=de_DE.UTF-8
++declare -x GIO_MODULE_DIR_VSCODE_SNAP_ORIG=
 +declare -x SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
++declare -x MEMORY_PRESSURE_WRITE=c29tZSAyMDAwMDAgMjAwMDAwMAA=
 +declare -x XMODIFIERS=@im=ibus
 +declare -x DESKTOP_SESSION=ubuntu
-+declare -x LC_MONETARY=de_DE.UTF-8
++declare -x BAMF_DESKTOP_FILE_HINT=/var/lib/snapd/desktop/applications/code_code.desktop
 +declare -x GTK_MODULES=gail:atk-bridge
-+declare -x PWD=/home/pcasagra/42/minishell_brunos_branch/test/temp
-+declare -x LOGNAME=pcasagra
++declare -x PWD=/home/bruno/Github42/Minishell/test/temp
++declare -x GSETTINGS_SCHEMA_DIR=/home/bruno/snap/code/167/.local/share/glib-2.0/schemas
++declare -x LOGNAME=bruno
 +declare -x XDG_SESSION_DESKTOP=ubuntu
++declare -x GTK_EXE_PREFIX=/snap/code/167/usr
 +declare -x XDG_SESSION_TYPE=wayland
-+declare -x SYSTEMD_EXEC_PID=1383
-+declare -x XAUTHORITY=/run/user/1000/.mutter-Xwaylandauth.RHKKT2
-+declare -x VSCODE_GIT_ASKPASS_NODE=/usr/share/code/code
++declare -x SYSTEMD_EXEC_PID=1420
++declare -x XAUTHORITY=/run/user/1000/.mutter-Xwaylandauth.BAFCT2
++declare -x VSCODE_GIT_ASKPASS_NODE=/snap/code/167/usr/share/code/code
 +declare -x IM_CONFIG_CHECK_ENV=1
 +declare -x GJS_DEBUG_TOPICS=JS ERROR;JS LOG
-+declare -x HOME=/home/pcasagra
-+declare -x USERNAME=pcasagra
++declare -x HOME=/home/bruno
++declare -x USERNAME=bruno
 +declare -x IM_CONFIG_PHASE=1
 +declare -x LANG=en_US.UTF-8
-+declare -x LC_PAPER=de_DE.UTF-8
-+declare -x LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
++declare -x LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:
 +declare -x XDG_CURRENT_DESKTOP=Unity
++declare -x MEMORY_PRESSURE_WATCH=/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/session.slice/org.gnome.Shell@wayland.service/memory.pressure
 +declare -x WAYLAND_DISPLAY=wayland-0
-+declare -x GIT_ASKPASS=/usr/share/code/resources/app/extensions/git/dist/askpass.sh
-+declare -x INVOCATION_ID=e94f03fe0a6c4e15909f802cd253c84f
-+declare -x MANAGERPID=1201
++declare -x GIT_ASKPASS=/snap/code/167/usr/share/code/resources/app/extensions/git/dist/askpass.sh
++declare -x INVOCATION_ID=248b531331b04749aa65647cbc2afda2
++declare -x MANAGERPID=1207
 +declare -x CHROME_DESKTOP=code-url-handler.desktop
 +declare -x GJS_DEBUG_OUTPUT=stderr
 +declare -x VSCODE_GIT_ASKPASS_EXTRA_ARGS=
 +declare -x GNOME_SETUP_DISPLAY=:1
++declare -x GSETTINGS_SCHEMA_DIR_VSCODE_SNAP_ORIG=
++declare -x GTK_IM_MODULE_FILE_VSCODE_SNAP_ORIG=
 +declare -x LESSCLOSE=/usr/bin/lesspipe %s %s
 +declare -x XDG_SESSION_CLASS=user
-+declare -x LC_IDENTIFICATION=de_DE.UTF-8
 +declare -x TERM=xterm-256color
++declare -x GTK_PATH=/snap/code/167/usr/lib/x86_64-linux-gnu/gtk-3.0
 +declare -x LESSOPEN=| /usr/bin/lesspipe %s
-+declare -x USER=pcasagra
-+declare -x VSCODE_GIT_IPC_HANDLE=/run/user/1000/vscode-git-806976d2ff.sock
++declare -x USER=bruno
++declare -x GTK_PATH_VSCODE_SNAP_ORIG=
++declare -x VSCODE_GIT_IPC_HANDLE=/run/user/1000/vscode-git-405f793557.sock
 +declare -x DISPLAY=:0
-+declare -x LC_TELEPHONE=de_DE.UTF-8
++declare -x LOCPATH=/snap/code/167/usr/lib/locale
++declare -x GSM_SKIP_SSH_AGENT_WORKAROUND=true
 +declare -x QT_IM_MODULE=ibus
-+declare -x LC_MEASUREMENT=de_DE.UTF-8
++declare -x GTK_EXE_PREFIX_VSCODE_SNAP_ORIG=
 +declare -x XDG_RUNTIME_DIR=/run/user/1000
-+declare -x LC_TIME=de_DE.UTF-8
-+declare -x VSCODE_GIT_ASKPASS_MAIN=/usr/share/code/resources/app/extensions/git/dist/askpass-main.js
-+declare -x JOURNAL_STREAM=8:7897
-+declare -x XDG_DATA_DIRS=/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
++declare -x XDG_DATA_DIRS_VSCODE_SNAP_ORIG=/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
++declare -x DEBUGINFOD_URLS=https://debuginfod.ubuntu.com 
++declare -x VSCODE_GIT_ASKPASS_MAIN=/snap/code/167/usr/share/code/resources/app/extensions/git/dist/askpass-main.js
++declare -x JOURNAL_STREAM=8:15631
++declare -x XDG_DATA_DIRS=/home/bruno/snap/code/167/.local/share:/home/bruno/snap/code/167:/snap/code/167/usr/share:/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
 +declare -x GDK_BACKEND=x11
-+declare -x PATH=/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/pcasagra/clion-2024.1.2/bin/clion.sh:/home/pcasagra/clion-2024.1.2/bin/clion.sh
++declare -x PATH=/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin
 +declare -x GDMSESSION=ubuntu
 +declare -x ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
++declare -x GTK_IM_MODULE_FILE=/home/bruno/snap/code/common/.cache/immodules/immodules.cache
 +declare -x DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
-+declare -x GIO_LAUNCHED_DESKTOP_FILE_PID=2342
-+declare -x GIO_LAUNCHED_DESKTOP_FILE=/usr/share/applications/code.desktop
-+declare -x LC_NUMERIC=de_DE.UTF-8
-+declare -x OLDPWD=/home/pcasagra/42/minishell_brunos_branch/test
++declare -x LOCPATH_VSCODE_SNAP_ORIG=
++declare -x GIO_MODULE_DIR=/home/bruno/snap/code/common/.cache/gio-modules
++declare -x GIO_LAUNCHED_DESKTOP_FILE_PID=2378
++declare -x GIO_LAUNCHED_DESKTOP_FILE=/var/lib/snapd/desktop/applications/code_code.desktop
++declare -x OLDPWD=/home/bruno/Github42/Minishell/test
 +declare -x TERM_PROGRAM=vscode
 +declare -x a="quotes"
  
@@ -498,8 +538,8 @@ echo 'export a=\'"quotes"\'; export' | tr ';' '\n' | [shell]
 ==> diffs/questionable_export_spaces1.diff <==
 diff of execution of:
 echo 'export a=\'    \'; echo $a' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:14.417727373 +0200
-+++ found	2024-09-01 20:35:14.532729031 +0200
+--- expected	2024-09-01 21:07:34.273549602 +0200
++++ found	2024-09-01 21:07:34.292549601 +0200
 @@ -1,6 +1,6 @@
 -
 +    
@@ -512,8 +552,8 @@ echo 'export a=\'    \'; echo $a' | tr ';' '\n' | [shell]
 ==> diffs/questionable_export_spaces2.diff <==
 diff of execution of:
 echo 'export a="a    b"; echo $a' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:14.606730098 +0200
-+++ found	2024-09-01 20:35:14.698731424 +0200
+--- expected	2024-09-01 21:07:34.317549598 +0200
++++ found	2024-09-01 21:07:34.339549596 +0200
 @@ -1,6 +1,6 @@
 -a b
 +a    b
@@ -526,11 +566,11 @@ echo 'export a="a    b"; echo $a' | tr ';' '\n' | [shell]
 ==> diffs/questionable_glob_order.diff <==
 diff of execution of:
 echo 'touch a b c A B C aa ab ac Aa Ab Ac aA aB aC; echo *' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:14.960735201 +0200
-+++ found	2024-09-01 20:35:14.995735706 +0200
+--- expected	2024-09-01 21:07:34.424549588 +0200
++++ found	2024-09-01 21:07:34.946566703 +0200
 @@ -1,6 +1,6 @@
 -a A aa aA Aa ab aB Ab ac aC Ac b B c C infile readonly
-+Ac a aC . aB infile aa .. readonly C A B Aa c ac ab aA b Ab
++aC infile .. Aa B ac C A readonly Ab ab aB aa aA b c Ac a .
  
  ======== stderr =======
  
@@ -540,10 +580,10 @@ echo 'touch a b c A B C aa ab ac Aa Ab Ac aA aB aC; echo *' | tr ';' '\n' | [she
 ==> diffs/questionable_pwd_rmdir.diff <==
 diff of execution of:
 echo 'mkdir tmp; cd tmp; rmdir $PWD; pwd' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:16.152752348 +0200
-+++ found	2024-09-01 20:35:16.196752979 +0200
+--- expected	2024-09-01 21:07:35.293566669 +0200
++++ found	2024-09-01 21:07:35.317566667 +0200
 @@ -1,6 +1,5 @@
--/home/pcasagra/42/minishell_brunos_branch/test/temp/tmp
+-/home/bruno/Github42/Minishell/test/temp/tmp
  
  ======== stderr =======
 -
@@ -555,27 +595,25 @@ echo 'mkdir tmp; cd tmp; rmdir $PWD; pwd' | tr ';' '\n' | [shell]
 ==> diffs/questionable_redir_ambiguous.diff <==
 diff of execution of:
 echo 'cat < *;' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:15.095737144 +0200
-+++ found	2024-09-01 20:35:15.185738439 +0200
-@@ -1,5 +1,7 @@
-+infile content
-+infile second line
+--- expected	2024-09-01 21:07:34.976566700 +0200
++++ found	2024-09-01 21:07:35.000566697 +0200
+@@ -1,5 +1,6 @@
  
  ======== stderr =======
 -[progname]: *: ambiguous redirect
 +[progname]: ..: Is a directory
++[progname]: .: Is a directory
  ======== return =======
--return value: 1
-+return value: 0
+ return value: 1
 
 ==> diffs/questionable_SHLVL.diff <==
 diff of execution of:
 echo 'echo $SHLVL' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:14.778732577 +0200
-+++ found	2024-09-01 20:35:14.870733903 +0200
+--- expected	2024-09-01 21:07:34.368549593 +0200
++++ found	2024-09-01 21:07:34.388549591 +0200
 @@ -1,6 +1,6 @@
--2
-+1
+-3
++2
  
  ======== stderr =======
  
@@ -585,8 +623,8 @@ echo 'echo $SHLVL' | tr ';' '\n' | [shell]
 ==> diffs/redir_expand_cmd.diff <==
 diff of execution of:
 echo '$fail < failed' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:35.242021589 +0200
-+++ found	2024-09-01 20:35:35.490025020 +0200
+--- expected	2024-09-01 21:07:28.890550117 +0200
++++ found	2024-09-01 21:07:30.157549996 +0200
 @@ -1,5 +1,5 @@
  
  ======== stderr =======
@@ -598,13 +636,13 @@ echo '$fail < failed' | tr ';' '\n' | [shell]
 ==> diffs/redir_heredoc2.diff <==
 diff of execution of:
 echo 'grep o << EOF > out;hello;there;EOF; ls -l --time-style=+' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:31.731972834 +0200
-+++ found	2024-09-01 20:35:31.833974256 +0200
+--- expected	2024-09-01 21:07:27.987550203 +0200
++++ found	2024-09-01 21:07:28.011550201 +0200
 @@ -1,9 +1,11 @@
  total 8
- -rw-rw-r-- 1 pcasagra pcasagra 34  infile
- -rw-rw-r-- 1 pcasagra pcasagra  6  out
- -r--r--r-- 1 pcasagra pcasagra  0  readonly
+ -rw-rw-r-- 1 bruno bruno 34  infile
+ -rw-rw-r-- 1 bruno bruno  6  out
+ -r--r--r-- 1 bruno bruno  0  readonly
  
  ======== stderr =======
 -
@@ -617,8 +655,8 @@ echo 'grep o << EOF > out;hello;there;EOF; ls -l --time-style=+' | tr ';' '\n' |
 ==> diffs/redir_heredoc.diff <==
 diff of execution of:
 echo 'cat << EOF;hello;there;EOF' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:31.541970185 +0200
-+++ found	2024-09-01 20:35:31.598970979 +0200
+--- expected	2024-09-01 21:07:27.927550209 +0200
++++ found	2024-09-01 21:07:27.950550207 +0200
 @@ -1,7 +1,9 @@
  hello
  there
@@ -634,8 +672,8 @@ echo 'cat << EOF;hello;there;EOF' | tr ';' '\n' | [shell]
 ==> diffs/redir_multi_here.diff <==
 diff of execution of:
 echo 'cat <<EOF <<OH;i;am;here;EOF;oh;OH' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:38.274063436 +0200
-+++ found	2024-09-01 20:35:38.319064056 +0200
+--- expected	2024-09-01 21:07:30.803549934 +0200
++++ found	2024-09-01 21:07:30.828549932 +0200
 @@ -1,6 +1,11 @@
  oh
  
@@ -653,8 +691,8 @@ echo 'cat <<EOF <<OH;i;am;here;EOF;oh;OH' | tr ';' '\n' | [shell]
 ==> diffs/return_exit_ko1.diff <==
 diff of execution of:
 echo 'exit one two; echo $?' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:41.292104844 +0200
-+++ found	2024-09-01 20:35:41.324105282 +0200
+--- expected	2024-09-01 21:07:33.832549645 +0200
++++ found	2024-09-01 21:07:33.854549643 +0200
 @@ -1,5 +1,5 @@
  
  ======== stderr =======
@@ -666,8 +704,8 @@ echo 'exit one two; echo $?' | tr ';' '\n' | [shell]
 ==> diffs/return_exit_ko2.diff <==
 diff of execution of:
 echo 'exit 1 2; echo $?' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:41.375105979 +0200
-+++ found	2024-09-01 20:35:41.443106909 +0200
+--- expected	2024-09-01 21:07:33.881549640 +0200
++++ found	2024-09-01 21:07:33.902549638 +0200
 @@ -1,6 +1,5 @@
 -1
  
@@ -680,8 +718,8 @@ echo 'exit 1 2; echo $?' | tr ';' '\n' | [shell]
 ==> diffs/return_ok2.diff <==
 diff of execution of:
 echo 'echo hi; echo thisiaavariable$?thatneedsexpansion' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:40.597095331 +0200
-+++ found	2024-09-01 20:35:40.661096207 +0200
+--- expected	2024-09-01 21:07:33.644549663 +0200
++++ found	2024-09-01 21:07:33.665549661 +0200
 @@ -1,7 +1,7 @@
  hi
 -thisiaavariable0thatneedsexpansion
@@ -695,8 +733,8 @@ echo 'echo hi; echo thisiaavariable$?thatneedsexpansion' | tr ';' '\n' | [shell]
 ==> diffs/special_reset_status.diff <==
 diff of execution of:
 echo 'cat fail; $FAIL; echo $?' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:16.343755090 +0200
-+++ found	2024-09-01 20:35:16.397755865 +0200
+--- expected	2024-09-01 21:07:31.805549838 +0200
++++ found	2024-09-01 21:07:31.827549836 +0200
 @@ -1,6 +1,6 @@
 -0
 +1

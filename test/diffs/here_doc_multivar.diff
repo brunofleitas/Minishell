@@ -1,19 +1,19 @@
 diff of execution of:
 echo 'cat <<EOF; $PWD and $OLDPWD;ha;$PATH ;EOF' | tr ';' '\n' | [shell]
---- expected	2024-09-01 20:35:33.587998654 +0200
-+++ found	2024-09-01 20:35:33.685000002 +0200
+--- expected	2024-09-01 21:07:28.205550182 +0200
++++ found	2024-09-01 21:07:28.231550180 +0200
 @@ -1,8 +1,11 @@
-- /home/pcasagra/42/minishell_brunos_branch/test/temp and /home/pcasagra/42/minishell_brunos_branch/test
+- /home/bruno/Github42/Minishell/test/temp and /home/bruno/Github42/Minishell/test
 + $PWD and $OLDPWD
  ha
--/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/pcasagra/clion-2024.1.2/bin/clion.sh:/home/pcasagra/clion-2024.1.2/bin/clion.sh 
+-/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin 
 +$PATH 
  
  ======== stderr =======
 -
-+[progname]: /home/pcasagra/42/minishell_brunos_branch/test/temp: Is a directory
++[progname]: /home/bruno/Github42/Minishell/test/temp: Is a directory
 +[progname]: ha: command not found
-+[progname]: /usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/nodejs/bin:/home/pcasagra/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/pcasagra/clion-2024.1.2/bin/clion.sh:/home/pcasagra/clion-2024.1.2/bin/clion.sh: No such file or directory
++[progname]: /home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin: No such file or directory
 +[progname]: EOF: command not found
  ======== return =======
  return value: 0
