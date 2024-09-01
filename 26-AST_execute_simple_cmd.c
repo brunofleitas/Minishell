@@ -30,21 +30,6 @@ static int node_word_count(t_astnode *node)
     //printf("node_word_count end\n");
     return (count);
 }
-/**
- *  * @brief Restore the standard I/O to their original state
- *
- * This function restores the standard input and output to their saved states.
- *
- * @param saved_stdin The saved standard input file descriptor
- * @param saved_stdout The saved standard output file descriptor
-*/
-void restore_io(int saved_stdin, int saved_stdout)
-{
-    dup2(saved_stdin, STDIN_FILENO);
-    dup2(saved_stdout, STDOUT_FILENO);
-    close(saved_stdin);
-    close(saved_stdout);
-}
 
 static char **create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
 {

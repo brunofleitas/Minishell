@@ -36,6 +36,7 @@ SRCS 	= 01-main.c \
 		  29-wc_expension.c \
 		  30-wc_expension_utils.c\
 		  31-wc_match_pattern.c\
+		  32-restore_io.c \
 		  get_next_line.c
 
 SRCSB 	= 01-main.c \
@@ -67,7 +68,8 @@ SRCSB 	= 01-main.c \
 		  28-AST_execute_external_cmd.c \
 		  29-wc_expension.c \
 		  30-wc_expension_utils.c\
-		  31-wc_match_pattern.c 
+		  31-wc_match_pattern.c \
+		  32-restore_io.c
 		
 OBJS	= $(SRCS:.c=.o)
 OBJSB	= $(SRCSB:.c=.o)

@@ -83,10 +83,8 @@ int	main(int argc, char **argv, char **envp)
 	ma.last_exit_status = 0;
 	ma.in_child_p = 0;
 	ma.env = duplicate_vars(&(ma.first_env), envp);
-	int saved_stdin = dup(STDIN_FILENO);
-    int saved_stdout = dup(STDOUT_FILENO);
-	int temp_fd1;
-	int temp_fd2;
+	ma.saved_stdin = dup(STDIN_FILENO);
+    ma.saved_stdout = dup(STDOUT_FILENO);
 	while (1)
 	{
 		signal(SIGINT, sigint_handler);
@@ -113,12 +111,7 @@ int	main(int argc, char **argv, char **envp)
 			}
 			free_memory(&(ma.first_node));
 		}
-		temp_fd1 = dup(STDIN_FILENO);
-		temp_fd2 = dup(STDOUT_FILENO);
-		dup2(saved_stdin, STDIN_FILENO);
-		dup2(saved_stdout, STDOUT_FILENO);
-		close (temp_fd1);
-		close (temp_fd2);
+		restore_io(&ma);
 	}
 	// free_memory(&(ma.first_env));
 	// clear_history();

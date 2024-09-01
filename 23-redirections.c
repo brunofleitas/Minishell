@@ -40,17 +40,12 @@ static int redirect_input(char *file_name)//, t_ma *ma)
 {
     int fd;
 
-        if (access(file_name, F_OK) != 0)
+        fd = open(file_name, O_RDONLY);
+        if (fd == -1)
         {
             write(2, "minishell: ", 11);
             write(2, file_name, ft_strlen(file_name));
             write(2, ": No such file or directory\n", 28);
-            exit(127); 
-        }
-        fd = open(file_name, O_RDONLY);
-        if (fd == -1)
-        {
-            perror(" ");
             return(0);
         }
         if (dup2(fd, STDIN_FILENO) == -1)
@@ -72,32 +67,24 @@ static int redirect_input(char *file_name)//, t_ma *ma)
 static int redirect_output(char *file_name, int fd_num)//, t_ma *ma)
 {
     int fd; 
-        // ft_printf("redirect_output start\n");
-        if (access(file_name, F_OK) == 0)
-        {
-            if (access(file_name, W_OK) != 0)
-            {
-                write(2, "minishell: ", 11);
-                write(2, file_name, ft_strlen(file_name));
-                write(2, ": Permission denied\n", 21);
-                exit(126); 
-            }
-        }
-        fd = open(file_name, /*O_WRONLY */ O_RDWR | O_CREAT | O_TRUNC, 0644);
-        // ft_printf("fd: %d\n", fd);
+
+        fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         if (fd == -1)
+        {
+            write(2, "minishell: ", 11);
+            write(2, file_name, ft_strlen(file_name));
+            write(2, ": Permission denied\n", 21);
             return(0);
+        }
         if (dup2(fd, fd_num) == -1)
         {
             close(fd);
             return(0);
         }
         close(fd);
-        // ft_printf("redirect_output end\n");
         return(1);
-    // }
-    // return (0);
 }
+
 
 
 /**
@@ -110,9 +97,14 @@ static int redirect_output_append(char *file_name, int fd_num)//, t_ma *ma)
 {
     int fd;
 
-        fd = open(file_name, /* O_WRONLY  */ O_RDWR | O_CREAT | O_APPEND, 0644);
+        fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
         if (fd == -1)
+        {
+            write(2, "minishell: ", 11);
+            write(2, file_name, ft_strlen(file_name));
+            write(2, ": Permission denied\n", 21);
             return(0);
+        }
         if (dup2(fd, fd_num) == -1)
         {
             close(fd);
@@ -287,7 +279,7 @@ int handle_redirections(t_astnode *redir_node, t_s_cmd_args *a, t_ma *ma)
                     exit_or_setexit(1,1, ma);
                 else
                 {
-                    restore_io(a->saved_stdin, a->saved_stdout);
+                    restore_io(ma);
                     exit_or_setexit(1,1, ma);
                     return (0);
                 }

@@ -186,6 +186,8 @@ typedef struct  s_main_args
     int         tmp_file_counter;// added for creation of temporary files in heredoc
     int         last_exit_status;
     int         in_child_p;
+    int         saved_stdin;
+    int         saved_stdout;
 }               t_ma;
 
 /* ************************************************************************** */
@@ -265,7 +267,7 @@ int	            expand_wildcard(t_wc_args *a, char *pattern, t_ma *ma);
 int             add_single_element(t_wc_args *a, char *name, t_ma *ma);
 int	            match_pattern(const char *str, const char *pattern);
 int             check_valid_file(char *path);
-void            restore_io(int saved_stdin, int saved_stdout);
+void            restore_io(t_ma *ma);
 void            exit_or_setexit(int e, int e_flag, t_ma *ma);
 void            generate_quotes(const char **s, char ***split, int *i, t_ma *ma);
 void            generate_double_operators(const char **s, char ***split, int *i, t_ma *ma);
