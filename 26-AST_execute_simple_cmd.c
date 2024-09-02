@@ -106,6 +106,8 @@ static int  input_is_critical(t_astnode *first_word_node)
     char        *command;
     t_astnode   *next_word;
 
+    if (first_word_node == NULL)
+        return (0);
     command = first_word_node->data.word.value;
     next_word = first_word_node->data.word.next;
     if (ft_strcmp(command, "cat") == 0 || ft_strcmp(command, "ls") == 0 || ((ft_strcmp(command, "echo") == 0) && next_word == NULL))
