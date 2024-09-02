@@ -175,6 +175,16 @@ Structs in the Union: Each struct within the union represents different types of
 
 */
 
+typedef struct s_fix_args
+{
+    t_ntc		*fix_node;
+	char		*program;
+	int		    l_program;
+    int         saved_stdin;
+    int         saved_stdout;
+}               t_fix;
+
+
 typedef struct  s_main_args
 {
     char        *program;
@@ -185,12 +195,15 @@ typedef struct  s_main_args
 	t_token		*tkns[1024];
     t_token     **c_tkn;
 	t_env		*env;
+    t_fix       *fix;
     int         tmp_file_counter;// added for creation of temporary files in heredoc
     int         last_exit_status;
     int         in_child_p;
     int         saved_stdin;
     int         saved_stdout;
 }               t_ma;
+
+
 /* ************************************************************************** */
 /*                                   AST EXECUTION                            */
 /* ************************************************************************** */

@@ -41,6 +41,7 @@ int is_valid_argument(char *arg)
 
 static void	clean_exit(int exit_code, t_ma *ma)
 {
+    free_memory(&(ma->fix->fix_node));
 	free_memory(&(ma->first_node));
 	free_memory(&(ma->first_env));
 	clear_history();

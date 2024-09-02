@@ -29,6 +29,23 @@ void sigint_handler(int sig)
     rl_redisplay();
 }
 
+void	init_fix(char **argv, t_fix *fix)
+{
+	fix->program	= ft_strjoin_g_c(argv[0], ": ", &(fix->fix_node));
+	fix->program = ft_strtrim_g_c(fix->program, "./", &(fix->fix_node));
+	fix->l_program = ft_strlen(fix->program);
+	fix->saved_stdin = dup(STDIN_FILENO);
+    fix->saved_stdout = dup(STDOUT_FILENO);
+}
+
+void	cpy_fix(t_fix *fix, t_ma *ma)
+{
+	ma->program = fix->program;
+	ma->l_program = fix->l_program;
+	ma->saved_stdin = fix->saved_stdin;
+	ma->saved_stdout = fix->saved_stdout;
+	ma->fix = fix;
+}
 /*
   Parameters:
     input: A string representing the user's input.
@@ -46,25 +63,22 @@ void sigint_handler(int sig)
 int	main(int argc, char **argv, char **envp)
 {
 	t_ma 		ma;
+	t_fix		fix;
 	t_astnode 	*root;
-
 	
 	(void)argc;
+	init_fix(argv, &fix);
 	ma.first_node = NULL;
 	ma.first_env = NULL;
-	ma.program = ft_strjoin_g_c(argv[0], ": ", &(ma.first_node));
-	ma.program = ft_strtrim_g_c(ma.program, "./", &(ma.first_node));
-	ma.l_program = ft_strlen(ma.program);
-	// write(1, ma.program, ma.l_program);
 	ma.last_exit_status = 0;
 	ma.in_child_p = 0;
 	ma.env = duplicate_vars(&(ma.first_env), envp);
-	ma.saved_stdin = dup(STDIN_FILENO);
-    ma.saved_stdout = dup(STDOUT_FILENO);
+	
 	while (1)
 	{
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, SIG_IGN);
+		cpy_fix(&fix, &ma);
 		ma.input = !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : readline("minisshell>>");
 		if (ma.input == NULL)
         	builtin_exit(&ma, NULL);
