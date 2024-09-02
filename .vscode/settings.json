@@ -5,7 +5,10 @@
         "unistd.h": "c",
         "string.h": "c",
         "types.h": "c",
-        "*.tcc": "c"
+        "*.tcc": "c",
+        "p_lexer.h": "c",
+        "ft_printf.h": "c",
+        "algorithm": "c"
     },
     "42header.username": "bfleitas",
     "42header.email": "bfleitas@student.42luxembourg"

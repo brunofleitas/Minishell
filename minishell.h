@@ -3,6 +3,7 @@
 
 #include "./libft/headers/libft.h"
 #include "./libft/headers/ft_printf.h"
+#include "p_lexer.h"
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <limits.h>
@@ -193,6 +194,10 @@ typedef struct  s_main_args
 	t_ntc		*first_node;
     t_ntc		*first_env;
 	t_token		*tkns[1024];
+
+    t_tok       *toks;
+    int         tok_count;
+
     t_token     **c_tkn;
 	t_env		*env;
     t_fix       *fix;
@@ -241,6 +246,14 @@ typedef struct s_expand_wildcards_args
     int     capacity;
     int     count_match;
 }               t_wc_args;
+
+typedef struct s_wc_args
+{
+    char    *orig_token;
+    char    **matches;
+    int     count_match;
+    int     max_matches;
+}               t_wcs_args;
 
 /* ************************************************************************** */
 /*                                   FUNCTIONS                                */
