@@ -15,8 +15,6 @@ char	*gnl(int fd);
 
 #include "minishell.h"
 
-#include "minishell.h"
-
 //tester: https://github.com/LucasKuhn/minishell_tester/tree/main
 //liveshare: https://prod.liveshare.vsengsaas.visualstudio.com/join?0623C96F2899D5C1DD0735373291B02F4DA7
  
@@ -73,18 +71,18 @@ int	main(int argc, char **argv, char **envp)
 	ma.last_exit_status = 0;
 	ma.in_child_p = 0;
 	ma.env = duplicate_vars(&(ma.first_env), envp);
-	
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
+
 	while (1)
 	{
-		signal(SIGINT, sigint_handler);
-		signal(SIGQUIT, SIG_IGN);
 		cpy_fix(&fix, &ma);
-		ma.input = !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : readline("minisshell>>");
+		ma.input = !isatty(0) ? gnl(0) : readline("minisshell>>");
 		if (ma.input == NULL)
         	builtin_exit(&ma, NULL);
 		if (ft_strcmp(ma.input, "") != 0)
 		{
-			!isatty(0) ? 0 : !isatty(0) ? 0 : !isatty(0) ? 0 : !isatty(0) ? 0 : !isatty(0) ? 0 : !isatty(0) ? 0 : add_history(ma.input);
+			!isatty(0) ? 0 : add_history(ma.input);
 			lexer(&ma);
 			if (ma.tkns[0] != NULL)
 			{	
