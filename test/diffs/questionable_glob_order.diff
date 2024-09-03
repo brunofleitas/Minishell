@@ -1,7 +1,7 @@
 diff of execution of:
 echo 'touch a b c A B C aa ab ac Aa Ab Ac aA aB aC; echo *' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:31:21.436352958 +0200
-+++ found	2024-09-03 21:31:21.462545293 +0200
+--- expected	2024-09-03 21:47:42.362793299 +0200
++++ found	2024-09-03 21:47:42.384810320 +0200
 @@ -1,6 +1,6 @@
 -a A aa aA Aa ab aB Ab ac aC Ac b B c C infile readonly
 +aC infile .. Aa B ac C A readonly Ab ab aB aa aA b c Ac a .
