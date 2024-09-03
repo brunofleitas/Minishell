@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   19-builtin_echo.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bruno <bruno@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:50:08 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/27 17:19:19 by bruno            ###   ########.fr       */
+/*   Updated: 2024/09/03 21:47:17 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ static void	print_echo_args(char **args, int start_index)
 	while (args[i])
 	{
 		ft_putstr_fd(args[i], STDOUT_FILENO);
-		if (args[i + 1])
+		if (args[i + 1] && (!(ft_isdigit(args[i + 1][0]) && args[i + 1][1] == '\0'))
+			&& (!(ft_isdigit(args[i][0]) && args[i][1] == '\0')))
 			ft_putchar_fd(' ', STDOUT_FILENO);
 		i++;
 	}
