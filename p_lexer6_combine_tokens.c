@@ -104,7 +104,9 @@ static void shift_tokens(t_ma *ma, int start_index)
  */
 void combine_tokens(t_ma *ma)
 {
-    int i = 0;
+    int i;
+
+    i = 0;
     while (i < ma->tok_count - 1) 
     {
         if (should_combine(&(ma->toks[i]), &(ma->toks[i + 1])))

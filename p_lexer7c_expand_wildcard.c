@@ -22,8 +22,8 @@ static int process_directory(t_wc_args *a, char *dir_path, char *pattern, t_ma *
 */
 int expand_wildcard(t_wc_args *a, char *pattern, t_ma *ma)
 {
-    char *path_end;
-    char *dir_path;
+    char    *path_end;
+    char    *dir_path;
     
     path_end = ft_strrchr(pattern, '/');
     if (path_end == NULL)
@@ -53,10 +53,11 @@ int expand_wildcard(t_wc_args *a, char *pattern, t_ma *ma)
 */
 static int expand_wildcard_recursive(t_wc_args *a, char *path, char *pattern, t_ma *ma)
 {
-    DIR *dir;
-    struct dirent *entry;
-    int result = 1;
+    DIR             *dir;
+    struct dirent   *entry;
+    int             result;
 
+    result = 1;
     dir = opendir(path);
     if (!dir)
         return (0);
@@ -93,8 +94,8 @@ static int expand_wildcard_recursive(t_wc_args *a, char *path, char *pattern, t_
 */
 static int process_entry(t_wc_args *a, char *path, char *entry_name, char *pattern, t_ma *ma)
 {
-    char *full_path;
-    struct stat (st);
+    char            *full_path;
+    struct stat     st;
 
     full_path = ft_strjoin_g_c(path, "/", &(ma->first_node));
     full_path = ft_strjoin_g_c(full_path, entry_name, &(ma->first_node));
@@ -127,10 +128,11 @@ static int process_entry(t_wc_args *a, char *path, char *entry_name, char *patte
 */
 static int process_directory(t_wc_args *a, char *dir_path, char *pattern, t_ma *ma)
 {
-    DIR *dir;
-    struct dirent *entry;
-    int result = 1;
+    DIR             *dir;
+    struct dirent   *entry;
+    int             result;
 
+    result = 1;
     dir = opendir(dir_path);
     if (!dir)
         return 0;

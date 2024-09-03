@@ -24,8 +24,8 @@ static void replace_token_with_expansion(t_ma *ma, int index, t_wcs_args *args);
  */
 void handle_globbing(char *input, t_ma *ma)
 {
-    int i;
-    t_wcs_args args;
+    int         i;
+    t_wcs_args  args;
 
     i = 0;
     while (i < ma->tok_count)
@@ -62,8 +62,8 @@ void handle_globbing(char *input, t_ma *ma)
  */
 static void replace_token_with_expansion(t_ma *ma, int index, t_wcs_args *args)
 {
-    int i;
-    t_tok *new_tokens;
+    int     i;
+    t_tok   *new_tokens;
 
     i = 0;
     if (args->count_match == 0)

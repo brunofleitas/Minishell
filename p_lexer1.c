@@ -26,8 +26,9 @@
  */
 t_tok *tokenize(char *input, t_ma *ma)
 {
-    int i = 0;
+    int i;
 
+    i = 0;
     // Allocate memory for tokens
     ma->toks = ft_calloc_g_c(MAX_TOK_LEN, sizeof(t_tok *), &(ma->first_node));
     ma->tok_count = 0;

@@ -11,6 +11,7 @@ static int is_special_char(char c)
 {
     return (c == '$' || c == ';' || c == '|' || c == '&' || c == '>' || c == '<');
 }
+
 /**
  * Handles a word in the input string and creates a token for it.
  * 

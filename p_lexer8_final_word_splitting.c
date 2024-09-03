@@ -37,8 +37,8 @@ static int is_ifs_char(char c)
  */
 static int count_words(const char *str)
 {
-    int count;
-    int in_word;
+    int     count;
+    int     in_word;
 
     count = 0;
     in_word = 0;
@@ -72,9 +72,9 @@ static int count_words(const char *str)
  */
 static void split_token(t_tok *token, t_tok *new_tokens, int *new_count, t_ma *ma) 
 {
-    char *str;
-    int start;
-    int i;
+    char    *str;
+    int     start;
+    int     i;
 
     str = token->value;
     start = 0;
@@ -122,9 +122,9 @@ static void split_token(t_tok *token, t_tok *new_tokens, int *new_count, t_ma *m
  */
 void final_word_splitting(t_ma *ma)
 {
-    t_tok *new_tokens;
-    int new_count;
-    int i;
+    t_tok   *new_tokens;
+    int     new_count;
+    int     i;
 
     i = 0;
     new_count = 0;

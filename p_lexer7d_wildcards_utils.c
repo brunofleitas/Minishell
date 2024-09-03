@@ -51,8 +51,8 @@ int add_single_element(t_wcs_args *a, char *full_path, t_ma *ma)
  */
 int add_matching_entry(t_wcs_args *a, char *dir_path, char *entry_name, t_ma *ma)
 {
-    char *full_path;
-    int result;
+    char    *full_path;
+    int     result;
 
     full_path = ft_strjoin_g_c(dir_path, "/", &(ma->first_node));
     if (!full_path)
