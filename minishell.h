@@ -247,14 +247,6 @@ typedef struct s_expand_wildcards_args
     int     count_match;
 }               t_wc_args;
 
-typedef struct s_wc_args
-{
-    char    *orig_token;
-    char    **matches;
-    int     count_match;
-    int     max_matches;
-}               t_wcs_args;
-
 /* ************************************************************************** */
 /*                                   FUNCTIONS                                */
 /* ************************************************************************** */

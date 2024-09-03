@@ -8,7 +8,7 @@ typedef enum e_tok_typ
     TOKEN_QUOTE,
     TOKEN_VARIABLE,
     TOKEN_COMMAND_SUBSTITUTION,
-    TOKEN_ARITHMETIC_EXPANSION
+    // TOKEN_ARITHMETIC_EXPANSION I don't need this field currently as it is not asked in the context of minishell. However if I would want to handle for exemple RESULT=$((2 + 3)) it would be necessary
 }   t_tok_type;
 
 typedef struct s_token
@@ -18,6 +18,14 @@ typedef struct s_token
     int         start_pos;
     int         end_pos;
 }               t_tok;
+
+typedef struct s_wc_args
+{
+    char    *orig_token;
+    char    **matches;
+    int     count_match;
+    int     max_matches;
+}               t_wcs_args;
 
 t_tok   *tokenize(char *input, t_ma *ma);
 void    initial_tokenization(char *input, int start, t_ma *ma);
