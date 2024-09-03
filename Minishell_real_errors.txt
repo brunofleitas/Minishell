@@ -50,12 +50,6 @@ cat << ||||;ha;|||| OK
 cat << EOF;$?;EOF ERROR
 cat fail; cat << EOF;$?;EOF ERROR
 
-==== test_cases/syntax/redirections_expand ====
-cat < "infile" OK
-cat < $PATH OK
-cat < "$PATH" OK
-$fail < failed ERROR
-
 ==== test_cases/syntax/redirections_multi ====
 cat < infile < infile < infile; OK
 echo a > in; cat < in < infile < in; OK
@@ -65,13 +59,6 @@ cat < infile > out1 < infile > out2 > out3; ls -l --time-style=+ OK
 cat < infile > infile; ls -l --time-style=+ OK
 cat <<EOF <<OH;i;am;here;EOF;oh;OH ERROR
 echo a > out; cat infile > out >> out; ls -l --time-style=+ OK
-
-==== test_cases/special ====
-cat fail; $FAIL; echo $? ERROR
-echo - "" " " hello "$FAIL" OK
-unset PATH; ls; /bin/ls; echo $PATH OK
-unset PWD; cd ..; echo $PWD OK
-unset OLDPWD; cd ..; echo $OLDPWD OK
 
 ==== test_cases/path ====
 cat infile OK
