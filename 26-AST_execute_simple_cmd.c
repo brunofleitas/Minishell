@@ -133,8 +133,6 @@ void execute_simple_cmd(t_astnode *node, t_ma *ma)
     // int status_inp_redir;
     // ft_printf("execute_simple_cmd start\n");
     a.s_inredir = 0;
-    if (strcmp(node->data.simple_cmd.words->data.word.value, "") == 0)
-        write (1, "test\n", 2); 
     a.i_c = input_is_critical(node->data.simple_cmd.words);
     if(!handle_redirections(node->data.simple_cmd.redirections, &a, ma))
         return;
