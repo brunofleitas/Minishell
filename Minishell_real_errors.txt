@@ -5,25 +5,6 @@
                                                                  
 testing if piping into minishell works correctly
 Working!
-==== test_cases/builtins/export ====
-export test0 OK
-export test1= OK
-export test2=1 OK
-export test3=test=salut OK
-export test="hi" OK
-export test="hi" test2="hi" OK
-export test="salut" OK
-export "salut"=test OK
-export A="variable with space" OK
-export test5="" OK
-export test=$COLORTERM=colorcolor OK
-export USER=itsame OK
-export A- OK
-export A-=123 OK
-export = OK
-export 123 OK
-export A=a 123=4 B=b MINUS- ERROR
-export A------=a 123=4 B=b MINUS- ERROR
 
 ==== test_cases/syntax/redirections_simple ====
 cat infile; cat < infile OK
@@ -72,17 +53,6 @@ export PATH='/heeeello'; echo $PATH; cat infile OK
 export PATH=$PATH':::::/hehe'; echo $PATH; cat infile ERROR
 export PATH=$PATH':::::/hehe'; echo $PATH; infile ERROR
 
-==== test_cases/variables/return_status ====
-echo $? OK
-echo hi; echo $? OK
-echo hi; echo thisiaavariable$?thatneedsexpansion ERROR
-cat fail; echo $? OK
-echo a > readonly; echo $? ./run.sh: line 94: warning: command substitution: ignored null byte in input
-OK
-cat < fail; echo $? OK
-exit one two; echo $? ERROR
-exit 1 2; echo $? ERROR
-
 ==== test_cases/questionable ====
 export ERROR
 export a='"quotes"'; export ERROR
@@ -98,4 +68,4 @@ export PATH="$PATH:$PWD"; mkdir asdfg; asdfg ERROR
 cd; ls OK
 mkdir tmp; cd tmp; rmdir $PWD; pwd ERROR
 
-30 TESTS FAILED!
+23 TESTS FAILED!
