@@ -24,20 +24,20 @@ int match_pattern(const char *filename, const char *pattern)
     while (*pattern)
     {
         if (*pattern == '*')
-            return match_star(filename, pattern + 1);
+            return (match_star(filename, pattern + 1));
         else if (*pattern == '?')
             return match_question(filename, pattern);
         else if (*pattern == '[')
-            return match_bracket(filename, pattern);
+            return (match_bracket(filename, pattern));
         else if (*pattern != *filename)
-            return 0;
+            return (0);
         else
         {
             pattern++;
             filename++;
         }
     }
-    return !*filename && !*pattern;
+    return (!*filename && !*pattern);
 }
 
 /**
@@ -56,11 +56,11 @@ int match_pattern(const char *filename, const char *pattern)
 static int match_star(const char *filename, const char *pattern)
 {
     if (!*pattern)
-        return 1;
+        return (1);
     while (*filename)
         if (match_pattern(filename++, pattern))
-            return 1;
-    return 0;
+            return (1);
+    return (0);
 }
 
 /**
@@ -78,8 +78,8 @@ static int match_star(const char *filename, const char *pattern)
 static int match_question(const char *filename, const char *pattern)
 {
     if (!*filename)
-        return 0;
-    return match_pattern(filename + 1, pattern + 1);
+        return (0);
+    return (match_pattern(filename + 1, pattern + 1));
 }
 
 /**
@@ -96,8 +96,10 @@ static int match_question(const char *filename, const char *pattern)
  */
 static int match_bracket(const char *filename, const char *pattern)
 {
+    int matched;
+    
     pattern++;
-    int matched = 0;
+    matched = 0;
     while (*pattern && *pattern != ']')
     {
         if (*pattern == *filename)
@@ -105,6 +107,6 @@ static int match_bracket(const char *filename, const char *pattern)
         pattern++;
     }
     if (!matched)
-        return 0;
-    return match_pattern(filename + 1, pattern + 1);
+        return (0);
+    return (match_pattern(filename + 1, pattern + 1));
 }

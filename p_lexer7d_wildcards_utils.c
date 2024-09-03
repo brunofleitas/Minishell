@@ -22,17 +22,16 @@ int add_single_element(t_wcs_args *a, char *full_path, t_ma *ma)
         int new_size = a->max_matches * 2 + 1;
         char **new_matches = ft_realloc_g_c(a->matches, sizeof(char *) * new_size, &(ma->first_node));
         if (!new_matches)
-            return 0;
+            return ((0));
         a->matches = new_matches;
         a->max_matches = new_size;
     }
-
     a->matches[a->count_match] = ft_strdup_g_c(full_path, &(ma->first_node));
     if (!a->matches[a->count_match])
-        return 0;
+        return ((0));
 
     a->count_match++;
-    return 1;
+    return ((1));
 }
 
 /**
@@ -57,15 +56,12 @@ int add_matching_entry(t_wcs_args *a, char *dir_path, char *entry_name, t_ma *ma
 
     full_path = ft_strjoin_g_c(dir_path, "/", &(ma->first_node));
     if (!full_path)
-        return 0;
+        return (0);
     
     full_path = ft_strjoin_g_c(full_path, entry_name, &(ma->first_node));
     if (!full_path)
-        return 0;
+        return (0);
 
     result = add_single_element(a, full_path, ma);
-    
-    // We don't need to free full_path as it's managed by the memory allocator
-
-    return result;
+    return (result);
 }

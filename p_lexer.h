@@ -30,4 +30,4 @@ int     match_pattern(const char *filename, const char *pattern);
 int     expand_wildcard(t_wc_args *a, char *pattern, t_ma *ma);
 int     add_single_element(t_wcs_args *a, char *full_path, t_ma *ma);
 int     add_matching_entry(t_wcs_args *a, char *dir_path, char *entry_name, t_ma *ma);
-int     final_word_splitting(t_tok *tokens, int token_count);
+void    final_word_splitting(t_ma *ma);

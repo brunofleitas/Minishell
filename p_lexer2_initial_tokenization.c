@@ -22,7 +22,9 @@ static int is_special_char(char c)
 
 static int handle_word(char *input, int start, t_ma *ma)
 {
-    int end = start;
+    int end;
+    
+    end = start;
     while (input[end] && !ft_isspace(input[end]) && !is_special_char(input[end]))
         end++;
     ma->toks[ma->tok_count] = (t_tok)

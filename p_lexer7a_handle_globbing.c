@@ -27,7 +27,8 @@ void handle_globbing(char *input, t_ma *ma)
     int i;
     t_wcs_args args;
 
-    for (i = 0; i < ma->tok_count; i++)
+    i = 0;
+    while (i < ma->tok_count)
     {
         if (ft_strchr(ma->toks[i].value, '*') || ft_strchr(ma->toks[i].value, '?') ||
             ft_strchr(ma->toks[i].value, '['))
@@ -40,6 +41,7 @@ void handle_globbing(char *input, t_ma *ma)
                 i += args.count_match - 1;  // Skip newly added tokens
             }
         }
+        i++;
     }
 }
 
@@ -63,6 +65,7 @@ static void replace_token_with_expansion(t_ma *ma, int index, t_wcs_args *args)
     int i;
     t_tok *new_tokens;
 
+    i = 0;
     if (args->count_match == 0)
         return;
     new_tokens = ft_calloc_g_c(ma->tok_count + args->count_match - 1, 
@@ -70,12 +73,13 @@ static void replace_token_with_expansion(t_ma *ma, int index, t_wcs_args *args)
     if (!new_tokens)
         return;
     ft_memcpy(new_tokens, ma->toks, index * sizeof(t_tok));
-    for (i = 0; i < args->count_match; i++)
+    while(i < args->count_match)
     {
         new_tokens[index + i].type = TOKEN_WORD;
         new_tokens[index + i].value = args->matches[i];
         new_tokens[index + i].start_pos = ma->toks[index].start_pos;
         new_tokens[index + i].end_pos = ma->toks[index].end_pos;
+        i++;
     }
     ft_memcpy(&new_tokens[index + args->count_match], &ma->toks[index + 1],
               (ma->tok_count - index - 1) * sizeof(t_tok));

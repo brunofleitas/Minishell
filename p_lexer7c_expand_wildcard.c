@@ -27,12 +27,12 @@ int expand_wildcard(t_wc_args *a, char *pattern, t_ma *ma)
     
     path_end = ft_strrchr(pattern, '/');
     if (path_end == NULL)
-        return process_directory(a, ".", pattern, ma);
+        return (process_directory(a, ".", pattern, ma));
     dir_path = ft_strndup_g_c(pattern, path_end - pattern, &(ma->first_node));
     if (!dir_path)
-        return 0;
+        return (0);
     path_end++;
-    return expand_wildcard_recursive(a, dir_path, path_end, ma);
+    return (expand_wildcard_recursive(a, dir_path, path_end, ma));
 }
 
 /**
@@ -59,19 +59,19 @@ static int expand_wildcard_recursive(t_wc_args *a, char *path, char *pattern, t_
 
     dir = opendir(path);
     if (!dir)
-        return 0;
+        return (0);
     while ((entry = readdir(dir)) != NULL)
     {
         if (entry->d_name[0] == '.' && (pattern[0] != '.' || pattern[1] != '*'))
             continue;
         if (!process_entry(a, path, entry->d_name, pattern, ma))
         {
-            result = 0;
+            result = (0);
             break;
         }
     }
     closedir(dir);
-    return result;
+    return (result);
 }
 
 /**
@@ -94,19 +94,19 @@ static int expand_wildcard_recursive(t_wc_args *a, char *path, char *pattern, t_
 static int process_entry(t_wc_args *a, char *path, char *entry_name, char *pattern, t_ma *ma)
 {
     char *full_path;
-    struct stat st;
+    struct stat (st);
 
     full_path = ft_strjoin_g_c(path, "/", &(ma->first_node));
     full_path = ft_strjoin_g_c(full_path, entry_name, &(ma->first_node));
     if (!full_path)
-        return 0;
+        return (0);
     if (stat(full_path, &st) != 0)
-        return 1;
+        return (1);
     if (S_ISDIR(st.st_mode) && match_pattern(entry_name, pattern))
         return expand_wildcard_recursive(a, full_path, "*", ma);
     else if (match_pattern(entry_name, pattern))
         return add_single_element(a, full_path, ma);
-    return 1;
+    return (1);
 }
 
 /**
@@ -146,5 +146,5 @@ static int process_directory(t_wc_args *a, char *dir_path, char *pattern, t_ma *
             }
     }
     closedir(dir);
-    return result;
+    return (result);
 }

@@ -10,7 +10,9 @@
  */
 static int handle_single_quote(char *input, int start, t_ma *ma)
 {
-    int end = start + 1;
+    int end;
+    
+    end = start + 1;
     while (input[end] && input[end] != '\'')
         end++;
     ma->toks[ma->tok_count] = (t_tok)
@@ -33,7 +35,9 @@ static int handle_single_quote(char *input, int start, t_ma *ma)
  */
 static int handle_double_quote(char *input, int start, t_ma *ma)
 {
-    int end = start + 1;
+    int end;
+    
+    end = start + 1;
     while (input[end] && input[end] != '"')
     {
         if (input[end] == '\\' && input[end + 1])
