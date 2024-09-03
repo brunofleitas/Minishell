@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:56:05 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/31 00:33:32 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/03 20:58:44 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,18 +66,18 @@ static int	add_env_var(char *var, t_ma *ma)
 	if (!new_var)
 	{
 		perror("realloc");
-		return (1);
+		return (0);
 	}
 	ma->env->var = new_var;
 	ma->env->var[ma->env->count] = ft_strdup_g_c(var, &(ma->first_env));
 	if (!(*ma->env->var[ma->env->count]))
 	{
 		write(2, "ft_strdup_g_c error\n", 20);
-		return (1);
+		return (0);
 	}
 	ma->env->count++;
 	ma->env->var[ma->env->count] = NULL;
-	return (0);
+	return (1);
 }
 
 void print_env(t_env *env)
@@ -98,7 +98,7 @@ void	builtin_export(char **words_arr, t_ma *ma)
 {
 	char	**words_cpy;
 	int		i;
-	char	*new_var_val;
+	// char	*new_var_val;
 
 	if (!words_arr[1])
 	{
@@ -110,33 +110,40 @@ void	builtin_export(char **words_arr, t_ma *ma)
 	words_cpy++;
 	while (*words_cpy)
 	{
-		new_var_val = *words_cpy;
-		if (!is_valid_var(new_var_val))
+		// new_var_val = *words_cpy;
+		// printf("export: %s\n", *words_cpy);
+		if (!is_valid_var(*words_cpy))
 		{
 			// write(2, " not a valid identifier", 23);
 			write(2, "minishell: export: `", 20);
-			write(2, new_var_val, ft_strlen(new_var_val));
-			write(2, "': not a valid identifier", 25);
-			//exit_or_setexit(0, 0, ma);
-			//return ;
+			write(2, *words_cpy, ft_strlen(*words_cpy));
+			write(2, "': not a valid identifier\n", 27);
+			// exit_or_setexit(0, 0, ma);
+			// return ;
 		}
-		i = find_env_var(&(ma->env), new_var_val);
-		if (i >= 0)
+		else 
 		{
-			if (!update_env_var(i, new_var_val, ma))
+			i = find_env_var(&(ma->env), *words_cpy);
+			if (i >= 0)
 			{
-				exit_or_setexit(0, 0, ma);
-				return ;
+				if (!update_env_var(i, *words_cpy, ma))
+				{
+					// printf("test update_env_var\n");
+					exit_or_setexit(0, 0, ma);
+					return ;
+				}
+			}
+			else if (i == -1)
+			{
+				if (!add_env_var(*words_cpy, ma))
+				{
+					printf("test add_env_var\n");
+					exit_or_setexit(0, 0, ma);
+					return ;
+				}
 			}
 		}
-		else
-		{
-			if (!add_env_var(new_var_val, ma))
-			{
-				exit_or_setexit(0, 0, ma);
-				return ;
-			}
-		}
+		// printf("export: %s\n", *words_cpy);
 		words_cpy++;
 	}
 	exit_or_setexit(0, 0, ma);

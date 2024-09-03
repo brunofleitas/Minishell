@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 01:47:55 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/31 02:08:23 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/03 21:30:54 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,11 +127,6 @@ static int validate_exit_args(char **args)
     int error;
     long long exit_code;
 
-    if (args[2] != NULL) {
-        ft_putstr_fd("minishell", 2);
-        ft_putstr_fd(": exit: too many arguments\n", 2);
-        return (1);
-    }
 	exit_code = ft_strtoll(args[1], &error);
 	if (is_number_argument(args[1]) && !checkoverflow(args[1]))
 		return((int)(exit_code % 256));
@@ -142,6 +137,11 @@ static int validate_exit_args(char **args)
         ft_putstr_fd(args[1], 2);
         ft_putstr_fd(": numeric argument required\n", 2);
         return (2);
+    }
+    if (args[2] != NULL) {
+        ft_putstr_fd("minishell", 2);
+        ft_putstr_fd(": exit: too many arguments\n", 2);
+        return (0);
     }
     return ((int)(exit_code % 256));
 }
@@ -166,5 +166,10 @@ void	builtin_exit(t_ma *ma, char **args)
 		{
 			clean_exit(exit_code, ma);
 		}
-	}
+        else
+        {
+            ma->last_exit_status = 1;
+            //exit_or_setexit(1,0, ma);
+        }
+    }
 }
