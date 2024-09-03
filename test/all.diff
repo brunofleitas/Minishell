@@ -1,157 +1,8 @@
-==> diffs/here_doc.diff <==
-diff of execution of:
-echo 'cat << EOF;hi;ha;ho;EOF' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:36.630527408 +0200
-+++ found	2024-09-03 21:47:36.660560706 +0200
-@@ -1,8 +1,11 @@
- hi
- ha
- ho
- 
- ======== stderr =======
--
-+[progname]: hi: command not found
-+[progname]: ha: command not found
-+[progname]: ho: command not found
-+[progname]: EOF: command not found
- ======== return =======
- return value: 0
-
-==> diffs/here_doc_multivar.diff <==
-diff of execution of:
-echo 'cat <<EOF; $PWD and $OLDPWD;ha;$PATH ;EOF' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:36.812729416 +0200
-+++ found	2024-09-03 21:47:36.837757165 +0200
-@@ -1,8 +1,11 @@
-- /home/bruno/Github42/Minishell/test/temp and /home/bruno/Github42/Minishell/test
-+ $PWD and $OLDPWD
- ha
--/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin 
-+$PATH 
- 
- ======== stderr =======
--
-+[progname]: /home/bruno/Github42/Minishell/test/temp: Is a directory
-+[progname]: ha: command not found
-+[progname]: /home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin: No such file or directory
-+[progname]: EOF: command not found
- ======== return =======
- return value: 0
-
-==> diffs/here_doc_quotes.diff <==
-diff of execution of:
-echo 'cat << EOF;\'$PWD\';EOF' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:36.752662820 +0200
-+++ found	2024-09-03 21:47:36.778691678 +0200
-@@ -1,6 +1,7 @@
--'/home/bruno/Github42/Minishell/test/temp'
-+'$PWD'
- 
- ======== stderr =======
--
-+[progname]: $PWD: command not found
-+[progname]: EOF: command not found
- ======== return =======
- return value: 0
-
-==> diffs/here_doc_status1.diff <==
-diff of execution of:
-echo 'cat << EOF;$?;EOF' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:36.911839300 +0200
-+++ found	2024-09-03 21:47:36.934864828 +0200
-@@ -1,6 +1,7 @@
--0
-+$?
- 
- ======== stderr =======
--
-+[progname]: 0: command not found
-+[progname]: EOF: command not found
- ======== return =======
- return value: 0
-
-==> diffs/here_doc_status2.diff <==
-diff of execution of:
-echo 'cat fail; cat << EOF;$?;EOF' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:36.966900346 +0200
-+++ found	2024-09-03 21:47:36.995932534 +0200
-@@ -1,6 +1,8 @@
--1
-+$?
- 
- ======== stderr =======
- [progname]: fail: No such file or directory
-+[progname]: 0: command not found
-+[progname]: EOF: command not found
- ======== return =======
- return value: 0
-
-==> diffs/here_doc_var.diff <==
-diff of execution of:
-echo 'cat << EOF;$PWD;EOF' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:36.697601774 +0200
-+++ found	2024-09-03 21:47:36.721628412 +0200
-@@ -1,6 +1,7 @@
--/home/bruno/Github42/Minishell/test/temp
-+$PWD
- 
- ======== stderr =======
--
-+[progname]: /home/bruno/Github42/Minishell/test/temp: Is a directory
-+[progname]: EOF: command not found
- ======== return =======
- return value: 0
-
-==> diffs/path_add_local.diff <==
-diff of execution of:
-echo 'export PATH=$PATH\':./\'; echo $PATH; infile' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:39.985830859 +0200
-+++ found	2024-09-03 21:47:40.012854801 +0200
-@@ -1,6 +1,6 @@
--/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:./
-+
- 
- ======== stderr =======
- [progname]: infile: Permission denied
- ======== return =======
- return value: 0
-
-==> diffs/path_empty_part.diff <==
-diff of execution of:
-echo 'export PATH=$PATH\':::::/hehe\'; echo $PATH; cat infile' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:40.335130919 +0200
-+++ found	2024-09-03 21:47:40.354147211 +0200
-@@ -1,8 +1,6 @@
--/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:::::/hehe
--infile content
--infile second line
- 
--======== stderr =======
- 
-+======== stderr =======
-+[progname]: cat: No such file or directory
- ======== return =======
- return value: 0
-
-==> diffs/path_empty_part_local.diff <==
-diff of execution of:
-echo 'export PATH=$PATH\':::::/hehe\'; echo $PATH; infile' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:40.392179797 +0200
-+++ found	2024-09-03 21:47:40.412196947 +0200
-@@ -1,6 +1,6 @@
--/home/bruno/.local/bin:/home/bruno/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:/home/bruno/.local/bin:::::/hehe
-+
- 
- ======== stderr =======
- [progname]: infile: Permission denied
- ======== return =======
- return value: 0
-
 ==> diffs/questionable_exec_dir.diff <==
 diff of execution of:
 echo 'export PATH="$PATH:$PWD"; mkdir asdfg; asdfg' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:42.628999104 +0200
-+++ found	2024-09-03 21:47:42.651016125 +0200
+--- expected	2024-09-03 23:56:49.038012465 +0200
++++ found	2024-09-03 23:56:49.062022367 +0200
 @@ -1,5 +1,6 @@
  
  ======== stderr =======
@@ -163,8 +14,8 @@ echo 'export PATH="$PATH:$PWD"; mkdir asdfg; asdfg' | tr ';' '\n' | [shell]
 ==> diffs/questionable_exec_dot.diff <==
 diff of execution of:
 echo '.' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:42.463871443 +0200
-+++ found	2024-09-03 21:47:42.484887691 +0200
+--- expected	2024-09-03 23:56:48.887950573 +0200
++++ found	2024-09-03 23:56:48.907958825 +0200
 @@ -1,6 +1,5 @@
  
  ======== stderr =======
@@ -177,8 +28,8 @@ echo '.' | tr ';' '\n' | [shell]
 ==> diffs/questionable_exec_dotdot.diff <==
 diff of execution of:
 echo '..' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:42.520915544 +0200
-+++ found	2024-09-03 21:47:42.543933339 +0200
+--- expected	2024-09-03 23:56:48.934969966 +0200
++++ found	2024-09-03 23:56:48.961981107 +0200
 @@ -1,5 +1,5 @@
  
  ======== stderr =======
@@ -190,8 +41,8 @@ echo '..' | tr ';' '\n' | [shell]
 ==> diffs/questionable_export.diff <==
 diff of execution of:
 echo 'export' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:42.103592910 +0200
-+++ found	2024-09-03 21:47:42.129613026 +0200
+--- expected	2024-09-03 23:56:48.440766127 +0200
++++ found	2024-09-03 23:56:48.461774792 +0200
 @@ -1,82 +1,82 @@
 -declare -x BAMF_DESKTOP_FILE_HINT="/var/lib/snapd/desktop/applications/code_code.desktop"
 -declare -x CHROME_DESKTOP="code-url-handler.desktop"
@@ -345,8 +196,8 @@ echo 'export' | tr ';' '\n' | [shell]
 +declare -x GIO_MODULE_DIR=/home/bruno/snap/code/common/.cache/gio-modules
 +declare -x GIO_LAUNCHED_DESKTOP_FILE_PID=2295
 +declare -x GIO_LAUNCHED_DESKTOP_FILE=/var/lib/snapd/desktop/applications/code_code.desktop
-+declare -x TERM_PROGRAM=vscode
 +declare -x OLDPWD=/home/bruno/Github42/Minishell/test
++declare -x TERM_PROGRAM=vscode
  
  ======== stderr =======
  
@@ -356,8 +207,8 @@ echo 'export' | tr ';' '\n' | [shell]
 ==> diffs/questionable_export_quotes.diff <==
 diff of execution of:
 echo 'export a=\'"quotes"\'; export' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:42.159636237 +0200
-+++ found	2024-09-03 21:47:42.180652485 +0200
+--- expected	2024-09-03 23:56:48.508794186 +0200
++++ found	2024-09-03 23:56:48.538806565 +0200
 @@ -1,83 +1,83 @@
 -declare -x BAMF_DESKTOP_FILE_HINT="/var/lib/snapd/desktop/applications/code_code.desktop"
 -declare -x CHROME_DESKTOP="code-url-handler.desktop"
@@ -512,8 +363,8 @@ echo 'export a=\'"quotes"\'; export' | tr ';' '\n' | [shell]
 +declare -x GIO_MODULE_DIR=/home/bruno/snap/code/common/.cache/gio-modules
 +declare -x GIO_LAUNCHED_DESKTOP_FILE_PID=2295
 +declare -x GIO_LAUNCHED_DESKTOP_FILE=/var/lib/snapd/desktop/applications/code_code.desktop
-+declare -x TERM_PROGRAM=vscode
 +declare -x OLDPWD=/home/bruno/Github42/Minishell/test
++declare -x TERM_PROGRAM=vscode
 +declare -x a="quotes"
  
  ======== stderr =======
@@ -524,8 +375,8 @@ echo 'export a=\'"quotes"\'; export' | tr ';' '\n' | [shell]
 ==> diffs/questionable_export_spaces1.diff <==
 diff of execution of:
 echo 'export a=\'    \'; echo $a' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:42.210675696 +0200
-+++ found	2024-09-03 21:47:42.231691944 +0200
+--- expected	2024-09-03 23:56:48.594829672 +0200
++++ found	2024-09-03 23:56:48.637847415 +0200
 @@ -1,6 +1,6 @@
 -
 +    
@@ -538,8 +389,8 @@ echo 'export a=\'    \'; echo $a' | tr ';' '\n' | [shell]
 ==> diffs/questionable_export_spaces2.diff <==
 diff of execution of:
 echo 'export a="a    b"; echo $a' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:42.259713608 +0200
-+++ found	2024-09-03 21:47:42.280729855 +0200
+--- expected	2024-09-03 23:56:48.682865984 +0200
++++ found	2024-09-03 23:56:48.714879187 +0200
 @@ -1,6 +1,6 @@
 -a b
 +a    b
@@ -552,8 +403,8 @@ echo 'export a="a    b"; echo $a' | tr ';' '\n' | [shell]
 ==> diffs/questionable_glob_order.diff <==
 diff of execution of:
 echo 'touch a b c A B C aa ab ac Aa Ab Ac aA aB aC; echo *' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:42.362793299 +0200
-+++ found	2024-09-03 21:47:42.384810320 +0200
+--- expected	2024-09-03 23:56:48.789910135 +0200
++++ found	2024-09-03 23:56:48.811919213 +0200
 @@ -1,6 +1,6 @@
 -a A aa aA Aa ab aB Ab ac aC Ac b B c C infile readonly
 +aC infile .. Aa B ac C A readonly Ab ab aB aa aA b c Ac a .
@@ -566,8 +417,8 @@ echo 'touch a b c A B C aa ab ac Aa Ab Ac aA aB aC; echo *' | tr ';' '\n' | [she
 ==> diffs/questionable_pwd_rmdir.diff <==
 diff of execution of:
 echo 'mkdir tmp; cd tmp; rmdir $PWD; pwd' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:42.731078022 +0200
-+++ found	2024-09-03 21:47:42.759099685 +0200
+--- expected	2024-09-03 23:56:49.155060735 +0200
++++ found	2024-09-03 23:56:49.185073112 +0200
 @@ -1,6 +1,5 @@
 -/home/bruno/Github42/Minishell/test/temp/tmp
  
@@ -581,8 +432,8 @@ echo 'mkdir tmp; cd tmp; rmdir $PWD; pwd' | tr ';' '\n' | [shell]
 ==> diffs/questionable_redir_ambiguous.diff <==
 diff of execution of:
 echo 'cat < *;' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:42.413832758 +0200
-+++ found	2024-09-03 21:47:42.434849006 +0200
+--- expected	2024-09-03 23:56:48.840931179 +0200
++++ found	2024-09-03 23:56:48.861939844 +0200
 @@ -1,5 +1,6 @@
  
  ======== stderr =======
@@ -591,72 +442,3 @@ echo 'cat < *;' | tr ';' '\n' | [shell]
 +[progname]: .: Is a directory
  ======== return =======
  return value: 1
-
-==> diffs/questionable_SHLVL.diff <==
-diff of execution of:
-echo 'echo $SHLVL' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:42.307750745 +0200
-+++ found	2024-09-03 21:47:42.329767767 +0200
-@@ -1,6 +1,6 @@
--3
-+2
- 
- ======== stderr =======
- 
- ======== return =======
- return value: 0
-
-==> diffs/redir_heredoc2.diff <==
-diff of execution of:
-echo 'grep o << EOF > out;hello;there;EOF; ls -l --time-style=+' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:36.569459702 +0200
-+++ found	2024-09-03 21:47:36.601495220 +0200
-@@ -1,9 +1,11 @@
- total 8
- -rw-rw-r-- 1 bruno bruno 34  infile
- -rw-rw-r-- 1 bruno bruno  6  out
- -r--r--r-- 1 bruno bruno  0  readonly
- 
- ======== stderr =======
--
-+[progname]: hello: command not found
-+[progname]: there: command not found
-+[progname]: EOF: command not found
- ======== return =======
- return value: 0
-
-==> diffs/redir_heredoc.diff <==
-diff of execution of:
-echo 'cat << EOF;hello;there;EOF' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:36.504387557 +0200
-+++ found	2024-09-03 21:47:36.529415305 +0200
-@@ -1,7 +1,9 @@
- hello
- there
- 
- ======== stderr =======
--
-+[progname]: hello: command not found
-+[progname]: there: command not found
-+[progname]: EOF: command not found
- ======== return =======
- return value: 0
-
-==> diffs/redir_multi_here.diff <==
-diff of execution of:
-echo 'cat <<EOF <<OH;i;am;here;EOF;oh;OH' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:38.333291819 +0200
-+++ found	2024-09-03 21:47:38.360317927 +0200
-@@ -1,6 +1,11 @@
- oh
- 
- ======== stderr =======
--
-+[progname]: i: command not found
-+[progname]: am: command not found
-+[progname]: here: command not found
-+[progname]: EOF: command not found
-+[progname]: oh: command not found
-+[progname]: OH: command not found
- ======== return =======
- return value: 0

@@ -61,6 +61,7 @@ int	main(int argc, char **argv, char **envp)
 	ma.env = duplicate_vars(&(ma.first_env), envp);
 	ma.saved_stdin = dup(STDIN_FILENO);
     ma.saved_stdout = dup(STDOUT_FILENO);
+	update_env_var(find_env_var(&(ma.env), "SHLVL"), "SHLVL=3", &ma);
 	while (1)
 	{
 		signal(SIGINT, sigint_handler);

@@ -1,7 +1,7 @@
 diff of execution of:
 echo 'export' | tr ';' '\n' | [shell]
---- expected	2024-09-03 21:47:42.103592910 +0200
-+++ found	2024-09-03 21:47:42.129613026 +0200
+--- expected	2024-09-03 23:56:48.440766127 +0200
++++ found	2024-09-03 23:56:48.461774792 +0200
 @@ -1,82 +1,82 @@
 -declare -x BAMF_DESKTOP_FILE_HINT="/var/lib/snapd/desktop/applications/code_code.desktop"
 -declare -x CHROME_DESKTOP="code-url-handler.desktop"
@@ -155,8 +155,8 @@ echo 'export' | tr ';' '\n' | [shell]
 +declare -x GIO_MODULE_DIR=/home/bruno/snap/code/common/.cache/gio-modules
 +declare -x GIO_LAUNCHED_DESKTOP_FILE_PID=2295
 +declare -x GIO_LAUNCHED_DESKTOP_FILE=/var/lib/snapd/desktop/applications/code_code.desktop
-+declare -x TERM_PROGRAM=vscode
 +declare -x OLDPWD=/home/bruno/Github42/Minishell/test
++declare -x TERM_PROGRAM=vscode
  
  ======== stderr =======
  
