@@ -51,7 +51,7 @@ static int handle_variable(char *input, int start, t_ma *ma)
     var_name = ft_substr_g_c(input, start + 1, end - start - 1, &(ma->first_node));
     var_value = getenv(var_name);//this should be replace by the function looking in env
     handle_variable_util(var_value, start, end, ma);
-    free(var_name);
+    free_ntc_prior(&(ma->first_node), var_name);
     return (end - 1);
 }
 

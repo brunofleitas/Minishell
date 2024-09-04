@@ -47,7 +47,7 @@ static int handle_double_quote(char *input, int start, t_ma *ma)
     ma->toks[ma->tok_count] = (t_tok)
     {
         .type = TOKEN_QUOTE,
-        .value = ft_substr(input, start + 1, end - start - 1),
+        .value = ft_substr_g_c(input, start + 1, end - start - 1, &(ma->first_node)),
         .start_pos = start,
         .end_pos = end
     };
@@ -70,14 +70,14 @@ void handle_quotes_and_escapes(char *input, int start, t_ma *ma)
         // If a single quote is encountered
         if (input[start] == '\'')
         {
-            ma->tok_count++;
             start = handle_single_quote(input, start, ma);
+            ma->tok_count++;
         }
         // If a double quote is encountered
         else if (input[start] == '"')
         {
-            ma->tok_count++;
             start = handle_double_quote(input, start, ma);
+            ma->tok_count++;
         }
         // If a backslash is encountered
         else if (input[start] == '\\' && input[start + 1])

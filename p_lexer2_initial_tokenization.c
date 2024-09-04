@@ -60,7 +60,7 @@ static int handle_special_char(char *input, int start, t_ma *ma)
         .start_pos = start,
         .end_pos = start
     };
-    return start;
+    return (start);
 }
 
 /**
@@ -82,13 +82,13 @@ void initial_tokenization(char *input, int start, t_ma *ma)
             start++;
         else if (is_special_char(input[start]))
         {
-            ma->tok_count++;
             start = handle_special_char(input, start, ma);
+            ma->tok_count++;
         }
         else
         {            
-            ma->tok_count++;
             start = handle_word(input, start, ma);
+            ma->tok_count++;
         }        
         start++;
     }
