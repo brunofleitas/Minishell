@@ -143,9 +143,14 @@ static char *give_tmp_name(t_ma *ma)
  * @param temp_file_name  The name of the temporary file.
  * @return                Returns 0 on success, -1 on failure.
  */
-static int write_to_tmp_file(int fd, const char *delimiter)
+static int write_to_tmp_file(int fd, const char *delimiter, t_ma *ma)
 {
     char *line;
+    int i;
+    int len;
+    int var_len;
+    char *temp;
+    char *env_value;
 
     while (1)
     {
@@ -157,11 +162,35 @@ static int write_to_tmp_file(int fd, const char *delimiter)
         }
         if (ft_strcmp(line, delimiter) == 0)
             break;
-        if (write(fd, line, ft_strlen(line)) == -1 || write(fd, "\n", 1) == -1)
+        len = ft_strlen(line);
+        i = 0;
+        while (i < len)
         {
-            // perror(" ");
-            return (0);
+            if (line[i] == '$' && line[i + 1] == '?')
+            {
+                write(fd, ft_itoa_g_c(ma->last_exit_status, &(ma->first_node)), ft_strlen(ft_itoa_g_c(ma->last_exit_status, &(ma->first_node))));
+                i += 2;
+            }
+            else if (line[i] == '$' && ((ft_isalnum(line[i + 1])) || line[i + 1] == '_')) 
+            {
+                var_len = 0;
+                while (line[i + var_len + 1] && ((ft_isalnum(line[i + var_len + 1]) || line[i + var_len + 1] == '_')))
+                    var_len++;
+                temp = ft_substr_g_c(line + i + 1, 0, var_len, &(ma->first_node)); // Corrected line
+                env_value = get_env(temp, ma->env->var);
+                if (env_value)
+                {
+                    write(fd, env_value, ft_strlen(env_value));
+                }
+                i += var_len + 1;
+            }
+            else
+            {
+                write(fd, &line[i], 1); // Corrected line
+                i++;
+            }
         }
+        write(fd, "\n", 1);
     }
     return (1);
 }
@@ -173,7 +202,7 @@ static int write_to_tmp_file(int fd, const char *delimiter)
  * @param delimiter The delimiter to write to the temporary file.
  * @return 0 if the temporary file is created and written successfully, -1 otherwise.
  */
-static int create_tmp_file(const char *temp_file_name, const char *delimiter)
+static int create_tmp_file(const char *temp_file_name, const char *delimiter, t_ma *ma)
 {
     int fd;
 
@@ -183,13 +212,31 @@ static int create_tmp_file(const char *temp_file_name, const char *delimiter)
         // perror(" ");
         return (0);
     }
-    if (!write_to_tmp_file(fd, delimiter))
+    if (!write_to_tmp_file(fd, delimiter, ma))
     {
         close(fd);
         unlink(temp_file_name);
         return (0);
     }
-    close(fd);
+
+    close(fd);  // Close the file descriptor after writing
+
+    // Reopen the file in read mode for input redirection
+    fd = open(temp_file_name, O_RDONLY);
+    if (fd == -1)
+    {
+        // perror(" ");
+        return (0);
+    }
+
+    // Now, redirect stdin to the temp file
+    if (dup2(fd, STDIN_FILENO) == -1)
+    {
+        close(fd);
+        return(0);
+    }
+    close(fd);  // Close the fd as it's now duplicated to stdin
+
     return (1);
 }
 
@@ -208,7 +255,7 @@ static int handle_heredoc(const char *delimiter, t_s_cmd_args *a, t_ma *ma)
     temp_file_name = give_tmp_name(ma);
     if (!temp_file_name)
         return(0);
-    if (!create_tmp_file(temp_file_name, delimiter))
+    if (!create_tmp_file(temp_file_name, delimiter, ma))
         return (0);
     redirect_input(temp_file_name, a, ma);
     if (unlink(temp_file_name) == -1)

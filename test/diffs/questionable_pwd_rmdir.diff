@@ -1,7 +1,7 @@
 diff of execution of:
 echo 'mkdir tmp; cd tmp; rmdir $PWD; pwd' | tr ';' '\n' | [shell]
---- expected	2024-09-03 23:56:49.155060735 +0200
-+++ found	2024-09-03 23:56:49.185073112 +0200
+--- expected	2024-09-04 10:39:22.035248335 +0200
++++ found	2024-09-04 10:39:22.056272139 +0200
 @@ -1,6 +1,5 @@
 -/home/bruno/Github42/Minishell/test/temp/tmp
  
