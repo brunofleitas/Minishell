@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:56:05 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/03 20:58:44 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/05 15:28:47 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,19 +80,94 @@ static int	add_env_var(char *var, t_ma *ma)
 	return (1);
 }
 
+// void print_env(t_env *env)
+// {
+// 	int i;
+
+// 	i = 0;
+// 	while (i < env->count)
+// 	{
+// 		write(1, "declare -x ", 11);
+// 		write(1, env->var[i], ft_strlen(env->var[i]));
+// 		write(1, "\n", 1);
+// 		i++;
+// 	}
+// }
+
+#include <stdlib.h>
+
+// Function to swap two environment variables
+void swap(char **a, char **b)
+{
+    char *temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
 void print_env(t_env *env)
 {
-	int i;
+    int i;
+    int j;
+    int sorted;
+    char **sorted_env;
+	int len;
 
-	i = 0;
-	while (i < env->count)
-	{
-		write(1, "declare -x ", 11);
-		write(1, env->var[i], ft_strlen(env->var[i]));
-		write(1, "\n", 1);
-		i++;
-	}
+    sorted_env = (char **)malloc(sizeof(char *) * env->count);
+    if (!sorted_env)
+        return;
+    i = 0;
+    while (i < env->count)
+    {
+        sorted_env[i] = env->var[i];
+        i++;
+    }
+    i = 0;
+    sorted = 0;
+    while (i < env->count - 1)
+    {
+        j = 0;
+        while (j < env->count - i - 1)
+        {
+            if (ft_strcmp(sorted_env[j], sorted_env[j + 1]) > 0)
+            {
+                swap(&sorted_env[j], &sorted_env[j + 1]);
+                sorted = 1;
+            }
+            j++;
+        }
+        if (!sorted)
+            break;
+        i++;
+    }
+    i = 0;
+    while (i < env->count)
+    {
+		len = 0;
+        write(1, "declare -x ", 11);
+		while (sorted_env[i][len] && sorted_env[i][len] != '=')
+			len++;
+        write(1, sorted_env[i], len);
+		if (sorted_env[i][len] == '=')
+        {
+            write(1, "=", 1);
+            len++;
+            write(1, "\"", 1);
+			int k = len;
+            while (sorted_env[i][k])
+            {
+                if (sorted_env[i][k] == '"')
+                    write(1, "\\", 1);
+                write(1, &sorted_env[i][k], 1);
+                k++;
+            }
+            write(1, "\"", 1);
+        }
+        write(1, "\n", 1);
+        i++;
+    }
+    free(sorted_env);
 }
+
 
 void	builtin_export(char **words_arr, t_ma *ma)
 {
@@ -110,16 +185,11 @@ void	builtin_export(char **words_arr, t_ma *ma)
 	words_cpy++;
 	while (*words_cpy)
 	{
-		// new_var_val = *words_cpy;
-		// printf("export: %s\n", *words_cpy);
 		if (!is_valid_var(*words_cpy))
 		{
-			// write(2, " not a valid identifier", 23);
 			write(2, "minishell: export: `", 20);
 			write(2, *words_cpy, ft_strlen(*words_cpy));
 			write(2, "': not a valid identifier\n", 27);
-			// exit_or_setexit(0, 0, ma);
-			// return ;
 		}
 		else 
 		{
@@ -128,7 +198,6 @@ void	builtin_export(char **words_arr, t_ma *ma)
 			{
 				if (!update_env_var(i, *words_cpy, ma))
 				{
-					// printf("test update_env_var\n");
 					exit_or_setexit(0, 0, ma);
 					return ;
 				}
@@ -143,7 +212,6 @@ void	builtin_export(char **words_arr, t_ma *ma)
 				}
 			}
 		}
-		// printf("export: %s\n", *words_cpy);
 		words_cpy++;
 	}
 	exit_or_setexit(0, 0, ma);

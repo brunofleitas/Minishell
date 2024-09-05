@@ -1,3 +1,11 @@
+char	*gnl(int fd);
+#include <unistd.h>
+char	*gnl(int fd);
+#include <unistd.h>
+char	*gnl(int fd);
+#include <unistd.h>
+char	*gnl(int fd);
+#include <unistd.h>
 
 char	*gnl(int fd);
 #include <unistd.h>
@@ -152,9 +160,12 @@ static int write_to_tmp_file(int fd, const char *delimiter, t_ma *ma)
     char *temp;
     char *env_value;
 
-    while (1)
+//write (1, "heredoc> ", 9);
+        line = gnl(0);
+    while (ft_strcmp(line, delimiter) != 0)
     {
-        line = !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : readline(" heredoc>");
+        //line = !isatty(0) ? gnl(0) : readline(" heredoc>");
+        
         if (!line)
         {
             // perror(" ");
@@ -191,6 +202,8 @@ static int write_to_tmp_file(int fd, const char *delimiter, t_ma *ma)
             }
         }
         write(fd, "\n", 1);
+        //write (1, "heredoc> ", 9);
+        line = gnl(0);
     }
     return (1);
 }
@@ -206,7 +219,7 @@ static int create_tmp_file(const char *temp_file_name, const char *delimiter, t_
 {
     int fd;
 
-    fd = open(temp_file_name, O_RDWR | O_CREAT | O_EXCL, 0600);
+    fd = open(temp_file_name, O_WRONLY | O_CREAT | O_TRUNC, 0600);
     if (fd == -1)
     {
         // perror(" ");
@@ -317,7 +330,6 @@ int handle_redirections(t_astnode *redir_node, t_s_cmd_args *a, t_ma *ma)
                 {
                     restore_io(ma);
                     exit_or_setexit(1, 0, ma);
-                    return (0);
                 }
             }
         redir_node = redir_node->data.redirection.next;
