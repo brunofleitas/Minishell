@@ -190,6 +190,7 @@ typedef struct  s_main_args
     int         in_child_p;
     int         saved_stdin;
     int         saved_stdout;
+    int         saved_stderr;
     int         delimiter;
 }               t_ma;
 /* ************************************************************************** */
@@ -287,5 +288,7 @@ int             update_env_variables(char *current_dir, t_ma *ma);
 int             get_env_var(t_env **env, const char *name, char **value);
 int             update_oldpwd(char *current_dir, t_ma *ma);
 int             update_pwd(t_ma *ma);
+void            close_heredoc(char ***delimiters_h, int *heredoc_f, t_ma *ma);
+void            heredoc_checker(char ***delimiters_h, int *heredoc_f, t_ma *ma);
 
 #endif

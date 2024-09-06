@@ -1,18 +1,3 @@
-#include <unistd.h>
-char	*gnl(int fd);
-#include <unistd.h>
-#include <unistd.h>
-char	*gnl(int fd);
-#include <unistd.h>
-#include <unistd.h>
-char	*gnl(int fd);
-#include <unistd.h>
-#include <unistd.h>
-char	*gnl(int fd);
-#include <unistd.h>
-#include <unistd.h>
-char	*gnl(int fd);
-#include <unistd.h>
 
 char	*gnl(int fd);
 #include <unistd.h>
@@ -27,8 +12,6 @@ char	*gnl(int fd);
 /*   Updated: 2024/08/27 17:03:59 by bruno            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "minishell.h"
 
 #include "minishell.h"
 
@@ -63,6 +46,25 @@ int	main(int argc, char **argv, char **envp)
 	t_ma 		ma;
 	t_astnode 	*root;
 	
+	int			fix_stdin;
+	int			fix_stdout;
+	int			fix_stderr;
+	// int			isatty_flag = isatty(0);
+	// ft_putnbr_fd(isatty_flag, 2);
+	// ft_putnbr_fd(isatty(0), 2);
+	// if (isatty(0))
+	// {
+		fix_stdin = dup(STDIN_FILENO);
+    	fix_stdout = dup(STDOUT_FILENO);
+		fix_stderr = dup(STDERR_FILENO);
+	// }
+	// ft_putnbr_fd(isatty(0), 2);
+
+	char        **delimiters_h;
+	int			heredoc_f;
+
+
+	heredoc_f = 0;
 	(void)argc;
 	ma.first_node = NULL;
 	ma.first_env = NULL;
@@ -73,106 +75,53 @@ int	main(int argc, char **argv, char **envp)
 	ma.last_exit_status = 0;
 	ma.in_child_p = 0;
 	ma.env = duplicate_vars(&(ma.first_env), envp);
-	ma.saved_stdin = dup(STDIN_FILENO);
-    ma.saved_stdout = dup(STDOUT_FILENO);
+	// ft_putnbr_fd(isatty(0), 2);
 	update_env_var(find_env_var(&(ma.env), "SHLVL"), "SHLVL=3", &ma);
 	while (1)
 	{
+		// ft_putnbr_fd(isatty(0), 2);
+		// if (isatty(0))
+		// {
+			ma.saved_stdin = fix_stdin;
+			ma.saved_stdout =  fix_stdout;
+			ma.saved_stderr =  fix_stderr;
+		// }
+		// ma.saved_stdin = fix_stdin;
+    	// ma.saved_stdout =  fix_stdout;
+		// ma.saved_stderr =  fix_stderr;
+		// pid_t main_pid = getpid();
+		// if(!ma.in_child_p)
+		// 	write(2, "minishell: parent_main_pid: ", 27);
+		// else
+		// 	write(2, "minishell: child_main_pid: ", 26);
+		// ft_putnbr_fd(main_pid, 2);
+		// write(2, "\n", 1);
+
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, SIG_IGN);
-		// ma.input = !isatty(0) ? NULL : !isatty(0) ? gnl(0) : readline("minisshell>>");
-		ma.input = !isatty(0) ? gnl(0) : readline("minishell>>");
+		// int isatty_flag = !isatty(0);
+		// ft_putnbr_fd(isatty_flag, 2);
+		ma.input = !isatty(0) ? gnl(0) : readline("minisshell>>");
+		// ft_putnbr_fd(heredoc_f, 1);
+		if(!isatty(0) && heredoc_f)
+		{
+			close_heredoc(&delimiters_h, &heredoc_f, &ma);
+			continue;
+		}
 
-		// int red_flag = 0;
-		// char *tmp = ft_strnstr(ma.input, "<<", ft_strlen(ma.input));
-		// if (tmp != NULL)
-		// {
-		// 	char *tmp2 = ft_strnstr(tmp + 2, "<", ft_strlen(tmp));
-		// 	if (tmp2 == NULL)
-		// 		red_flag = 1;
-		// }
-
-    	// int red_flag = 0;
-    	// int i = 0;
-    	// while (ma.input[i] != '\0')
-		// {
-    	//     if (ma.input[i] == '<' && ma.input[i+1] == '<')
-		// 	{
-		// 		char *delimiter;
-		// 		while (ma.input[i] != '\0' && ma.input[i] != ' ')
-		// 			i++;
-				
-    	//         int j = i + 2;
-    	//         int single_arrow_found = 0;
-    	//         while (ma.input[j] != '\0')
-		// 		{
-    	//             if (ma.input[j] == '<' && ma.input[j+1] != '<')
-		// 			{
-    	//                 single_arrow_found = 1;
-    	//                 break;
-    	//             }
-    	//             j++;
-    	//         }
-    	//         if (!single_arrow_found)
-    	//             red_flag = 1;
-    	//         break;
-    	//     }
-    	//     i++;
-		// }
-
-		// if (!isatty(0))
-		// {
-		// 		ma.input = gnl(0);
-		// }
-		// else 
-		// {
-			
-		// 	ma.input = gnl(0);
-		// 	// continue;
-		// 	//ma.input = readline("minishell>>");
-		// // }			
-		// int flag = 0;
-		// char *delimiter = NULL;
-		//int flag_out = 0;
+		// write(2, ma.input, ft_strlen(ma.input));
+		// write(2, "\n", 1);
 		if (ma.input == NULL)
         	builtin_exit(&ma, NULL);
 		if (ft_strcmp(ma.input, "") != 0)
 		{
 			!isatty(0) ? 0 : add_history(ma.input);
 			lexer(&ma);
-			// t_token		*tmp[1024];
-			// int i = 0;
-			// while (ma.tkns[i] != NULL)
-			// {
-			// 	tmp[i] = ma.tkns[i];
-			// 	i++;
-			// }
-			// i = 0;
-			// while (tmp[i] != NULL)
-			// {
-			// 	if (tmp[i]->type == TOKEN_HEREDOC)
-			// 	{
-			// 		flag = 1;
-			// 		// delimiter = tmp[i]->value;
-			// 		i++;
-			// 		while (tmp[i] != NULL)
-			// 		{
-			// 			if (tmp[i]->type == TOKEN_REDIR_IN)
-			// 			{
-			// 				flag = 0;
-			// 				break;
-			// 			}
-			// 			// if (tmp[i]->type == TOKEN_REDIR_OUT || tmp[i]->type == TOKEN_REDIR_APPEND)
-			// 			// {
-			// 			// 	//flag_out = 1;
-			// 			// 	flag = 0;
-			// 			// 	break;
-			// 			// }
-			// 			i++;
-			// 		}
-			// 	}
-			// 	i++;
-			// }
+			// ft_putnbr_fd(isatty(0), 2);
+			if(!isatty(0))
+				heredoc_checker(&delimiters_h, &heredoc_f, &ma);
+			// ft_putnbr_fd(heredoc_f, 2);
+			// write(2, "\n", 1);
 			if (ma.tkns[0] != NULL)
 			{	
 				//get_next_token(&ma);
@@ -188,14 +137,9 @@ int	main(int argc, char **argv, char **envp)
 			}
 			free_memory(&(ma.first_node));
 		}
+		// write(2, "1 loop finished\n", 16);
+		// if (isatty_flag)
 		restore_io(&ma);
-		
-		// if (flag == 1 && !isatty(0))
-		// {	
-		// 		exit(1);
-		// }
-		// if (ft_strncmp(ma.input, delimiter, ft_strlen(delimiter)) == 0)
-		// 		return (0);
 	}
 	// free_memory(&(ma.first_env));
 	// clear_history();
@@ -248,4 +192,10 @@ int	main(int argc, char **argv, char **envp)
  * of operators, command grouping, and redirections in a way that respects the 
  * intended precedence and associativity of operations.
  */
+
+
+
+void __attribute__((destructor)) free_gnl_buffer();
+
+void free_gnl_buffer() { gnl(-1); }
 

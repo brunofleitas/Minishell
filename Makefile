@@ -37,6 +37,7 @@ SRCS 	= 01-main.c \
 		  30-wc_expension_utils.c\
 		  31-wc_match_pattern.c\
 		  32-restore_io.c \
+		  33-handle_heredoc.c\
 		  get_next_line.c
 
 SRCSB 	= 01-main.c \
