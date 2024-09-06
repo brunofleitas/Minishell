@@ -87,22 +87,118 @@ static char *find_command_path(char *cmd, t_env **env, int *p_ue, t_ntc **first_
     }
     paths = ft_split(path_env, ':', first_node);  // Assuming ft_split exists
     i = 0;
+    // int permission_flag = 0;
     while (paths[i])
     {
         cmd_path = join_path(paths[i], cmd, first_node);
-        if (access(cmd_path, X_OK) == 0)
+        if (access(cmd_path, F_OK) == 0)
         {
+            if (access(cmd_path, X_OK) == 0)
+            {
             //free(paths);  // Free the paths array
-            return (cmd_path); // Found the command
+                return (cmd_path); // Found the command
+            }
+            else
+            {
+                write (2, "minishell: ", 11);
+                write (2, cmd, ft_strlen(cmd));
+                write (2, ": Permission denied", 19);
+                exit(126);
+            }
         }
-        //free(cmd_path);
         i++;
     }
+    // if (permission_flag)
+    // {
+    //     // write (2, "minishell: ", 11);
+    //     // write (2, cmd, ft_strlen(cmd));
+    //     // write (2, ": Permission denied", 20);
+    //     // exit(126);
+    // }
     //free(paths);  // Free the paths array
     return (NULL); // Command not found or path was not set, if the path was unset then the shell checks if the command that was not found is a file in the current directory.
 }
 
 void execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
+{
+    char *command_path;
+    struct stat path_stat;
+    int p_ue; // flag added to check if path was unset or empty
+    p_ue = 0;
+    command_path = NULL;
+
+    if (words_arr == NULL || words_arr[0] == NULL || words_arr[0][0] == '\0')
+    {
+        exit(0); // Return 0 for an empty command
+    }
+
+    if (words_arr[0][0] == '/' || words_arr[0][0] == '.' || words_arr[0][0] == '~')
+        command_path = ft_strdup_g_c(words_arr[0], first_node);
+    else
+        command_path = find_command_path(words_arr[0], env, &p_ue, first_node);
+    if (access(words_arr[0], F_OK) == 0)
+    {
+        if (!access(words_arr[0], X_OK) == 0)
+        {
+            write(2, "minishell: ", 11);
+            write(2, words_arr[0], ft_strlen(words_arr[0]));
+            write(2, ": Permission denied\n", 20);
+            exit(126);
+        }
+    }
+    
+    // printf("command_path: %s\n", command_path);
+    if (p_ue)
+    {
+        if (access(words_arr[0], F_OK) != 0)
+        {
+            write(2, "minishell: ", 11);
+            write(2, words_arr[0], ft_strlen(words_arr[0]));
+            write(2, ": No such file or directory\n", 28);
+            exit(127); // Return 127 for "No such file or directory"
+        }
+        else if (access(words_arr[0], X_OK) != 0)
+        {
+            write(2, "minishell: ", 11);
+            write(2, words_arr[0], ft_strlen(words_arr[0]));
+            write(2, ": Permission denied\n", 20);
+            exit(126); // Return 126 for "Permission denied"
+        }
+    }
+    else if (!command_path)
+    {
+        write(2, "minishell: ", 11);
+        write(2, words_arr[0], ft_strlen(words_arr[0]));
+        write(2, ": command not found\n", 20);
+        exit(127); // Return 127 if the command was not found
+    }
+    else if (stat(command_path, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
+    {
+        write(2, "minishell: ", 11);
+        write(2, command_path, ft_strlen(command_path));
+        write(2, ": Is a directory\n", 17);
+        exit(126); // Return 126 if the path is a directory
+    }
+    else if (access(command_path, F_OK) != 0)
+    {
+        write(2, "minishell: ", 11);
+        write(2, command_path, ft_strlen(command_path));
+        write(2, ": No such file or directory\n", 28);
+        exit(127); // Return 127 for "No such file or directory"
+    }
+    else if (access(command_path, X_OK) != 0)
+    {
+        write(2, "minishell: ", 11);
+        write(2, command_path, ft_strlen(command_path));
+        write(2, ": Permission denied\n", 20);
+        exit(126); // Return 126 for "Permission denied"
+    }
+
+    exit(execve(command_path, words_arr, (*env)->var));
+}
+
+
+/* void execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
 {
     // pid_t pid;
     char *command_path;
@@ -195,3 +291,4 @@ void execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
     exit(execve(command_path, words_arr, (*env)->var));
     
 }
+ */

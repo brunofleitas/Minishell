@@ -173,6 +173,7 @@ static void execute_words_arr(char **words_arr, t_ma *ma)
         // write(1, "executing external command\n", 27);
         // printf("executing external command\n");
         execute_external_cmd(words_arr, &(ma)->env, &(ma)->first_node);
+        dup2(ma->saved_stdin, STDIN_FILENO);
         return;
     }
 }

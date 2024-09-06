@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:07:23 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/30 01:15:52 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/06 18:26:58 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,22 @@ void execute_pipeline(t_astnode *node, t_ma *ma)
     i = 0;
     a.input_fd = STDIN_FILENO;
     // original_stdout = dup(STDOUT_FILENO);
+    
+    // t_astnode *temp = node->data.pipeline.cmds[0]->data.simple_cmd.redirections;
+    // ma->delimiter = NULL;//ft_strdup_g_c("", &(ma->first_node));
+    // while (temp)
+    // {
+    //     if (ma->delimiter && ft_strncmp(temp->data.redirection.file, ma->delimiter, ft_strlen(ma->delimiter)) == 0)
+    //         ma->flag = 2;
+    //     if (temp->data.redirection.type == TOKEN_HEREDOC)
+    //     {
+    //         ma->delimiter = temp->data.redirection.file;
+    //         ma->flag = 1;
+    //     }
+    //     if (ma->flag == 1 && temp->data.redirection.type == TOKEN_REDIR_IN && temp->data.redirection.type == TOKEN_HEREDOC)
+    //     temp = temp->data.redirection.next;
+    // }
+
     if (node->data.pipeline.cmd_count == 1 && 
     (node->data.pipeline.cmds[0]->data.simple_cmd.words && (node->data.pipeline.cmds[0]->data.simple_cmd.words[0].data.word.type == TOKEN_BUILTIN)))//added here a sef\g fault check
     {

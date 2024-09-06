@@ -92,6 +92,7 @@ $(NAME): $(OBJS) $(LIBFT)
 	cc get_next_line.c -c
 	cc get_next_line.c -c
 	cc get_next_line.c -c
+	cc get_next_line.c -c
 	$(CC) $(CFLAGS) $(OBJS) $(LIBRARIES) -o $(NAME) $(LDFLAGS)
 
 $(BONUS): $(OBJSB) $(LIBFT)

@@ -190,6 +190,7 @@ typedef struct  s_main_args
     int         in_child_p;
     int         saved_stdin;
     int         saved_stdout;
+    int         delimiter;
 }               t_ma;
 /* ************************************************************************** */
 /*                                   AST EXECUTION                            */

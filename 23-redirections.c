@@ -6,6 +6,8 @@ char	*gnl(int fd);
 #include <unistd.h>
 char	*gnl(int fd);
 #include <unistd.h>
+char	*gnl(int fd);
+#include <unistd.h>
 
 char	*gnl(int fd);
 #include <unistd.h>
@@ -164,7 +166,7 @@ static int write_to_tmp_file(int fd, const char *delimiter, t_ma *ma)
         line = gnl(0);
     while (ft_strcmp(line, delimiter) != 0)
     {
-        //line = !isatty(0) ? gnl(0) : readline(" heredoc>");
+        //line = !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : readline(" heredoc>");
         
         if (!line)
         {
@@ -232,24 +234,7 @@ static int create_tmp_file(const char *temp_file_name, const char *delimiter, t_
         return (0);
     }
 
-    close(fd);  // Close the file descriptor after writing
-
-    // Reopen the file in read mode for input redirection
-    fd = open(temp_file_name, O_RDONLY);
-    if (fd == -1)
-    {
-        // perror(" ");
-        return (0);
-    }
-
-    // Now, redirect stdin to the temp file
-    if (dup2(fd, STDIN_FILENO) == -1)
-    {
-        close(fd);
-        return(0);
-    }
-    close(fd);  // Close the fd as it's now duplicated to stdin
-
+    close(fd);
     return (1);
 }
 
@@ -273,9 +258,69 @@ static int handle_heredoc(const char *delimiter, t_s_cmd_args *a, t_ma *ma)
     redirect_input(temp_file_name, a, ma);
     if (unlink(temp_file_name) == -1)
         return (0);
-    printf("\n");
     return (1);
 }
+
+/* #include <unistd.h>
+#include <stdio.h>
+#include <sys/wait.h>
+#include <stdlib.h>
+
+static int handle_heredoc(const char *delimiter, t_s_cmd_args *a, t_ma *ma)
+{
+    char *temp_file_name;
+    pid_t pid;
+    int status;
+
+    // Verificamos si es necesario el fork
+    if (!isatty(0))
+    {
+        pid = fork();
+        if (pid < 0)
+        {
+            perror("fork failed");
+            return 0;
+        }
+        else if (pid == 0) // Proceso hijo
+        {
+            // Lógica de manejo de heredoc en el proceso hijo
+            temp_file_name = give_tmp_name(ma);
+            if (!temp_file_name)
+                exit(EXIT_FAILURE);  // Salimos si fallamos en dar un nombre al archivo temporal
+            if (!create_tmp_file(temp_file_name, delimiter, ma))
+                exit(EXIT_FAILURE);  // Salimos si fallamos en crear el archivo temporal
+            if (!redirect_input(temp_file_name, a, ma))
+                exit(EXIT_FAILURE);  // Salimos si falla la redirección
+            if (unlink(temp_file_name) == -1) // Eliminamos el archivo temporal
+                exit(EXIT_FAILURE);  // Salimos si no podemos eliminar el archivo temporal
+            exit(EXIT_SUCCESS);  // El proceso hijo termina con éxito
+        }
+        else // Proceso padre
+        {
+            // El proceso padre espera que el hijo termine
+            waitpid(pid, &status, 0);
+            if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
+                return 1; // Éxito en el proceso hijo
+            else
+                return 0; // Fallo en el proceso hijo
+        }
+    }
+    else
+    {
+        // Si isatty(0) es verdadero, ejecutamos la lógica heredoc en el proceso principal
+        temp_file_name = give_tmp_name(ma);
+        if (!temp_file_name)
+            return 0;
+        if (!create_tmp_file(temp_file_name, delimiter, ma))
+            return 0;
+        if (!redirect_input(temp_file_name, a, ma))
+            return 0;
+        if (unlink(temp_file_name) == -1)
+            return 0;
+        return 1;
+    }
+} */
+
 
 /**
  * Exits the shell if the given error code is non-zero.
@@ -286,6 +331,7 @@ static int handle_heredoc(const char *delimiter, t_s_cmd_args *a, t_ma *ma)
  */
 void exit_or_setexit(int e, int e_throw_err, t_ma *ma)
 {
+    (void)e_throw_err;
     if (!e)
     {
         if (ma->in_child_p)
@@ -325,11 +371,16 @@ int handle_redirections(t_astnode *redir_node, t_s_cmd_args *a, t_ma *ma)
             {
                 if ((redir_node->data.redirection.type == TOKEN_REDIR_IN  || 
                 redir_node->data.redirection.type == TOKEN_HEREDOC) && !a->i_c)
+                {
+                    restore_io(ma);
                     exit_or_setexit(1,0, ma);
+                    return (0);
+                }
                 else
                 {
                     restore_io(ma);
                     exit_or_setexit(1, 0, ma);
+                    return (0);
                 }
             }
         redir_node = redir_node->data.redirection.next;
