@@ -102,7 +102,7 @@ static char *find_command_path(char *cmd, t_env **env, int *p_ue, t_ntc **first_
             {
                 write (2, "minishell: ", 11);
                 write (2, cmd, ft_strlen(cmd));
-                write (2, ": Permission denied", 19);
+                write (2, ": Permission denied\n", 20);
                 exit(126);
             }
         }

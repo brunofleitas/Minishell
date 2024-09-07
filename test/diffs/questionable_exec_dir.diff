@@ -1,7 +1,7 @@
 diff of execution of:
 echo 'export PATH="$PATH:$PWD"; mkdir asdfg; asdfg' | tr ';' '\n' | [shell]
---- expected	2024-09-07 00:54:48.245669435 +0200
-+++ found	2024-09-07 00:54:48.245669435 +0200
+--- expected	2024-09-07 03:00:42.543783408 +0200
++++ found	2024-09-07 03:00:42.558783497 +0200
 @@ -1,5 +1,6 @@
  
  ======== stderr =======

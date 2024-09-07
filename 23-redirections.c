@@ -71,7 +71,7 @@ static int redirect_output(char *file_name, int fd_num, t_ma *ma)
             write(2, ma->program, ma->l_program); //doesn't work need to find out why
             // write(2, "minishell: ", 11);
             write(2, file_name, ft_strlen(file_name));
-            write(2, ": Permission denied\n", 21);
+            write(2, ": Permission denied\n", 20);
             return(0);
         }
         if (dup2(fd, fd_num) == -1)

@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:56:05 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/05 15:28:47 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/07 02:42:29 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ void	builtin_export(char **words_arr, t_ma *ma)
 		{
 			write(2, "minishell: export: `", 20);
 			write(2, *words_cpy, ft_strlen(*words_cpy));
-			write(2, "': not a valid identifier\n", 27);
+			write(2, "': not a valid identifier\n", 26);
 		}
 		else 
 		{

@@ -1,8 +1,8 @@
 ==> diffs/questionable_exec_dir.diff <==
 diff of execution of:
 echo 'export PATH="$PATH:$PWD"; mkdir asdfg; asdfg' | tr ';' '\n' | [shell]
---- expected	2024-09-07 00:54:48.245669435 +0200
-+++ found	2024-09-07 00:54:48.245669435 +0200
+--- expected	2024-09-07 03:00:42.543783408 +0200
++++ found	2024-09-07 03:00:42.558783497 +0200
 @@ -1,5 +1,6 @@
  
  ======== stderr =======
@@ -14,8 +14,8 @@ echo 'export PATH="$PATH:$PWD"; mkdir asdfg; asdfg' | tr ';' '\n' | [shell]
 ==> diffs/questionable_exec_dot.diff <==
 diff of execution of:
 echo '.' | tr ';' '\n' | [shell]
---- expected	2024-09-07 00:54:47.954673157 +0200
-+++ found	2024-09-07 00:54:48.119671047 +0200
+--- expected	2024-09-07 03:00:42.435782772 +0200
++++ found	2024-09-07 03:00:42.450782860 +0200
 @@ -1,6 +1,5 @@
  
  ======== stderr =======
@@ -28,8 +28,8 @@ echo '.' | tr ';' '\n' | [shell]
 ==> diffs/questionable_exec_dotdot.diff <==
 diff of execution of:
 echo '..' | tr ';' '\n' | [shell]
---- expected	2024-09-07 00:54:48.170670395 +0200
-+++ found	2024-09-07 00:54:48.218669780 +0200
+--- expected	2024-09-07 03:00:42.470782978 +0200
++++ found	2024-09-07 03:00:42.487783078 +0200
 @@ -1,5 +1,5 @@
  
  ======== stderr =======
@@ -41,8 +41,8 @@ echo '..' | tr ';' '\n' | [shell]
 ==> diffs/questionable_export_spaces1.diff <==
 diff of execution of:
 echo 'export a=\'    \'; echo $a' | tr ';' '\n' | [shell]
---- expected	2024-09-07 00:54:46.971685729 +0200
-+++ found	2024-09-07 00:54:47.061684578 +0200
+--- expected	2024-09-07 03:00:42.231781570 +0200
++++ found	2024-09-07 03:00:42.254781705 +0200
 @@ -1,6 +1,6 @@
 -
 +    
@@ -55,8 +55,8 @@ echo 'export a=\'    \'; echo $a' | tr ';' '\n' | [shell]
 ==> diffs/questionable_export_spaces2.diff <==
 diff of execution of:
 echo 'export a="a    b"; echo $a' | tr ';' '\n' | [shell]
---- expected	2024-09-07 00:54:47.164683261 +0200
-+++ found	2024-09-07 00:54:47.280681777 +0200
+--- expected	2024-09-07 03:00:42.280781858 +0200
++++ found	2024-09-07 03:00:42.299781971 +0200
 @@ -1,6 +1,6 @@
 -a b
 +a    b
@@ -69,11 +69,11 @@ echo 'export a="a    b"; echo $a' | tr ';' '\n' | [shell]
 ==> diffs/questionable_glob_order.diff <==
 diff of execution of:
 echo 'touch a b c A B C aa ab ac Aa Ab Ac aA aB aC; echo *' | tr ';' '\n' | [shell]
---- expected	2024-09-07 00:54:47.617677467 +0200
-+++ found	2024-09-07 00:54:47.668676815 +0200
+--- expected	2024-09-07 03:00:42.361782336 +0200
++++ found	2024-09-07 03:00:42.379782442 +0200
 @@ -1,6 +1,6 @@
 -a A aa aA Aa ab aB Ab ac aC Ac b B c C infile readonly
-+Ac a aC . aB infile aa .. readonly C A B Aa c ac ab aA b Ab
++aC infile .. Aa B ac C A readonly Ab ab aB aa aA b c Ac a .
  
  ======== stderr =======
  
@@ -83,10 +83,10 @@ echo 'touch a b c A B C aa ab ac Aa Ab Ac aA aB aC; echo *' | tr ';' '\n' | [she
 ==> diffs/questionable_pwd_rmdir.diff <==
 diff of execution of:
 echo 'mkdir tmp; cd tmp; rmdir $PWD; pwd' | tr ';' '\n' | [shell]
---- expected	2024-09-07 00:54:48.462666654 +0200
-+++ found	2024-09-07 00:54:48.462666654 +0200
+--- expected	2024-09-07 03:00:42.618783850 +0200
++++ found	2024-09-07 03:00:42.635783950 +0200
 @@ -1,6 +1,5 @@
--/home/pcasagra/42/minishell_brunos_branch/test/temp/tmp
+-/home/bruno/Github42/Minishell/test/temp/tmp
  
  ======== stderr =======
 -
@@ -98,59 +98,13 @@ echo 'mkdir tmp; cd tmp; rmdir $PWD; pwd' | tr ';' '\n' | [shell]
 ==> diffs/questionable_redir_ambiguous.diff <==
 diff of execution of:
 echo 'cat < *;' | tr ';' '\n' | [shell]
---- expected	2024-09-07 00:54:47.774675459 +0200
-+++ found	2024-09-07 00:54:47.873674193 +0200
-@@ -1,5 +1,7 @@
-+infile content
-+infile second line
+--- expected	2024-09-07 03:00:42.399782560 +0200
++++ found	2024-09-07 03:00:42.415782654 +0200
+@@ -1,5 +1,6 @@
  
  ======== stderr =======
 -[progname]: *: ambiguous redirect
 +[progname]: ..: Is a directory
- ======== return =======
--return value: 1
-+return value: 0
-
-==> diffs/questionable_SHLVL.diff <==
-diff of execution of:
-echo 'echo $SHLVL' | tr ';' '\n' | [shell]
---- expected	2024-09-07 00:54:47.415680050 +0200
-+++ found	2024-09-07 00:54:47.491679078 +0200
-@@ -1,6 +1,6 @@
--2
-+3
- 
- ======== stderr =======
- 
- ======== return =======
- return value: 0
-
-==> diffs/redir_heredoc2.diff <==
-diff of execution of:
-echo 'grep o << EOF > out;hello;there;EOF; ls -l --time-style=+' | tr ';' '\n' | [shell]
---- expected	2024-09-07 00:55:06.928429842 +0200
-+++ found	2024-09-07 00:55:07.317424841 +0200
-@@ -1,9 +1,5 @@
--total 8
---rw-rw-r-- 1 pcasagra pcasagra 34  infile
---rw-rw-r-- 1 pcasagra pcasagra  6  out
---r--r--r-- 1 pcasagra pcasagra  0  readonly
- 
- ======== stderr =======
- 
- ======== return =======
--return value: 0
-+return value: 1
-
-==> diffs/syntax_redir_end1.diff <==
-diff of execution of:
-echo 'cat <<' | tr ';' '\n' | [shell]
---- expected	2024-09-07 00:55:13.235348692 +0200
-+++ found	2024-09-07 00:55:13.476345589 +0200
-@@ -1,5 +1,5 @@
- 
- ======== stderr =======
--[syntax error msg]
-+
++[progname]: .: Is a directory
  ======== return =======
  return value: 1
