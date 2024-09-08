@@ -1,8 +1,8 @@
 ==> diffs/questionable_exec_dir.diff <==
 diff of execution of:
 echo 'export PATH="$PATH:$PWD"; mkdir asdfg; asdfg' | tr ';' '\n' | [shell]
---- expected	2024-09-07 03:00:42.543783408 +0200
-+++ found	2024-09-07 03:00:42.558783497 +0200
+--- expected	2024-09-08 03:20:54.323236577 +0200
++++ found	2024-09-08 03:20:54.369237260 +0200
 @@ -1,5 +1,6 @@
  
  ======== stderr =======
@@ -11,66 +11,11 @@ echo 'export PATH="$PATH:$PWD"; mkdir asdfg; asdfg' | tr ';' '\n' | [shell]
  ======== return =======
  return value: 1
 
-==> diffs/questionable_exec_dot.diff <==
-diff of execution of:
-echo '.' | tr ';' '\n' | [shell]
---- expected	2024-09-07 03:00:42.435782772 +0200
-+++ found	2024-09-07 03:00:42.450782860 +0200
-@@ -1,6 +1,5 @@
- 
- ======== stderr =======
--[progname]: .: filename argument required
--[progname]: usage: . filename [arguments]
-+[progname]: .: Is a directory
- ======== return =======
- return value: 1
-
-==> diffs/questionable_exec_dotdot.diff <==
-diff of execution of:
-echo '..' | tr ';' '\n' | [shell]
---- expected	2024-09-07 03:00:42.470782978 +0200
-+++ found	2024-09-07 03:00:42.487783078 +0200
-@@ -1,5 +1,5 @@
- 
- ======== stderr =======
--[progname]: ..: command not found
-+[progname]: ..: Is a directory
- ======== return =======
- return value: 1
-
-==> diffs/questionable_export_spaces1.diff <==
-diff of execution of:
-echo 'export a=\'    \'; echo $a' | tr ';' '\n' | [shell]
---- expected	2024-09-07 03:00:42.231781570 +0200
-+++ found	2024-09-07 03:00:42.254781705 +0200
-@@ -1,6 +1,6 @@
--
-+    
- 
- ======== stderr =======
- 
- ======== return =======
- return value: 0
-
-==> diffs/questionable_export_spaces2.diff <==
-diff of execution of:
-echo 'export a="a    b"; echo $a' | tr ';' '\n' | [shell]
---- expected	2024-09-07 03:00:42.280781858 +0200
-+++ found	2024-09-07 03:00:42.299781971 +0200
-@@ -1,6 +1,6 @@
--a b
-+a    b
- 
- ======== stderr =======
- 
- ======== return =======
- return value: 0
-
 ==> diffs/questionable_glob_order.diff <==
 diff of execution of:
 echo 'touch a b c A B C aa ab ac Aa Ab Ac aA aB aC; echo *' | tr ';' '\n' | [shell]
---- expected	2024-09-07 03:00:42.361782336 +0200
-+++ found	2024-09-07 03:00:42.379782442 +0200
+--- expected	2024-09-08 03:20:53.881230019 +0200
++++ found	2024-09-08 03:20:53.917230554 +0200
 @@ -1,6 +1,6 @@
 -a A aa aA Aa ab aB Ab ac aC Ac b B c C infile readonly
 +aC infile .. Aa B ac C A readonly Ab ab aB aa aA b c Ac a .
@@ -79,32 +24,3 @@ echo 'touch a b c A B C aa ab ac Aa Ab Ac aA aB aC; echo *' | tr ';' '\n' | [she
  
  ======== return =======
  return value: 0
-
-==> diffs/questionable_pwd_rmdir.diff <==
-diff of execution of:
-echo 'mkdir tmp; cd tmp; rmdir $PWD; pwd' | tr ';' '\n' | [shell]
---- expected	2024-09-07 03:00:42.618783850 +0200
-+++ found	2024-09-07 03:00:42.635783950 +0200
-@@ -1,6 +1,5 @@
--/home/bruno/Github42/Minishell/test/temp/tmp
- 
- ======== stderr =======
--
-+getcwd() error
- ======== return =======
--return value: 0
-+return value: 1
-
-==> diffs/questionable_redir_ambiguous.diff <==
-diff of execution of:
-echo 'cat < *;' | tr ';' '\n' | [shell]
---- expected	2024-09-07 03:00:42.399782560 +0200
-+++ found	2024-09-07 03:00:42.415782654 +0200
-@@ -1,5 +1,6 @@
- 
- ======== stderr =======
--[progname]: *: ambiguous redirect
-+[progname]: ..: Is a directory
-+[progname]: .: Is a directory
- ======== return =======
- return value: 1

@@ -6,16 +6,37 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 07:19:53 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/03 23:43:43 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/08 03:01:22 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+char *remove_extra_spaces(char *str)
+{
+    int i = 0, j = 0;
+    int len = strlen(str);
+    char *result = malloc(len + 1);
+
+    if (!result)
+        return NULL;
+    while (str[i])
+    {
+        if (str[i] != ' ' || (i > 0 && str[i - 1] != ' '))
+            result[j++] = str[i];
+        i++;
+    }
+    if (j > 0 && result[j - 1] == ' ')
+        j--;
+    result[j] = '\0';
+    return result;
+}
+
 char	*get_env(char *name, char **env)
 {
 	int	i;
 	int	name_len;
+	char *env_value;
 
 	if (!name || !env)
 		return (NULL);
@@ -24,7 +45,10 @@ char	*get_env(char *name, char **env)
 	while (env[i])
 	{
 		if (strncmp(env[i], name, name_len) == 0 && env[i][name_len] == '=')
-			return (&env[i][name_len + 1]);
+		{
+			env_value = &env[i][name_len + 1];
+			return remove_extra_spaces(env_value);
+		}
 		i++;
 	}
 	return (NULL);
@@ -54,6 +78,7 @@ void	handle_env_var(const char **s, char **result, t_ma *ma)
 			result_len += strlen(env_value);
 		}
 	}
+	free(env_value);
 }
 
 void	append_char(char s, char **result, t_ma *ma)

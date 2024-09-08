@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 15:03:22 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/04 20:37:17 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/08 03:34:46 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ static void	process_wildcards(char **wildcards, t_ma *ma)
 		ma->tkns[i]->type = clasify_token(wildcards[i]);
 		trimmed = trim_wildcard(wildcards[i], ma);
 		ma->tkns[i]->value = trimmed;
-		// printf("%s\n", ma->tkns[i]->value);
-		// printf("%i\n", ma->tkns[i]->type);
+		printf("%s\n", ma->tkns[i]->value);
+		printf("%i\n", ma->tkns[i]->type);
 		i++;
 	}
 	ma->tkns[i] = NULL;
@@ -80,8 +80,21 @@ void	lexer(t_ma *ma)
 {
 	char	**split;
 	char	**wildcards;
+	int		i;
 
 	split = ft_split_tkns(' ', ma);
+	i = 0;
+	while (split[i] && split [i + 1])
+	{
+		if ((strcmp(split[i], "<") == 0 || strcmp(split[i], "<<") == 0 ) && (strcmp(split[i + 1], "*") == 0))
+		{
+			write(2, "minishell: ", 11);
+        	write(2, split[i + 1], ft_strlen(split[i + 1]));
+        	write(2, ": ambiguous redirect\n", 21);
+			return ;
+		}
+		i ++;
+	}
 	if (split[0])
 	{
 		wildcards = expand_wildcards_in_args(split, ma);

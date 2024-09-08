@@ -131,11 +131,28 @@ void execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
     {
         exit(0); // Return 0 for an empty command
     }
-
-    if (words_arr[0][0] == '/' || words_arr[0][0] == '.' || words_arr[0][0] == '~')
+    if (ft_strcmp(words_arr[0], ".") == 0)
+    {
+        write(2, "minishell: ", 11);
+        write(2, words_arr[0], ft_strlen(words_arr[0]));
+        write(2, ": filename argument required\n", 29);
+        write(2, "minishell: usage: ", 18);
+        write(2, words_arr[0], ft_strlen(words_arr[0]));
+        write (2, " filename [arguments]\n", 22);
+        exit(127);
+    }
+    else if (ft_strcmp(words_arr[0], "..") == 0)
+    {
+        write(2, "minishell: ", 11);
+        write(2, words_arr[0], ft_strlen(words_arr[0]));
+        write(2, ": command not found\n", 20);
+        exit(127);
+    }
+    else if (words_arr[0][0] == '/' || (words_arr[0][0] == '.' &&  words_arr[0][1] != '\0')|| words_arr[0][0] == '~')
         command_path = ft_strdup_g_c(words_arr[0], first_node);
     else
         command_path = find_command_path(words_arr[0], env, &p_ue, first_node);
+        
     if (access(words_arr[0], F_OK) == 0)
     {
         if (!access(words_arr[0], X_OK) == 0)

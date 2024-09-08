@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 06:18:08 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/04 22:29:20 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/08 11:47:46 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,11 @@ static char	*ft_strremove_quotes(const char *str, t_ntc **first_node)
 	return (result);
 }
 
+/* void expand_vars(char *str, t_ma *ma)
+{
+	
+} */
+
 void	generate_regular_tkns(const char **s, char ***split, int *i,
 		t_ma *ma)
 {
@@ -177,18 +182,15 @@ void	generate_regular_tkns(const char **s, char ***split, int *i,
 			break;
 	}
 	temp = ft_substr_g_c(*s, 0, word_length, &(ma->first_node));
-	// printf("temp: %s\n", temp);
+	// result = expand_vars(temp, ma);
 	result = temp;
-	// printf("result: %s\n", result);
 	len_var = 1;
 	if (((*s)[word_length] == '$') && (ft_isalnum((*s)[word_length + 1]) || (*s)[word_length + 1] == '_'))
 	{
 		while ((*s)[word_length + len_var] && (ft_isalnum((*s)[word_length + len_var]) || (*s)[word_length + len_var] == '_'))
             len_var++;
 		temp = ft_substr_g_c(*s + word_length + 1, 0, len_var - 1, &(ma->first_node));
-		// printf("temp: %s\n", temp);
 		env_value = get_env(temp, ma->env->var);
-		// printf("env_value: %s\n", env_value);
 		if (env_value)
 		{
 			result = ft_strjoin_g_c(result, env_value, &(ma->first_node));
@@ -200,8 +202,6 @@ void	generate_regular_tkns(const char **s, char ***split, int *i,
 		}
 	}
 	trimmed = ft_strremove_quotes(result, &(ma->first_node));
-	// result = ft_strremove_char(trimmed, '\"', &(ma->first_node));
-	//result = ft_strtrim(result, " ", &(ma->first_node));
 	(*split)[(*i)++] = trimmed;
 	*s += word_length;
 }
