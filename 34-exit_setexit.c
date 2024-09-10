@@ -14,9 +14,9 @@ void exit_or_setexit(int e, int e_throw_err, t_ma *ma)
     {
         if (ma->in_child_p && !ma->and_or)
         {
-            write(1, "Exit fork lvl: ", 15);
-            ft_putnbr_fd(ma->in_child_p, 1);
-            write(1, "\n", 1);
+            // write(1, "Exit fork lvl: ", 15);
+            // ft_putnbr_fd(ma->in_child_p, 1);
+            // write(1, "\n", 1);
             exit(EXIT_SUCCESS);
         }
         else
@@ -32,9 +32,9 @@ void exit_or_setexit(int e, int e_throw_err, t_ma *ma)
             perror(" ");
         if (ma->in_child_p && !ma->and_or)
         {
-            write(1, "Exit fork lvl: ", 15);
-            ft_putnbr_fd(ma->in_child_p, 1);
-            write(1, "\n", 1);
+            // write(1, "Exit fork lvl: ", 15);
+            // ft_putnbr_fd(ma->in_child_p, 1);
+            // write(1, "\n", 1);
             exit(EXIT_FAILURE);
         }
         else

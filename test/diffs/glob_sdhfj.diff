@@ -1,0 +1,12 @@
+diff of execution of:
+echo 'touch bonus bonus_bonus; echo bo*s' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 23:36:58.008635622 +0200
++++ found	2024-09-10 23:36:58.171633584 +0200
+@@ -1,6 +1,6 @@
+-bonus bonus_bonus
++bonus_bonus bonus
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0

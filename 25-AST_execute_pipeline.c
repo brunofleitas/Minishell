@@ -25,6 +25,9 @@ static void setup_pipe(int pipe_fds[2])
 
 static void child_process(t_pip_args *a, t_astnode *simple_cmd, t_ma *ma)
 {
+    // write(1, "Enter fork lvl: ", 16);
+    // ft_putnbr_fd(ma->in_child_p, 1);
+    // write(1, "\n", 1);
     // printf("child_process start\n");
     if (a->input_fd != STDIN_FILENO)
     {
@@ -37,7 +40,7 @@ static void child_process(t_pip_args *a, t_astnode *simple_cmd, t_ma *ma)
         close(a->pipe_fds[0]);
         close(a->pipe_fds[1]);
     }
-    ma->in_child_p = 1;
+    ma->in_child_p++;
     ma->and_or = 0;
     //printf("child_process end\n");
     execute_ast(simple_cmd, ma); //what is this function?

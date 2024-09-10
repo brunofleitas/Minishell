@@ -1,0 +1,12 @@
+diff of execution of:
+echo 'echo * in* *' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 23:36:56.740651487 +0200
++++ found	2024-09-10 23:36:56.776651036 +0200
+@@ -1,6 +1,6 @@
+-infile readonly infile infile readonly
++. infile .. readonly infile . infile .. readonly
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0

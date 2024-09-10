@@ -63,6 +63,10 @@ void execute_cmd_line(t_astnode *node, t_ma *ma)
         if (ma->last_exit_status == 0)
             execute_ast(node->data.cmd_line.right, ma);
         else
+        {
+            ma->and_or = 0;
+            exit_or_setexit(1, 0, ma);
+        }
             return;
 
     }
@@ -71,7 +75,11 @@ void execute_cmd_line(t_astnode *node, t_ma *ma)
         if (ma->last_exit_status != 0)
             execute_ast(node->data.cmd_line.right, ma);
         else
+        {
+            ma->and_or = 0;
+            exit_or_setexit(0, 0, ma);
             return;
+        }
     }
     //printf("execute_cmd_line end\n");
     return;

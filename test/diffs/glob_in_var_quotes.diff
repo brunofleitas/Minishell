@@ -1,0 +1,12 @@
+diff of execution of:
+echo 'export a=\'"*file"\'; echo $a' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 23:36:57.054647557 +0200
++++ found	2024-09-10 23:36:57.136646531 +0200
+@@ -1,6 +1,6 @@
+-"*file"
++*file
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
