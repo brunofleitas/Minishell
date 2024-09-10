@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:08:01 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/08/30 01:03:35 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/10 09:29:36 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,13 +277,20 @@ t_astnode *parse_cmd_line(t_ma *ma)
     t_astnode *new_node;
     
     //printf("parse_cmd_line start\n");
+    ma->and_or = 0;
     node = parse_pipeline(ma);
     while ((*(ma->c_tkn)) &&((*(ma->c_tkn))->type == TOKEN_AND || (*(ma->c_tkn))->type == TOKEN_OR))
     {
+        ma->and_or = 1;
         new_node = create_ast_node(&(ma->first_node), NODE_CMD_LINE);
         new_node->data.cmd_line.left = node;
         new_node->data.cmd_line.operator = (*(ma->c_tkn))->type;
         get_next_token(ma);
+        if (ma->c_tkn == NULL || *(ma->c_tkn) == NULL)
+        {
+            write(2, "minishell : syntax error near unexpected token \n", 48); //ADDED THIS FOR test_cases/syntax/invalid for example && or echo a &&
+            exit(1);
+        }
         new_node->data.cmd_line.right = parse_pipeline(ma);
         node = new_node;
     }

@@ -1,0 +1,13 @@
+diff of execution of:
+echo 'touch .hidden .test; echo .*; echo .hidd*' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:57.636582177 +0200
++++ found	2024-09-10 09:26:57.667582176 +0200
+@@ -1,7 +1,7 @@
+-.hidden .test
++.. .hidden .test .
+ .hidden
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0

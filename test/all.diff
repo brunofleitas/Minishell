@@ -1,26 +1,309 @@
-==> diffs/questionable_exec_dir.diff <==
+==> diffs/and_pipe_and.diff <==
 diff of execution of:
-echo 'export PATH="$PATH:$PWD"; mkdir asdfg; asdfg' | tr ';' '\n' | [shell]
---- expected	2024-09-08 03:20:54.323236577 +0200
-+++ found	2024-09-08 03:20:54.369237260 +0200
-@@ -1,5 +1,6 @@
+echo 'echo a && echo b | cat - fail && echo c' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:57.141582194 +0200
++++ found	2024-09-10 09:26:57.168582193 +0200
+@@ -1,7 +1,8 @@
+ a
+ b
  
  ======== stderr =======
-+[progname]: mkdir: command not found
- [progname]: asdfg: command not found
+ [progname]: fail: No such file or directory
++[progname]: fail: No such file or directory
+ ======== return =======
+ return value: 0
+
+==> diffs/bonus_syntax_invalid4.diff <==
+diff of execution of:
+echo '&& echo a' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:27:00.538582078 +0200
++++ found	2024-09-10 09:27:01.810582035 +0200
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-[syntax error msg]
++
  ======== return =======
  return value: 1
 
-==> diffs/questionable_glob_order.diff <==
+==> diffs/glob_both.diff <==
 diff of execution of:
-echo 'touch a b c A B C aa ab ac Aa Ab Ac aA aB aC; echo *' | tr ';' '\n' | [shell]
---- expected	2024-09-08 03:20:53.881230019 +0200
-+++ found	2024-09-08 03:20:53.917230554 +0200
+echo 'touch a.c b.c a.o b.o; echo *.*' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:57.483582183 +0200
++++ found	2024-09-10 09:26:57.530582181 +0200
 @@ -1,6 +1,6 @@
--a A aa aA Aa ab aB Ab ac aC Ac b B c C infile readonly
-+aC infile .. Aa B ac C A readonly Ab ab aB aa aA b c Ac a .
+-a.c a.o b.c b.o
++.. a.o a.c b.o b.c .
  
  ======== stderr =======
  
+ ======== return =======
+ return value: 0
+
+==> diffs/glob_cmd1.diff <==
+diff of execution of:
+echo 'rm *; *' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:57.883582169 +0200
++++ found	2024-09-10 09:26:57.905582168 +0200
+@@ -1,5 +1,7 @@
+ 
+ ======== stderr =======
+-[progname]: *: command not found
++[progname]: cannot remove '..': Is a directory
++[progname]: cannot remove '.': Is a directory
++[progname]: ..: command not found
+ ======== return =======
+ return value: 1
+
+==> diffs/glob_cmd2.diff <==
+diff of execution of:
+echo 'rm *; touch ls; *' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:57.945582167 +0200
++++ found	2024-09-10 09:26:57.970582166 +0200
+@@ -1,6 +1,7 @@
+-ls
+ 
+ ======== stderr =======
+-
++[progname]: cannot remove '..': Is a directory
++[progname]: cannot remove '.': Is a directory
++[progname]: ..: command not found
+ ======== return =======
+-return value: 0
++return value: 1
+
+==> diffs/glob_empty.diff <==
+diff of execution of:
+echo 'mkdir empty; cd empty; echo *; echo .*' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:57.828582171 +0200
++++ found	2024-09-10 09:26:57.850582170 +0200
+@@ -1,7 +1,7 @@
+-*
+-.*
++.. .
++.. .
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
+
+==> diffs/glob_ending.diff <==
+diff of execution of:
+echo 'touch a.c b.c a.o b.o; echo a.*' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:57.417582185 +0200
++++ found	2024-09-10 09:26:57.440582184 +0200
+@@ -1,6 +1,6 @@
+-a.c a.o
++a.o a.c
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
+
+==> diffs/glob_hidden2.diff <==
+diff of execution of:
+echo 'touch .hidden .test; echo .*; echo .hidd*' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:57.636582177 +0200
++++ found	2024-09-10 09:26:57.667582176 +0200
+@@ -1,7 +1,7 @@
+-.hidden .test
++.. .hidden .test .
+ .hidden
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
+
+==> diffs/glob_hidden.diff <==
+diff of execution of:
+echo 'echo .*' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:57.572582180 +0200
++++ found	2024-09-10 09:26:57.599582179 +0200
+@@ -1,6 +1,6 @@
+-.*
++.. .
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
+
+==> diffs/glob_in_var_quotes.diff <==
+diff of execution of:
+echo 'export a=\'"*file"\'; echo $a' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:58.290582155 +0200
++++ found	2024-09-10 09:26:58.316582154 +0200
+@@ -1,6 +1,6 @@
+-"*file"
++*file
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
+
+==> diffs/glob_mutliple.diff <==
+diff of execution of:
+echo 'echo * in* *' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:58.151582160 +0200
++++ found	2024-09-10 09:26:58.188582158 +0200
+@@ -1,6 +1,6 @@
+-infile readonly infile infile readonly
++infile .. readonly . infile infile .. readonly .
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
+
+==> diffs/glob_redir_ambiguous.diff <==
+diff of execution of:
+echo 'touch a b c; cat *;' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:58.347582153 +0200
++++ found	2024-09-10 09:26:58.375582152 +0200
+@@ -1,7 +1,8 @@
+ infile content
+ infile second line
+ 
+ ======== stderr =======
+-
++[progname]: ..: Is a directory
++[progname]: .: Is a directory
+ ======== return =======
+ return value: 0
+
+==> diffs/glob_redir.diff <==
+diff of execution of:
+echo 'rm readonly; cat *;' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:58.009582165 +0200
++++ found	2024-09-10 09:26:58.077582162 +0200
+@@ -1,7 +1,8 @@
+ infile content
+ infile second line
+ 
+ ======== stderr =======
+-
++[progname]: ..: Is a directory
++[progname]: .: Is a directory
+ ======== return =======
+ return value: 0
+
+==> diffs/glob_simple.diff <==
+diff of execution of:
+echo 'echo *' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:57.249582191 +0200
++++ found	2024-09-10 09:26:57.267582190 +0200
+@@ -1,6 +1,6 @@
+-infile readonly
++infile .. readonly .
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
+
+==> diffs/glob_sorted.diff <==
+diff of execution of:
+echo 'touch b c a; echo *' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:57.298582189 +0200
++++ found	2024-09-10 09:26:57.326582188 +0200
+@@ -1,6 +1,6 @@
+-a b c infile readonly
++infile .. readonly b c a .
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
+
+==> diffs/parenthesis_nested3.diff <==
+diff of execution of:
+echo '(echo a && (echo b || echo c) && echo d)' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:27:00.069582094 +0200
++++ found	2024-09-10 09:27:00.112582093 +0200
+@@ -1,8 +1,9 @@
+ a
+ b
+ d
++d
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
+
+==> diffs/parenthesis_redir_fail.diff <==
+diff of execution of:
+echo '(cat | grep a) < fail' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:56.773582207 +0200
++++ found	2024-09-10 09:26:56.798582206 +0200
+@@ -1,5 +1,5 @@
+ 
+ ======== stderr =======
+-[progname]: fail: No such file or directory
++
+ ======== return =======
+ return value: 1
+
+==> diffs/parenthesis_redir_in.diff <==
+diff of execution of:
+echo '(cat | grep in) < infile' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:56.602582213 +0200
++++ found	2024-09-10 09:26:56.624582212 +0200
+@@ -1,7 +1,5 @@
+-infile content
+-infile second line
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+-return value: 0
++return value: 1
+
+==> diffs/parenthesis_redir_in_out.diff <==
+diff of execution of:
+echo '(cat | grep in) < infile > outfile; cat outfile' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:56.719582209 +0200
++++ found	2024-09-10 09:26:56.745582208 +0200
+@@ -1,7 +1,5 @@
+-infile content
+-infile second line
+ 
+ ======== stderr =======
+-
++[progname]: outfile: No such file or directory
+ ======== return =======
+-return value: 0
++return value: 1
+
+==> diffs/parenthesis_redir_out.diff <==
+diff of execution of:
+echo '(cat infile | grep in) > outfile; cat outfile' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:56.657582211 +0200
++++ found	2024-09-10 09:26:56.686582210 +0200
+@@ -1,7 +1,7 @@
+ infile content
+ infile second line
+ 
+ ======== stderr =======
+-
++[progname]: outfile: No such file or directory
+ ======== return =======
+ return value: 0
+
+==> diffs/pipe_and.diff <==
+diff of execution of:
+echo 'echo a | cat - fail && echo b' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 09:26:57.034582198 +0200
++++ found	2024-09-10 09:26:57.062582197 +0200
+@@ -1,6 +1,7 @@
+ a
+ 
+ ======== stderr =======
+ [progname]: fail: No such file or directory
++[progname]: fail: No such file or directory
  ======== return =======
  return value: 0

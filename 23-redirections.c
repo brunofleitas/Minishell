@@ -334,7 +334,7 @@ void exit_or_setexit(int e, int e_throw_err, t_ma *ma)
     (void)e_throw_err;
     if (!e)
     {
-        if (ma->in_child_p)
+        if (ma->in_child_p && !ma->and_or)
             exit(EXIT_SUCCESS);
         else
              ma->last_exit_status = e;
@@ -343,7 +343,7 @@ void exit_or_setexit(int e, int e_throw_err, t_ma *ma)
     {
         if (e_throw_err)
             perror(" ");
-        if (ma->in_child_p)
+        if (ma->in_child_p && !ma->and_or)
             exit(EXIT_FAILURE);
         else
             ma->last_exit_status = e;

@@ -192,6 +192,7 @@ typedef struct  s_main_args
     int         saved_stdout;
     int         saved_stderr;
     int         delimiter;
+    int         and_or;
 }               t_ma;
 /* ************************************************************************** */
 /*                                   AST EXECUTION                            */
