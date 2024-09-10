@@ -277,11 +277,10 @@ t_astnode *parse_cmd_line(t_ma *ma)
     t_astnode *new_node;
     
     //printf("parse_cmd_line start\n");
-    ma->and_or = 0;
     node = parse_pipeline(ma);
     while ((*(ma->c_tkn)) &&((*(ma->c_tkn))->type == TOKEN_AND || (*(ma->c_tkn))->type == TOKEN_OR))
     {
-        ma->and_or = 1;
+
         new_node = create_ast_node(&(ma->first_node), NODE_CMD_LINE);
         new_node->data.cmd_line.left = node;
         new_node->data.cmd_line.operator = (*(ma->c_tkn))->type;

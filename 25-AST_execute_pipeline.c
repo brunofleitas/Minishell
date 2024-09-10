@@ -22,20 +22,6 @@ static void setup_pipe(int pipe_fds[2])
     }
     //printf("setup_pipe end\n");
 }
-// pid_t    fork_process()
-// {
-//     pid_t pid;
-    
-//     //printf("fork_process start\n");
-//     return(fork());
-//     // if (pid == -1)
-//     // {
-//     //     perror("fork");
-//     //     return(EXIT_FAILURE);
-//     // }
-//     // //printf("fork_process end\n");
-//     // return (pid);
-// }
 
 static void child_process(t_pip_args *a, t_astnode *simple_cmd, t_ma *ma)
 {
@@ -52,6 +38,7 @@ static void child_process(t_pip_args *a, t_astnode *simple_cmd, t_ma *ma)
         close(a->pipe_fds[1]);
     }
     ma->in_child_p = 1;
+    ma->and_or = 0;
     //printf("child_process end\n");
     execute_ast(simple_cmd, ma); //what is this function?
 }
@@ -88,23 +75,6 @@ void execute_pipeline(t_astnode *node, t_ma *ma)
     //printf("execute_pipeline start\n");
     i = 0;
     a.input_fd = STDIN_FILENO;
-    // original_stdout = dup(STDOUT_FILENO);
-    
-    // t_astnode *temp = node->data.pipeline.cmds[0]->data.simple_cmd.redirections;
-    // ma->delimiter = NULL;//ft_strdup_g_c("", &(ma->first_node));
-    // while (temp)
-    // {
-    //     if (ma->delimiter && ft_strncmp(temp->data.redirection.file, ma->delimiter, ft_strlen(ma->delimiter)) == 0)
-    //         ma->flag = 2;
-    //     if (temp->data.redirection.type == TOKEN_HEREDOC)
-    //     {
-    //         ma->delimiter = temp->data.redirection.file;
-    //         ma->flag = 1;
-    //     }
-    //     if (ma->flag == 1 && temp->data.redirection.type == TOKEN_REDIR_IN && temp->data.redirection.type == TOKEN_HEREDOC)
-    //     temp = temp->data.redirection.next;
-    // }
-
     if (node->data.pipeline.cmd_count == 1 && 
     (node->data.pipeline.cmds[0]->data.simple_cmd.words && (node->data.pipeline.cmds[0]->data.simple_cmd.words[0].data.word.type == TOKEN_BUILTIN)))//added here a sef\g fault check
     {

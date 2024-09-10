@@ -1,0 +1,12 @@
+diff of execution of:
+echo 'echo $SHLVL' | tr ';' '\n' | [shell]
+--- expected	2024-09-10 21:32:57.841759826 +0200
++++ found	2024-09-10 21:32:57.928760428 +0200
+@@ -1,6 +1,6 @@
+-2
++3
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0

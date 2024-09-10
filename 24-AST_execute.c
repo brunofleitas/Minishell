@@ -56,18 +56,22 @@ void execute_ast(t_astnode *node, t_ma *ma)
 void execute_cmd_line(t_astnode *node, t_ma *ma)
 {   
     //printf("execute_cmd_line start\n");
+    ma->and_or++;
     execute_ast(node->data.cmd_line.left, ma);
     if (node->data.cmd_line.operator == TOKEN_AND)
     {
         if (ma->last_exit_status == 0)
             execute_ast(node->data.cmd_line.right, ma);
-        return;
+        else
+            return;
+
     }
     else if (node->data.cmd_line.operator == TOKEN_OR)
     {
         if (ma->last_exit_status != 0)
             execute_ast(node->data.cmd_line.right, ma);
-        return;
+        else
+            return;
     }
     //printf("execute_cmd_line end\n");
     return;

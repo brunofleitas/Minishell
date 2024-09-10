@@ -126,6 +126,7 @@ int	main(int argc, char **argv, char **envp)
 			{	
 				//get_next_token(&ma);
 				// printf("test\n");
+				ma.and_or = 0;
 				root = parser(&ma);
 				// printf("test\n");
 				//printf("parser end\n");
