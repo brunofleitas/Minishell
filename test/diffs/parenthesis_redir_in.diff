@@ -1,7 +1,7 @@
 diff of execution of:
 echo '(cat | grep in) < infile' | tr ';' '\n' | [shell]
---- expected	2024-09-10 23:36:52.432705459 +0200
-+++ found	2024-09-10 23:36:52.472704957 +0200
+--- expected	2024-09-10 23:49:49.879838645 +0200
++++ found	2024-09-10 23:49:49.932838117 +0200
 @@ -1,7 +1,5 @@
 -infile content
 -infile second line
