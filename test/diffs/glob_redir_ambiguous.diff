@@ -1,7 +1,7 @@
 diff of execution of:
 echo 'touch a b c; cat *;' | tr ';' '\n' | [shell]
---- expected	2024-09-10 23:49:54.819789469 +0200
-+++ found	2024-09-10 23:49:54.937788295 +0200
+--- expected	2024-09-11 18:29:57.868052573 +0200
++++ found	2024-09-11 18:29:57.977054916 +0200
 @@ -1,7 +1,8 @@
  infile content
  infile second line

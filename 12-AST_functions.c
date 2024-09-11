@@ -207,7 +207,7 @@ static t_astnode *parse_simple_cmd(t_ma *ma)
  * enclosed in parentheses.
  * Returns a node representing the cmd.
  */
-static t_astnode *parse_cmd(t_ma *ma) 
+static t_astnode *parse_cmd(t_astnode *n_pipeline, t_ma *ma) 
 {
     t_astnode *node;
 
@@ -222,6 +222,7 @@ static t_astnode *parse_cmd(t_ma *ma)
             exit(1);
         }
         get_next_token(ma);
+        
         //printf("parse_cmd end\n");
         return (node);
     } 
@@ -231,6 +232,13 @@ static t_astnode *parse_cmd(t_ma *ma)
         return parse_simple_cmd(ma);
     }
 }
+
+
+
+// static void store_cmd_redirections(t_astnode *n_pipeline, t_ma *ma)
+// {
+
+// }
 
 /* 
  * Parses a pipeline, which is a sequence of cmds connected by pipes (|).
@@ -243,7 +251,9 @@ static t_astnode *parse_pipeline(t_ma *ma)
     //printf("parse_pipeline start\n");
     node = create_ast_node(&(ma->first_node), NODE_PIPELINE);
     node->data.pipeline.cmds = g_c(&(ma->first_node), sizeof(t_astnode*))->data;
-    node->data.pipeline.cmds[0] = parse_cmd(ma);
+    node->data.pipeline.cmds[0] = parse_cmd(node, ma);
+    // if (*(ma->c_tkn) && is_redirection_token((*(ma->c_tkn))->type))
+    //     store_cmd_redirections(node, ma);
     node->data.pipeline.cmd_count = 1;
     
     while (((*(ma->c_tkn))) && (*(ma->c_tkn))->type == TOKEN_PIPE) 
@@ -260,7 +270,7 @@ static t_astnode *parse_pipeline(t_ma *ma)
                                         node->data.pipeline.cmd_count\
                                         * sizeof(t_astnode*));
         node->data.pipeline.cmds[node->data.pipeline.cmd_count - 1]\
-                                = parse_cmd(ma);
+                                = parse_cmd(node, ma);
     }
     //printf("parse_pipeline end\n");
     return (node);
@@ -277,6 +287,11 @@ t_astnode *parse_cmd_line(t_ma *ma)
     t_astnode *new_node;
     
     //printf("parse_cmd_line start\n");
+    if(*(ma->c_tkn) && ((*(ma->c_tkn))->type == TOKEN_AND || (*(ma->c_tkn))->type == TOKEN_OR))
+    {
+        write(2, "minishell : syntax error near unexpected token \n", 48);
+        exit(1);
+    }
     node = parse_pipeline(ma);
     while ((*(ma->c_tkn)) &&((*(ma->c_tkn))->type == TOKEN_AND || (*(ma->c_tkn))->type == TOKEN_OR))
     {

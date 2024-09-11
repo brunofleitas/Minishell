@@ -160,7 +160,13 @@ void execute_simple_cmd(t_astnode *node, t_ma *ma)
 static void execute_words_arr(char **words_arr, t_ma *ma)
 {
     // int     status;
-
+    // for(int i = 0; words_arr[i]; i++)
+    // {
+    //     ft_printf("words_arr[%d]: %s,  ", i, words_arr[i]);
+    //     ft_printf("\n");
+    // }
+    // ft_putnbr_fd(ma->in_child_p, 1);
+    // fflush(stdout);
     if (is_builtin(words_arr[0]))
     {
         // ft_printf("ma->in_child_p: %d\n", ma->in_child_p);// why does this execute or at least land in the exit code if the command is a builtin?
@@ -168,10 +174,11 @@ static void execute_words_arr(char **words_arr, t_ma *ma)
         return;
     }
     // ft_printf("ma->in_child_p: %d\n", ma->in_child_p);
-    if (ma->in_child_p == 1)
+    if (ma->in_child_p)
     {
         // write(1, "executing external command\n", 27);
         // printf("executing external command\n");
+        // write(1, "executing external command\n", 27);
         execute_external_cmd(words_arr, &(ma)->env, &(ma)->first_node);
         dup2(ma->saved_stdin, STDIN_FILENO);
         return;

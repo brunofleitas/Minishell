@@ -134,6 +134,7 @@ struct s_astnode
 		{
             t_astnode **cmds;
             int cmd_count;
+            t_astnode **cmds_redir;
         } pipeline;
 
         struct

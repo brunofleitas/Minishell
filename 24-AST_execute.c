@@ -57,11 +57,18 @@ void execute_cmd_line(t_astnode *node, t_ma *ma)
 {   
     //printf("execute_cmd_line start\n");
     ma->and_or++;
+    // ft_printf("%s \n",node->data.cmd_line.left->data.pipeline.cmds[0]->data.simple_cmd.words[0].data.word.value);
+    // fflush(stdout);
     execute_ast(node->data.cmd_line.left, ma);
     if (node->data.cmd_line.operator == TOKEN_AND)
     {
         if (ma->last_exit_status == 0)
+        {
+            ma->and_or--;
+            // ft_printf("%s \n",node->data.cmd_line.right->data.pipeline.cmds[0]->data.simple_cmd.words[0]);
+            // fflush(stdout);
             execute_ast(node->data.cmd_line.right, ma);
+        }
         else
         {
             ma->and_or = 0;
@@ -73,7 +80,10 @@ void execute_cmd_line(t_astnode *node, t_ma *ma)
     else if (node->data.cmd_line.operator == TOKEN_OR)
     {
         if (ma->last_exit_status != 0)
+        {
+            ma->and_or--;
             execute_ast(node->data.cmd_line.right, ma);
+        }
         else
         {
             ma->and_or = 0;
