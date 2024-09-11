@@ -322,33 +322,6 @@ static int handle_heredoc(const char *delimiter, t_s_cmd_args *a, t_ma *ma)
 } */
 
 
-/**
- * Exits the shell if the given error code is non-zero.
- * 
- * @param e The error code to check. Set to 0 if no error occurred, non-zero an error occured.
- * @param e_throw_err If true, an error message is printed.
- * @param ma The main structure containing the necessary information for the shell.
- */
-void exit_or_setexit(int e, int e_throw_err, t_ma *ma)
-{
-    (void)e_throw_err;
-    if (!e)
-    {
-        if (ma->in_child_p && !ma->and_or)
-            exit(EXIT_SUCCESS);
-        else
-             ma->last_exit_status = e;
-    }
-    else
-    {
-        if (e_throw_err)
-            perror(" ");
-        if (ma->in_child_p && !ma->and_or)
-            exit(EXIT_FAILURE);
-        else
-            ma->last_exit_status = e;
-    }
-}
 
 /**
  * Handles the redirections specified in the given AST node.
