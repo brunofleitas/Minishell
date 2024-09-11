@@ -1,8 +1,8 @@
 ==> diffs/glob_both.diff <==
 diff of execution of:
 echo 'touch a.c b.c a.o b.o; echo *.*' | tr ';' '\n' | [shell]
---- expected	2024-09-11 18:29:55.796007990 +0200
-+++ found	2024-09-11 18:29:55.844009026 +0200
+--- expected	2024-09-11 23:21:47.421696204 +0200
++++ found	2024-09-11 23:21:47.455695435 +0200
 @@ -1,6 +1,6 @@
 -a.c a.o b.c b.o
 +a.c . .. b.c b.o a.o
@@ -15,8 +15,8 @@ echo 'touch a.c b.c a.o b.o; echo *.*' | tr ';' '\n' | [shell]
 ==> diffs/glob_cmd1.diff <==
 diff of execution of:
 echo 'rm *; *' | tr ';' '\n' | [shell]
---- expected	2024-09-11 18:29:56.822030089 +0200
-+++ found	2024-09-11 18:29:56.869031101 +0200
+--- expected	2024-09-11 23:21:48.391674261 +0200
++++ found	2024-09-11 23:21:48.440673152 +0200
 @@ -1,5 +1,8 @@
  
  ======== stderr =======
@@ -31,8 +31,8 @@ echo 'rm *; *' | tr ';' '\n' | [shell]
 ==> diffs/glob_cmd2.diff <==
 diff of execution of:
 echo 'rm *; touch ls; *' | tr ';' '\n' | [shell]
---- expected	2024-09-11 18:29:56.962033103 +0200
-+++ found	2024-09-11 18:29:57.061035232 +0200
+--- expected	2024-09-11 23:21:48.547670734 +0200
++++ found	2024-09-11 23:21:48.645668515 +0200
 @@ -1,6 +1,8 @@
 -ls
  
@@ -49,8 +49,8 @@ echo 'rm *; touch ls; *' | tr ';' '\n' | [shell]
 ==> diffs/glob_empty.diff <==
 diff of execution of:
 echo 'mkdir empty; cd empty; echo *; echo .*' | tr ';' '\n' | [shell]
---- expected	2024-09-11 18:29:56.640026170 +0200
-+++ found	2024-09-11 18:29:56.691027268 +0200
+--- expected	2024-09-11 23:21:48.176679124 +0200
++++ found	2024-09-11 23:21:48.274676908 +0200
 @@ -1,7 +1,7 @@
 -*
 +. ..
@@ -64,8 +64,8 @@ echo 'mkdir empty; cd empty; echo *; echo .*' | tr ';' '\n' | [shell]
 ==> diffs/glob_hidden2.diff <==
 diff of execution of:
 echo 'touch .hidden .test; echo .*; echo .hidd*' | tr ';' '\n' | [shell]
---- expected	2024-09-11 18:29:56.043013317 +0200
-+++ found	2024-09-11 18:29:56.119014953 +0200
+--- expected	2024-09-11 23:21:47.665690684 +0200
++++ found	2024-09-11 23:21:47.716689531 +0200
 @@ -1,7 +1,7 @@
 -. .. .hidden .test
 +.test .hidden . ..
@@ -79,8 +79,8 @@ echo 'touch .hidden .test; echo .*; echo .hidd*' | tr ';' '\n' | [shell]
 ==> diffs/glob_in_var_quotes.diff <==
 diff of execution of:
 echo 'export a=\'"*file"\'; echo $a' | tr ';' '\n' | [shell]
---- expected	2024-09-11 18:29:57.715049286 +0200
-+++ found	2024-09-11 18:29:57.770050468 +0200
+--- expected	2024-09-11 23:21:49.157656934 +0200
++++ found	2024-09-11 23:21:49.194656097 +0200
 @@ -1,6 +1,6 @@
 -"*file"
 +*file
@@ -93,8 +93,8 @@ echo 'export a=\'"*file"\'; echo $a' | tr ';' '\n' | [shell]
 ==> diffs/glob_mutli.diff <==
 diff of execution of:
 echo 'touch minini mini; echo *i*i*' | tr ';' '\n' | [shell]
---- expected	2024-09-11 18:29:56.172016094 +0200
-+++ found	2024-09-11 18:29:56.301018871 +0200
+--- expected	2024-09-11 23:21:47.866686137 +0200
++++ found	2024-09-11 23:21:47.931684667 +0200
 @@ -1,6 +1,6 @@
 -infile mini minini
 +infile minini mini
@@ -107,8 +107,8 @@ echo 'touch minini mini; echo *i*i*' | tr ';' '\n' | [shell]
 ==> diffs/glob_mutliple.diff <==
 diff of execution of:
 echo 'echo * in* *' | tr ';' '\n' | [shell]
---- expected	2024-09-11 18:29:57.375041980 +0200
-+++ found	2024-09-11 18:29:57.420042947 +0200
+--- expected	2024-09-11 23:21:48.909662544 +0200
++++ found	2024-09-11 23:21:48.968661209 +0200
 @@ -1,6 +1,6 @@
 -infile readonly infile infile readonly
 +. infile .. readonly infile . infile .. readonly
@@ -121,8 +121,8 @@ echo 'echo * in* *' | tr ';' '\n' | [shell]
 ==> diffs/glob_redir_ambiguous.diff <==
 diff of execution of:
 echo 'touch a b c; cat *;' | tr ';' '\n' | [shell]
---- expected	2024-09-11 18:29:57.868052573 +0200
-+++ found	2024-09-11 18:29:57.977054916 +0200
+--- expected	2024-09-11 23:21:49.267654446 +0200
++++ found	2024-09-11 23:21:49.461650058 +0200
 @@ -1,7 +1,8 @@
  infile content
  infile second line
@@ -137,8 +137,8 @@ echo 'touch a b c; cat *;' | tr ';' '\n' | [shell]
 ==> diffs/glob_redir.diff <==
 diff of execution of:
 echo 'rm readonly; cat *;' | tr ';' '\n' | [shell]
---- expected	2024-09-11 18:29:57.160037359 +0200
-+++ found	2024-09-11 18:29:57.246039207 +0200
+--- expected	2024-09-11 23:21:48.749666163 +0200
++++ found	2024-09-11 23:21:48.804664919 +0200
 @@ -1,7 +1,8 @@
  infile content
  infile second line
@@ -153,8 +153,8 @@ echo 'rm readonly; cat *;' | tr ';' '\n' | [shell]
 ==> diffs/glob_sdhfj.diff <==
 diff of execution of:
 echo 'touch bonus bonus_bonus; echo bo*s' | tr ';' '\n' | [shell]
---- expected	2024-09-11 18:29:58.714070723 +0200
-+++ found	2024-09-11 18:29:58.803072631 +0200
+--- expected	2024-09-11 23:21:50.142634655 +0200
++++ found	2024-09-11 23:21:50.255632100 +0200
 @@ -1,6 +1,6 @@
 -bonus bonus_bonus
 +bonus_bonus bonus
@@ -167,8 +167,8 @@ echo 'touch bonus bonus_bonus; echo bo*s' | tr ';' '\n' | [shell]
 ==> diffs/glob_simple.diff <==
 diff of execution of:
 echo 'echo *' | tr ';' '\n' | [shell]
---- expected	2024-09-11 18:29:55.184994809 +0200
-+++ found	2024-09-11 18:29:55.184994809 +0200
+--- expected	2024-09-11 23:21:46.752711339 +0200
++++ found	2024-09-11 23:21:46.827709643 +0200
 @@ -1,6 +1,6 @@
 -infile readonly
 +. infile .. readonly
@@ -181,8 +181,8 @@ echo 'echo *' | tr ';' '\n' | [shell]
 ==> diffs/glob_sorted.diff <==
 diff of execution of:
 echo 'touch b c a; echo *' | tr ';' '\n' | [shell]
---- expected	2024-09-11 18:29:55.324997829 +0200
-+++ found	2024-09-11 18:29:55.399999447 +0200
+--- expected	2024-09-11 23:21:46.919707561 +0200
++++ found	2024-09-11 23:21:46.959706656 +0200
 @@ -1,6 +1,6 @@
 -a b c infile readonly
 +a . infile .. readonly c b
@@ -195,8 +195,8 @@ echo 'touch b c a; echo *' | tr ';' '\n' | [shell]
 ==> diffs/parenthesis_redir_fail.diff <==
 diff of execution of:
 echo '(cat | grep a) < fail' | tr ';' '\n' | [shell]
---- expected	2024-09-11 18:29:54.182973157 +0200
-+++ found	2024-09-11 18:29:54.279975255 +0200
+--- expected	2024-09-11 23:21:45.792733061 +0200
++++ found	2024-09-11 23:21:45.865731409 +0200
 @@ -1,5 +1,5 @@
  
  ======== stderr =======
@@ -208,8 +208,8 @@ echo '(cat | grep a) < fail' | tr ';' '\n' | [shell]
 ==> diffs/parenthesis_redir_in.diff <==
 diff of execution of:
 echo '(cat | grep in) < infile' | tr ';' '\n' | [shell]
---- expected	2024-09-11 18:29:53.505958503 +0200
-+++ found	2024-09-11 18:29:53.641961448 +0200
+--- expected	2024-09-11 23:21:45.283744579 +0200
++++ found	2024-09-11 23:21:45.360742836 +0200
 @@ -1,7 +1,5 @@
 -infile content
 -infile second line
@@ -223,8 +223,8 @@ echo '(cat | grep in) < infile' | tr ';' '\n' | [shell]
 ==> diffs/parenthesis_redir_in_out.diff <==
 diff of execution of:
 echo '(cat | grep in) < infile > outfile; cat outfile' | tr ';' '\n' | [shell]
---- expected	2024-09-11 18:29:53.988968963 +0200
-+++ found	2024-09-11 18:29:54.080970952 +0200
+--- expected	2024-09-11 23:21:45.653736206 +0200
++++ found	2024-09-11 23:21:45.711734894 +0200
 @@ -1,7 +1,5 @@
 -infile content
 -infile second line
@@ -239,8 +239,8 @@ echo '(cat | grep in) < infile > outfile; cat outfile' | tr ';' '\n' | [shell]
 ==> diffs/parenthesis_redir_out.diff <==
 diff of execution of:
 echo '(cat infile | grep in) > outfile; cat outfile' | tr ';' '\n' | [shell]
---- expected	2024-09-11 18:29:53.737963527 +0200
-+++ found	2024-09-11 18:29:53.874966492 +0200
+--- expected	2024-09-11 23:21:45.469740369 +0200
++++ found	2024-09-11 23:21:45.516739306 +0200
 @@ -1,7 +1,7 @@
  infile content
  infile second line

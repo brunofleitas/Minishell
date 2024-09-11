@@ -207,7 +207,7 @@ static t_astnode *parse_simple_cmd(t_ma *ma)
  * enclosed in parentheses.
  * Returns a node representing the cmd.
  */
-static t_astnode *parse_cmd(t_astnode *n_pipeline, t_ma *ma) 
+static t_astnode *parse_cmd(t_ma *ma) 
 {
     t_astnode *node;
 
@@ -251,7 +251,7 @@ static t_astnode *parse_pipeline(t_ma *ma)
     //printf("parse_pipeline start\n");
     node = create_ast_node(&(ma->first_node), NODE_PIPELINE);
     node->data.pipeline.cmds = g_c(&(ma->first_node), sizeof(t_astnode*))->data;
-    node->data.pipeline.cmds[0] = parse_cmd(node, ma);
+    node->data.pipeline.cmds[0] = parse_cmd(ma);
     // if (*(ma->c_tkn) && is_redirection_token((*(ma->c_tkn))->type))
     //     store_cmd_redirections(node, ma);
     node->data.pipeline.cmd_count = 1;
@@ -270,7 +270,7 @@ static t_astnode *parse_pipeline(t_ma *ma)
                                         node->data.pipeline.cmd_count\
                                         * sizeof(t_astnode*));
         node->data.pipeline.cmds[node->data.pipeline.cmd_count - 1]\
-                                = parse_cmd(node, ma);
+                                = parse_cmd(ma);
     }
     //printf("parse_pipeline end\n");
     return (node);
