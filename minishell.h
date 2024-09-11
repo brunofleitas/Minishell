@@ -264,7 +264,7 @@ void            builtin_cd(char **args, t_ma *ma);
 int             find_env_var(t_env **env, char *var);
 pid_t           fork_process();
 int	            update_env_var(int i, const char *var, t_ma *ma);
-int             handle_redirections(t_astnode *redir_node, t_s_cmd_args *a, t_ma *ma);
+int             handle_redirections(t_astnode *redir_node/* , t_s_cmd_args *a */, t_ma *ma);
 void	        print_env(t_env *env);
 char            **expand_wildcards_in_args(char **args, t_ma *ma);
 int	            expand_wildcard(t_wc_args *a, char *pattern, t_ma *ma);

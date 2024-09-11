@@ -1,7 +1,7 @@
 diff of execution of:
 echo 'touch .hidden .test; echo .*; echo .hidd*' | tr ';' '\n' | [shell]
---- expected	2024-09-11 23:42:39.897042950 +0200
-+++ found	2024-09-11 23:42:39.943041793 +0200
+--- expected	2024-09-11 23:58:23.680090802 +0200
++++ found	2024-09-11 23:58:23.770087857 +0200
 @@ -1,7 +1,7 @@
 -. .. .hidden .test
 +.test .hidden . ..

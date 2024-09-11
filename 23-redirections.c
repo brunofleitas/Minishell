@@ -31,7 +31,7 @@ char	*gnl(int fd);
  * 
  * @param file_name The name of the file to redirect input from.
  */
-static int redirect_input(char *file_name, t_s_cmd_args *a, t_ma *ma)
+static int redirect_input(char *file_name/* , t_s_cmd_args *a */, t_ma *ma)
 {
     int fd;
 
@@ -50,7 +50,7 @@ static int redirect_input(char *file_name, t_s_cmd_args *a, t_ma *ma)
             return(0);
         }
         close(fd);
-        a->s_inredir += 1;
+        // a->s_inredir += 1;
         return(1);
 }
 
@@ -246,7 +246,7 @@ static int create_tmp_file(const char *temp_file_name, const char *delimiter, t_
  * @param delimiter The delimiter used to mark the end of the heredoc input.
  * @param ma The main structure containing the necessary information for the shell.
  */
-static int handle_heredoc(const char *delimiter, t_s_cmd_args *a, t_ma *ma)
+static int handle_heredoc(const char *delimiter/* , t_s_cmd_args *a */, t_ma *ma)
 {
     char *temp_file_name;
 
@@ -255,7 +255,7 @@ static int handle_heredoc(const char *delimiter, t_s_cmd_args *a, t_ma *ma)
         return(0);
     if (!create_tmp_file(temp_file_name, delimiter, ma))
         return (0);
-    redirect_input(temp_file_name, a, ma);
+    redirect_input(temp_file_name/* , a */, ma);
     if (unlink(temp_file_name) == -1)
         return (0);
     return (1);
@@ -329,7 +329,7 @@ static int handle_heredoc(const char *delimiter, t_s_cmd_args *a, t_ma *ma)
  * @param redir_node The AST node containing the redirections.
  * @param ma The main data structure of the program.
  */
-int handle_redirections(t_astnode *redir_node, t_s_cmd_args *a, t_ma *ma)
+int handle_redirections(t_astnode *redir_node/* , t_s_cmd_args *a */, t_ma *ma)
 {
     while (redir_node != NULL)
     {
@@ -338,23 +338,23 @@ int handle_redirections(t_astnode *redir_node, t_s_cmd_args *a, t_ma *ma)
             (redir_node->data.redirection.type == TOKEN_REDIR_APPEND 
             && !redirect_output_append(redir_node->data.redirection.file, 1, ma))||
             (redir_node->data.redirection.type == TOKEN_REDIR_IN 
-            && !redirect_input(redir_node->data.redirection.file, a, ma)) ||
+            && !redirect_input(redir_node->data.redirection.file/* , a */, ma)) ||
             (redir_node->data.redirection.type == TOKEN_HEREDOC 
-            && !handle_heredoc(redir_node->data.redirection.file, a, ma)))
+            && !handle_heredoc(redir_node->data.redirection.file/* , a */, ma)))
             {
-                if ((redir_node->data.redirection.type == TOKEN_REDIR_IN  || 
-                redir_node->data.redirection.type == TOKEN_HEREDOC) && !a->i_c)
-                {
-                    restore_io(ma);
-                    exit_or_setexit(1,0, ma);
-                    return (0);
-                }
-                else
-                {
+                // if ((redir_node->data.redirection.type == TOKEN_REDIR_IN  || 
+                // redir_node->data.redirection.type == TOKEN_HEREDOC) && !a->i_c)
+                // {
+                //     restore_io(ma);
+                //     exit_or_setexit(1,0, ma);
+                //     return (0);
+                // }
+                // else
+                // {
                     restore_io(ma);
                     exit_or_setexit(1, 0, ma);
                     return (0);
-                }
+                // }
             }
         redir_node = redir_node->data.redirection.next;
     }

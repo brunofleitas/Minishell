@@ -1,7 +1,7 @@
 diff of execution of:
 echo 'echo * in* *' | tr ';' '\n' | [shell]
---- expected	2024-09-11 23:42:40.974015868 +0200
-+++ found	2024-09-11 23:42:41.110012447 +0200
+--- expected	2024-09-11 23:58:25.199041117 +0200
++++ found	2024-09-11 23:58:25.199041117 +0200
 @@ -1,6 +1,6 @@
 -infile readonly infile infile readonly
 +. infile .. readonly infile . infile .. readonly
