@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 15:03:22 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/12 15:05:38 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/12 22:49:06 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,26 @@
  * @return char* The trimmed wildcard string or the original wildcard
  *               string if no quotes were found.
  */
-static char	*trim_wildcard(char *wildcard, t_ma *ma)
+static char	*trim_wildcard(char *wildcard, t_ma *ma, t_token_type type)
 {
-	if (wildcard[0] == '\"')
-		return (ft_strtrim_g_c(wildcard, "\"", &(ma->first_node)));
-	else if (wildcard[0] == '\'')
-		return (ft_strtrim_g_c(wildcard, "\'", &(ma->first_node)));
+	// printf("wildcard: %s\n", wildcard);
+	if (!(type == 2 && ft_strchr(wildcard, '"') && ft_strchr(wildcard, '*')))
+	{
+		// if (ft_strcmp(wildcard, "\"*\"))
+		{
+			if (wildcard[0] == '\"')
+				return (ft_strtrim_g_c(wildcard, "\"", &(ma->first_node)));
+			else if (wildcard[0] == '\'')
+				return (ft_strtrim_g_c(wildcard, "\'", &(ma->first_node)));
+		}
+	}
+	if (ft_strcmp(wildcard, "\"*\"") == 0)
+	{
+		if (wildcard[0] == '\"')
+			return (ft_strtrim_g_c(wildcard, "\"", &(ma->first_node)));
+		else if (wildcard[0] == '\'')
+			return (ft_strtrim_g_c(wildcard, "\'", &(ma->first_node)));
+	}
 	return (wildcard);
 }
 
@@ -56,7 +70,7 @@ static void	process_wildcards(char **wildcards, t_ma *ma)
 	{
 		ma->tkns[i] = g_c(&(ma->first_node), sizeof(t_token))->data;
 		ma->tkns[i]->type = clasify_token(wildcards[i]);
-		trimmed = trim_wildcard(wildcards[i], ma);
+		trimmed = trim_wildcard(wildcards[i], ma, ma->tkns[i]->type);
 		ma->tkns[i]->value = trimmed;
 		// printf("%s\n", ma->tkns[i]->value);
 		// printf("%i\n", ma->tkns[i]->type);
@@ -94,6 +108,15 @@ void	lexer(t_ma *ma)
 			return ;
 		}
 		i ++;
+	}
+	if (split[0] && (!split [1]) && strcmp(split[0], "*") == 0)
+	{
+		wildcards = expand_wildcards_in_args(split, ma);
+		process_wildcards(wildcards, ma);
+		if (ft_strcmp(wildcards[0], "*") == 0)
+			return ;
+		printf("%s\n",wildcards[0]);
+		exit (0);
 	}
 	if (split[0])
 	{

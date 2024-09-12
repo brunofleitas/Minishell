@@ -1,3 +1,18 @@
+#include <unistd.h>
+char	*gnl(int fd);
+#include <unistd.h>
+#include <unistd.h>
+char	*gnl(int fd);
+#include <unistd.h>
+#include <unistd.h>
+char	*gnl(int fd);
+#include <unistd.h>
+#include <unistd.h>
+char	*gnl(int fd);
+#include <unistd.h>
+#include <unistd.h>
+char	*gnl(int fd);
+#include <unistd.h>
 
 char	*gnl(int fd);
 #include <unistd.h>
@@ -101,7 +116,7 @@ int	main(int argc, char **argv, char **envp)
 		signal(SIGQUIT, SIG_IGN);
 		// int isatty_flag = !isatty(0);
 		// ft_putnbr_fd(isatty_flag, 2);
-		ma.input = !isatty(0) ? gnl(0) : readline("minisshell>>");
+		ma.input = !isatty(0) ? gnl(0) : !isatty(0) ? gnl(0) : readline("minisshell>>");
 		// ft_putnbr_fd(heredoc_f, 1);
 		if(!isatty(0) && heredoc_f)
 		{
@@ -115,7 +130,7 @@ int	main(int argc, char **argv, char **envp)
         	builtin_exit(&ma, NULL);
 		if (ft_strcmp(ma.input, "") != 0)
 		{
-			!isatty(0) ? 0 : add_history(ma.input);
+			!isatty(0) ? 0 : !isatty(0) ? 0 : add_history(ma.input);
 			lexer(&ma);
 			// ft_putnbr_fd(isatty(0), 2);
 			if(!isatty(0))
@@ -193,7 +208,6 @@ int	main(int argc, char **argv, char **envp)
  * of operators, command grouping, and redirections in a way that respects the 
  * intended precedence and associativity of operations.
  */
-
 
 
 void __attribute__((destructor)) free_gnl_buffer();

@@ -1,5 +1,5 @@
 #include "minishell.h"
-
+/* 
 static int minishell_strcmp(const char *s1, const char *s2) 
 {
 	char    c1;
@@ -43,7 +43,7 @@ static int minishell_strcmp(const char *s1, const char *s2)
         return (-1);
     else 
         return (0);
-}
+}*/
 
 /**
  * Swaps two string pointers.
@@ -51,7 +51,7 @@ static int minishell_strcmp(const char *s1, const char *s2)
  * @param a Pointer to the first string pointer
  * @param b Pointer to the second string pointer
  */
-static void swap_strings(char **a, char **b) 
+// static void swap_strings(char **a, char **b) 
 {
     char    *temp;
     
@@ -66,7 +66,7 @@ static void swap_strings(char **a, char **b)
  * @param arr Array of string pointers to be sorted
  * @param n Number of strings in the array
  */
-void minishell_sort_str(char *arr[], int n) 
+/* void minishell_sort_str(char *arr[], int n) 
 {
     int i;
     
@@ -85,7 +85,7 @@ void minishell_sort_str(char *arr[], int n)
         i++;
     }
 }
-
+  */
 /**
  * Sorts an array of strings using bubble sort algorithm.
  *

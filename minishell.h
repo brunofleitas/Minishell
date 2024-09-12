@@ -293,6 +293,6 @@ int             update_oldpwd(char *current_dir, t_ma *ma);
 int             update_pwd(t_ma *ma);
 void            close_heredoc(char ***delimiters_h, int *heredoc_f, t_ma *ma);
 void            heredoc_checker(char ***delimiters_h, int *heredoc_f, t_ma *ma);
-void minishell_sort_str(char *arr[], int n);
+void	minishell_sort_str(char *tab[], size_t size);
 
 #endif
