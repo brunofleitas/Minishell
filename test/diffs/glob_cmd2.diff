@@ -1,16 +1,13 @@
 diff of execution of:
 echo 'rm *; touch ls; *' | tr ';' '\n' | [shell]
---- expected	2024-09-11 23:58:24.750055800 +0200
-+++ found	2024-09-11 23:58:24.889051254 +0200
-@@ -1,6 +1,8 @@
+--- expected	2024-09-12 10:36:52.156070677 +0200
++++ found	2024-09-12 10:36:52.173070773 +0200
+@@ -1,6 +1,5 @@
 -ls
  
  ======== stderr =======
 -
-+[progname]: cannot remove '.': Is a directory
-+[progname]: cannot remove '..': Is a directory
-+[progname]: .: filename argument required
-+[progname]: usage: . filename [arguments]
++[progname]: ls: Permission denied
  ======== return =======
 -return value: 0
 +return value: 1

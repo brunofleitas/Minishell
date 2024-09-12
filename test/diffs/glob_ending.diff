@@ -1,0 +1,12 @@
+diff of execution of:
+echo 'touch a.c b.c a.o b.o; echo a.*' | tr ';' '\n' | [shell]
+--- expected	2024-09-12 10:36:51.849068948 +0200
++++ found	2024-09-12 10:36:51.867069049 +0200
+@@ -1,6 +1,6 @@
+-a.c a.o
++a.o a.c
+ 
+ ======== stderr =======
+ 
+ ======== return =======
+ return value: 0
