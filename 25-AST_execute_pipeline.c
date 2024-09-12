@@ -23,8 +23,9 @@ static void setup_pipe(int pipe_fds[2])
     //printf("setup_pipe end\n");
 }
 
-static void child_process(t_pip_args *a, t_astnode *simple_cmd, t_ma *ma)
+static void child_process(t_pip_args *a, t_astnode *simple_cmd, t_astnode *cmd_redir, t_ma *ma)
 {
+    // (void)cmd_redir;
     // write(1, "Enter fork lvl: ", 16);
     // ft_putnbr_fd(ma->in_child_p, 1);
     // write(1, "\n", 1);
@@ -43,6 +44,11 @@ static void child_process(t_pip_args *a, t_astnode *simple_cmd, t_ma *ma)
     ma->in_child_p++;
     ma->and_or = 0;
     //printf("child_process end\n");
+    if (cmd_redir)
+    {
+        // write(1, "redir\n\n", 6);
+        handle_redirections(cmd_redir, ma);
+    }
     execute_ast(simple_cmd, ma); //what is this function?
 }
 
@@ -78,9 +84,10 @@ void execute_pipeline(t_astnode *node, t_ma *ma)
     //printf("execute_pipeline start\n");
     i = 0;
     a.input_fd = STDIN_FILENO;
-    if (node->data.pipeline.cmd_count == 1 && 
+    if (node->data.pipeline.cmd_count == 1 && node->data.pipeline.cmds[0]->type == NODE_SIMPLE_CMD &&
     (node->data.pipeline.cmds[0]->data.simple_cmd.words && (node->data.pipeline.cmds[0]->data.simple_cmd.words[0].data.word.type == TOKEN_BUILTIN)))//added here a sef\g fault check
     {
+        // write (1, "command ==1", 12);
         execute_ast(node->data.pipeline.cmds[0], ma);
         return;
         // close(original_stdout);
@@ -88,16 +95,25 @@ void execute_pipeline(t_astnode *node, t_ma *ma)
     a.pid_arr = g_c(&(ma->first_node), sizeof(pid_t) * (node->data.pipeline.cmd_count))->data;
     while (i < node->data.pipeline.cmd_count)
     {
+        // ft_printf("command_count: %d\n", node->data.pipeline.cmd_count);
         a.last_cmd = (i == node->data.pipeline.cmd_count - 1);
         if (!a.last_cmd)
             setup_pipe(a.pipe_fds);
         a.pid_arr[i] = fork();
+        // write(1, "stops here\n", 12);
         if (a.pid_arr[i] == -1)
             exit_or_setexit(1, 1, ma);
-        if (a.pid_arr[i] == 0)
-            child_process(&a, node->data.pipeline.cmds[i], ma);
+        // if(node->data.pipeline.cmds_redir)
+        // {
+        //     ft_printf("node->data.pipeline.cmds_redir[%d] %s\n", i, node->data.pipeline.cmds_redir[i]->data.redirection.file);
+        //     fflush(stdout);
+        // }
+        if (a.pid_arr[i] == 0 && node->data.pipeline.cmds_redir)
+            child_process(&a, node->data.pipeline.cmds[i], node->data.pipeline.cmds_redir[i], ma);
+        else if (a.pid_arr[i] == 0)
+            child_process(&a, node->data.pipeline.cmds[i], NULL, ma);
         else
-            parent_process(&a);
+            parent_process(&a /* node->data.pipeline.cmds_redir[i] */);
         i++;
     }
     // dup2(original_stdout, STDOUT_FILENO);

@@ -109,8 +109,10 @@ static void parse_word_list(t_astnode *node, t_astnode **last_word, t_ma *ma)
 
 static void add_redir(t_astnode **first_redir_node, t_astnode **current, t_astnode *redir_node)
 {
+    // write(1, "add_redir start\n", 16);
     if (!(*first_redir_node))
     {
+        // write(1, "enters b\n", 9);
         *first_redir_node = redir_node;
         *current = *first_redir_node;
     }
@@ -119,8 +121,16 @@ static void add_redir(t_astnode **first_redir_node, t_astnode **current, t_astno
        (*current)->data.redirection.next = redir_node;
        *current = redir_node;
     }
+    // write(1, "add_redir end\n", 14);
 }
 
+/**
+ * Parses a redirection list in the AST.
+ *
+ * @param node The AST node representing the redirection list.
+ * @param last_word The last word resulting of the call of parse_word_list.
+ * @param ma The memory allocator used for dynamic memory allocation.
+ */
 static void parse_redirection_list(t_astnode *node, t_astnode **last_word, t_ma *ma)
 {
 
@@ -146,10 +156,17 @@ static void parse_redirection_list(t_astnode *node, t_astnode **last_word, t_ma 
         redir_node->data.redirection.file = (*(ma->c_tkn))->value;
         redir_node->data.redirection.next = NULL;
         get_next_token(ma);
-        add_redir(&(node->data.simple_cmd.redirections), &(current), redir_node);
+        if(!last_word)
+        {
+            // write(1, "enters a", 9);
+            add_redir(&(node->data.pipeline.cmds_redir[node->data.pipeline.cmd_count - 1]), &(current), redir_node);
+        }
+        else
+            add_redir(&(node->data.simple_cmd.redirections), &(current), redir_node);
+        // write(1, "stops here\n", 11);
         // ft_printf("redir_node->data.simple_cmd.redirections_in : %p\n" ,node->data.simple_cmd.redirections_in);
         // ft_printf("redir_node->data.simple_cmd.redirections_out : %p\n" ,node->data.simple_cmd.redirections_out);
-        if ((*(ma->c_tkn)) && is_word_token((*(ma->c_tkn))->type))
+        if ((*(ma->c_tkn)) && is_word_token((*(ma->c_tkn))->type) && last_word)
             parse_word_list(node, last_word, ma);
     }
 }
@@ -235,10 +252,26 @@ static t_astnode *parse_cmd(t_ma *ma)
 
 
 
-// static void store_cmd_redirections(t_astnode *n_pipeline, t_ma *ma)
-// {
-
-// }
+static void store_cmd_redirections(t_astnode *n_pipeline, t_ma *ma)
+{
+    n_pipeline->data.pipeline.cmds_redir = ft_realloc_g_c(&(ma->first_node),\
+                                        n_pipeline->data.pipeline.cmds_redir,\
+                                        n_pipeline->data.pipeline.cmd_count\
+                                        * sizeof(t_astnode *));
+    n_pipeline->data.pipeline.cmds_redir[n_pipeline->data.pipeline.cmd_count - 1] = NULL;
+    if(!n_pipeline->data.pipeline.cmds_redir)
+    {
+        write(2, "cmd_redir creation failed\n", 13);
+        exit(1);
+    }
+    parse_redirection_list(n_pipeline, NULL, ma);
+    // t_astnode *current = n_pipeline->data.pipeline.cmds_redir[n_pipeline->data.pipeline.cmd_count - 1];
+    // while (current)
+    // {
+    //     ft_printf("current->data.redirection.file : %s\n", current->data.redirection.file);
+    //     current = current->data.redirection.next;
+    // }    
+}
 
 /* 
  * Parses a pipeline, which is a sequence of cmds connected by pipes (|).
@@ -252,10 +285,10 @@ static t_astnode *parse_pipeline(t_ma *ma)
     node = create_ast_node(&(ma->first_node), NODE_PIPELINE);
     node->data.pipeline.cmds = g_c(&(ma->first_node), sizeof(t_astnode*))->data;
     node->data.pipeline.cmds[0] = parse_cmd(ma);
-    // if (*(ma->c_tkn) && is_redirection_token((*(ma->c_tkn))->type))
-    //     store_cmd_redirections(node, ma);
     node->data.pipeline.cmd_count = 1;
-    
+    node->data.pipeline.cmds_redir = NULL;
+    if (*(ma->c_tkn) && is_redirection_token((*(ma->c_tkn))->type))
+        store_cmd_redirections(node, ma);
     while (((*(ma->c_tkn))) && (*(ma->c_tkn))->type == TOKEN_PIPE) 
     {
         get_next_token(ma);
@@ -271,7 +304,10 @@ static t_astnode *parse_pipeline(t_ma *ma)
                                         * sizeof(t_astnode*));
         node->data.pipeline.cmds[node->data.pipeline.cmd_count - 1]\
                                 = parse_cmd(ma);
+        if (*(ma->c_tkn) && is_redirection_token((*(ma->c_tkn))->type))
+            store_cmd_redirections(node, ma);
     }
+    // ft_printf("node->data.pipeline.cmd_count : %d\n", node->data.pipeline.cmd_count);
     //printf("parse_pipeline end\n");
     return (node);
 }
