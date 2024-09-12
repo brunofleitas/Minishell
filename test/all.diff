@@ -1,8 +1,8 @@
 ==> diffs/questionable_exec_dir.diff <==
 diff of execution of:
 echo 'export PATH="$PATH:$PWD"; mkdir asdfg; asdfg' | tr ';' '\n' | [shell]
---- expected	2024-09-12 17:24:56.107341021 +0200
-+++ found	2024-09-12 17:24:56.124341140 +0200
+--- expected	2024-09-12 21:42:46.289594175 +0200
++++ found	2024-09-12 21:42:46.310593076 +0200
 @@ -1,5 +1,6 @@
  
  ======== stderr =======
@@ -14,8 +14,8 @@ echo 'export PATH="$PATH:$PWD"; mkdir asdfg; asdfg' | tr ';' '\n' | [shell]
 ==> diffs/questionable_glob_order.diff <==
 diff of execution of:
 echo 'touch a b c A B C aa ab ac Aa Ab Ac aA aB aC; echo *' | tr ';' '\n' | [shell]
---- expected	2024-09-12 17:24:55.903339596 +0200
-+++ found	2024-09-12 17:24:55.922339729 +0200
+--- expected	2024-09-12 21:42:46.045606938 +0200
++++ found	2024-09-12 21:42:46.068605735 +0200
 @@ -1,6 +1,6 @@
 -a A aa aA Aa ab aB Ab ac aC Ac b B c C infile readonly
 +a A aa aA ab aB ac aC Aa Ab Ac b B c C infile readonly
