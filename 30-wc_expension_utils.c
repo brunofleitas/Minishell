@@ -2,6 +2,73 @@
 
 static int	process_directory(t_wc_args *a, DIR *dir, char *pattern, t_ma *ma);
 
+// int	ft_strWildCmp(const char *s1, const char *s2)
+// {
+/* 	size_t	i;
+	char	c1;
+	char	c2;
+
+	i = 0;
+	while (s1[i] != '\0' && s2[i] != '\0')
+	{
+		c1 = tolower((unsigned char)s1[i]);
+		c2 = tolower((unsigned char)s2[i]);
+		if (c1 != c2)
+			return ((int)c1 - (int)c2);
+		i++;
+	}
+	return ((int)tolower((unsigned char)s1[i]) - (int)tolower((unsigned char)s2[i])); */
+	// size_t	i;
+
+	// i = 0;
+	// while (s1[i] != '\0' && s2[i] != '\0')
+	// {
+	// 	if (s1[i] != s2[i])
+	// 		return ((int)s1[i] - (int)s2[i]);
+	// 	i++;
+	// }
+	// return ((int)s1[i] - (int)s2[i]);
+// 	int i = 0;
+// 	while (s1[i] != '\0' && s2[i] != '\0')
+// 	{
+// 		if (s1[i] != s2[i])
+// 		{
+// 			if ((s1[i] > 'a' && s1[i] < 'z') && (s2[i] > 'A' && s2[i] < 'Z'))
+// 				return ((int)s1[i] - (int)s2[i]);
+// 			else if ((s1[i] > 'A' && s1[i] < 'Z') && (s2[i] > 'a' && s2[i] < 'z'))
+// 				return ((int)s1[i] - (int)s2[i]);
+// 		}
+// 		else 	
+// 			return ((int)s1[i] - (int)s2[i]);
+// 		i++;
+// 	}
+// 	return ((int)s1[i] - (int)s2[i]);
+// }
+
+// void sort_wildcard_args(t_wc_args *a)
+// {
+//     int i;
+//     int j;
+//     char *tmp;
+
+//     i = a->count_cpy;
+//     while (i < a->count)
+//     {
+//         j = i + 1;
+//         while (j < a->count + 1)
+//         {
+//             if (ft_strWildCmp(a->exp_args[i], a->exp_args[j]) > 0)
+//             {
+//                 tmp = a->exp_args[i];
+//                 a->exp_args[i] = a->exp_args[j];
+//                 a->exp_args[j] = tmp;
+//             }
+//             j++;
+//         }
+//         i++;
+//     }
+// }
+
 /**
  * @brief Expand wildcard patterns in a single argument
  *
@@ -58,6 +125,7 @@ static int	process_directory(t_wc_args *a, DIR *dir, char *pattern, t_ma *ma)
 
 	// printf("process_directory_start\n");
 	entry = readdir(dir);
+	a->count_cpy = a->count;
 	while (entry != NULL)
 	{
 		// printf("entry->d_name: %s\n", entry->d_name);
@@ -65,7 +133,7 @@ static int	process_directory(t_wc_args *a, DIR *dir, char *pattern, t_ma *ma)
 		{	
 			if (match_pattern(entry->d_name, pattern))
 			{
-    				if (!add_single_element(a, entry->d_name, ma))
+    				if (!add_single_element( a, entry->d_name, ma))
 						return (0);
 				a->count_match++;
 			}
@@ -73,6 +141,7 @@ static int	process_directory(t_wc_args *a, DIR *dir, char *pattern, t_ma *ma)
 		entry = readdir(dir);
 	}
 	// sort_wildcard_args(a);
+	minishell_sort_str(a->exp_args + a->count_cpy, (a->count - a->count_cpy));
 	// printf("process_directory_end\n");
 	return (1);
 }
@@ -99,7 +168,7 @@ static int	process_directory(t_wc_args *a, DIR *dir, char *pattern, t_ma *ma)
  * @param ma Pointer to the memory allocation structure
  * @return int Returns 1 on success, 0 on error
  */
-int add_single_element(t_wc_args *a, char *name, t_ma *ma)
+int add_single_element(/* int flag, */ t_wc_args *a, char *name, t_ma *ma)
 {
     int i;
 
@@ -112,6 +181,8 @@ int add_single_element(t_wc_args *a, char *name, t_ma *ma)
     if (!a->exp_args)
         return (0);
     (a->exp_args)[a->count] = ft_strdup_g_c(name, &(ma->first_node));
+	// if (flag)
+	// 	sort_wildcard_args(a);
     if (!(a->exp_args)[a->count])
     {
         while (i--)

@@ -231,6 +231,7 @@ typedef struct s_expand_wildcards_args
     int     count;
     int     capacity;
     int     count_match;
+    int     count_cpy;
 }               t_wc_args;
 
 /* ************************************************************************** */
@@ -268,7 +269,7 @@ int             handle_redirections(t_astnode *redir_node/* , t_s_cmd_args *a */
 void	        print_env(t_env *env);
 char            **expand_wildcards_in_args(char **args, t_ma *ma);
 int	            expand_wildcard(t_wc_args *a, char *pattern, t_ma *ma);
-int             add_single_element(t_wc_args *a, char *name, t_ma *ma);
+int             add_single_element(/* int flag, */ t_wc_args *a, char *name, t_ma *ma);
 int	            match_pattern(const char *str, const char *pattern);
 int             check_valid_file(char *path);
 void            restore_io(t_ma *ma);
@@ -292,5 +293,6 @@ int             update_oldpwd(char *current_dir, t_ma *ma);
 int             update_pwd(t_ma *ma);
 void            close_heredoc(char ***delimiters_h, int *heredoc_f, t_ma *ma);
 void            heredoc_checker(char ***delimiters_h, int *heredoc_f, t_ma *ma);
+void minishell_sort_str(char *arr[], int n);
 
 #endif

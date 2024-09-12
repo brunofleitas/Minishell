@@ -2,6 +2,58 @@
 
 static int expand_single_arg(t_wc_args *a , char *arg, t_ma *ma);
 
+/* int	ft_strWildCmp(const char *s1, const char *s2)
+{
+ 	size_t	i;
+	char	c1;
+	char	c2;
+
+	i = 0;
+	while (s1[i] != '\0' && s2[i] != '\0')
+	{
+		c1 = tolower((unsigned char)s1[i]);
+		c2 = tolower((unsigned char)s2[i]);
+		if (c1 != c2)
+			return ((int)c1 - (int)c2);
+		i++;
+	}
+	return ((int)tolower((unsigned char)s1[i]) - (int)tolower((unsigned char)s2[i])); 
+    size_t	i;
+
+	i = 0;
+	while (s1[i] != '\0' && s2[i] != '\0')
+	{
+		if (s1[i] != s2[i])
+			return ((int)s1[i] - (int)s2[i]);
+		i++;
+	}
+	return ((int)s1[i] - (int)s2[i]);
+}
+
+void sort_wildcard_args(t_wc_args *a)
+{
+    int i;
+    int j;
+    char *tmp;
+
+    i = 1;
+    while (i < a->count - 1)
+    {
+        j = i + 1;
+        while (j < a->count)
+        {
+            if (ft_strWildCmp(a->exp_args[i], a->exp_args[j]) > 0)
+            {
+                tmp = a->exp_args[i];
+                a->exp_args[i] = a->exp_args[j];
+                a->exp_args[j] = tmp;
+            }
+            j++;
+        }
+        i++;
+    }
+} */
+
 /**
  * @brief Expand wildcard patterns in command arguments
  *
@@ -50,22 +102,24 @@ char    **expand_wildcards_in_args(char **args, t_ma *ma)
  */
 static int expand_single_arg(t_wc_args *a , char *arg, t_ma *ma)
 {
-
     // printf("expand_single_arg_start\n");
     a->count_match = 0;
     if (ft_strchr(arg, '*') /* || ft_strchr(arg, '?') */)
     {
         if (!expand_wildcard(a, arg, ma))
+        {
             return (0);
+        }
         if (!a->count_match)
         {
-            if (!add_single_element(a, arg, ma))
+            if (!add_single_element( a, arg, ma))
                 return (0);
         }
+        // sort_wildcard_args(a);
     }
     else
     {
-        if (!add_single_element(a, arg, ma))
+        if (!add_single_element( a, arg, ma))
         return (0);
     } 
     // printf("expand_single_arg_end\n");
