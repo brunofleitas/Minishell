@@ -61,15 +61,18 @@ static int	process_directory(t_wc_args *a, DIR *dir, char *pattern, t_ma *ma)
 	while (entry != NULL)
 	{
 		// printf("entry->d_name: %s\n", entry->d_name);
-		if (match_pattern(entry->d_name, pattern))
-		{
-			
-			if (!add_single_element(a, entry->d_name, ma))
-				return (0);
-			a->count_match++;
+		if (!(ft_strcmp(entry->d_name, ".") == 0 || ft_strcmp(entry->d_name, "..") == 0))
+		{	
+			if (match_pattern(entry->d_name, pattern))
+			{
+    				if (!add_single_element(a, entry->d_name, ma))
+						return (0);
+				a->count_match++;
+			}
 		}
 		entry = readdir(dir);
 	}
+	// sort_wildcard_args(a);
 	// printf("process_directory_end\n");
 	return (1);
 }
