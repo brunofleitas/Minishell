@@ -1,0 +1,1884 @@
+/* int	main(int argc, char **argv, char **envp)
+{
+	t_ma		ma;
+	t_astnode	*root;
+	int			fix_stdin;
+	int			fix_stdout;
+	int			fix_stderr;
+	char		**delimiters_h;
+	int			heredoc_f;
+
+	(void)argc;
+	fix_stdin = dup(STDIN_FILENO);
+	fix_stdout = dup(STDOUT_FILENO);
+	fix_stderr = dup(STDERR_FILENO);
+	heredoc_f = 0;
+	ma.first_node = NULL;
+	ma.first_env = NULL;
+	ma.program = ft_strjoin_g_c(argv[0], ": ", &(ma.first_node));
+	ma.program = ft_strtrim_g_c(ma.program, "./", &(ma.first_node));
+	ma.l_program = ft_strlen(ma.program);
+	ma.last_exit_status = 0;
+	ma.in_child_p = 0;
+	ma.env = duplicate_vars(&(ma.first_env), envp);
+	update_env_var(find_env_var(&(ma.env), "SHLVL"), "SHLVL=3", &ma);
+	while (1)
+	{
+			ma.saved_stdin = fix_stdin;
+			ma.saved_stdout =  fix_stdout;
+			ma.saved_stderr =  fix_stderr;
+		signal(SIGINT, sigint_handler);
+		signal(SIGQUIT, SIG_IGN);
+		ma.input = !isatty(0) ? gnl(0) : readline("minisshell>>");
+		if(!isatty(0) && heredoc_f)
+		{
+			close_heredoc(&delimiters_h, &heredoc_f, &ma);
+			continue ;
+		}
+		if (ma.input == NULL)
+			builtin_exit(&ma, NULL);
+		if (ft_strcmp(ma.input, "") != 0)
+		{
+			!isatty(0) ? 0 : add_history(ma.input);
+			lexer(&ma);
+			if(!isatty(0))
+				heredoc_checker(&delimiters_h, &heredoc_f, &ma);
+			if (ma.tkns[0] != NULL)
+			{
+				ma.and_or = 0;
+				root = parser(&ma);
+				execute_ast(root, &ma);
+			}
+			free_memory(&(ma.first_node));
+		}
+		restore_io(&ma);
+	}
+	return (0);
+} */
+/*
+ * Next step:
+ * Construct a syntax tree, often referred to as an Abstract Syntax Tree (AST).
+ * The AST represents the syntactic structure of the parsed input in a
+ * hierarchical tree form, where each node represents a construct occurring
+ * in the source code.
+ *
+ * The lexer has already segmented the input into tokens and classified them,
+ * which is the first step in parsing. The next step, constructing the AST,
+ * involves analyzing the sequence of tokens to understand their syntactic
+ * relationships and organizing them into a tree that reflects the commands
+ * and their execution order, including pipelines, redirections, and control
+ * structures.
+ *
+ * Here's a high-level overview of steps you might take to construct the AST:
+ *
+ * 1. **Parsing**: Implement a parser that takes the list of tokens produced by
+ *    the lexer and applies grammar rules to organize these tokens into a tree
+ *    structure. This involves recognizing patterns in the sequence of tokens
+ *    that correspond to commands, arguments, operators, etc.
+ *
+ * 2. **AST Nodes Creation**: Define different types of nodes for your AST,
+ *    corresponding to the constructs in your shell language, such as command
+ *    nodes, pipeline nodes, redirection nodes, and so on.
+ *
+ * 3. **Building the Tree**: As the parser recognizes the grammar patterns in
+ *    the token sequence, it should create the appropriate AST nodes and link
+ *    them together to build the tree. This involves determining the
+ *    parent-child relationships between nodes based on the syntactic structure
+ *    of the input.
+ *
+ * 4. **Error Handling**: Implement error handling in the parser to deal with
+ *    syntax errors, providing meaningful error messages to the user.
+ *
+ * The get_next_token function is used to initialize the index to 0.
+ *
+ * After constructing the AST, the next steps in the shell's execution process
+ * would involve traversing the AST to interpret or execute the commands
+ * represented by the tree.
+ *
+ * This process is crucial for a shell because it allows for the correct
+ * interpretation and execution of complex command lines, including handling
+ * of operators, command grouping, and redirections in a way that respects the
+ * intended precedence and associativity of operations.
+ */
+
+
+/* void	lexer(t_ma *ma)
+{
+	char	**split;
+	char	**wildcards;
+	int		i;
+
+	split = ft_split_tkns(' ', ma);
+	i = 0;
+	while (split[i] && split[i + 1])
+	{
+		if ((strcmp(split[i], "<") == 0 || strcmp(split[i], "<<") == 0)
+			&& (strcmp(split[i + 1], "*") == 0))
+		{
+			write(2, "minishell: ", 11);
+			write(2, split[i + 1], ft_strlen(split[i + 1]));
+			write(2, ": ambiguous redirect\n", 21);
+			return ;
+		}
+		i++;
+	}
+	if (split[0] && (!split[1]) && strcmp(split[0], "*") == 0)
+	{
+		wildcards = expand_wildcards_in_args(split, ma);
+		process_wildcards(wildcards, ma);
+		if (ft_strcmp(wildcards[0], "*") == 0)
+			return ;
+		printf("%s\n", wildcards[0]);
+		exit(0);
+	}
+	if (split[0])
+	{
+		wildcards = expand_wildcards_in_args(split, ma);
+		process_wildcards(wildcards, ma);
+	}
+	else
+	{
+		ma->tkns[0] = NULL;
+		ma->c_tkn = ma->tkns;
+		exit_or_setexit(0, 0, ma);
+	}
+	free_ntc_prior(&(ma->first_node), split);
+} */
+
+/*
+int	count_tks(char const *s, char c)
+{
+	int	counter;
+	int	i;
+
+	counter = 0;
+	i = 0;
+	if (*s == '\0')
+		return (0);
+	while (s[i] != '\0')
+	{
+		if (s[i] == '$' && s[i + 1] == '?')
+		{
+			counter++;
+			i += 2;
+		}
+		if (ft_isdigit(s[i]) && s[i + 1] == '>' && s[i + 2] == '>')
+			counter++;
+		else if (ft_isdigit(s[i]) && s[i + 1] == '>')
+			counter++;
+		else if (s[i] == '"' || s[i] == '\'')
+			counter += handle_quotes(s, &i);
+		else if (handle_double_operators(s, &i)
+			|| handle_single_operators_and_specials(s, &i))
+			counter++;
+		else if (s[i] != c && (i == 0 || s[i - 1] == c || ft_strchr(" ><&()|$?",
+					s[i - 1])))
+			counter++;
+		i++;
+	}
+	return (counter);
+}
+*/
+
+
+/* void	generate_single_operators_and_specials(const char **s, char ***split,
+		int *i, t_ma *ma)
+{
+	int		len;
+	char	*temp;
+	char	*env_value;
+	int		len_after;
+	char	*ad_word;
+
+	len = 1;
+	if (**s == '$' && *(*s + 1) == '?')
+	{
+		(*split)[(*i)++] = ft_itoa_g_c(ma->last_exit_status, &(ma->first_node));
+		(*s) += 2;
+		return ;
+	}
+	len = 1;
+	if (**s == '$')
+	{
+		if (ft_isalnum(*(*s + 1)) || *(*s + 1) == '_')
+		{
+			while ((*s)[len] && (ft_isalnum((*s)[len]) || (*s)[len] == '_'))
+				len++;
+			temp = ft_substr_g_c(*s + 1, 0, len - 1, &(ma->first_node));
+			env_value = get_env(temp, ma->env->var);
+			if (env_value)
+			{
+				len_after = len;
+				while ((*s)[len_after] && !ft_strchr(" ><&()|$",
+						(*s)[len_after]))
+					len_after++;
+				ad_word = ft_substr_g_c(*s, len, len_after - len,
+						&(ma->first_node));
+				(*split)[(*i)++] = ft_strjoin_g_c(env_value, ad_word,
+						&(ma->first_node));
+				len = len_after;
+			}
+		}
+		else
+		{
+			while ((*s)[len] && !ft_strchr(" ><&()|$", (*s)[len]))
+				len++;
+			(*split)[(*i)++] = ft_substr_g_c(*s, 0, len, &(ma->first_node));
+		}
+	}
+	else
+	{
+		(*split)[(*i)++] = ft_substr_g_c(*s, 0, 1, &(ma->first_node));
+	}
+	*s += len;
+} */
+
+/* static char	*ft_strremove_quotes(const char *str, t_ntc **first_node)
+{
+	char	*result;
+	int		i;
+	int		j;
+	int		len_var;
+	char	*env_value;
+	char	*var_name;
+
+	if (!str)
+	{
+		return (NULL);
+	}
+	result = g_c(first_node, sizeof(char) * (strlen(str) + 1))->data;
+	if (!result)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] != '\'' && str[i] != '"')
+		{
+			result[j++] = str[i++];
+		}
+		else
+		{
+			if (str[i] == '"')
+			{
+				i++;
+				while (str[i] != '"')
+					result[j++] = str[i++];
+				if (str[i])
+					i++;
+			}
+			else if (str[i] == '\'')
+			{
+				i++;
+				while (str[i] != '\'')
+					result[j++] = str[i++];
+				if (str[i])
+					i++;
+			}
+		}
+	}
+	result[j] = '\0';
+	return (result);
+} */
+
+/* static char	*process_dollar_expansion(const char **s, char *temp,
+		int word_length, t_ma *ma)
+{
+	int		len_var;
+	int		len_after;
+	char	*env_value;
+	char	*ad_word;
+	char	*result;
+
+	result = temp;
+	len_var = 1;
+	if (((*s)[word_length] == '$') && (ft_isalnum((*s)[word_length + 1])
+			|| (*s)[word_length + 1] == '_'))
+	{
+		while ((*s)[word_length + len_var] && (ft_isalnum((*s)[word_length
+					+ len_var]) || (*s)[word_length + len_var] == '_'))
+			len_var++;
+		temp = ft_substr_g_c(*s + word_length + 1, 0, len_var - 1,
+				&(ma->first_node));
+		env_value = get_env(temp, ma->env->var);
+		if (env_value)
+		{
+			result = ft_strjoin_g_c(result, env_value, &(ma->first_node));
+			len_after = 0;
+			while ((*s)[word_length + len_var + len_after]
+				&& !ft_strchr(" ><&()|$", (*s)[word_length + len_var
+					+ len_after]))
+				len_after++;
+			ad_word = ft_substr_g_c(*s, word_length + len_var, len_after,
+					&(ma->first_node));
+			result = ft_strjoin_g_c(result, ad_word, &(ma->first_node));
+		}
+	}
+	return (result);
+} */
+
+/* void	generate_regular_tkns(const char **s, char ***split, int *i,
+		t_ma *ma)
+{
+	int		word_length;
+	char	*temp;
+	char	*trimmed;
+	char	*result;
+	int		len_var;
+	char	*env_value;
+	int		len_after;
+	char	*ad_word;
+	int		i;
+		int len_var;
+	char	*var_name;
+
+	word_length = 0;
+	while ((*s)[word_length])
+	{
+		if ((*s)[word_length] == '"')
+		{
+			word_length++;
+			while (!((*s)[word_length] == '"'))
+				word_length++;
+			word_length++;
+		}
+		else if ((*s)[word_length] == '\'')
+		{
+			word_length++;
+			while (!((*s)[word_length] == '\''))
+				word_length++;
+			word_length++;
+		}
+		else if (!ft_strchr("' ><&()|$", (*s)[word_length]))
+			word_length++;
+		else
+			break ;
+	}
+	temp = ft_substr_g_c(*s, 0, word_length, &(ma->first_node));
+	if (ft_strchr(temp, '=') && ft_strchr(temp, '"') && ft_strchr(temp, '$'))
+	{
+		result = ft_strdup_g_c("", &(ma->first_node));
+		i = 0;
+		while (temp[i] != '=')
+			append_char(temp[i++], &result, ma);
+		while (temp[i])
+		{
+			if (temp[i] == '$')
+			{
+				len_var = 1;
+				if (ft_isalnum(temp[i + 1]) || temp[i + 1] == '_')
+				{
+					while (temp[i + len_var] && (ft_isalnum(temp[i + len_var])
+							|| temp[i + len_var] == '_'))
+						len_var++;
+					var_name = ft_substr_g_c(temp, i + 1, len_var - 1,
+							&(ma->first_node));
+					env_value = get_env(var_name, ma->env->var);
+					if (env_value)
+					{
+						result = ft_strjoin_g_c(result, env_value,
+								&(ma->first_node));
+					}
+					i += len_var;
+				}
+			}
+			else
+			{
+				append_char(temp[i], &result, ma);
+				i++;
+			}
+		}
+	}
+	else
+	{
+		result = temp;
+		len_var = 1;
+		if (((*s)[word_length] == '$') && (ft_isalnum((*s)[word_length + 1])
+				|| (*s)[word_length + 1] == '_'))
+		{
+			while ((*s)[word_length + len_var] && (ft_isalnum((*s)[word_length
+						+ len_var]) || (*s)[word_length + len_var] == '_'))
+				len_var++;
+			temp = ft_substr_g_c(*s + word_length + 1, 0, len_var - 1,
+					&(ma->first_node));
+			env_value = get_env(temp, ma->env->var);
+			if (env_value)
+			{
+				result = ft_strjoin_g_c(result, env_value, &(ma->first_node));
+				len_after = 0;
+				while ((*s)[word_length + len_var + len_after]
+					&& !ft_strchr(" ><&()|$", (*s)[word_length + len_var
+						+ len_after]))
+						len_after++;
+				ad_word = ft_substr_g_c(*s, word_length + len_var, len_after,
+						&(ma->first_node));
+				result = ft_strjoin_g_c(result, ad_word, &(ma->first_node));
+			}
+		}
+	}
+	trimmed = ft_strremove_quotes(result, &(ma->first_node));
+	(*split)[(*i)++] = trimmed;
+	*s += word_length;
+}
+ */
+
+/* int	handle_env_or_exit(const char **s, char **result, char quote, t_ma *ma)
+{
+	char	*exit_value;
+
+	if (quote == '"' && **s == '$' && ft_isalnum(*(*s + 1)))
+	{
+		handle_env_var(s, result, ma);
+		return (1);
+	}
+	else if (quote == '"' && **s == '$' && (*(*s + 1) == '?'))
+	{
+		exit_value = ft_itoa_g_c(ma->last_exit_status, &(ma->first_node));
+		while (*exit_value)
+			append_char(*exit_value++, result, ma);
+		(*s) += 2;
+		return (1);
+	}
+	return (0);
+}
+
+int	handle_double_quote(const char **s, char **result, char quote)
+{
+	if (**s == quote && *(*s + 1) == quote)
+	{
+		(*s) += 2;
+		return (1);
+	}
+	if (**s == quote && *(*s + 1) == '=')
+	{
+		(*s)++;
+		append_char(*(*s)++, result, NULL);
+		return (1);
+	}
+	return (0);
+}
+
+void	handle_quote_content(const char **s, char **result, char quote,
+		t_ma *ma)
+{
+	char	*exit_value;
+
+	while (**s)
+	{
+		if (handle_double_quote(s, result, quote))
+			continue ;
+		if (handle_env_or_exit(s, result, quote, ma))
+			continue ;
+		if (**s == quote)
+			break ;
+		append_char(*(*s)++, result, ma);
+	}
+} */
+
+
+/* void	handle_quote_content(const char **s, char **result, char quote,
+		t_ma *ma)
+{
+	char	*exit_value;
+
+	while (**s)
+	{
+		if (**s == quote && *(*s + 1) == quote)
+		{
+			(*s) += 2;
+			continue ;
+		}
+		if (**s == quote && *(*s + 1) == '=')
+		{
+			(*s)++;
+			append_char(*(*s)++, result, ma);
+		}
+		else if (**s == quote)
+			break ;
+		else if (quote == '"' && **s == '$' && ft_isalnum(*(*s + 1)))
+			handle_env_var(s, result, ma);
+		else if (quote == '"' && **s == '$' && (*(*s + 1) == '?'))
+		{
+			exit_value = ft_itoa_g_c(ma->last_exit_status, &(ma->first_node));
+			while (*exit_value)
+				append_char(*exit_value++, result, ma);
+			(*s) += 2;
+		}
+		else
+			append_char(*(*s)++, result, ma);
+	}
+} */
+
+/* static void	parse_redirection_list(t_astnode *node, t_astnode **last_word,
+		t_ma *ma)
+{
+	t_astnode	*current;
+	t_astnode	*redir_node;
+
+	current = NULL;
+	while ((*(ma->c_tkn)) && is_redirection_token((*(ma->c_tkn))->type))
+	{
+		redir_node = create_ast_node(&(ma->first_node), NODE_REDIRECTION);
+		redir_node->data.redirection.type = (*(ma->c_tkn))->type;
+		get_next_token(ma);
+		if (ma->c_tkn == NULL || *(ma->c_tkn) == NULL)
+		{
+			write(2, "minishell : syntax error near unexpected token \n", 48);
+			exit(1);
+		}
+		if ((*(ma->c_tkn)) && !is_word_token((*(ma->c_tkn))->type))
+		{
+			write(2, "minishell : syntax error near unexpected token \n", 48);
+			exit(1);
+		}
+		redir_node->data.redirection.file = (*(ma->c_tkn))->value;
+		redir_node->data.redirection.next = NULL;
+		get_next_token(ma);
+		if (!last_word)
+		{
+			add_redir(&(node->data.pipeline.cmds_redir[node-> \
+			data.pipeline.cmd_count - 1]), &(current), redir_node);
+		}
+		else
+			add_redir(&(node->data.simple_cmd.redirections), &(current),
+				redir_node);
+		if ((*(ma->c_tkn)) && is_word_token((*(ma->c_tkn))->type) && last_word)
+			parse_word_list(node, last_word, ma);
+	}
+} */
+
+
+/* static t_astnode	*parse_pipeline(t_ma *ma)
+{
+	t_astnode	*node;
+
+	node = create_ast_node(&(ma->first_node), NODE_PIPELINE);
+	node->data.pipeline.cmds = g_c(&(ma->first_node),
+			sizeof(t_astnode *))->data;
+	node->data.pipeline.cmds[0] = parse_cmd(ma);
+	node->data.pipeline.cmd_count = 1;
+	node->data.pipeline.cmds_redir = NULL;
+	if (*(ma->c_tkn) && is_redirection_token((*(ma->c_tkn))->type))
+		store_cmd_redirections(node, ma);
+	while (((*(ma->c_tkn))) && (*(ma->c_tkn))->type == TOKEN_PIPE)
+	{
+		get_next_token(ma);
+		if (ma->c_tkn == NULL || *(ma->c_tkn) == NULL)
+		{
+			write(2, "minishell : syntax error near unexpected token \n", 48);
+			exit(1);
+		}
+		node->data.pipeline.cmd_count++;
+		node->data.pipeline.cmds = ft_realloc_g_c(&(ma->first_node),
+				node->data.pipeline.cmds, node->data.pipeline.cmd_count
+				* sizeof(t_astnode *));
+		node->data.pipeline.cmds[node->data.pipeline.cmd_count
+			- 1] = parse_cmd(ma);
+		if (*(ma->c_tkn) && is_redirection_token((*(ma->c_tkn))->type))
+			store_cmd_redirections(node, ma);
+	}
+	return (node);
+} */
+
+/* t_astnode	*parse_cmd_line(t_ma *ma)
+{
+	t_astnode	*node;
+	t_astnode	*new_node;
+
+	if (*(ma->c_tkn) && ((*(ma->c_tkn))->type == TOKEN_AND
+			|| (*(ma->c_tkn))->type == TOKEN_OR))
+	{
+		write(2, "minishell : syntax error near unexpected token \n", 48);
+		exit(1);
+	}
+	node = parse_pipeline(ma);
+	while ((*(ma->c_tkn)) && ((*(ma->c_tkn))->type == TOKEN_AND
+			|| (*(ma->c_tkn))->type == TOKEN_OR))
+	{
+		new_node = create_ast_node(&(ma->first_node), NODE_CMD_LINE);
+		new_node->data.cmd_line.left = node;
+		new_node->data.cmd_line.operator = (*(ma->c_tkn))->type;
+		get_next_token(ma);
+		if (ma->c_tkn == NULL || *(ma->c_tkn) == NULL)
+		{
+			write(2, "minishell : syntax error near unexpected token \n", 48);
+			exit(1);
+		}
+		new_node->data.cmd_line.right = parse_pipeline(ma);
+		node = new_node;
+	}
+	return (node);
+} */
+
+/* int	ft_strWildCmp(const char *s1, const char *s2)
+{
+	size_t	i;
+	char	c1;
+	char	c2;
+	size_t	i;
+
+	i = 0;
+	while (s1[i] != '\0' && s2[i] != '\0')
+	{
+		c1 = tolower((unsigned char)s1[i]);
+		c2 = tolower((unsigned char)s2[i]);
+		if (c1 != c2)
+			return ((int)c1 - (int)c2);
+		i++;
+	}
+	return ((int)tolower((unsigned char)s1[i])
+		- (int)tolower((unsigned char)s2[i]));
+	i = 0;
+	while (s1[i] != '\0' && s2[i] != '\0')
+	{
+		if (s1[i] != s2[i])
+			return ((int)s1[i] - (int)s2[i]);
+		i++;
+	}
+	return ((int)s1[i] - (int)s2[i]);
+}
+
+void	sort_wildcard_args(t_wc_args *a)
+{
+	int			i;
+	int			j;
+	char		*tmp;
+	t_wc_args	a;
+	int			i;
+
+	i = 1;
+	while (i < a->count - 1)
+	{
+		j = i + 1;
+		while (j < a->count)
+		{
+			if (ft_strWildCmp(a->exp_args[i], a->exp_args[j]) > 0)
+			{
+				tmp = a->exp_args[i];
+				a->exp_args[i] = a->exp_args[j];
+				a->exp_args[j] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
+} */
+
+
+// int	ft_strWildCmp(const char *s1, const char *s2)
+// {
+/* 	size_t	i;
+	char	c1;
+	char	c2;
+
+	i = 0;
+	while (s1[i] != '\0' && s2[i] != '\0')
+	{
+		c1 = tolower((unsigned char)s1[i]);
+		c2 = tolower((unsigned char)s2[i]);
+		if (c1 != c2)
+			return ((int)c1 - (int)c2);
+		i++;
+	}
+	return ((int)tolower((unsigned char)s1[i])
+		- (int)tolower((unsigned char)s2[i])); */
+// size_t	i;
+
+// i = 0;
+// while (s1[i] != '\0' && s2[i] != '\0')
+// {
+// 	if (s1[i] != s2[i])
+// 		return ((int)s1[i] - (int)s2[i]);
+// 	i++;
+// }
+// return ((int)s1[i] - (int)s2[i]);
+// 	int i = 0;
+// 	while (s1[i] != '\0' && s2[i] != '\0')
+// 	{
+// 		if (s1[i] != s2[i])
+// 		{
+// 			if ((s1[i] > 'a' && s1[i] < 'z') && (s2[i] > 'A' && s2[i] < 'Z'))
+// 				return ((int)s1[i] - (int)s2[i]);
+// 			else if ((s1[i] > 'A' && s1[i] < 'Z') && (s2[i] > 'a'
+//					&& s2[i] < 'z'))
+// 				return ((int)s1[i] - (int)s2[i]);
+// 		}
+// 		else
+// 			return ((int)s1[i] - (int)s2[i]);
+// 		i++;
+// 	}
+// 	return ((int)s1[i] - (int)s2[i]);
+// }
+
+// void sort_wildcard_args(t_wc_args *a)
+// {
+//     int i;
+//     int j;
+//     char *tmp;
+
+//     i = a->count_cpy;
+//     while (i < a->count)
+//     {
+//         j = i + 1;
+//         while (j < a->count + 1)
+//         {
+//             if (ft_strWildCmp(a->exp_args[i], a->exp_args[j]) > 0)
+//             {
+//                 tmp = a->exp_args[i];
+//                 a->exp_args[i] = a->exp_args[j];
+//                 a->exp_args[j] = tmp;
+//             }
+//             j++;
+//         }
+//         i++;
+//     }
+// }
+
+
+/* int	match_pattern(const char *str, const char *pattern)
+{
+	if (*pattern == '\0')
+	{
+		if (*str == '\0')
+			return (1);
+		else
+			return (0);
+	}
+	if (*pattern == '*')
+	{
+		while (*pattern == '*')
+			pattern++;
+		if (*pattern == '\0')
+			return (1);
+		while (*str)
+		{
+			if (match_pattern(str, pattern))
+				return (1);
+			str++;
+		}
+		return (0);
+	}
+	if (*str == '\0')
+		return (0);
+	if (*pattern == *str)
+		return (match_pattern(str + 1, pattern + 1));
+	return (0);
+} */
+
+
+// /**
+//  * Custom string comparison function.
+//  * Compares strings in a case-insensitive manner, with lowercase 
+//  * letters sorting before their uppercase counterparts.
+//  *
+//  * @param s1 Pointer to the first string
+//  * @param s2 Pointer to the second string
+//  * @return Negative if s1 < s2, positive if s1 > s2, zero if equal
+//  */
+// int minishell_strcmp(const char *s1, const char *s2) 
+// {
+// 	char    c1;
+// 	char    c2;
+//     while (*s1 && *s2) 
+//     {
+//         c1 = *s1;
+//         c2 = *s2;
+//         if (c1 >= 'A' && c1 <= 'Z') 
+//         	c1 += 32;
+//         if (c2 >= 'A' && c2 <= 'Z') 
+//         	c2 += 32;
+//         if (c1 != c2)
+//             return c1 - c2;
+//         // If lowercase versions are the same, but original chars different,
+//         // lowercase comes first
+//         if (*s1 != *s2)
+//             return (*s2 & 32) - (*s1 & 32);
+//         s1++;
+//         s2++;
+//     }
+//     return *s1 - *s2;
+// }
+// /**
+//  * Swaps two string pointers.
+//  *
+//  * @param a Pointer to the first string pointer
+//  * @param b Pointer to the second string pointer
+//  */
+// void swap_strings(char **a, char **b) 
+// {
+//     char    *temp;
+//     temp = *a;
+//     *a = *b;
+//     *b = temp;
+// }
+// /**
+//  * Sorts an array of strings using bubble sort algorithm.
+//  *
+//  * @param arr Array of string pointers to be sorted
+//  * @param n Number of strings in the array
+//  */
+// void sort_strings(char *arr[], int n) 
+// {
+//     int i;
+//     i = 0;
+//     while (i < n - 1) 
+//     {
+//         int j = 0;
+//         while (j < n - i - 1) 
+//         {
+//             if (minishell_strcmp(arr[j], arr[j + 1]) > 0) 
+//             {
+//                 swap_strings(&arr[j], &arr[j + 1]);
+//             }
+//             j++;
+//         }
+//         i++;
+//     }
+// }
+
+
+/* void	execute_cmd_line(t_astnode *node, t_ma *ma)
+{
+	ma->and_or++;
+	execute_ast(node->data.cmd_line.left, ma);
+	if (node->data.cmd_line.operator == TOKEN_AND)
+	{
+		if (ma->last_exit_status == 0)
+		{
+			ma->and_or--;
+			execute_ast(node->data.cmd_line.right, ma);
+		}
+		else
+		{
+			ma->and_or = 0;
+			exit_or_setexit(1, 0, ma);
+		}
+		return ;
+	}
+	else if (node->data.cmd_line.operator == TOKEN_OR)
+	{
+		if (ma->last_exit_status != 0)
+		{
+			ma->and_or--;
+			execute_ast(node->data.cmd_line.right, ma);
+		}
+		else
+		{
+			ma->and_or = 0;
+			exit_or_setexit(0, 0, ma);
+			return ;
+		}
+	}
+	return ;
+} */
+
+
+/* void	execute_pipeline(t_astnode *node, t_ma *ma)
+{
+	t_pip_args	a;
+	int			i;
+
+	i = 0;
+	a.input_fd = STDIN_FILENO;
+	if (node->data.pipeline.cmd_count == 1
+		&& node->data.pipeline.cmds[0]->type == NODE_SIMPLE_CMD
+		&& (node->data.pipeline.cmds[0]->data.simple_cmd.words
+			&& (node->data.pipeline.cmds[0]-> \
+			data.simple_cmd.words[0].data.word.type == TOKEN_BUILTIN)))
+	{
+		execute_ast(node->data.pipeline.cmds[0], ma);
+		return ;
+	}
+	a.pid_arr = g_c(&(ma->first_node), sizeof(pid_t)
+			* (node->data.pipeline.cmd_count))->data;
+	while (i < node->data.pipeline.cmd_count)
+	{
+		a.last_cmd = (i == node->data.pipeline.cmd_count - 1);
+		if (!a.last_cmd)
+			setup_pipe(a.pipe_fds);
+		a.pid_arr[i] = fork();
+		if (a.pid_arr[i] == -1)
+			exit_or_setexit(1, 1, ma);
+		if (a.pid_arr[i] == 0 && node->data.pipeline.cmds_redir)
+			child_process(&a, node->data.pipeline.cmds[i],
+				node->data.pipeline.cmds_redir[i], ma);
+		else if (a.pid_arr[i] == 0)
+			child_process(&a, node->data.pipeline.cmds[i], NULL, ma);
+		else
+			parent_process(&a);
+		i++;
+	}
+	i = 0;
+	while (i < node->data.pipeline.cmd_count)
+	{
+		waitpid(a.pid_arr[i], &(a.status), 0);
+		if (i == node->data.pipeline.cmd_count - 1)
+			a.last_status = a.status;
+		i++;
+	}
+	if (WIFEXITED(a.last_status))
+		exit_or_setexit(WEXITSTATUS(a.last_status), 0, ma);
+	else if (WIFSIGNALED(a.last_status))
+		exit_or_setexit(WTERMSIG(a.last_status), 0, ma);
+	return ;
+} */
+// This implementation of simple command execution is incomplete.
+// It does not handle the case where for exemple we have export
+// PATH=new/path/added | env and then execute env again as it will
+// only have been updated in the child process.
+
+// #include "minishell.h"
+
+// /**
+//  * @brief Sets up a pipe for inter-process communication.
+//  *
+//  * This function creates a pipe using the `pipe()` system call and checks
+//  * if the pipe was successfully created. The pipe file descriptors are stored
+//  * in the array `pipe_fds`.
+//  *
+//
+// * @param pipe_fds An array of two integers where the pipe file
+// descriptors are stored.
+//  */
+// static void setup_pipe(int pipe_fds[2])
+// {
+//     if (pipe(pipe_fds) == -1)
+//     {
+//         perror("pipe");
+//         exit(1);
+//     }
+// }
+
+// /**
+//  * @brief Forks a new process.
+//  *
+//  * This function creates a new process by calling `fork()` and checks if the
+//  * fork was successful. It returns the process ID of the child process.
+//  *
+//  * @return pid_t The process ID of the child process, or -1 if fork failed.
+//  */
+// pid_t fork_process()
+// {
+//     pid_t pid;
+
+//     pid = fork();
+//     if (pid == -1)
+//     {
+//         perror("fork");
+//         exit(1);
+//     }
+//     return (pid);
+// }
+
+// /**
+//  * @brief Executes the command in the child process.
+//  *
+//  * This function sets up the file descriptors for the child process based on
+//  * whether it's the first or last command in the pipeline. It then calls
+//  * `execute_ast()` to execute the command.
+//  *
+//  * @param a Structure containing the pipeline arguments.
+//  * @param simple_cmd The AST node representing the simple command to execute.
+//
+// * @param ma Pointer to the main minishell structure
+//(environment and other data).
+//  */
+// static void child_process(t_pip_args *a, t_astnode *simple_cmd, t_ma *ma)
+// {
+//     if (a->input_fd != STDIN_FILENO)
+//     {
+//         dup2(a->input_fd, STDIN_FILENO);
+// Redirect input to the read end of the previous pipe
+//         close(a->input_fd); // Close the original input file descriptor
+//     }
+//     if (!a->last_cmd)
+//     {
+//         dup2(a->pipe_fds[1], STDOUT_FILENO);
+// Redirect output to the write end of the current pipe
+//         close(a->pipe_fds[0]);
+// Close the read end of the pipe in the child process
+//         close(a->pipe_fds[1]); // Close the original write end of the pipe
+//     }
+//     exit(execute_ast(simple_cmd, ma));
+// Execute the command and exit the child process
+// }
+
+// /**
+//  * @brief Manages the parent process after forking a child.
+//  *
+//
+// * This function closes the unnecessary file descriptors in the
+// parent process
+//  * and prepares the input for the next command in the pipeline.
+//  *
+//  * @param a Structure containing the pipeline arguments.
+//  */
+// static void parent_process(t_pip_args *a)
+// {
+//     if (a->input_fd != STDIN_FILENO)
+//         close(a->input_fd); // Close the previous input file descriptor
+
+//     if (!(a->last_cmd))
+//     {
+//         close(a->pipe_fds[1]); // Close the write end of the pipe
+//         a->input_fd = a->pipe_fds[0];
+// Set the input for the next command to the read end of the pipe
+//     }
+//     a->last_status = a->pid;
+// Store the PID of the last forked child process
+// }
+
+// /**
+//  * @brief Execute a pipeline of commands.
+//  *
+//  * This function handles the execution of a pipeline node, which contains
+//  * multiple commands connected by pipes (|). It creates the necessary pipes
+//  * and forks child processes to execute each command in the pipeline.
+//  *
+//  * It only waits for the last process in the pipeline to finish. However,
+//  * to accurately mimic the shell behavior, it should wait for all processes.
+//  *
+//  * @param node Pointer to the pipeline node.
+//
+// * @param ma Pointer to the main minishell structure
+// S(environment and other data).
+//  * @return int Returns the exit status of the last command in the pipeline.
+//  */
+// int execute_pipeline(t_astnode *node, t_ma *ma)
+// {
+//     t_pip_args  a;
+//     int         i;
+
+//     i = 0;
+//     a.input_fd = STDIN_FILENO;
+// Start with the standard input as the input FD
+
+//     if (node->data.pipeline.cmd_count == 1)
+//         return (execute_ast(node->data.pipeline.cmds[0], ma));
+//     else
+//     {
+//         while (i < node->data.pipeline.cmd_count)
+//         {
+//             a.last_cmd = (i == node->data.pipeline.cmd_count - 1);
+// Check if it's the last command in the pipeline
+//             if (!a.last_cmd)
+//                 setup_pipe(a.pipe_fds);
+// Setup a pipe for communication between processes
+
+//             a.pid = fork_process(); // Fork a new process
+
+//             if (a.pid == 0)
+//                 child_process(&a, node->data.pipeline.cmds[i], ma);
+// In the child process, execute the command
+//             else
+//                 parent_process(&a); // In the parent process,
+// manage the pipe FDs
+
+//             i++;
+//         }
+
+//
+
+//         return (0); // Return success,
+// as we are assuming execute_ast handles command failures
+//     }
+// }
+
+/* static int	write_to_tmp_file(int fd, const char *delimiter, t_ma *ma)
+{
+	char	*line;
+	int		i;
+	int		len;
+	int		var_len;
+	char	*temp;
+	char	*env_value;
+
+	line = gnl(0);
+	while (ft_strcmp(line, delimiter) != 0)
+	{
+		if (!line)
+		{
+			return (0);
+		}
+		if (ft_strcmp(line, delimiter) == 0)
+			break ;
+		len = ft_strlen(line);
+		i = 0;
+		while (i < len)
+		{
+			if (line[i] == '$' && line[i + 1] == '?')
+			{
+				write(fd, ft_itoa_g_c(ma->last_exit_status, &(ma->first_node)),
+					ft_strlen(ft_itoa_g_c(ma->last_exit_status,
+							&(ma->first_node))));
+				i += 2;
+			}
+			else if (line[i] == '$'
+				&& ((ft_isalnum(line[i + 1]))
+					|| line[i + 1] == '_'))
+			{
+				var_len = 0;
+				while (line[i + var_len + 1]
+					&& ((ft_isalnum(line[i + var_len + 1])
+							|| line[i + var_len + 1] == '_')))
+					var_len++;
+				temp = ft_substr_g_c(line + i + 1, 0, var_len,
+						&(ma->first_node));
+				env_value = get_env(temp, ma->env->var);
+				if (env_value)
+				{
+					write(fd, env_value, ft_strlen(env_value));
+				}
+				i += var_len + 1;
+			}
+			else
+			{
+				write(fd, &line[i], 1);
+				i++;
+			}
+		}
+		write(fd, "\n", 1);
+		line = gnl(0);
+	}
+	return (1);
+} */
+
+
+/* void	heredoc_checker(char ***delimiters_h, int *heredoc_f, t_ma *ma)
+{
+	t_token	**temp;
+	int		heredoc_count;
+	int		i;
+	int		j;
+
+	i = 0;
+	heredoc_count = 0;
+	*delimiters_h = NULL;
+	temp = ma->tkns;
+	while (temp[0])
+	{
+		if (temp[0]->type == TOKEN_HEREDOC)
+			heredoc_count++;
+		else if ((temp[0]->type == TOKEN_HEREDOC) && !temp[1])
+			return ;
+		temp++;
+	}
+	temp = ma->tkns;
+	if (!heredoc_count)
+		return ;
+	*delimiters_h = ft_calloc_g_c(heredoc_count + 1, sizeof(char *),
+			&(ma->first_env));
+	while (temp[0])
+	{
+		if (temp[0]->type == TOKEN_HEREDOC && temp[1])
+		{
+			temp++;
+			delimiters_h[0][i] = ft_strdup_g_c(temp[0]->value,
+					&(ma->first_env));
+			(*heredoc_f)++;
+			i++;
+		}
+		else if (temp[0]->type == TOKEN_HEREDOC && !temp[1])
+			return ;
+		delimiters_h[0][i] = NULL;
+		temp++;
+	}
+	return ;
+} */
+
+
+// /**
+// * @brief Execute a simple command
+//  *
+//  * This function handles the execution of a simple command node. It prepares
+//  * the arguments, checks if it's a builtin command, handles redirections,
+//  * and either executes the builtin or forks a child process to execute an
+//  * external command.
+//  *
+//  * @param node Pointer to the simple command node
+//  * @param env Pointer to the environment structure
+//  * @param first_node Double pointer to the first node in my garbage collector
+//  * @return int Returns the exit status of the executed command
+//  */
+// int execute_simple_cmd(t_astnode *node, t_ma *ma)
+// {
+//     t_s_cmd_args   a;
+
+//     a.saved_stdin = dup(STDIN_FILENO);
+//     a.saved_stdout = dup(STDOUT_FILENO);
+//     if (!handle_redirections(node->data.simple_cmd.redirections, ma))
+//     {
+//         restore_io(a.saved_stdin, a.saved_stdout);
+//         return(1);
+//     }
+//     a.words_arr = create_words_arr(node, &(a.word_count), ma);
+//     if (!a.words_arr)
+//     {
+//         restore_io(a.saved_stdin, a.saved_stdout);
+//         return(1);
+//     }
+//     wildcards(a.words_arr);
+//     if (is_builtin(a.words_arr[0]))
+//     {
+//         int exit_code = execute_builtin(a.words_arr, ma);
+//         return (exit_code);
+//     }
+//     else
+//         a.status = execute_external_cmd(a.words_arr, &(ma)->env,
+		// &(ma)->first_node);
+//     free_ntc_prior(&(ma->first_node), a.words_arr);
+//     restore_io(a.saved_stdin, a.saved_stdout);
+//     return (a.status);
+// }
+
+// static int  input_is_critical(t_astnode *first_word_node)
+// {
+//     char        *command;
+//     t_astnode   *next_word;
+
+//     if (first_word_node == NULL)
+//         return (0);
+//     command = first_word_node->data.word.value;
+//     next_word = first_word_node->data.word.next;
+//     if (ft_strcmp(command, "cat") == 0 || ft_strcmp(command, "ls") == 0
+	// || ((ft_strcmp(command, "echo") == 0) && next_word == NULL))
+//         return (1);
+//     return (0);
+// }
+
+
+// static void execute_builtin_child(char **args, t_ma *ma)
+// {
+//     int word_count;
+
+//     word_count = count_words(args);
+//     if (ft_strcmp(args[0], "echo") == 0)
+//         exit(builtin_echo(args, word_count, ma));
+//     else if (ft_strcmp(args[0], "cd") == 0)
+//         exit(builtin_cd(args, ma));
+//     else if (ft_strcmp(args[0], "pwd") == 0)
+//         exit(builtin_pwd(args, ma));
+//     else if (ft_strcmp(args[0], "export") == 0)
+//         exit(builtin_export(args, ma));
+//     else if (ft_strcmp(args[0], "unset") == 0)
+//         exit(builtin_unset(args, ma));
+//     else if (ft_strcmp(args[0], "env") == 0)
+//         exit(builtin_env(args, ma));
+//     else if (ft_strcmp(args[0], "exit") == 0)
+//         builtin_exit(ma, args);
+//     exit(EXIT_FAILURE);
+
+// }
+
+
+// /**
+//  * @brief Execute a builtin command
+//  *
+//  * This function executes the appropriate builtin command based on the
+//  * command name. It handles echo, cd, pwd, export, unset, and env commands.
+//  *
+//  * @param args Array of command arguments
+//  * @param env Pointer to the environment structure
+//  * @return int Returns the exit status of the builtin command
+//  */
+// void execute_builtin(char **args, t_ma *ma)
+// {
+//     // ft_printf( "execute_builtin start\n");
+//     if (ma->in_child_p)
+//     {
+//         // ft_printf("ma->in_child_p: %d\n", ma->in_child_p);
+//         execute_builtin_child(args, ma);
+//     }
+//     else
+//         execute_builtin_parent(args, ma);
+// }
+
+/*
+Below is the current implementation of the execute_command function. 
+Would be discarded in favor of the new implementation.
+
+char	*execute_command(t_astnode *node, t_ntc **first_node, char **env)
+{
+	if (!node)
+		return (NULL);
+	if (node->data.simple_cmd.words && \
+		ft_strcmp(node->data.simple_cmd.words->data.word.value, "cd") == 0)
+		builtin_cd(node, first_node, env);
+	if (node->data.simple_cmd.words && \
+		ft_strcmp(node->data.simple_cmd.words->data.word.value, "export") == 0)
+		builtin_export(node, first_node, env);
+	if (node->data.simple_cmd.words && \
+		ft_strcmp(node->data.simple_cmd.words->data.word.value, "unset") == 0)
+		builtin_unset(node, first_node);
+	if (node->data.simple_cmd.words && \
+		ft_strcmp(node->data.simple_cmd.words->data.word.value, "echo") == 0)
+		return (builtin_echo(node, first_node));
+	if (node->data.simple_cmd.words && \
+		ft_strcmp(node->data.simple_cmd.words->data.word.value, "pwd") == 0)
+		return (builtin_pwd(first_node));
+	if (node->data.simple_cmd.words && \
+		ft_strcmp(node->data.simple_cmd.words->data.word.value, "env") == 0)
+		return (builtin_env(env, first_node));
+	return (NULL);
+}*/
+
+/* int	update_pwd(t_ma *ma)
+{
+	char	*pwd_str;
+	char	*temp;
+	char	new_current_dir[PATH_MAX];
+	int		i;
+	char	current_dir[PATH_MAX];
+	char	*path;
+	int		i;
+	int		i;
+
+	if (getcwd(new_current_dir, sizeof(new_current_dir)) == NULL)
+	{
+		perror("getcwd");
+		return (1);
+	}
+	i = get_env_var(&ma->env, "PWD", &temp);
+	if (i == -1)
+	{
+		add_env_var(ft_strjoin_g_c("PWD=", new_current_dir, &ma->first_env),
+			ma);
+	}
+	if (i != -1)
+	{
+		pwd_str = ft_strdup_g_c("", &ma->first_env);
+		temp = ft_strjoin_g_c(pwd_str, "PWD=", &ma->first_env);
+		pwd_str = temp;
+		temp = ft_strjoin_g_c(pwd_str, new_current_dir, &ma->first_env);
+		pwd_str = temp;
+		if (update_env_var(i, pwd_str, ma))
+		{
+			fprintf(stderr, "cd: failed to update PWD environment variable\n");
+			return (1);
+		}
+	}
+	return (0);
+} */
+
+
+/* void	builtin_cd(char **args, t_ma *ma)
+{
+	char	current_dir[PATH_MAX];
+	char	*path;
+	int		i;
+
+	i = 0;
+	while (args[i])
+		i++;
+	if (i > 2)
+	{
+		write(STDERR_FILENO, "minishell: cd: ", 15);
+		write(STDERR_FILENO, "too many arguments\n", 19);
+		exit_or_setexit(1, 0, ma);
+		return ;
+	}
+	if (args[1] && strcmp(args[1], "") == 0)
+		return ;
+	path = get_cd_path(args, &ma->env);
+	if (!path || !validate_cd_path(path))
+	{
+		exit_or_setexit(1, 0, ma);
+		return ;
+	}
+	if (getcwd(current_dir, sizeof(current_dir)) == NULL)
+	{
+		exit_or_setexit(1, 0, ma);
+		return ;
+	}
+	if (change_directory(path))
+	{
+		exit_or_setexit(1, 0, ma);
+		return ;
+	}
+	if (update_env_variables(current_dir, ma))
+	{
+		exit_or_setexit(1, 0, ma);
+		return ;
+	}
+	exit_or_setexit(0, 0, ma);
+} */
+
+
+/* void	builtin_export(char **words_arr, t_ma *ma)
+{
+	char	**words_cpy;
+	int		i;
+
+	if (!words_arr[1])
+	{
+		print_env(ma->env);
+		exit_or_setexit(0, 0, ma);
+		return ;
+	}
+	words_cpy = words_arr;
+	words_cpy++;
+	while (*words_cpy)
+	{
+		if (!is_valid_var(*words_cpy))
+		{
+			write(2, "minishell: export: `", 20);
+			write(2, *words_cpy, ft_strlen(*words_cpy));
+			write(2, "': not a valid identifier\n", 26);
+		}
+		else
+		{
+			i = find_env_var(&(ma->env), *words_cpy);
+			if (i >= 0)
+			{
+				if (!update_env_var(i, *words_cpy, ma))
+				{
+					exit_or_setexit(0, 0, ma);
+					return ;
+				}
+			}
+			else if (i == -1)
+			{
+				if (!add_env_var(*words_cpy, ma))
+				{
+					printf("test add_env_var\n");
+					exit_or_setexit(0, 0, ma);
+					return ;
+				}
+			}
+		}
+		words_cpy++;
+	}
+	exit_or_setexit(0, 0, ma);
+} */
+
+
+/* void	print_env(t_env *env)
+{
+	int		i;
+	int		j;
+	int		sorted;
+	char	**sorted_env;
+	int		len;
+	int		k;
+
+	sorted_env = (char **)malloc(sizeof(char *) * env->count);
+	if (!sorted_env)
+		return ;
+	i = 0;
+	while (i < env->count)
+	{
+		sorted_env[i] = env->var[i];
+		i++;
+	}
+	i = 0;
+	sorted = 0;
+	while (i < env->count - 1)
+	{
+		j = 0;
+		while (j < env->count - i - 1)
+		{
+			if (ft_strcmp(sorted_env[j], sorted_env[j + 1]) > 0)
+			{
+				swap(&sorted_env[j], &sorted_env[j + 1]);
+				sorted = 1;
+			}
+			j++;
+		}
+		if (!sorted)
+			break ;
+		i++;
+	}
+	i = 0;
+	while (i < env->count)
+	{
+		len = 0;
+		write(1, "declare -x ", 11);
+		while (sorted_env[i][len] && sorted_env[i][len] != '=')
+			len++;
+		write(1, sorted_env[i], len);
+		if (sorted_env[i][len] == '=')
+		{
+			write(1, "=", 1);
+			len++;
+			write(1, "\"", 1);
+			k = len;
+			while (sorted_env[i][k])
+			{
+				if (sorted_env[i][k] == '"')
+					write(1, "\\", 1);
+				write(1, &sorted_env[i][k], 1);
+				k++;
+			}
+			write(1, "\"", 1);
+		}
+		write(1, "\n", 1);
+		i++;
+	}
+	free(sorted_env);
+} */
+
+
+/* long long	ft_strtoll(const char *str, int *error)
+{
+	long long	result;
+	int			sign;
+	int			i;
+	int			digit;
+
+	result = 0;
+	sign = 1;
+	i = 0;
+	*error = 0;
+	while (str[i] && (str[i] == ' ' || str[i] == '\t' || str[i] == '\n'
+			|| str[i] == '\v' || str[i] == '\f' || str[i] == '\r'))
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (str[i] && isdigit(str[i]))
+	{
+		digit = str[i] - '0';
+		if (result > (LLONG_MAX - digit) / 10)
+		{
+			*error = 1;
+			if (sign == 1)
+				return (LLONG_MAX);
+			else
+				return (LLONG_MIN);
+		}
+		result = result * 10 + digit;
+		i++;
+	}
+	if (i == 0 || (i == 1 && (str[0] == '-' || str[0] == '+')))
+	{
+		*error = 1;
+		return (0);
+	}
+	return (sign * result);
+} */
+
+
+/* void execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
+{
+	char		*command_path;
+	struct stat	path_stat;
+	int			p_ue;
+	char		*command_path;
+	struct stat	path_stat;
+	char		*command_path;
+	struct stat	path_stat;
+
+	p_ue = 0;
+	command_path = NULL;
+	if (words_arr == NULL || words_arr[0] == NULL || words_arr[0][0] == '\0')
+	{
+		exit(0);
+	}
+	if (ft_strcmp(words_arr[0], ".") == 0)
+	{
+		write(2, "minishell: ", 11);
+		write(2, words_arr[0], ft_strlen(words_arr[0]));
+		write(2, ": filename argument required\n", 29);
+		write(2, "minishell: usage: ", 18);
+		write(2, words_arr[0], ft_strlen(words_arr[0]));
+		write (2, " filename [arguments]\n", 22);
+		exit(127);
+	}
+	else if (ft_strcmp(words_arr[0], "..") == 0)
+	{
+		write(2, "minishell: ", 11);
+		write(2, words_arr[0], ft_strlen(words_arr[0]));
+		write(2, ": command not found\n", 20);
+		exit(127);
+	}
+	else if (words_arr[0][0] == '/' || (words_arr[0][0] == '.'
+			&&  words_arr[0][1] != '\0')|| words_arr[0][0] == '~')
+		command_path = ft_strdup_g_c(words_arr[0], first_node);
+	else
+		command_path = find_command_path(words_arr[0], env, &p_ue, first_node);
+	if (stat(command_path, &path_stat) == 0 && S_ISDIR(path_stat.st_mode)
+		&& ft_strcmp(words_arr[0], "./") == 0) {
+		write(2, "minishell: ", 11);
+		write(2, command_path, ft_strlen(command_path));
+		write(2, ": Is a directory\n", 17);
+		exit(126);
+	}
+	else if (stat(words_arr[0], &path_stat) == 0
+		&& S_ISDIR(path_stat.st_mode)) {
+		write(2, "minishell: ", 11);
+		write(2, words_arr[0], ft_strlen(words_arr[0]));
+		write(2, ": command not found\n", 20);
+		exit(127);
+	}
+	else if (access(words_arr[0], F_OK) == 0)
+	{
+		if (!access(words_arr[0], X_OK) == 0)
+		{
+			write(2, "minishell: ", 11);
+			write(2, words_arr[0], ft_strlen(words_arr[0]));
+			write(2, ": Permission denied\n", 20);
+			exit(126);
+		}
+	}
+	if (p_ue)
+	{
+		if (access(words_arr[0], F_OK) != 0)
+		{
+			write(2, "minishell: ", 11);
+			write(2, words_arr[0], ft_strlen(words_arr[0]));
+			write(2, ": No such file or directory\n", 28);
+			exit(127);
+		}
+		else if (access(words_arr[0], X_OK) != 0)
+		{
+			write(2, "minishell: ", 11);
+			write(2, words_arr[0], ft_strlen(words_arr[0]));
+			write(2, ": Permission denied\n", 20);
+			exit(126);
+		}
+	}
+	else if (!command_path)
+	{
+		write(2, "minishell: ", 11);
+		write(2, words_arr[0], ft_strlen(words_arr[0]));
+		write(2, ": command not found\n", 20);
+		exit(127);
+	}
+	else if (stat(command_path, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
+	{
+		write(2, "minishell: ", 11);
+		write(2, command_path, ft_strlen(command_path));
+		write(2, ": Is a directory\n", 17);
+		exit(126);
+	}
+	else if (access(command_path, F_OK) != 0)
+	{
+		write(2, "minishell: ", 11);
+		write(2, command_path, ft_strlen(command_path));
+		write(2, ": No such file or directory\n", 28);
+		exit(127);
+	}
+	else if (access(command_path, X_OK) != 0)
+	{
+		write(2, "minishell: ", 11);
+		write(2, command_path, ft_strlen(command_path));
+		write(2, ": Permission denied\n", 20);
+		exit(126);
+	}
+	exit(execve(command_path, words_arr, (*env)->var));
+} */
+/* void execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
+{
+	int p_ue; // flag added to check if path was unset or empty
+	p_ue = 0;
+	command_path = NULL;
+	if (words_arr == NULL || words_arr[0] == NULL || words_arr[0][0] == '\0')
+	{
+		exit(0); // Return 0 for an empty command
+	}
+	if (ft_strcmp(words_arr[0], ".") == 0)
+	{
+		write(2, "minishell: ", 11);
+		write(2, words_arr[0], ft_strlen(words_arr[0]));
+		write(2, ": filename argument required\n", 29);
+		write(2, "minishell: usage: ", 18);
+		write(2, words_arr[0], ft_strlen(words_arr[0]));
+		write (2, " filename [arguments]\n", 22);
+		exit(127);
+	}
+	else if (ft_strcmp(words_arr[0], "..") == 0)
+	{
+		write(2, "minishell: ", 11);
+		write(2, words_arr[0], ft_strlen(words_arr[0]));
+		write(2, ": command not found\n", 20);
+		exit(127);
+	}
+	else if (words_arr[0][0] == '/' || (words_arr[0][0] == '.'
+			&&  words_arr[0][1] != '\0')|| words_arr[0][0] == '~')
+		command_path = ft_strdup_g_c(words_arr[0], first_node);
+	else
+		command_path = find_command_path(words_arr[0], env, &p_ue, first_node);
+	if (access(words_arr[0], F_OK) == 0)
+	{
+		if (!access(words_arr[0], X_OK) == 0)
+		{
+			write(2, "minishell: ", 11);
+			write(2, words_arr[0], ft_strlen(words_arr[0]));
+			write(2, ": Permission denied\n", 20);
+			exit(126);
+		}
+	}
+	// printf("command_path: %s\n", command_path);
+	if (p_ue)
+	{
+		if (access(words_arr[0], F_OK) != 0)
+		{
+			write(2, "minishell: ", 11);
+			write(2, words_arr[0], ft_strlen(words_arr[0]));
+			write(2, ": No such file or directory\n", 28);
+			exit(127); // Return 127 for "No such file or directory"
+		}
+		else if (access(words_arr[0], X_OK) != 0)
+		{
+			write(2, "minishell: ", 11);
+			write(2, words_arr[0], ft_strlen(words_arr[0]));
+			write(2, ": Permission denied\n", 20);
+			exit(126); // Return 126 for "Permission denied"
+		}
+	}
+	else if (!command_path)
+	{
+		write(2, "minishell: ", 11);
+		write(2, words_arr[0], ft_strlen(words_arr[0]));
+		write(2, ": command not found\n", 20);
+		exit(127); // Return 127 if the command was not found
+	}
+	else if (stat(command_path, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
+	{
+		write(2, "minishell: ", 11);
+		write(2, command_path, ft_strlen(command_path));
+		write(2, ": Is a directory\n", 17);
+		exit(126); // Return 126 if the path is a directory
+	}
+	else if (access(command_path, F_OK) != 0)
+	{
+		write(2, "minishell: ", 11);
+		write(2, command_path, ft_strlen(command_path));
+		write(2, ": No such file or directory\n", 28);
+		exit(127); // Return 127 for "No such file or directory"
+	}
+	else if (access(command_path, X_OK) != 0)
+	{
+		write(2, "minishell: ", 11);
+		write(2, command_path, ft_strlen(command_path));
+		write(2, ": Permission denied\n", 20);
+		exit(126); // Return 126 for "Permission denied"
+	}
+	exit(execve(command_path, words_arr, (*env)->var));
+} */
+/* void execute_external_cmd(char **words_arr, t_env **env, t_ntc **first_node)
+{
+	// pid_t pid;
+	// int status;
+	// char **current;
+	int    p_ue; // flag added to check if path was unset or empty
+	// Check if the command is empty
+	p_ue = 0;
+	command_path = NULL;
+	// printf("words_arr[0]: %s\n", words_arr[0]);
+	// printf("words_arr[0][0]: %c\n", words_arr[0][0]);
+	if (words_arr == NULL || words_arr[0] == NULL || words_arr[0][0] == '\0')
+	{
+		exit (0);  // Return 0 for an empty command
+	}
+	// current = words_arr;
+	// while (*current)
+	// {
+	//     printf("word: %s\n", *words_arr);
+	//     current++;
+	// }
+	if (words_arr[0][0] == '/' || words_arr[0][0] == '.'
+		|| words_arr[0][0] == '~')
+		command_path = ft_strdup_g_c(words_arr[0], first_node);
+	else
+	{
+		// ft_printf("find_command_path_start\n");
+		command_path = find_command_path(words_arr[0], env, &p_ue, first_node);
+		// ft_printf("find_command_path_end\n");
+	}
+	// ft_printf("command_path: %s\n", command_path);
+	// Check if command_path was found
+	if (p_ue)
+	{
+		if (access(words_arr[0], F_OK) != 0)
+		{
+			// perror("minishell: ");
+			write(2, "minishell: ", 11);
+			write(2, words_arr[0], ft_strlen(words_arr[0]));
+			write(2, ": No such file or directory\n", 28);
+			exit(127);  // Return 127 for "No such file or directory"
+		}
+		if (access(words_arr[0], X_OK) != 0)
+		{
+			write(2, "minishell: ", 11);
+			write(2, words_arr[0], ft_strlen(words_arr[0]));
+			write(2, ": Permission denied\n", 20);
+			exit(126);  // Return 126 for "Permission denied"
+		}
+	}
+	if (!command_path)
+	{
+		// write(2, " command not found\n", 19);
+		write(2, "minishell: ", 11);
+		write(2, words_arr[0], ft_strlen(words_arr[0]));
+		write(2, ": command not found\n", 20);
+		exit(127);  // Return 127 if the command was not found
+	}
+	// Check if the path is a directory
+	if (stat(command_path, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
+	{
+		// perror("minishell: ");
+		write(2, "minishell: ", 11);
+		write(2, command_path, ft_strlen(command_path));
+		write(2, ": Is a directory\n", 17);
+		exit(126);  // Return 126 if the path is a directory
+	}
+	// Check if the file exists
+	if (access(command_path, F_OK) != 0)
+	{
+		// perror("minishell: ");
+		write(2, "minishell: ", 11);
+		write(2, command_path, ft_strlen(command_path));
+		write(2, ": No such file or directory\n", 28);
+		exit(127);  // Return 127 for "No such file or directory"
+	}
+	// Check if the file is executable
+	if (access(command_path, X_OK) != 0)
+	{
+		write(2, "minishell: ", 11);
+		write(2, command_path, ft_strlen(command_path));
+		write(2, ": Permission denied\n", 20);
+		exit(126);  // Return 126 for "Permission denied"
+	}
+	exit(execve(command_path, words_arr, (*env)->var));
+}
+ */
+
+
+/* static char *find_command_path(char *cmd, t_env **env, int *p_ue,
+	t_ntc **first_node)
+{
+	char	**paths;
+	char	*path_env;
+	char	*cmd_path;
+	int		i;
+
+	if (get_env_var(env, "PATH", &path_env) == -1)
+	{
+		*p_ue = 1;
+		return (NULL);
+	}
+	paths = ft_split(path_env, ':', first_node);
+	i = 0;
+	while (paths[i])
+	{
+		cmd_path = join_path(paths[i], cmd, first_node);
+		if (access(cmd_path, F_OK) == 0)
+		{
+			if (access(cmd_path, X_OK) == 0)
+				return (cmd_path);
+			else
+			{
+				write (2, "minishell: ", 11);
+				write (2, cmd, ft_strlen(cmd));
+				write (2, ": Permission denied\n", 20);
+				exit(126);
+			}
+		}
+		i++;
+	}
+	return (NULL);
+} */

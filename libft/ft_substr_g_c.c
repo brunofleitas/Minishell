@@ -1,34 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_substr_g_c.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcasagra <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 16:42:02 by pcasagra          #+#    #+#             */
-/*   Updated: 2024/02/28 16:42:04 by pcasagra         ###   ########.fr       */
+/*   Updated: 2024/09/17 01:31:54 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Returns a substring of the given string 's' starting from the specified index 'start' and with a maximum length of 'len'.
+ * Returns a substring of the given string 's' starting from the specified 
+ * index 'start' and with a maximum length of 'len'.
  * If 's' is NULL, returns NULL.
  * If 'start' is greater than the length of 's', returns an empty string.
- * The function allocates memory for the substring using the 'g_c' function and returns a pointer to it.
- * The 'g_c' function is used to manage memory and is passed a pointer to the first node of a linked list.
- * The 'g_c' function allocates memory for the substring based on the length of the substring plus one for the null terminator.
- * The substring is then copied from 's' to the allocated memory using 'ft_strlcpy'.
- * Returns a pointer to the allocated memory containing the substring.
+ * The function allocates memory for the substring using the 'g_c' function and 
+ * returns a pointer to it.
+ * The 'g_c' function is used to manage memory and is passed a pointer to the 
+ * first node of a linked list.
+ * The 'g_c' function allocates memory for the substring based on the length of 
+ * the substring plus one for the null terminator.
+ * The substring is then copied from 's' to the allocated memory using
+ * 'ft_strlcpy'
+ *	Returns a pointer to the allocated memory containing the substring.
  *
  * @param s The string to extract the substring from.
  * @param start The starting index of the substring.
  * @param len The maximum length of the substring.
- * @param first_node A pointer to the first node of a linked list used for memory management.
- * @return A pointer to the allocated memory containing the substring, or NULL if 's' is NULL or memory allocation fails.
+ * @param first_node A pointer to the first node of a linked list used 
+ * for memory management.
+ * @return A pointer to the allocated memory containing the substring, or NULL
+ * if 's' is NULL or memory allocation fails.
  */
-char	*ft_substr_g_c(char const *s, unsigned int start, size_t len, t_ntc **first_node)
+char	*ft_substr_g_c(char const *s, unsigned int start, size_t len,
+	t_ntc **first_node)
 {
 	char	*substr;
 	size_t	dlen;

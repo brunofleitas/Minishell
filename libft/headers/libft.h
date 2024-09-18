@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 16:43:44 by pcasagra          #+#    #+#             */
-/*   Updated: 2024/08/19 22:05:12 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/17 01:37:15 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,10 @@ void		*ft_memset(void *s, int c, size_t n);
 /*                             GARBAGE COLLEECTOR                             */
 /* ************************************************************************** */
 t_ntc		*g_c(t_ntc **first_node, size_t size_of);
-t_ntc   	*find_ntc(t_ntc **first_node, void *data_ptr);
+t_ntc		*find_ntc(t_ntc **first_node, void *data_ptr);
 void		free_ntc_prior(t_ntc **first_node, void *data_ptr);
 void		free_memory(t_ntc **first_node);
-void    	*ft_realloc_g_c(t_ntc **first_node, void *existing_data,\
+void		*ft_realloc_g_c(t_ntc **first_node, void *existing_data, \
 			size_t new_size);
 /* ************************************************************************** */
 /*                                 STRING                                     */
@@ -73,7 +73,7 @@ char		*ft_itoa_g_c(int n, t_ntc **first_node);
 char		**ft_split_g_c(char const *s, char c, t_ntc **first_node);
 char		*ft_strchr(const char *s, int c);
 char		*ft_strdup_g_c(const char *s, t_ntc **first_node);
-char    	*ft_strndup_g_c(const char *s, size_t n, t_ntc **first_node);
+char		*ft_strndup_g_c(const char *s, size_t n, t_ntc **first_node);
 void		ft_striteri(char *s, void (*f)(unsigned int, char *));
 char		*ft_strjoin_g_c(char const *s1, char const *s2, t_ntc **first_node);
 size_t		ft_strlcat(char *dst, const char *src, size_t size);
@@ -85,7 +85,8 @@ int			ft_strcmp(const char *s1, const char *s2);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 char		*ft_strnstr(const char *big, const char *little, size_t len);
 char		*ft_strrchr(const char *s, int c);
-char		*ft_strtrim_g_c(char const *s1, char const *set, t_ntc **first_node);
+char		*ft_strtrim_g_c(char const *s1, char const *set, \
+	t_ntc **first_node);
 char		*ft_substr_g_c(char const *s, unsigned int start, size_t len, \
 															t_ntc **first_node);
 int			ft_tolower(int c);

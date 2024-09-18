@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcasagra <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 16:41:18 by pcasagra          #+#    #+#             */
-/*   Updated: 2024/02/28 16:41:22 by pcasagra         ###   ########.fr       */
+/*   Updated: 2024/09/17 01:23:27 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@
  * @param s2 The second string to be compared.
  * @param n The maximum number of characters to compare.
  *
- * @return An integer greater than, equal to, or less than 0, depending on whether
- *         `s1` is greater than, equal to, or less than `s2`.
+ * @return An integer greater than, equal to, or less than 0, depending on 
+ * whether `s1` is greater than, equal to, or less than `s2`.
  */
-int ft_strncmp(const char *s1, const char *s2, size_t n)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (i < n && (s1[i] != '\0' || s2[i] != '\0'))

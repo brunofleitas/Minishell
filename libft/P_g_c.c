@@ -13,20 +13,19 @@
 #include "libft.h"
 #include <stdio.h>
 
-t_ntc   *find_ntc(t_ntc **first_node, void *data_ptr) 
+t_ntc	*find_ntc(t_ntc **first_node, void *data_ptr)
 {
-    t_ntc	*temp;
-    
-    temp = *first_node;
-	//printf("find_ntc data_ptr: %p\n", data_ptr);
-    while (temp != NULL) 
-    {
-		//printf("temp->data: %p\n", temp->data);
-        if (temp->data != NULL && (ft_memcmp(temp->data, data_ptr, temp->size) == 0)) 
-            return (temp);
-        temp = temp->next;
-    }
-    return (NULL);
+	t_ntc	*temp;
+
+	temp = *first_node;
+	while (temp != NULL)
+	{
+		if (temp->data != NULL && (ft_memcmp(temp->data, data_ptr,
+					temp->size) == 0))
+			return (temp);
+		temp = temp->next;
+	}
+	return (NULL);
 }
 
 /*
@@ -34,19 +33,12 @@ The free_ntc_prior function is used to free a node in the garbage collector
 list at any time during the execution of the program. It is usefull when we need
 to free a node before the end of the program.
 */
-void free_ntc_prior(t_ntc **first_node, void *data_ptr) 
+void	free_ntc_prior(t_ntc **first_node, void *data_ptr)
 {
 	t_ntc	*temp;
 
-	/*temp = *first_node;
-	while (temp != NULL) 
-	{
-		if (temp->data != NULL && temp->data == data_ptr)
-			break;
-		temp = temp->next;
-	}*/
 	temp = find_ntc(first_node, data_ptr);
-	if (temp != NULL) 
+	if (temp != NULL)
 	{
 		if (temp == *first_node && temp->next != NULL)
 			*first_node = temp->next;
@@ -56,7 +48,7 @@ void free_ntc_prior(t_ntc **first_node, void *data_ptr)
 			temp->prev->next = temp->next;
 		if (temp->next != NULL)
 			temp->next->prev = temp->prev;
-		if (temp->data != NULL) 
+		if (temp->data != NULL)
 		{
 			free(temp->data);
 			temp->data = NULL;
@@ -67,7 +59,7 @@ void free_ntc_prior(t_ntc **first_node, void *data_ptr)
 
 /*
 The free_memory function is used to free all the nodes in the garbage
-collector list. It is normally meant to be used at the end of the programm 
+collector list. It is normally meant to be used at the end of the programm
 but could be used before if needed.
 */
 void	free_memory(t_ntc **first_node)
@@ -120,7 +112,7 @@ and there wont be any memory leaks.
 Exemple of how to call  the function:
 
 function() {
-t_ntc	*first_node;
+t_ntc			*first_node;
 
 first_node = NULL;
 g_c(&first_node, sizeof(t_lst));

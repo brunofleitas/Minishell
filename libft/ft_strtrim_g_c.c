@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strtrim.c                                       :+:      :+:    :+:   */
+/*   ft_strtrim_g_c.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcasagra <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 16:43:16 by pcasagra          #+#    #+#             */
-/*   Updated: 2024/02/28 16:43:18 by pcasagra         ###   ########.fr       */
+/*   Updated: 2024/09/17 01:21:10 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,17 +65,19 @@ static void	populate(char *newstr, char const *s1, char const *set, int lnewstr)
 }
 
 /**
- * Removes leading and trailing characters specified in `set` from the string `s1`.
+ * Removes leading and trailing characters specified in `set` from 
+ * the string `s1`.
  * 
  * @param s1 The string to be trimmed.
  * @param set The set of characters to be removed.
  * @param first_node A pointer to the first node of a linked list.
- * @return A new string with leading and trailing characters removed, or NULL if memory allocation fails.
+ * @return A new string with leading and trailing characters removed, or 
+ * NULL if memory allocation fails.
  */
-char *ft_strtrim_g_c(char const *s1, char const *set, t_ntc **first_node)
+char	*ft_strtrim_g_c(char const *s1, char const *set, t_ntc **first_node)
 {
-	int lnewstr;
-	char *newstr;
+	int		lnewstr;
+	char	*newstr;
 
 	lnewstr = calclength(s1, set);
 	newstr = g_c(first_node, (lnewstr + 1) * sizeof(char))->data;

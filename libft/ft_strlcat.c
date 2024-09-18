@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcasagra <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 16:40:42 by pcasagra          #+#    #+#             */
-/*   Updated: 2024/02/28 16:56:35 by pcasagra         ###   ########.fr       */
+/*   Updated: 2024/09/17 01:30:22 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
 
 /**
  * Concatenates the string pointed to by src to the end of the string
@@ -25,12 +24,12 @@
  *              created if enough space had been available, excluding
  *              the null-terminating character.
  */
-size_t ft_strlcat(char *dst, const char *src, size_t size)
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
-	size_t dst_len;
-	size_t src_len;
-	size_t i;
-	size_t j;
+	size_t	dst_len;
+	size_t	src_len;
+	size_t	i;
+	size_t	j;
 
 	dst_len = ft_strlen(dst);
 	src_len = ft_strlen(src);

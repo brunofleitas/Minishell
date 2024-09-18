@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 16:30:45 by pcasagra          #+#    #+#             */
-/*   Updated: 2024/08/20 23:34:56 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/17 01:26:06 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,19 @@
 
 /**
  * @brief Duplicate a string and store it in a new memory location.
- * 
- * This function duplicates the string `s` and stores it in a new memory location.
- * It also updates the global variable `g_c` with the newly allocated memory block.
- * 
+ *
+
+	* This function duplicates the string `s` and stores it in a new memory
+	location.
+
+	* It also updates the global variable `g_c` with the newly allocated
+	memory block.
+ *
  * @param s The string to be duplicated.
  * @param first_node A pointer to the first node of a linked list.
- * @return char* A pointer to the newly allocated memory block containing the duplicated string.
+
+	* @return char* A pointer to the newly allocated memory block 
+	containing the duplicated string.
  *         Returns NULL if memory allocation fails.
  */
 char	*ft_strdup_g_c(const char *s, t_ntc **first_node)
