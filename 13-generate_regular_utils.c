@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 00:12:34 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/18 04:01:57 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/24 11:10:55 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	append_env_value(const char *temp, int *i, char **result, t_ma *ma)
 				|| temp[*i + len_var] == '_'))
 			len_var++;
 		var_name = ft_substr_g_c(temp, *i + 1, len_var - 1, &(ma->first_node));
-		env_value = get_env(var_name, ma->env->var);
+		env_value = get_env(var_name, ma->env->var, ma);
 		if (env_value)
 			*result = ft_strjoin_g_c(*result, env_value, &(ma->first_node));
 		*i += len_var;
@@ -68,7 +68,7 @@ char	*get_env_var_value(const char *s, int word_length, int len_var,
 
 	temp = ft_substr_g_c(s + word_length + 1, 0, len_var - 1,
 			&(ma->first_node));
-	env_value = get_env(temp, ma->env->var);
+	env_value = get_env(temp, ma->env->var, ma);
 	return (env_value);
 }
 

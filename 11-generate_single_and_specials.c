@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   10-generate_single_and_specials.c                  :+:      :+:    :+:   */
+/*   11-generate_single_and_specials.c                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 00:08:11 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/18 00:36:51 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/24 11:10:01 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	handle_env_vari(const char **s, char ***split, int *i, t_ma *ma)
 	while ((*s)[len] && (ft_isalnum((*s)[len]) || (*s)[len] == '_'))
 		len++;
 	temp = ft_substr_g_c(*s + 1, 0, len - 1, &(ma->first_node));
-	env_value = get_env(temp, ma->env->var);
+	env_value = get_env(temp, ma->env->var, ma);
 	if (env_value)
 	{
 		len_after = len;

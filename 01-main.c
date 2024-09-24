@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:59:46 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/24 10:59:01 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/24 11:42:49 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,28 +133,27 @@ void	restore_io_fds(t_ma *ma, int *fix_stdin, int *fix_stdout,
 int	main(int argc, char **argv, char **envp)
 {
 	t_ma	ma;
-	int		fix_stdin;
-	int		fix_stdout;
-	int		fix_stderr;
+	int		fix [3];
 	char	**delimiters_h;
 
 	delimiters_h = NULL;
 	(void)argc;
-	fix_stdin = dup(STDIN_FILENO);
-	fix_stdout = dup(STDOUT_FILENO);
-	fix_stderr = dup(STDERR_FILENO);
+	fix[0] = dup(STDIN_FILENO);
+	fix[1] = dup(STDOUT_FILENO);
+	fix[2] = dup(STDERR_FILENO);
 	init_ma(&ma, argv, envp);
 	while (1)
 	{
-		restore_io_fds(&ma, &fix_stdin, &fix_stdout, &fix_stderr);
+		restore_io_fds(&ma, &fix[0], &fix[1], &fix[2]);
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, SIG_IGN);
 		if (!isatty(0))
 			ma.input = gnl(0);
 		else
-			ma.input = readline("\033[1;32mminisshell>>\033[0m");
+			ma.input = readline("\033[1;32mminishell>>\033[0m");
 		process_input(&ma, &delimiters_h, &(ma.heredoc_f));
 		restore_io(&ma);
+		free(ma.input);
 	}
 	return (0);
 }
@@ -164,9 +163,9 @@ int	main(int argc, char **argv, char **envp)
 
 valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes 
 ./your_program  */
+// void	free_gnl_buffer(void) __attribute__((destructor));
 
-void		__attribute__((destructor)) free_gnl_buffer();
-void	free_gnl_buffer(void)
-{
-	gnl(-1);
-}
+// void	free_gnl_buffer(void)
+// {
+// 	gnl(-1);
+// }

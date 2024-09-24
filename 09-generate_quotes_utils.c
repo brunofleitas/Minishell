@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   08-generate_quotes_utils.c                         :+:      :+:    :+:   */
+/*   09-generate_quotes_utils.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 23:51:35 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/18 00:33:54 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/24 11:07:55 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	handle_env_var(const char **s, char **result, t_ma *ma)
 	while (ft_isalnum(**s) || **s == '_')
 		var_name[var_name_len++] = *(*s)++;
 	var_name[var_name_len] = '\0';
-	env_value = get_env(var_name, (ma->env->var));
+	env_value = get_env(var_name, (ma->env->var), ma);
 	if (env_value)
 	{
 		*result = ft_realloc_g_c(&(ma->first_node), *result, (result_len
@@ -129,7 +129,7 @@ void	handle_env_var(const char **s, char **result, t_ma *ma)
  *            "NAME=VALUE".
  * @return The value of the environment variable, or NULL if not found.
  */
-char	*get_env(char *name, char **env)
+char	*get_env(char *name, char **env, t_ma *ma)
 {
 	int		i;
 	int		name_len;
@@ -144,7 +144,7 @@ char	*get_env(char *name, char **env)
 		if (strncmp(env[i], name, name_len) == 0 && env[i][name_len] == '=')
 		{
 			env_value = &env[i][name_len + 1];
-			return (remove_extra_spaces(env_value));
+			return (remove_extra_spaces(env_value, ma));
 		}
 		i++;
 	}
@@ -162,13 +162,14 @@ char	*get_env(char *name, char **env)
  * @return A new string with extra spaces removed, or NULL if memory 
  *         allocation fails.
  */
-char	*remove_extra_spaces(char *str)
+char	*remove_extra_spaces(char *str, t_ma *ma)
 {
 	int		i;
 	int		j;
 	int		len;
 	char	*result;
 
+	(void)ma;
 	i = 0;
 	j = 0;
 	len = strlen(str);

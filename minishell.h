@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 23:50:17 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/24 00:14:10 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/24 11:33:46 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,14 @@ typedef enum e_token_type
 /* ************************************************************************** */
 /*                           STRUCTURE DEFINITIONS                            */
 /* ************************************************************************** */
+
+typedef struct s_gnl_buffer
+{
+	char	*ptr;
+	char	*start;
+	size_t	len;
+	size_t	cap;
+}	t_gnl_buffer;
 
 typedef struct s_token
 {
@@ -296,8 +304,8 @@ int						handle_double_q(const char **s, char **result,
 							char quote, t_ma *ma);
 void					handle_env_var(const char **s, char **result,
 							t_ma *ma);
-char					*get_env(char *name, char **env);
-char					*remove_extra_spaces(char *str);
+char					*get_env(char *name, char **env, t_ma *ma);
+char					*remove_extra_spaces(char *str, t_ma *ma);
 
 void					generate_double_operators(const char **s,
 							char ***split, int *i, t_ma *ma);

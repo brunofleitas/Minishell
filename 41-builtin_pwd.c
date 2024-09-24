@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   20-builtin_pwd.c                                   :+:      :+:    :+:   */
+/*   41-builtin_pwd.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 00:51:00 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/15 02:15:49 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/24 11:11:50 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@
 void	builtin_pwd(char **args, t_ma *ma)
 {
 	(void)args;
-	if (get_env("PWD", (ma->env->var)) != NULL)
+	if (get_env("PWD", (ma->env->var), ma) != NULL)
 	{
-		ft_printf("%s\n", get_env("PWD", (ma->env->var)));
+		ft_printf("%s\n", get_env("PWD", (ma->env->var), ma));
 		exit_or_setexit(0, 0, ma);
 	}
 	else

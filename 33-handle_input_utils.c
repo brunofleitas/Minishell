@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   33-handle_inputs_utils.c                           :+:      :+:    :+:   */
+/*   33-handle_input_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 01:56:47 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/18 04:23:28 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/24 11:11:11 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	handle_env_variable(int fd, char *line, int *i, t_ma *ma)
 				|| line[*i + var_len + 1] == '_'))
 			var_len++;
 		temp = ft_substr_g_c(line + *i + 1, 0, var_len, &(ma->first_node));
-		env_value = get_env(temp, ma->env->var);
+		env_value = get_env(temp, ma->env->var, ma);
 		if (env_value)
 			write(fd, env_value, ft_strlen(env_value));
 		*i += var_len + 1;

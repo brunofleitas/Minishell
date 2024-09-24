@@ -3,28 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: athill <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:58:57 by athill            #+#    #+#             */
-/*   Updated: 2024/05/21 13:35:27 by athill           ###   ########.fr       */
+/*   Updated: 2024/09/24 11:36:48 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
+#include "minishell.h"
 
-# ifndef GNL_BUFFER_SIZE
-#  define GNL_BUFFER_SIZE 1024
-# endif
-
-typedef struct s_gnl_buffer
-{
-	char	*ptr;
-	char	*start;
-	size_t	len;
-	size_t	cap;
-}	t_gnl_buffer;
+#ifndef GNL_BUFFER_SIZE
+# define GNL_BUFFER_SIZE 1024
+#endif
 
 static int	gnl_buffer_realloc(t_gnl_buffer *buf, size_t n)
 {
@@ -118,7 +108,7 @@ char	*gnl(int fd)
 
 	line = get_next_line(fd);
 	if (line == NULL)
-		return NULL;
+		return (NULL);
 	len = strlen(line);
 	if (len && line[len - 1] == '\n')
 		line[len - 1] = '\0';
