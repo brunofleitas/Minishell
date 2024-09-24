@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 00:50:59 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/18 04:11:00 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/24 00:16:23 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ t_astnode	*create_cmd_line_node(t_astnode *node, t_ma *ma)
 	t_astnode	*new_node;
 
 	new_node = create_ast_node(&(ma->first_node), NODE_CMD_LINE);
-	new_node->data.cmd_line.left = node;
-	new_node->data.cmd_line.operator = (*(ma->c_tkn))->type;
+	new_node->u_data.s_cmd_line.left = node;
+	new_node->u_data.s_cmd_line.operator = (*(ma->c_tkn))->type;
 	get_next_token(ma);
 	check_cmd_line_syntax(ma);
-	new_node->data.cmd_line.right = parse_pipeline(ma);
+	new_node->u_data.s_cmd_line.right = parse_pipeline(ma);
 	return (new_node);
 }
 

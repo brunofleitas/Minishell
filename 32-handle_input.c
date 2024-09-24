@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 01:53:04 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/18 04:21:49 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/24 10:58:58 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,13 +100,19 @@ int	write_to_tmp_file(int fd, const char *delimiter, t_ma *ma)
 {
 	char	*line;
 
-	line = gnl(0);
+	if (!isatty(0))
+		line = gnl(0);
+	else
+		line = readline("\033[1;32mheredoc>\033[0m");
 	while (line && ft_strcmp(line, delimiter) != 0)
 	{
 		if (!process_line(fd, line, ma))
 			return (0);
 		write(fd, "\n", 1);
-		line = gnl(0);
+		if (!isatty(0))
+			line = gnl(0);
+		else
+			line = readline("\033[1;32mheredoc>\033[0m");
 	}
 	return (1);
 }

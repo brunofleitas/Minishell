@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:07:23 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/18 05:23:31 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/24 00:23:53 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	parent_process(t_pip_args *a)
  */
 void	create_process(t_pip_args *a, t_astnode *node, int i, t_ma *ma)
 {
-	a->last_cmd = (i == node->data.pipeline.cmd_count - 1);
+	a->last_cmd = (i == node->u_data.s_pipeline.cmd_count - 1);
 	if (!a->last_cmd)
 	{
 		if (pipe(a->pipe_fds) == -1)
@@ -105,11 +105,11 @@ void	create_process(t_pip_args *a, t_astnode *node, int i, t_ma *ma)
 		exit_or_setexit(1, 1, ma);
 	if (a->pid_arr[i] == 0)
 	{
-		if (node->data.pipeline.cmds_redir)
-			child_process(a, node->data.pipeline.cmds[i],
-				node->data.pipeline.cmds_redir[i], ma);
+		if (node->u_data.s_pipeline.cmds_redir)
+			child_process(a, node->u_data.s_pipeline.cmds[i],
+				node->u_data.s_pipeline.cmds_redir[i], ma);
 		else
-			child_process(a, node->data.pipeline.cmds[i], NULL, ma);
+			child_process(a, node->u_data.s_pipeline.cmds[i], NULL, ma);
 	}
 	else
 		parent_process(a);
@@ -168,22 +168,22 @@ void	execute_pipeline(t_astnode *node, t_ma *ma)
 	int			i;
 
 	a.input_fd = STDIN_FILENO;
-	if (node->data.pipeline.cmd_count == 1
-		&& node->data.pipeline.cmds[0]->type == NODE_SIMPLE_CMD
-		&& (node->data.pipeline.cmds[0]->data.simple_cmd.words
-			&& node->data.pipeline.cmds[0]-> \
-			data.simple_cmd.words[0].data.word.type == TOKEN_BUILTIN))
+	if (node->u_data.s_pipeline.cmd_count == 1
+		&& node->u_data.s_pipeline.cmds[0]->type == NODE_SIMPLE_CMD
+		&& (node->u_data.s_pipeline.cmds[0]->u_data.s_simple_cmd.words
+			&& node->u_data.s_pipeline.cmds[0]-> \
+			u_data.s_simple_cmd.words[0].u_data.s_word.type == TOKEN_BUILTIN))
 	{
-		execute_ast(node->data.pipeline.cmds[0], ma);
+		execute_ast(node->u_data.s_pipeline.cmds[0], ma);
 		return ;
 	}
 	a.pid_arr = g_c(&(ma->first_node), sizeof(pid_t)
-			* (node->data.pipeline.cmd_count))->data;
+			* (node->u_data.s_pipeline.cmd_count))->data;
 	i = 0;
-	while (i < node->data.pipeline.cmd_count)
+	while (i < node->u_data.s_pipeline.cmd_count)
 	{
 		create_process(&a, node, i, ma);
 		i++;
 	}
-	wait_for_all_processes(node->data.pipeline.cmd_count, a.pid_arr, ma);
+	wait_for_all_processes(node->u_data.s_pipeline.cmd_count, a.pid_arr, ma);
 }

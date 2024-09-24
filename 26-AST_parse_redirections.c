@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 01:03:41 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/18 04:54:50 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/24 00:33:59 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	add_redir(t_astnode **first_redir_node, t_astnode **current,
 	}
 	else
 	{
-		(*current)->data.redirection.next = redir_node;
+		(*current)->u_data.s_redirection.next = redir_node;
 		*current = redir_node;
 	}
 }
@@ -97,12 +97,13 @@ void	process_redirection(t_astnode *node, t_astnode **last_word,
 {
 	if (!last_word)
 	{
-		add_redir(&(node->data.pipeline.cmds_redir[node-> \
-		data.pipeline.cmd_count - 1]), current, redir_node);
+		add_redir(&(node->u_data.s_pipeline.cmds_redir[node-> \
+		u_data.s_pipeline.cmd_count - 1]), current, redir_node);
 	}
 	else
 	{
-		add_redir(&(node->data.simple_cmd.redirections), current, redir_node);
+		add_redir(&(node->u_data.s_simple_cmd.redirections),
+			current, redir_node);
 	}
 }
 
@@ -129,11 +130,11 @@ void	parse_redirection_list(t_astnode *node, t_astnode **last_word, t_ma *ma)
 	while ((*(ma->c_tkn)) && is_redirection_token((*(ma->c_tkn))->type))
 	{
 		redir_node = create_ast_node(&(ma->first_node), NODE_REDIRECTION);
-		redir_node->data.redirection.type = (*(ma->c_tkn))->type;
+		redir_node->u_data.s_redirection.type = (*(ma->c_tkn))->type;
 		get_next_token(ma);
 		check_redirection_syntax(ma);
-		redir_node->data.redirection.file = (*(ma->c_tkn))->value;
-		redir_node->data.redirection.next = NULL;
+		redir_node->u_data.s_redirection.file = (*(ma->c_tkn))->value;
+		redir_node->u_data.s_redirection.next = NULL;
 		get_next_token(ma);
 		process_redirection(node, last_word, redir_node, &current);
 		if ((*(ma->c_tkn)) && is_word_token((*(ma->c_tkn))->type) && last_word)

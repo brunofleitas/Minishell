@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 01:02:27 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/18 04:14:04 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/24 00:19:58 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ t_astnode	*parse_simple_cmd(t_ma *ma)
 
 	last_word = NULL;
 	node = create_ast_node(&(ma->first_node), NODE_SIMPLE_CMD);
-	node->data.simple_cmd.words = NULL;
-	node->data.simple_cmd.redirections = NULL;
+	node->u_data.s_simple_cmd.words = NULL;
+	node->u_data.s_simple_cmd.redirections = NULL;
 	parse_word_list(node, &last_word, ma);
 	parse_redirection_list(node, &last_word, ma);
 	return (node);

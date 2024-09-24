@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:07:15 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/18 05:02:52 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/24 00:27:22 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ int	node_word_count(t_astnode *node)
 	t_astnode	*node_word;
 
 	count = 0;
-	node_word = node->data.simple_cmd.words;
+	node_word = node->u_data.s_simple_cmd.words;
 	while (node_word)
 	{
 		count++;
-		node_word = node_word->data.word.next;
+		node_word = node_word->u_data.s_word.next;
 	}
 	return (count);
 }
@@ -56,7 +56,7 @@ char	**create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
 	int			i;
 
 	i = 0;
-	node_word = node->data.simple_cmd.words;
+	node_word = node->u_data.s_simple_cmd.words;
 	*word_count = node_word_count(node);
 	words_arr = g_c(&(ma->first_node), (*word_count + 1)
 			* sizeof(char *))->data;
@@ -65,12 +65,12 @@ char	**create_words_arr(t_astnode *node, int *word_count, t_ma *ma)
 		write(2, "malloc error\n", 13);
 		return (NULL);
 	}
-	node_word = node->data.simple_cmd.words;
+	node_word = node->u_data.s_simple_cmd.words;
 	while (i < *word_count)
 	{
-		words_arr[i++] = ft_substr_g_c(node_word->data.word.value, 0,
-				ft_strlen(node_word->data.word.value), &(ma->first_node));
-		node_word = node_word->data.word.next;
+		words_arr[i++] = ft_substr_g_c(node_word->u_data.s_word.value, 0,
+				ft_strlen(node_word->u_data.s_word.value), &(ma->first_node));
+		node_word = node_word->u_data.s_word.next;
 	}
 	words_arr[*word_count] = NULL;
 	return (words_arr);
@@ -91,7 +91,7 @@ void	execute_simple_cmd(t_astnode *node, t_ma *ma)
 {
 	t_s_cmd_args	a;
 
-	if (!handle_redirections(node->data.simple_cmd.redirections, ma))
+	if (!handle_redirections(node->u_data.s_simple_cmd.redirections, ma))
 		return ;
 	a.words_arr = create_words_arr(node, &(a.word_count), ma);
 	if (!a.words_arr)

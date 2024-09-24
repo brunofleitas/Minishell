@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:07:32 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/18 04:17:52 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/24 00:22:30 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	handle_and_operator(t_astnode *node, t_ma *ma)
 	if (ma->last_exit_status == 0)
 	{
 		ma->and_or--;
-		execute_ast(node->data.cmd_line.right, ma);
+		execute_ast(node->u_data.s_cmd_line.right, ma);
 	}
 	else
 	{
@@ -91,7 +91,7 @@ void	handle_or_operator(t_astnode *node, t_ma *ma)
 	if (ma->last_exit_status != 0)
 	{
 		ma->and_or--;
-		execute_ast(node->data.cmd_line.right, ma);
+		execute_ast(node->u_data.s_cmd_line.right, ma);
 	}
 	else
 	{
@@ -116,13 +116,13 @@ void	handle_or_operator(t_astnode *node, t_ma *ma)
 void	execute_cmd_line(t_astnode *node, t_ma *ma)
 {
 	ma->and_or++;
-	execute_ast(node->data.cmd_line.left, ma);
-	if (node->data.cmd_line.operator == TOKEN_AND)
+	execute_ast(node->u_data.s_cmd_line.left, ma);
+	if (node->u_data.s_cmd_line.operator == TOKEN_AND)
 	{
 		handle_and_operator(node, ma);
 		return ;
 	}
-	else if (node->data.cmd_line.operator == TOKEN_OR)
+	else if (node->u_data.s_cmd_line.operator == TOKEN_OR)
 	{
 		handle_or_operator(node, ma);
 		return ;

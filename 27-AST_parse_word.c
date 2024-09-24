@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 01:04:44 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/18 04:16:41 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/24 00:21:48 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	add_word(t_astnode **first_word_node, t_astnode **current,
 	}
 	else
 	{
-		(*current)->data.word.next = word_node;
+		(*current)->u_data.s_word.next = word_node;
 		*current = word_node;
 	}
 }
@@ -86,10 +86,10 @@ void	parse_word_list(t_astnode *node, t_astnode **last_word, t_ma *ma)
 	while ((*(ma->c_tkn)) && is_word_token((*(ma->c_tkn))->type))
 	{
 		word_node = create_ast_node(&(ma->first_node), NODE_WORD);
-		word_node->data.word.value = (*(ma->c_tkn))->value;
-		word_node->data.word.type = (*(ma->c_tkn))->type;
-		word_node->data.word.next = NULL;
-		add_word(&(node->data.simple_cmd.words), &(current), word_node);
+		word_node->u_data.s_word.value = (*(ma->c_tkn))->value;
+		word_node->u_data.s_word.type = (*(ma->c_tkn))->type;
+		word_node->u_data.s_word.next = NULL;
+		add_word(&(node->u_data.s_simple_cmd.words), &(current), word_node);
 		get_next_token(ma);
 	}
 	if (current)

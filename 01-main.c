@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 17:59:46 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/18 05:07:19 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/24 10:59:01 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ int	main(int argc, char **argv, char **envp)
 		if (!isatty(0))
 			ma.input = gnl(0);
 		else
-			ma.input = readline("minisshell>>");
+			ma.input = readline("\033[1;32mminisshell>>\033[0m");
 		process_input(&ma, &delimiters_h, &(ma.heredoc_f));
 		restore_io(&ma);
 	}

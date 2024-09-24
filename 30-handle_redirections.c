@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 02:49:56 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/18 02:16:24 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/24 00:33:08 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,21 @@ int	handle_redirections(t_astnode *redir_node, t_ma *ma)
 {
 	while (redir_node != NULL)
 	{
-		if ((redir_node->data.redirection.type == TOKEN_REDIR_OUT
-				&& !redirect_output(redir_node->data.redirection.file, 1, ma))
-			|| (redir_node->data.redirection.type == TOKEN_REDIR_APPEND
-				&& !redirect_output_append(redir_node->data.redirection.file, 1,
-					ma)) || (redir_node->data.redirection.type == TOKEN_REDIR_IN
-				&& !redirect_input(redir_node->data.redirection.file, ma))
-			|| (redir_node->data.redirection.type == TOKEN_HEREDOC
-				&& !handle_heredoc(redir_node->data.redirection.file, ma)))
+		if ((redir_node->u_data.s_redirection.type == TOKEN_REDIR_OUT && \
+			!redirect_output(redir_node->u_data.s_redirection.file, 1, ma))
+			|| (redir_node->u_data.s_redirection.type == TOKEN_REDIR_APPEND && \
+			!redirect_output_append(redir_node->u_data.s_redirection.file, 1,
+					ma)) || (redir_node->u_data.s_redirection.type == \
+			TOKEN_REDIR_IN
+				&& !redirect_input(redir_node->u_data.s_redirection.file, ma))
+			|| (redir_node->u_data.s_redirection.type == TOKEN_HEREDOC
+				&& !handle_heredoc(redir_node->u_data.s_redirection.file, ma)))
 		{
 			restore_io(ma);
 			exit_or_setexit(1, 0, ma);
 			return (0);
 		}
-		redir_node = redir_node->data.redirection.next;
+		redir_node = redir_node->u_data.s_redirection.next;
 	}
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: bfleitas <bfleitas@student.42luxembourg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 00:54:41 by bfleitas          #+#    #+#             */
-/*   Updated: 2024/09/18 04:12:19 by bfleitas         ###   ########.fr       */
+/*   Updated: 2024/09/24 00:29:39 by bfleitas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@
  */
 void	store_cmd_redirections(t_astnode *n_pipeline, t_ma *ma)
 {
-	n_pipeline->data.pipeline.cmds_redir = ft_realloc_g_c(&(ma->first_node),
-			n_pipeline->data.pipeline.cmds_redir,
-			n_pipeline->data.pipeline.cmd_count * sizeof(t_astnode *));
-	n_pipeline->data.pipeline.cmds_redir[n_pipeline->data.pipeline.cmd_count
-		- 1] = NULL;
-	if (!n_pipeline->data.pipeline.cmds_redir)
+	n_pipeline->u_data.s_pipeline.cmds_redir = ft_realloc_g_c(&(ma->first_node),
+			n_pipeline->u_data.s_pipeline.cmds_redir,
+			n_pipeline->u_data.s_pipeline.cmd_count * sizeof(t_astnode *));
+	n_pipeline->u_data.s_pipeline.cmds_redir \
+		[n_pipeline->u_data.s_pipeline.cmd_count - 1] = NULL;
+	if (!n_pipeline->u_data.s_pipeline.cmds_redir)
 	{
 		write(2, "cmd_redir creation failed\n", 13);
 		exit(1);
@@ -71,11 +71,12 @@ void	check_next_token(t_ma *ma)
  */
 void	add_command_to_pipeline(t_astnode *node, t_ma *ma)
 {
-	node->data.pipeline.cmd_count++;
-	node->data.pipeline.cmds = ft_realloc_g_c(&(ma->first_node),
-			node->data.pipeline.cmds, node->data.pipeline.cmd_count
+	node->u_data.s_pipeline.cmd_count++;
+	node->u_data.s_pipeline.cmds = ft_realloc_g_c(&(ma->first_node),
+			node->u_data.s_pipeline.cmds, node->u_data.s_pipeline.cmd_count
 			* sizeof(t_astnode *));
-	node->data.pipeline.cmds[node->data.pipeline.cmd_count - 1] = parse_cmd(ma);
+	node->u_data.s_pipeline.cmds[node->u_data.s_pipeline.cmd_count - 1] \
+			= parse_cmd(ma);
 	if (*(ma->c_tkn) && is_redirection_token((*(ma->c_tkn))->type))
 		store_cmd_redirections(node, ma);
 }
@@ -97,11 +98,11 @@ t_astnode	*parse_pipeline(t_ma *ma)
 	t_astnode	*node;
 
 	node = create_ast_node(&(ma->first_node), NODE_PIPELINE);
-	node->data.pipeline.cmds = g_c(&(ma->first_node), \
+	node->u_data.s_pipeline.cmds = g_c(&(ma->first_node), \
 		sizeof(t_astnode *))->data;
-	node->data.pipeline.cmds[0] = parse_cmd(ma);
-	node->data.pipeline.cmd_count = 1;
-	node->data.pipeline.cmds_redir = NULL;
+	node->u_data.s_pipeline.cmds[0] = parse_cmd(ma);
+	node->u_data.s_pipeline.cmd_count = 1;
+	node->u_data.s_pipeline.cmds_redir = NULL;
 	if (*(ma->c_tkn) && is_redirection_token((*(ma->c_tkn))->type))
 		store_cmd_redirections(node, ma);
 	while ((*(ma->c_tkn)) && (*(ma->c_tkn))->type == TOKEN_PIPE)
